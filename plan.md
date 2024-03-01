@@ -1,3 +1,49 @@
+# Devlog
+## Day 1
+- Brainstorming
+
+## Day 2
+- Basic code for 2D world
+
+# Plan
+1. Write the code for fighting and moving and evoking
+2. Code the 5 levels without any texture and minimal dialog
+3. Draw the levels
+4. Get the assets
+5. Code the time reversal (set a maximum time)
+6. Finish up the dialogs
+7. Sound system
+8. Visual touch ups
+9. Balance fix with extensive play tests
+
+# Plan
+## 1. Write the code for fighting and moving and evoking
+- Real time fighting
+- You make swings which are arc circles, deal damage and push back based on sword
+- Secondary attack is a bit more charged but is 360 degrees
+- You can evoke fire and wind, spraying wind on fire makes it expand
+- Enemy ai is very simple, comes towards you avoiding tiles on fire and obstacles
+## 2. Code the 5 levels without any texture and minimal dialog
+- Put already some obstacles, so that running and hiding is a viable strategy
+## 3. Draw the levels
+- Ldtk, make the colors go from fire to winter (red to blue, not green! we don't want hope, just melanchony)
+## 4. Get the assets
+- Remember to cite
+- Change them a bit, maybe there can be some way to map the colors
+## 5. Code the time reversal (set a maximum time)
+- Try to do the complex thing, but if it doens't work, make it simple and see if you have time in the end
+## 6. Finish up the dialogs
+- Font and everything as well
+## 7. Sound system
+- Freesound.org
+- Simple music, going more harh and strident with high pain
+- Or maybe the music is high ( classical, violin) on high levels and low (very low frequency bass) on low levels
+## 8. Visual touch ups
+- Maybe a shader for the high pain
+## 9. Balance fix with extensive play tests
+- Maybe add different types of ai behaviors and enemy attacks if you have time
+
+
 # Plot
 
 Start from the end, you fight like a demon and he beats you, but instead of killing you he forces you to sit and contemplate your mistakes. The immense pain caused by this opens a time warp
@@ -83,40 +129,3 @@ How to create time warps?
 # Rithm
 High pace battle, slower time reversal and calm but intense dialog, then repeat with variations
 
-# Plan
-1. Write the code for fighting and moving and evoking
-2. Code the 5 levels without any texture and minimal dialog
-3. Draw the levels 
-4. Get the assets
-5. Code the time reversal (set a maximum time)
-6. Finish up the dialogs
-7. Sound system
-8. Visual touch ups
-9. Balance fix with extensive play tests
-
-# Plan
-## 1. Write the code for fighting and moving and evoking
-- Real time fighting
-- You make swings which are arc circles, deal damage and push back based on sword
-- Secondary attack is a bit more charged but is 360 degrees
-- You can evoke fire and wind, spraying wind on fire makes it expand
-- Enemy ai is very simple, comes towards you avoiding tiles on fire and obstacles 
-## 2. Code the 5 levels without any texture and minimal dialog
-- Put already some obstacles, so that running and hiding is a viable strategy
-## 3. Draw the levels 
-- Ldtk, make the colors go from fire to winter (red to blue, not green! we don't want hope, just melanchony)
-## 4. Get the assets
-- Remember to cite
-- Change them a bit, maybe there can be some way to map the colors
-## 5. Code the time reversal (set a maximum time)
-- Try to do the complex thing, but if it doens't work, make it simple and see if you have time in the end
-## 6. Finish up the dialogs
-- Font and everything as well
-## 7. Sound system
-- Freesound.org
-- Simple music, going more harh and strident with high pain
-- Or maybe the music is high ( classical, violin) on high levels and low (very low frequency bass) on low levels
-## 8. Visual touch ups
-- Maybe a shader for the high pain
-## 9. Balance fix with extensive play tests
-- Maybe add different types of ai behaviors and enemy attacks if you have time
