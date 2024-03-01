@@ -4,6 +4,7 @@
 
 ## Day 2
 - Basic code for 2D world
+- Look at the commits
 
 # Plan
 1. Write the code for fighting and moving and evoking

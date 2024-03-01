@@ -45,5 +45,16 @@ struct Radius {
     float value;
 };
 
+enum class State {
+    casting,
+    normal,
+};
+
+struct PlayerState {
+    State state;
+};
+
+
+
 
 #endif //ACEROLA_JAM0_COMPONENTS_H

@@ -92,13 +92,42 @@ void playerAttack(entt::registry &registry, entt::entity player, Vector2 clickPo
                         position.y + (position.y - playerPosition.y) * playerWeapon.pushback / m};
         }
     }
-
 }
 
+void playerSecondaryAttack(entt::registry &registry, entt::entity player) {
+    Position playerPosition = registry.get<Position>(player);
+    Weapon playerWeapon = registry.get<Weapon>(player);
+    DrawCircle(playerPosition.x, playerPosition.y, playerWeapon.range, RED);
+
+    auto enemyView = registry.view<Enemy, Living, Health, Radius, Position>();
+    for (auto [enemy, health, radius, position]: enemyView.each()) {
+        if (CheckCollisionCircles(position, radius.value, playerPosition,
+                                  playerWeapon.range)) {
+            health.value -= playerWeapon.damage * 2;
+            float m = sqrt(pow(playerPosition.x + position.x, 2) + pow(playerPosition.y + position.y, 2));
+            position = {(position.x + (position.x - playerPosition.x) * playerWeapon.pushback / m * 3),
+                        position.y + (position.y - playerPosition.y) * playerWeapon.pushback / m * 3};
+        }
+    }
+}
+
+void castFire(entt::registry &registry, entt::entity player, Vector2 clickPosition) {}
+
 void parseInput(entt::registry &registry, entt::entity player, Position &position, Camera2D &camera) {
-    if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+    State playerState = registry.get<PlayerState>(player).state;
+    if (IsKeyPressed(KEY_ONE)) {
+        playerState = State::casting;
+    }
+    if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && playerState == State::normal) {
         playerAttack(registry, player, GetScreenToWorld2D(GetMousePosition(), camera));
     }
+    if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && playerState == State::casting) {
+        castFire(registry, player, GetScreenToWorld2D(GetMousePosition(), camera));
+    }
+    if (IsMouseButtonPressed(MOUSE_RIGHT_BUTTON)) {
+        playerSecondaryAttack(registry, player);
+    }
+
 
     position.y -= 4.0f * static_cast<float>(IsKeyPressed(KEY_W) || IsKeyDown(KEY_W));
     position.y += 4.0f * static_cast<float>(IsKeyPressed(KEY_S) || IsKeyDown(KEY_S));
