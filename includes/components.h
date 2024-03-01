@@ -25,7 +25,9 @@ struct Position {
 
 struct Weapon {
     int damage;
-    int range;
+    float range;
+    float spread;
+    float pushback;
 };
 
 struct Triangle {
