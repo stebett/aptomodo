@@ -1,6 +1,7 @@
 #include <raylib.h>
 #include <entt/entity/registry.hpp>
 #include <iostream>
+#include <random>
 #include "includes/components.h"
 
 
@@ -160,6 +161,8 @@ entt::entity spawnPlayer(entt::registry &registry) {
     registry.emplace<Weapon>(player, sword);
     registry.emplace<Health>(player, 100, 100);
     registry.emplace<Position>(player, 500.0f, 500.0f);
+    registry.emplace<PlayerState>(player, State::normal);
+
     return player;
 }
 
@@ -173,11 +176,14 @@ Camera2D spawnCamera() {
 }
 
 void moveTowardsPoint(Position &position, Position &target) {
-    float speed = 2.0f;
-    position.y -= speed * static_cast<float>(position.y > target.y);
-    position.y += speed * static_cast<float>(position.y < target.y);
-    position.x -= speed * static_cast<float>(position.x > target.x);
-    position.x += speed * static_cast<float>(position.x < target.x);
+    float speed = 4.0f;
+    float m = sqrt(pow(position.x - target.x, 2) + pow(position.y - target.y, 2));
+    position = {(position.x - (position.x - target.x) * speed / m),
+                position.y - (position.y - target.y) * speed / m};
+//    position.y -= speed * static_cast<float>(position.y > target.y);
+//    position.y += speed * static_cast<float>(position.y < target.y);
+//    position.x -= speed * static_cast<float>(position.x > target.x);
+//    position.x += speed * static_cast<float>(position.x < target.x);
 }
 
 void updateEnemy(entt::registry &registry, Position &playerPosition) {
@@ -193,6 +199,11 @@ void updateEnemy(entt::registry &registry, Position &playerPosition) {
 
 
 int main() {
+    std::random_device r;
+
+    // Choose a random mean between 1 and 6
+    std::default_random_engine e1(r());
+    std::uniform_int_distribution<int> uniform_dist(1, 500);
     entt::registry registry;
 
     entt::entity player = spawnPlayer(registry);
@@ -209,6 +220,11 @@ int main() {
         world = GetScreenToWorld2D(Vector2{0, 0}, camera);
         parseInput(registry, player, position, camera);
         updateEnemy(registry, position);
+
+        if (framesCounter % 60 == 0) {
+            spawnEnemy(registry, {static_cast<float>(uniform_dist(e1)),
+                                  static_cast<float>(uniform_dist(e1))});
+        }
 
         BeginDrawing();
         ClearBackground(BLACK);
