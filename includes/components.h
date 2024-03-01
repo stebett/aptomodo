@@ -7,11 +7,22 @@
 
 // Tags
 struct Player {};
-
+struct Enemy {};
 // Components
 struct Position {
     float x;
     float y;
+};
+
+struct Weapon {
+    int damage;
+    int range;
+};
+
+struct Triangle {
+    Vector2 v1;
+    Vector2 v2;
+    Vector2 v3;
 };
 
 
