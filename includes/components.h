@@ -6,12 +6,21 @@
 #define ACEROLA_JAM0_COMPONENTS_H
 
 // Tags
-struct Player {};
-struct Enemy {};
+struct Player {
+};
+struct Enemy {
+};
+struct Living {
+};
+
 // Components
 struct Position {
     float x;
     float y;
+
+    operator Vector2() {
+        return Vector2{x, y};
+    }
 };
 
 struct Weapon {
@@ -25,6 +34,14 @@ struct Triangle {
     Vector2 v3;
 };
 
+struct Health {
+    float max;
+    float value;
+};
+
+struct Radius {
+    float value;
+};
 
 
 #endif //ACEROLA_JAM0_COMPONENTS_H
