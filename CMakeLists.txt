@@ -7,5 +7,18 @@ find_package(raylib REQUIRED)
 set(CMAKE_CXX_STANDARD 20)
 
 add_executable(acerola_jam0 main.cpp
-        includes/components.h)
+        includes/components.h
+        includes/levels.cpp
+        includes/levels.h
+        includes/factories.cpp
+        includes/factories.h
+        includes/constants.h
+        includes/rendering.cpp
+        includes/rendering.h
+        includes/collisions.cpp
+        includes/collisions.h
+        includes/controls.cpp
+        includes/controls.h
+        includes/npc.cpp
+        includes/npc.h)
 target_link_libraries(acerola_jam0 PRIVATE raylib)

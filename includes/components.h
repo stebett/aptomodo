@@ -5,6 +5,8 @@
 #ifndef ACEROLA_JAM0_COMPONENTS_H
 #define ACEROLA_JAM0_COMPONENTS_H
 
+#include <raylib.h>
+
 // Tags
 struct Player {
 };
@@ -59,6 +61,13 @@ struct Pain {
     float value;
 };
 
+enum class Level {
+    One,
+    Two,
+    Three,
+    Four,
+    Five,
+};
 
 
 #endif //ACEROLA_JAM0_COMPONENTS_H
