@@ -13,6 +13,5 @@ const int screenHeight = 600;
 const float radToDeg = (180.0 / 3.141592653589793238463);
 const float degToRad = (3.141592653589793238463 / 180.0);
 
-const Weapon sword{10, 100, 25, 150};
 
 #endif //ACEROLA_JAM0_CONSTANTS_H

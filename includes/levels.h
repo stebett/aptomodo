@@ -9,6 +9,7 @@
 #include "components.h"
 
 void playLevel(entt::registry &registry, Level level);
-
+float radiusByLevel(Level level);
+Weapon swordByLevel(Level level);
 
 #endif //ACEROLA_JAM0_LEVELS_H

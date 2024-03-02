@@ -8,7 +8,8 @@
 #include "components.h"
 
 entt::entity spawnEnemy(entt::registry &registry, Position position, Level level);
-entt::entity spawnPlayer(entt::registry &registry);
+entt::entity spawnPlayer(entt::registry &registry, Level level);
 Camera2D spawnCamera();
+
 
 #endif //ACEROLA_JAM0_FACTORIES_H
