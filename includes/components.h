@@ -48,12 +48,16 @@ struct Radius {
 enum class State {
     casting,
     normal,
+    pain,
 };
 
 struct PlayerState {
     State state;
 };
 
+struct Pain {
+    float value;
+};
 
 
 

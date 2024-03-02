@@ -114,10 +114,19 @@ void playerSecondaryAttack(entt::registry &registry, entt::entity player) {
 
 void castFire(entt::registry &registry, entt::entity player, Vector2 clickPosition) {}
 
-void parseInput(entt::registry &registry, entt::entity player, Position &position, Camera2D &camera) {
-    State playerState = registry.get<PlayerState>(player).state;
+void parseInput(entt::registry &registry, entt::entity &player, Position &position, Camera2D &camera) {
+    State& playerState = registry.get<PlayerState>(player).state;
+    if (IsKeyPressed(KEY_P) || IsKeyDown(KEY_P)) {
+        Pain& pain = registry.get<Pain>(player);
+        pain.value += 10;
+        playerState = State::pain;
+        return;
+    }
     if (IsKeyPressed(KEY_ONE)) {
         playerState = State::casting;
+    }
+    if (IsKeyPressed(KEY_ZERO)) {
+        playerState = State::normal;
     }
     if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && playerState == State::normal) {
         playerAttack(registry, player, GetScreenToWorld2D(GetMousePosition(), camera));
@@ -129,12 +138,12 @@ void parseInput(entt::registry &registry, entt::entity player, Position &positio
         playerSecondaryAttack(registry, player);
     }
 
-
-    position.y -= 4.0f * static_cast<float>(IsKeyPressed(KEY_W) || IsKeyDown(KEY_W));
-    position.y += 4.0f * static_cast<float>(IsKeyPressed(KEY_S) || IsKeyDown(KEY_S));
-    position.x -= 4.0f * static_cast<float>(IsKeyPressed(KEY_A) || IsKeyDown(KEY_A));
-    position.x += 4.0f * static_cast<float>(IsKeyPressed(KEY_D) || IsKeyDown(KEY_D));
-
+    if (playerState != State::pain) {
+        position.y -= 4.0f * static_cast<float>(IsKeyPressed(KEY_W) || IsKeyDown(KEY_W));
+        position.y += 4.0f * static_cast<float>(IsKeyPressed(KEY_S) || IsKeyDown(KEY_S));
+        position.x -= 4.0f * static_cast<float>(IsKeyPressed(KEY_A) || IsKeyDown(KEY_A));
+        position.x += 4.0f * static_cast<float>(IsKeyPressed(KEY_D) || IsKeyDown(KEY_D));
+    }
 }
 
 
@@ -152,6 +161,20 @@ entt::entity spawnEnemy(entt::registry &registry) {
     return spawnEnemy(registry, Position{300.f, 300.f});
 }
 
+entt::entity spawnEnemy2(entt::registry &registry, Position position) {
+    entt::entity enemy = registry.create();
+    registry.emplace<Enemy>(enemy);
+    registry.emplace<Radius>(enemy, 30);
+    registry.emplace<Living>(enemy);
+    registry.emplace<Health>(enemy, 100, 100);
+    registry.emplace<Position>(enemy, position.x, position.y);
+    return enemy;
+}
+
+entt::entity spawnEnemy2(entt::registry &registry) {
+    return spawnEnemy(registry, Position{300.f, 300.f});
+}
+
 
 entt::entity spawnPlayer(entt::registry &registry) {
     entt::entity player = registry.create();
@@ -162,6 +185,7 @@ entt::entity spawnPlayer(entt::registry &registry) {
     registry.emplace<Health>(player, 100, 100);
     registry.emplace<Position>(player, 500.0f, 500.0f);
     registry.emplace<PlayerState>(player, State::normal);
+    registry.emplace<Pain>(player, 100.0f);
 
     return player;
 }
@@ -209,6 +233,7 @@ int main() {
     entt::entity player = spawnPlayer(registry);
     spawnEnemy(registry);
     Position &position = registry.get<Position>(player);
+    Pain &pain = registry.get<Pain>(player);
 
     InitWindow(screenWidth, screenHeight, "Apto Modo");
     SetTargetFPS(60);
@@ -216,14 +241,41 @@ int main() {
     Camera2D camera = spawnCamera();
     Vector2 world{};
     unsigned int framesCounter = 0;
-    while (!WindowShouldClose()) {
+    int enemyCounter = 0;
+    while (!WindowShouldClose() && pain.value < 200.0f) {
         world = GetScreenToWorld2D(Vector2{0, 0}, camera);
         parseInput(registry, player, position, camera);
         updateEnemy(registry, position);
 
-        if (framesCounter % 60 == 0) {
+        if (framesCounter % 60 == 0 && enemyCounter < 15) {
             spawnEnemy(registry, {static_cast<float>(uniform_dist(e1)),
                                   static_cast<float>(uniform_dist(e1))});
+            ++enemyCounter;
+        }
+
+        BeginDrawing();
+        ClearBackground(BLACK);
+        BeginMode2D(camera);
+
+        draw(registry);
+
+        DrawRectangleV(world, Vector2{80, 20}, {0, 0, 0, 100});
+        DrawFPS((int) world.x, (int) world.y);
+        EndDrawing();
+
+        ++framesCounter;
+    }
+    enemyCounter = 0;
+
+    while (!WindowShouldClose() && pain.value < 400.0f) {
+        world = GetScreenToWorld2D(Vector2{0, 0}, camera);
+        parseInput(registry, player, position, camera);
+        updateEnemy(registry, position);
+
+        if (framesCounter % 60 == 0 && enemyCounter < 15) {
+            spawnEnemy2(registry, {static_cast<float>(uniform_dist(e1)),
+                                  static_cast<float>(uniform_dist(e1))});
+            ++enemyCounter;
         }
 
         BeginDrawing();
