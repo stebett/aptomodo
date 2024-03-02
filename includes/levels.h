@@ -7,9 +7,13 @@
 
 #include <entt/entity/registry.hpp>
 #include "components.h"
+#include "rendering.h"
 
-void playLevel(entt::registry &registry, Level level);
+
+void playLevel(entt::registry &registry, Level level, GameScene &scene);
+
 float radiusByLevel(Level level);
+
 Weapon swordByLevel(Level level);
 
 #endif //ACEROLA_JAM0_LEVELS_H

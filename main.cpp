@@ -3,21 +3,20 @@
 #include "includes/components.h"
 #include "includes/constants.h"
 #include "includes/levels.h"
+#include "includes/rendering.h"
 
 
 int main() {
     entt::registry registry;
 
-
     InitWindow(screenWidth, screenHeight, "Apto Modo");
+    GameScene* scene = new GameScene;
+
     SetTargetFPS(60);
 
 
-    playLevel(registry, Level::One);
-    playLevel(registry, Level::Two);
-    playLevel(registry, Level::Three);
-    playLevel(registry, Level::Four);
-    playLevel(registry, Level::Five);
+    playLevel(registry, Level::One, *scene);
+
 
 
     CloseWindow();
