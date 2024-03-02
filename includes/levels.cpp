@@ -6,6 +6,7 @@
 #include "factories.h"
 #include "controls.h"
 #include "npc.h"
+#include "constants.h"
 #include <raylib.h>
 #include <random>
 #include <string>
@@ -24,6 +25,7 @@ Weapon swordByLevel(Level level) {
             return {10, 100, 25, 150};
     }
 }
+
 float radiusByLevel(Level level) {
     switch (level) {
         case Level::One:
@@ -69,8 +71,20 @@ Color colorByLevel(Level level) {
     }
 }
 
+void updateCamera(Camera2D &camera, Position &playerPosition) {
+    float target_x = playerPosition.x;
+    float target_y = playerPosition.y;
 
-void playLevel(entt::registry &registry, Level level, GameScene& scene) {
+    if (playerPosition.x < screenWidth / ( 2 * camera.zoom)) {target_x = screenWidth / ( 2 * camera.zoom);}
+    if (playerPosition.x > screenWidth - screenWidth / ( 2 * camera.zoom)) {target_x = screenWidth - screenWidth / ( 2 * camera.zoom);}
+    if (playerPosition.y < screenHeight / ( 2 * camera.zoom)) {target_y = screenHeight / ( 2 * camera.zoom);}
+    if (playerPosition.y > screenHeight - screenHeight / ( 2 * camera.zoom)) {target_y = screenHeight - screenHeight / ( 2 * camera.zoom);}
+
+    camera.target = {target_x, target_y};
+}
+
+
+void playLevel(entt::registry &registry, Level level, GameScene &scene) {
 
     std::random_device r;
     std::default_random_engine randomEngine(r());
@@ -79,6 +93,7 @@ void playLevel(entt::registry &registry, Level level, GameScene& scene) {
     entt::entity player = spawnPlayer(registry, level);
     Position &position = registry.get<Position>(player);
     Pain &pain = registry.get<Pain>(player);
+    Health &health = registry.get<Health>(player);
 
     int enemyCounter = 0;
 
@@ -88,7 +103,7 @@ void playLevel(entt::registry &registry, Level level, GameScene& scene) {
 
 
     while (!WindowShouldClose() && pain.value < painByLevel(level)) {
-        camera.target = {position.x, position.y};
+        updateCamera(camera, position);
         topLeft = GetScreenToWorld2D(Vector2{0, 0}, camera);
 
 
@@ -111,7 +126,8 @@ void playLevel(entt::registry &registry, Level level, GameScene& scene) {
         DrawRectangleV(topLeft, Vector2{80, 20}, {0, 0, 0, 100});
         DrawFPS((int) topLeft.x, (int) topLeft.y);
 
-        DrawText(("Pain: " + std::to_string((int)pain.value)).c_str(), topLeft.x, topLeft.y + 30, 25, WHITE);
+        DrawText(("Pain: " + std::to_string((int) pain.value)).c_str(), topLeft.x, topLeft.y + 30, 25, WHITE);
+        DrawText(("Health: " + std::to_string((int) health.value)).c_str(), topLeft.x, topLeft.y + 60, 25, WHITE);
         EndDrawing();
 
         ++framesCounter;

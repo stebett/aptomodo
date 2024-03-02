@@ -39,7 +39,7 @@ Camera2D spawnCamera() {
     camera.target = {0, 0};
     camera.offset = {screenWidth/2, screenHeight/2};
     camera.rotation = 0.0f;
-    camera.zoom = 1.0f;
+    camera.zoom = 3.0f;
     return camera;
 }
 
