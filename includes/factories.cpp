@@ -10,7 +10,7 @@
 
 
 
-entt::entity spawnEnemy(entt::registry &registry, Position position, Level level) {
+entt::entity spawnEnemy(entt::registry &registry, Position position, int level) {
     entt::entity enemy = registry.create();
     registry.emplace<Radius>(enemy, radiusByLevel(level));
     registry.emplace<Enemy>(enemy);
@@ -20,11 +20,14 @@ entt::entity spawnEnemy(entt::registry &registry, Position position, Level level
     return enemy;
 }
 
-entt::entity spawnPlayer(entt::registry &registry, Level level) {
+entt::entity spawnPlayer(entt::registry &registry, int level) {
+    auto texture = LoadTexture(getAssetPath("player.png").c_str()); // TODO: remember to unload if needed
+
     entt::entity player = registry.create();
     registry.emplace<Player>(player);
     registry.emplace<Living>(player);
     registry.emplace<Radius>(player, 20);
+    registry.emplace<Texture>(player, texture);
     registry.emplace<Weapon>(player, swordByLevel(level));
     registry.emplace<Health>(player, 100, 100);
     registry.emplace<Position>(player, 500.0f, 500.0f);

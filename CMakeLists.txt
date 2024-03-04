@@ -21,7 +21,8 @@ add_executable(acerola_jam0 main.cpp
         includes/controls.cpp
         includes/controls.h
         includes/npc.cpp
-        includes/npc.h)
+        includes/npc.h
+        includes/raygui.h)
 
 target_link_libraries(acerola_jam0 PRIVATE raylib)
 target_link_libraries(acerola_jam0 PRIVATE LDtkLoader)

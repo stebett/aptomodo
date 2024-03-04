@@ -9,12 +9,16 @@
 #include <LDtkLoader/Project.hpp>
 #include <LDtkLoader/World.hpp>
 #include <raylib.h>
+#include <entt/entity/registry.hpp>
 
 
 
 
 class GameScene {
+
     int current_level;
+
+    entt::registry& m_registry;
 
     ldtk::Project *ldtkProject{};
     const ldtk::World *ldtkWorld{};
@@ -23,11 +27,11 @@ class GameScene {
     Texture2D currentTilesetTexture;
     Texture2D renderedLevelTexture;
 public:
-    GameScene();
+    GameScene(entt::registry &registry);
 
     ~GameScene();
 
-    void set_selected_level(int lvl);
+    void set_selected_level(entt::registry &registry, int level);
     void draw();
 };
 

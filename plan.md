@@ -16,6 +16,7 @@
 7. Sound system
 8. Visual touch ups
 9. Balance fix with extensive play tests
+10.make a titlescreen with a moving image of an eye in the background and a press any butto =n to sra==tartZZ
 
 # Plan
 ## 1. Write the code for fighting and moving and evoking

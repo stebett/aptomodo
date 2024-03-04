@@ -10,10 +10,10 @@
 #include "rendering.h"
 
 
-void playLevel(entt::registry &registry, Level level, GameScene &scene);
+void playLevel(entt::registry &registry, GameScene &scene, int level);
 
-float radiusByLevel(Level level);
+float radiusByLevel(int level);
 
-Weapon swordByLevel(Level level);
+Weapon swordByLevel(int level);
 
 #endif //ACEROLA_JAM0_LEVELS_H
