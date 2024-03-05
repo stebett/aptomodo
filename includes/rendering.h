@@ -10,7 +10,8 @@
 #include <LDtkLoader/World.hpp>
 #include <raylib.h>
 #include <entt/entity/registry.hpp>
-
+#include "components.h"
+#include "gui.h"
 
 
 
@@ -31,11 +32,13 @@ public:
 
     ~GameScene();
 
-    void set_selected_level(entt::registry &registry, int level);
+    void setLevel(entt::registry &registry, int level);
     void draw();
+    std::string getTexturePath(const std::string& tileset);
+    Animation::Map getAnimationMap(const std::string& ldtkEnum);
 };
 
-void draw(const entt::registry &registry, GameScene &scene);
+void draw(const entt::registry &registry, GameScene &scene, unsigned int frame);
 
 
 

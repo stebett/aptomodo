@@ -3,18 +3,29 @@
 //
 
 #include "rendering.h"
-#include "components.h"
 #include "constants.h"
 #include "factories.h"
 
+Rectangle toRectangle(ldtk::Rect<int> rectangle)
+{
+    return {
+            .x = float(rectangle.x),
+            .y = float(rectangle.y),
+            .width = float(rectangle.width),
+            .height = float(rectangle.height),
+    };
+}
 
-void draw(const entt::registry &registry, GameScene &scene) {
+void draw(const entt::registry &registry, GameScene &scene, unsigned int frame) {
     scene.draw();
 
-    auto playerView = registry.view<Player, Living, Texture, Position>();
-    for (auto [entity, texture, position]: playerView.each()) {
-        DrawTexture(texture, position.x, position.y, WHITE);
+    auto playerView = registry.view<Player, Living, Texture, Animation::Map, Position>();
+    for (auto [entity, texture, animationMap, position]: playerView.each()) {
+//        DrawTexture(texture, position.x, position.y, WHITE);
 //        DrawCircle(position.x, position.y, radius.value, RED);
+        Rectangle sourceRec = animationMap.at(Animation::Stand)[(frame % playerUpdateRate) % animationMap.at(Animation::Stand).size()];
+        DrawTextureRec(texture, sourceRec, {position.x, position.y}, WHITE);
+
     }
     auto enemyView = registry.view<Enemy, Living, Radius, Position>();
     for (auto [entity, radius, position]: enemyView.each()) {
@@ -30,7 +41,7 @@ GameScene::GameScene(entt::registry &registry) : m_registry(registry) {
     ldtkWorld = &ldtkProject->getWorld();
 
     current_level = -1;
-    set_selected_level(registry, 0);
+    setLevel(registry, 0);
 }
 
 
@@ -53,7 +64,7 @@ void GameScene::draw() {
 
 }
 
-void GameScene::set_selected_level(entt::registry &registry, int level) {
+void GameScene::setLevel(entt::registry &registry, int level) {
     // unload current tileset texture if necessary
     if (current_level >= 0) {
         UnloadTexture(currentTilesetTexture);
@@ -122,4 +133,20 @@ void GameScene::set_selected_level(entt::registry &registry, int level) {
     EndTextureMode();
     renderedLevelTexture = renderTexture.texture;
 
+}
+
+std::string GameScene::getTexturePath(const std::string& tileset) {
+    return getAssetPath(ldtkWorld -> getTileset(tileset).path);
+}
+
+Animation::Map GameScene::getAnimationMap(const std::string &ldtkEnum) {
+    auto &playerEnum = ldtkWorld -> getEnum(ldtkEnum);
+    auto rec1 = toRectangle(playerEnum["Standing1"].getIconTextureRect());
+    auto rec2 = toRectangle(playerEnum["Standing2"].getIconTextureRect());
+    auto rec3 = toRectangle(playerEnum["Standing3"].getIconTextureRect());
+    auto rec4 = toRectangle(playerEnum["Standing4"].getIconTextureRect());
+    auto rec5 = toRectangle(playerEnum["Standing5"].getIconTextureRect());
+    Animation::Map map;
+    map[Animation::Stand] = {rec1, rec2, rec3, rec4, rec5};
+    return map;
 }

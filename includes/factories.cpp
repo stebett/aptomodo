@@ -20,14 +20,16 @@ entt::entity spawnEnemy(entt::registry &registry, Position position, int level) 
     return enemy;
 }
 
-entt::entity spawnPlayer(entt::registry &registry, int level) {
-    auto texture = LoadTexture(getAssetPath("player.png").c_str()); // TODO: remember to unload if needed
+entt::entity spawnPlayer(entt::registry &registry, int level, GameScene &scene) {
+    Texture2D texture = LoadTexture(scene.getTexturePath("Player").c_str()); // TODO: remember to unload if needed
+    Animation::Map animationMap = scene.getAnimationMap("Player");
 
     entt::entity player = registry.create();
     registry.emplace<Player>(player);
     registry.emplace<Living>(player);
     registry.emplace<Radius>(player, 20);
     registry.emplace<Texture>(player, texture);
+    registry.emplace<Animation::Map>(player, animationMap);
     registry.emplace<Weapon>(player, swordByLevel(level));
     registry.emplace<Health>(player, 100, 100);
     registry.emplace<Position>(player, 500.0f, 500.0f);

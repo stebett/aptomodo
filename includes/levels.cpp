@@ -104,7 +104,7 @@ void playLevel(entt::registry &registry, GameScene &scene, int level) {
     std::uniform_int_distribution<int> uniform_dist(1, 500);
 
 
-    entt::entity player = spawnPlayer(registry, level);
+    entt::entity player = spawnPlayer(registry, level, scene);
     Position &position = registry.get<Position>(player);
     Pain &pain = registry.get<Pain>(player);
     Health &health = registry.get<Health>(player);
@@ -133,7 +133,7 @@ void playLevel(entt::registry &registry, GameScene &scene, int level) {
         ClearBackground(colorByLevel(level));
         BeginMode2D(camera);
 
-        draw(registry, scene);
+        draw(registry, scene, framesCounter);
         parseInput(registry, player, position, camera);
         updateEnemy(registry, position);
 

@@ -17,6 +17,7 @@ int main() {
 //    GuiSetStyle(BUTTON, TEXT_ALIGNMENT, TEXT_ALIGN_CENTER);
 //    GuiSetStyle(DEFAULT, TEXT_SIZE, 20);
     GuiLoadStyle(getAssetPath("gui_style.rgs").c_str());
+//    GUI gui = GUI(screenWidth, screenHeight, health.value, health.max, pain.value, maxPain, style);
 
     auto rec = Rectangle { static_cast<float>(screenWidth / 2 - 50), static_cast<float>(screenHeight / 2 - 20), 100, 40 };
 

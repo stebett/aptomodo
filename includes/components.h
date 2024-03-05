@@ -6,6 +6,9 @@
 #define ACEROLA_JAM0_COMPONENTS_H
 
 #include <raylib.h>
+#include <unordered_map>
+#include <vector>
+
 
 // Tags
 struct Player {
@@ -70,6 +73,18 @@ enum class Level {
     Four,
     Five,
 };
+
+namespace Animation {
+
+    enum State {
+        Stand,
+        Walk,
+        Attack,
+    };
+    using Map = std::unordered_map<Animation::State, std::vector<Rectangle>>;
+
+}
+
 
 
 #endif //ACEROLA_JAM0_COMPONENTS_H
