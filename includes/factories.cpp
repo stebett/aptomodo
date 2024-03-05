@@ -10,9 +10,14 @@
 #include "levels.h"
 
 
+entt::entity spawnRandomEnemy(entt::registry &registry, Level::Variables &level) {
+    Position randomPos = {static_cast<float>(rng::uniform(rng::seed)),
+                          static_cast<float> (rng::uniform(rng::seed))};
+    return spawnEnemy(registry, randomPos, level);
+}
 
 
-entt::entity spawnEnemy(entt::registry &registry, Position position, Level::Variables level) {
+entt::entity spawnEnemy(entt::registry &registry, Position position, Level::Variables &level) {
     entt::entity enemy = registry.create();
     registry.emplace<Radius>(enemy, level.radius);
     registry.emplace<Enemy>(enemy);
@@ -22,9 +27,9 @@ entt::entity spawnEnemy(entt::registry &registry, Position position, Level::Vari
     return enemy;
 }
 
-entt::entity spawnPlayer(entt::registry &registry, GameScene *scene, Level::Variables level) {
-    Texture2D texture = LoadTexture(scene -> getTexturePath("Player").c_str()); // TODO: remember to unload if needed
-    Animation::Map animationMap = scene -> getAnimationMap("Player");
+entt::entity spawnPlayer(entt::registry &registry, GameScene *scene, Level::Variables &level) {
+    Texture2D texture = LoadTexture(scene->getTexturePath("Player").c_str()); // TODO: remember to unload if needed
+    Animation::Map animationMap = scene->getAnimationMap("Player");
 
     entt::entity player = registry.create();
     registry.emplace<Player>(player);
@@ -44,7 +49,7 @@ entt::entity spawnPlayer(entt::registry &registry, GameScene *scene, Level::Vari
 Camera2D spawnCamera() {
     Camera2D camera = {0};
     camera.target = {0, 0};
-    camera.offset = {screenWidth/2, screenHeight/2};
+    camera.offset = {screenWidth / 2, screenHeight / 2};
     camera.rotation = 0.0f;
     camera.zoom = 3.0f;
     return camera;
