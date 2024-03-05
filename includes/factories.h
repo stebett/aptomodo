@@ -9,8 +9,8 @@
 #include "components.h"
 #include "rendering.h"
 
-entt::entity spawnEnemy(entt::registry &registry, Position position, int level);
-entt::entity spawnPlayer(entt::registry &registry, int level, GameScene &scene);
+entt::entity spawnEnemy(entt::registry &registry, Position position, Level::Variables level);
+entt::entity spawnPlayer(entt::registry &registry, GameScene *scene, Level::Variables level);
 Camera2D spawnCamera();
 
 #endif //ACEROLA_JAM0_FACTORIES_H

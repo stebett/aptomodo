@@ -6,6 +6,7 @@
 #define ACEROLA_JAM0_CONSTANTS_H
 
 
+#include <random>
 #include "components.h"
 
 const int screenWidth = 1920;
@@ -17,6 +18,11 @@ const float degToRad = (3.141592653589793238463 / 180.0);
 const int updateRate { 10 };
 const int playerUpdateRate { 30 };
 
+namespace rng {
+    static std::random_device randomDevice;
+    static std::default_random_engine seed(randomDevice());
+    static std::uniform_int_distribution<int> uniform(1, 500);
+}
 
 inline std::string getAssetPath(const std::string& assetName)
 {

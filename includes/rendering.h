@@ -38,8 +38,9 @@ public:
     Animation::Map getAnimationMap(const std::string& ldtkEnum);
 };
 
-void draw(const entt::registry &registry, GameScene &scene, unsigned int frame);
+void draw(const entt::registry &registry, GameScene *scene, unsigned int frame);
 
+void updateCamera(Camera2D &camera, Position &playerPosition);
 
 
 #endif //ACEROLA_JAM0_RENDERING_H

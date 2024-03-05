@@ -42,14 +42,13 @@ struct Triangle {
 };
 
 struct Health {
-    float max;
     float value;
+    float max;
 };
 
 struct Radius {
     float value;
 };
-
 
 
 enum class State {
@@ -64,16 +63,18 @@ struct PlayerState {
 
 struct Pain {
     float value;
+    float max;
 };
 
-enum class Level {
-    One,
-    Two,
-    Three,
-    Four,
-    Five,
-};
-
+namespace Level {
+    struct Variables {
+        int id;
+        Pain pain;
+        Weapon sword;
+        Radius radius;
+        Color color;
+    };
+}
 namespace Animation {
 
     enum State {
@@ -84,7 +85,6 @@ namespace Animation {
     using Map = std::unordered_map<Animation::State, std::vector<Rectangle>>;
 
 }
-
 
 
 #endif //ACEROLA_JAM0_COMPONENTS_H

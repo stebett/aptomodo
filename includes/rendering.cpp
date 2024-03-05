@@ -6,6 +6,25 @@
 #include "constants.h"
 #include "factories.h"
 
+
+void updateCamera(Camera2D &camera, Position &playerPosition) {
+    float target_x = playerPosition.x;
+    float target_y = playerPosition.y;
+
+    if (playerPosition.x < mapWidth / (2 * camera.zoom)) { target_x = mapWidth / (2 * camera.zoom); }
+    if (playerPosition.x > mapWidth - mapWidth / (2 * camera.zoom)) {
+        target_x = mapWidth - mapWidth / (2 * camera.zoom);
+    }
+    if (playerPosition.y < mapHeight / (2 * camera.zoom)) { target_y = mapHeight / (2 * camera.zoom); }
+    if (playerPosition.y > mapHeight - mapHeight / (2 * camera.zoom)) {
+        target_y = mapHeight - mapHeight / (2 * camera.zoom);
+    }
+
+    camera.target = {target_x, target_y};
+}
+
+
+
 Rectangle toRectangle(ldtk::Rect<int> rectangle)
 {
     return {
@@ -16,8 +35,8 @@ Rectangle toRectangle(ldtk::Rect<int> rectangle)
     };
 }
 
-void draw(const entt::registry &registry, GameScene &scene, unsigned int frame) {
-    scene.draw();
+void draw(const entt::registry &registry, GameScene *scene, unsigned int frame) {
+    scene -> draw();
 
     auto playerView = registry.view<Player, Living, Texture, Animation::Map, Position>();
     for (auto [entity, texture, animationMap, position]: playerView.each()) {

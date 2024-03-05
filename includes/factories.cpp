@@ -4,15 +4,17 @@
 
 #include <entt/entity/registry.hpp>
 #include <raylib.h>
+#include <random>
 #include "factories.h"
 #include "constants.h"
 #include "levels.h"
 
 
 
-entt::entity spawnEnemy(entt::registry &registry, Position position, int level) {
+
+entt::entity spawnEnemy(entt::registry &registry, Position position, Level::Variables level) {
     entt::entity enemy = registry.create();
-    registry.emplace<Radius>(enemy, radiusByLevel(level));
+    registry.emplace<Radius>(enemy, level.radius);
     registry.emplace<Enemy>(enemy);
     registry.emplace<Living>(enemy);
     registry.emplace<Health>(enemy, 100, 100);
@@ -20,21 +22,21 @@ entt::entity spawnEnemy(entt::registry &registry, Position position, int level) 
     return enemy;
 }
 
-entt::entity spawnPlayer(entt::registry &registry, int level, GameScene &scene) {
-    Texture2D texture = LoadTexture(scene.getTexturePath("Player").c_str()); // TODO: remember to unload if needed
-    Animation::Map animationMap = scene.getAnimationMap("Player");
+entt::entity spawnPlayer(entt::registry &registry, GameScene *scene, Level::Variables level) {
+    Texture2D texture = LoadTexture(scene -> getTexturePath("Player").c_str()); // TODO: remember to unload if needed
+    Animation::Map animationMap = scene -> getAnimationMap("Player");
 
     entt::entity player = registry.create();
     registry.emplace<Player>(player);
     registry.emplace<Living>(player);
-    registry.emplace<Radius>(player, 20);
+    registry.emplace<Radius>(player, level.radius);
     registry.emplace<Texture>(player, texture);
     registry.emplace<Animation::Map>(player, animationMap);
-    registry.emplace<Weapon>(player, swordByLevel(level));
+    registry.emplace<Weapon>(player, level.sword);
     registry.emplace<Health>(player, 100, 100);
     registry.emplace<Position>(player, 500.0f, 500.0f);
     registry.emplace<PlayerState>(player, State::normal);
-    registry.emplace<Pain>(player, 100.0f);
+    registry.emplace<Pain>(player, level.pain);
 
     return player;
 }
