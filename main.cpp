@@ -33,7 +33,7 @@ int main() {
     while (!WindowShouldClose() ) {
         updateCamera(camera, position);
 
-        if (framesCounter % 60 == 0 && enemyCounter < 10) {
+        if (framesCounter % 60 == 0 && enemyCounter < 4) {
             spawnRandomEnemy(registry, level);
             ++enemyCounter;
         }
@@ -43,7 +43,7 @@ int main() {
         BeginMode2D(camera);
         draw(registry, scene, framesCounter);
         parseInput(registry, player, position, camera, scene -> grid);
-        updateEnemy(registry, position, scene -> grid);
+        updateEnemy(registry, player, scene -> grid);
 
         EndMode2D();
         gui.drawGameplay();

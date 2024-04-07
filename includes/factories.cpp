@@ -20,6 +20,7 @@ entt::entity spawnEnemy(entt::registry &registry, Position position, Level::Vari
     registry.emplace<Enemy>(enemy);
     registry.emplace<Living>(enemy);
     registry.emplace<ID>(enemy, id++);
+    registry.emplace<Weapon>(enemy, level.sword);
     registry.emplace<Speed>(enemy, 5.0f);
     registry.emplace<Health>(enemy, 100, 100);
     registry.emplace<Position>(enemy, position.x, position.y);

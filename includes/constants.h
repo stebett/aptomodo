@@ -24,6 +24,7 @@ namespace rng {
     static std::random_device randomDevice;
     static std::default_random_engine seed(randomDevice());
     static std::uniform_int_distribution<int> uniform(1, 500);
+    static std::uniform_int_distribution<int> uniform_neg500_500(-500, 500);
 }
 
 inline std::string getAssetPath(const std::string& assetName)
