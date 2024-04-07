@@ -4,6 +4,7 @@
 
 #include <entt/entity/registry.hpp>
 #include <raylib.h>
+#include <iostream>
 #include "controls.h"
 #include "collisions.h"
 #include "constants.h"
@@ -55,7 +56,7 @@ void playerSecondaryAttack(entt::registry &registry, entt::entity player) {
 
 void castFire(entt::registry &registry, entt::entity player, Vector2 clickPosition) {}
 
-void parseInput(entt::registry &registry, entt::entity &player, Position &position, Camera2D &camera) {
+void parseInput(entt::registry &registry, entt::entity &player, Position &position, Camera2D &camera, const Map &grid) {
     State &playerState = registry.get<PlayerState>(player).state;
     if (IsKeyPressed(KEY_P) || IsKeyDown(KEY_P)) {
         Pain &pain = registry.get<Pain>(player);
@@ -79,11 +80,24 @@ void parseInput(entt::registry &registry, entt::entity &player, Position &positi
         playerSecondaryAttack(registry, player);
     }
 
+    static int y = position.y;
+    static int x = position.x;
+
     if (playerState != State::pain) {
-        position.y -= 4.0f * static_cast<float>(IsKeyPressed(KEY_W) || IsKeyDown(KEY_W));
-        position.y += 4.0f * static_cast<float>(IsKeyPressed(KEY_S) || IsKeyDown(KEY_S));
-        position.x -= 4.0f * static_cast<float>(IsKeyPressed(KEY_A) || IsKeyDown(KEY_A));
-        position.x += 4.0f * static_cast<float>(IsKeyPressed(KEY_D) || IsKeyDown(KEY_D));
+        y -= 4.0f * static_cast<float>(IsKeyPressed(KEY_W) || IsKeyDown(KEY_W));
+        y += 4.0f * static_cast<float>(IsKeyPressed(KEY_S) || IsKeyDown(KEY_S));
+        x -= 4.0f * static_cast<float>(IsKeyPressed(KEY_A) || IsKeyDown(KEY_A));
+        x += 4.0f * static_cast<float>(IsKeyPressed(KEY_D) || IsKeyDown(KEY_D));
+    }
+
+    if (x > mapWidth || y > mapHeight || grid(x / tileSize, y / tileSize) == -1) {
+        position.x = x;
+        position.y = y;
+    }
+    else {
+//        std::cout << "Position: " << x << ", " << y << " Value: " << grid(x / tileSize, y / tileSize) << '\n';
+        x = position.x;
+        y = position.y;
     }
 }
 

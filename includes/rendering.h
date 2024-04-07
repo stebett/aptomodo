@@ -12,7 +12,7 @@
 #include <entt/entity/registry.hpp>
 #include "components.h"
 #include "gui.h"
-
+#include "constants.h"
 
 
 class GameScene {
@@ -27,7 +27,10 @@ class GameScene {
 
     Texture2D currentTilesetTexture;
     Texture2D renderedLevelTexture;
+
 public:
+    Map grid;
+
     GameScene(entt::registry &registry);
 
     ~GameScene();

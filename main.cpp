@@ -42,8 +42,8 @@ int main() {
 
         BeginMode2D(camera);
         draw(registry, scene, framesCounter);
-        parseInput(registry, player, position, camera);
-        updateEnemy(registry, position);
+        parseInput(registry, player, position, camera, scene -> grid);
+        updateEnemy(registry, position, scene -> grid);
 
         EndMode2D();
         gui.drawGameplay();

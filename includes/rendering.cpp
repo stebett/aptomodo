@@ -4,7 +4,7 @@
 
 #include "rendering.h"
 #include "constants.h"
-#include "factories.h"
+#include <raymath.h>
 
 
 void updateCamera(Camera2D &camera, Position &playerPosition) {
@@ -20,13 +20,11 @@ void updateCamera(Camera2D &camera, Position &playerPosition) {
         target_y = mapHeight - mapHeight / (2 * camera.zoom);
     }
 
-    camera.target = {target_x, target_y};
+    camera.target = Vector2Lerp(camera.target, {target_x, target_y}, 0.1);
 }
 
 
-
-Rectangle toRectangle(ldtk::Rect<int> rectangle)
-{
+Rectangle toRectangle(ldtk::Rect<int> rectangle) {
     return {
             .x = float(rectangle.x),
             .y = float(rectangle.y),
@@ -36,14 +34,14 @@ Rectangle toRectangle(ldtk::Rect<int> rectangle)
 }
 
 void draw(const entt::registry &registry, GameScene *scene, unsigned int frame) {
-    scene -> draw();
+    scene->draw();
 
     auto playerView = registry.view<Player, Living, Texture, Animation::Map, Position>();
     for (auto [entity, texture, animationMap, position]: playerView.each()) {
 //        DrawTexture(texture, position.x, position.y, WHITE);
-//        DrawCircle(position.x, position.y, radius.value, RED);
-        Rectangle sourceRec = animationMap.at(Animation::Stand)[(frame % playerUpdateRate) % animationMap.at(Animation::Stand).size()];
-        DrawTextureRec(texture, sourceRec, {position.x, position.y}, WHITE);
+        DrawCircle(position.x, position.y, 5, RED);
+//        Rectangle sourceRec = animationMap.at(Animation::Stand)[frame / playerUpdateRate % animationMap.at(Animation::Stand).size()];
+//        DrawTextureRec(texture, sourceRec, {position.x, position.y}, WHITE);
 
     }
     auto enemyView = registry.view<Enemy, Living, Radius, Position>();
@@ -96,18 +94,16 @@ void GameScene::setLevel(entt::registry &registry, int level) {
 
     BeginTextureMode(renderTexture);
 
-    if (currentLdtkLevel->hasBgImage())
-    {
+    if (currentLdtkLevel->hasBgImage()) {
         auto backgroundPath = currentLdtkLevel->getBgImage();
         auto backgroundTexture = LoadTexture(getAssetPath(backgroundPath.path.c_str()).c_str());
         SetTextureFilter(backgroundTexture, TEXTURE_FILTER_POINT);
 
         // tile background texture to cover the whole frame buffer
-        for (int i = 0; i <= (mapWidth / backgroundTexture.width); i++)
-        {
-            for (int j = 0; j <= (mapHeight / backgroundTexture.height); j++)
-            {
-                DrawTextureV(backgroundTexture, {float(i * backgroundTexture.width), float(j * backgroundTexture.height)}, WHITE);
+        for (int i = 0; i <= (mapWidth / backgroundTexture.width); i++) {
+            for (int j = 0; j <= (mapHeight / backgroundTexture.height); j++) {
+                DrawTextureV(backgroundTexture,
+                             {float(i * backgroundTexture.width), float(j * backgroundTexture.height)}, WHITE);
             }
         }
     }
@@ -136,6 +132,17 @@ void GameScene::setLevel(entt::registry &registry, int level) {
                 DrawTextureRec(currentTilesetTexture, source_rect, target_pos, WHITE);
             }
         }
+
+        if (ldtk::LayerType::IntGrid == layer.getType()) {
+            const auto gridSize = layer.getGridSize();
+//            std::cout << gridSize.x << " " << gridSize.y << "\n";
+//            std::cout << grid.rows() << " " << grid.cols() << "\n";
+            for (int x = 0; x <= mapWidth / tileSize; x++) {
+                for (int y = 0; y <= mapHeight / tileSize; y++) {
+                    grid(x, y) = layer.getIntGridVal(x, y).value;
+                }
+            }
+        }
     }
 
 //    for (auto &&entity: currentLdtkLevel->getLayer("Entities").allEntities()) {
@@ -154,12 +161,12 @@ void GameScene::setLevel(entt::registry &registry, int level) {
 
 }
 
-std::string GameScene::getTexturePath(const std::string& tileset) {
-    return getAssetPath(ldtkWorld -> getTileset(tileset).path);
+std::string GameScene::getTexturePath(const std::string &tileset) {
+    return getAssetPath(ldtkWorld->getTileset(tileset).path);
 }
 
 Animation::Map GameScene::getAnimationMap(const std::string &ldtkEnum) {
-    auto &playerEnum = ldtkWorld -> getEnum(ldtkEnum);
+    auto &playerEnum = ldtkWorld->getEnum(ldtkEnum);
     auto rec1 = toRectangle(playerEnum["Standing1"].getIconTextureRect());
     auto rec2 = toRectangle(playerEnum["Standing2"].getIconTextureRect());
     auto rec3 = toRectangle(playerEnum["Standing3"].getIconTextureRect());

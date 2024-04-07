@@ -26,6 +26,10 @@ struct Position {
     operator Vector2() {
         return Vector2{x, y};
     }
+
+    Position(Vector2 v) : x(v.x), y(v.y) {}
+
+    Position(float x, float y) : x(x), y(y) {}
 };
 
 struct Weapon {
@@ -47,6 +51,10 @@ struct Health {
 };
 
 struct Radius {
+    float value;
+};
+
+struct Speed {
     float value;
 };
 

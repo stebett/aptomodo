@@ -6,7 +6,8 @@
 #define ACEROLA_JAM0_NPC_H
 
 #include "components.h"
+#include "constants.h"
 
-void updateEnemy(entt::registry &registry, Position &playerPosition);
+void updateEnemy(entt::registry &registry, Position &playerPosition, const Map &grid);
 
 #endif //ACEROLA_JAM0_NPC_H

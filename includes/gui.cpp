@@ -7,6 +7,9 @@
 #define RAYGUI_IMPLEMENTATION
 
 #include "raygui.h"
+#include "constants.h"
+#include <string>
+
 
 void GUI::drawStartScreen(bool &start, bool &stop) {
     BeginDrawing();

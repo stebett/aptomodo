@@ -10,11 +10,7 @@
 #include "levels.h"
 
 
-entt::entity spawnRandomEnemy(entt::registry &registry, Level::Variables &level) {
-    Position randomPos = {static_cast<float>(rng::uniform(rng::seed)),
-                          static_cast<float> (rng::uniform(rng::seed))};
-    return spawnEnemy(registry, randomPos, level);
-}
+
 
 
 entt::entity spawnEnemy(entt::registry &registry, Position position, Level::Variables &level) {
@@ -22,9 +18,16 @@ entt::entity spawnEnemy(entt::registry &registry, Position position, Level::Vari
     registry.emplace<Radius>(enemy, level.radius);
     registry.emplace<Enemy>(enemy);
     registry.emplace<Living>(enemy);
+    registry.emplace<Speed>(enemy, 5.0f);
     registry.emplace<Health>(enemy, 100, 100);
     registry.emplace<Position>(enemy, position.x, position.y);
     return enemy;
+}
+
+entt::entity spawnRandomEnemy(entt::registry &registry, Level::Variables &level) {
+    Position randomPos = {static_cast<float>(rng::uniform(rng::seed)),
+                          static_cast<float> (rng::uniform(rng::seed))};
+    return spawnEnemy(registry, randomPos, level);
 }
 
 entt::entity spawnPlayer(entt::registry &registry, GameScene *scene, Level::Variables &level) {

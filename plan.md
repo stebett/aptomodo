@@ -6,6 +6,11 @@
 - Basic code for 2D world
 - Look at the commits
 
+# TODO
+- fix player position, centering it
+- add animation for attack
+- construct level 1
+- Write dialogs
 # Plan
 1. Write the code for fighting and moving and evoking
 2. Code the 5 levels without any texture and minimal dialog

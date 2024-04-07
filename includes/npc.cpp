@@ -4,27 +4,34 @@
 
 #include <entt/entity/registry.hpp>
 #include <valarray>
+#include <raylib.h>
 #include "npc.h"
+#include "constants.h"
+#include <raymath.h>
 
-void moveTowardsPoint(Position &position, Position &target) {
-    float speed = 4.0f;
-    float m = sqrt(pow(position.x - target.x, 2) + pow(position.y - target.y, 2));
-    position = {(position.x - (position.x - target.x) * speed / m),
-                position.y - (position.y - target.y) * speed / m};
-//    position.y -= speed * static_cast<float>(position.y > target.y);
-//    position.y += speed * static_cast<float>(position.y < target.y);
-//    position.x -= speed * static_cast<float>(position.x > target.x);
-//    position.x += speed * static_cast<float>(position.x < target.x);
+
+
+bool checkCollision(const entt::registry &registry, Vector2 position, Radius radius, const Map &grid) {
+    auto enemyView = registry.view<Living, Radius, Position>();
+    for (auto [enemy, enemyRadius, enemyPosition]: enemyView.each())
+        if (CheckCollisionCircles(position, radius.value, {enemyPosition.x, enemyPosition.y}, enemyRadius.value))
+            return true;
+        if (position.x > mapWidth || position.y > mapHeight || grid((int)position.x / tileSize, (int)position.y / tileSize) == -1) {
+            return true;
+            }
+    return false;
 }
 
-
-void updateEnemy(entt::registry &registry, Position &playerPosition) {
-    auto enemyView = registry.view<Living, Health, Position, Enemy>();
-    for (auto [enemy, health, position]: enemyView.each()) {
+void updateEnemy(entt::registry &registry, Position &playerPosition, const Map &grid) {
+    auto enemyView = registry.view<Living, Speed, Radius, Health, Position, Enemy>();
+    for (auto [enemy, speed, radius, health, position]: enemyView.each()) {
         if (health.value <= 0) {
             registry.remove<Living>(enemy);
             return;
         }
-        moveTowardsPoint(position, playerPosition);
+        Position newPosition = Vector2MoveTowards(position, playerPosition, speed.value);
+        if (!checkCollision(registry, newPosition, radius, grid)) {
+            position = newPosition;
+        }
     }
 }
