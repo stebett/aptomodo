@@ -8,6 +8,8 @@ find_package(LDtkLoader 1.5)
 set(CMAKE_CXX_STANDARD 20)
 
 add_executable(acerola_jam0 main.cpp
+        includes/astar.h
+        includes/astar.cpp
         includes/components.h
         includes/levels.cpp
         includes/levels.h

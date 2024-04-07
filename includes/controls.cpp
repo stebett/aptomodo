@@ -10,7 +10,6 @@
 #include "constants.h"
 
 
-
 void playerAttack(entt::registry &registry, entt::entity player, Vector2 clickPosition) {
     Position playerPosition = registry.get<Position>(player);
     Weapon playerWeapon = registry.get<Weapon>(player);
@@ -83,18 +82,17 @@ void parseInput(entt::registry &registry, entt::entity &player, Position &positi
     static int y = position.y;
     static int x = position.x;
 
-    if (playerState != State::pain) {
-        y -= 4.0f * static_cast<float>(IsKeyPressed(KEY_W) || IsKeyDown(KEY_W));
-        y += 4.0f * static_cast<float>(IsKeyPressed(KEY_S) || IsKeyDown(KEY_S));
-        x -= 4.0f * static_cast<float>(IsKeyPressed(KEY_A) || IsKeyDown(KEY_A));
-        x += 4.0f * static_cast<float>(IsKeyPressed(KEY_D) || IsKeyDown(KEY_D));
-    }
+//    if (playerState != State::pain) {
+    y -= 4.0f * static_cast<float>(IsKeyPressed(KEY_W) || IsKeyDown(KEY_W));
+    y += 4.0f * static_cast<float>(IsKeyPressed(KEY_S) || IsKeyDown(KEY_S));
+    x -= 4.0f * static_cast<float>(IsKeyPressed(KEY_A) || IsKeyDown(KEY_A));
+    x += 4.0f * static_cast<float>(IsKeyPressed(KEY_D) || IsKeyDown(KEY_D));
+//    }
 
-    if (x > mapWidth || y > mapHeight || grid(x / tileSize, y / tileSize) == -1) {
+    if (x < 0 || y < 0 || x > mapWidth || y > mapHeight || grid(x / tileSize, y / tileSize) == -1) {
         position.x = x;
         position.y = y;
-    }
-    else {
+    } else {
 //        std::cout << "Position: " << x << ", " << y << " Value: " << grid(x / tileSize, y / tileSize) << '\n';
         x = position.x;
         y = position.y;

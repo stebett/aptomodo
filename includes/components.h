@@ -74,6 +74,10 @@ struct Pain {
     float max;
 };
 
+struct ID {
+    int value;
+};
+
 namespace Level {
     struct Variables {
         int id;

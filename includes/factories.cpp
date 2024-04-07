@@ -14,13 +14,16 @@
 
 
 entt::entity spawnEnemy(entt::registry &registry, Position position, Level::Variables &level) {
+    static int id = 0;
     entt::entity enemy = registry.create();
     registry.emplace<Radius>(enemy, level.radius);
     registry.emplace<Enemy>(enemy);
     registry.emplace<Living>(enemy);
+    registry.emplace<ID>(enemy, id++);
     registry.emplace<Speed>(enemy, 5.0f);
     registry.emplace<Health>(enemy, 100, 100);
     registry.emplace<Position>(enemy, position.x, position.y);
+
     return enemy;
 }
 
