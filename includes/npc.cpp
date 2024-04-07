@@ -20,34 +20,54 @@ bool checkCollision(const entt::registry &registry, const int id, Vector2 positi
             return true;
         }
     }
-    if (position.x > mapWidth || position.y > mapHeight ||
-        grid((int) position.x / tileSize, (int) position.y / tileSize) == -1) {
-        return true;
-    }
+    if (position.x > 0 && position.y > 0 && position.x < mapWidth && position.y < mapHeight &&
+        grid((int) position.x / tileSize, (int) position.y / tileSize) != -1)
+        if (CheckCollisionCircleRec(position, radius.value, {position.x, position.y, tileSize, tileSize})) {
+            return true;
+        }
     return false;
+}
+
+bool playerInView(const Vector2 position, const Vector2 &playerPosition, const float range) {
+    return CheckCollisionCircles(position, range, playerPosition, 1.0f);
 }
 
 void updateEnemy(entt::registry &registry, Position &playerPosition, const Map &grid) {
     auto enemyView = registry.view<Living, Speed, Radius, Health, Position, Enemy, ID>();
+    Position newPosition = {0, 0};
     for (auto [enemy, speed, radius, health, position, id]: enemyView.each()) {
         if (health.value <= 0) {
             registry.remove<Living>(enemy);
             return;
         }
+
+        if (!playerInView(position, playerPosition, 150.0f)) {
+//            DrawCircleV(position, 150.0f, ColorAlpha(WHITE, 0.1));
+            continue;
+        }
+
         Node start = getTile(position);
         Node end = getTile(playerPosition);
         Search search(grid);
         search.init(start, end);
+
+        // Check distance
+
+
         if (!CheckCollisionCircles(playerPosition, radius.value, position, static_cast<float>(2 * tileSize))) {
             while (!search.completed) { search.step(); }
-            search.draw();
-            position = Vector2Lerp(position, {static_cast<float>(search.path[2].x * tileSize),
-                                              static_cast<float>(search.path[2].y * tileSize)}, 0.05);
+//            search.draw();
+            if (!search.path.empty()) {
+                newPosition = Vector2Lerp(position, {static_cast<float>(search.path[2].x * tileSize),
+                                                     static_cast<float>(search.path[2].y * tileSize)}, 0.05);
+            }
         }
-////        Position newPosition = Vector2Lerp(Vector2MoveTowards(position, playerPosition, 10.0f), playerPosition, 0.1f);
-//        if (!checkCollision(registry, id.value, newPosition, radius, grid)) {
-//            position = newPosition;
-//        }
+        if (!checkCollision(registry, id.value, newPosition, radius, grid)) {
+            position = newPosition;
+        } else {
+//            position = Vector2Subtract(position, {static_cast<float>(search.path[2].x * tileSize),
+//                                                  static_cast<float>(search.path[2].y * tileSize)});
+        }
     }
 
 }

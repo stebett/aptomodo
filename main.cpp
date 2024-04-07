@@ -33,7 +33,7 @@ int main() {
     while (!WindowShouldClose() ) {
         updateCamera(camera, position);
 
-        if (framesCounter % 60 == 0 && enemyCounter < 1) {
+        if (framesCounter % 60 == 0 && enemyCounter < 10) {
             spawnRandomEnemy(registry, level);
             ++enemyCounter;
         }
