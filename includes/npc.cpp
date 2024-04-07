@@ -101,7 +101,7 @@ void updateEnemy(entt::registry &registry, entt::entity &player, const Map &grid
             newPosition = Vector2Subtract(
                     {static_cast<float>(search.path[2].x * tileSize), static_cast<float>(search.path[2].y * tileSize)},
                     position);
-            newPosition = Vector2Rotate(newPosition, static_cast<float>(rng::uniform_neg500_500(rng::seed))/500.0f*15);
+            newPosition = Vector2Rotate(newPosition, rng::uniform_neg500_500(rng::seed)/500*90);
             newPosition = Vector2Scale(newPosition, 0.05);
             position = Vector2Add(position, newPosition);
         }

@@ -36,10 +36,10 @@ Rectangle toRectangle(ldtk::Rect<int> rectangle) {
 void draw(const entt::registry &registry, GameScene *scene, unsigned int frame) {
     scene->draw();
 
-    auto playerView = registry.view<Player, Living, Texture, Animation::Map, Position>();
-    for (auto [entity, texture, animationMap, position]: playerView.each()) {
+    auto playerView = registry.view<Player, Living, Radius, Texture, Animation::Map, Position>();
+    for (auto [entity, radius, texture, animationMap, position]: playerView.each()) {
 //        DrawTexture(texture, position.x, position.y, WHITE);
-        DrawCircle(position.x, position.y, 5, RED);
+        DrawCircle(position.x, position.y, radius.value, RED);
 //        Rectangle sourceRec = animationMap.at(Animation::Stand)[frame / playerUpdateRate % animationMap.at(Animation::Stand).size()];
 //        DrawTextureRec(texture, sourceRec, {position.x, position.y}, WHITE);
 

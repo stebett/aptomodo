@@ -57,6 +57,7 @@ void castFire(entt::registry &registry, entt::entity player, Vector2 clickPositi
 
 void parseInput(entt::registry &registry, entt::entity &player, Position &position, Camera2D &camera, const Map &grid) {
     State &playerState = registry.get<PlayerState>(player).state;
+    Radius radius = registry.get<Radius>(player);
     if (IsKeyPressed(KEY_P) || IsKeyDown(KEY_P)) {
         Pain &pain = registry.get<Pain>(player);
         pain.value += 10;
