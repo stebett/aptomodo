@@ -5,9 +5,12 @@
 #ifndef ACEROLA_JAM0_COLLISIONS_H
 #define ACEROLA_JAM0_COLLISIONS_H
 
+#include "components.h"
+#include "constants.h"
 
 bool
 CheckCollisionCircleTriangle(Vector2 center, float radius, Vector2 v1, Vector2 v2, Vector2 v3, float height);
+void solveCircleRecCollision(Position &futurePos, Radius radius, const Map &grid);
 
 
 #endif //ACEROLA_JAM0_COLLISIONS_H

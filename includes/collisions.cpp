@@ -5,7 +5,8 @@
 #include <raylib.h>
 #include <valarray>
 #include "collisions.h"
-#include "components.h"
+#include <raymath.h>
+
 
 float distanceBetweenPoints(Position p1, Position p2) {
     return static_cast<float>(sqrt(pow(p1.x - p2.x, 2) + pow(p1.y - p2.y, 2)));
@@ -50,3 +51,38 @@ bool CheckCollisionCircleTriangle(Vector2 center, float radius, Vector2 v1, Vect
 
     return false;
 }
+
+void solveCircleRecCollision(Position &futurePos, Radius radius, const Map &grid) {
+
+    Vector2 upperBoundary = {std::max(0.0f, floor(futurePos.x / tileSize) * tileSize - 2 * tileSize),
+                             std::max(0.0f, floor(futurePos.y / tileSize) * tileSize - 2 * tileSize)};
+    Vector2 lowerBoundary = {std::min(float(mapWidth), ceil(futurePos.x / tileSize) * tileSize + 2 * tileSize),
+                             std::min(float(mapHeight), ceil(futurePos.y / tileSize) * tileSize + 2 * tileSize)};
+//    DrawRectangleV(upperBoundary, Vector2Subtract(lowerBoundary, upperBoundary), ColorAlpha(RED, 0.2));
+
+
+    float clampedX;
+    float clampedY;
+    float distanceX;
+    float distanceY;
+    float overlap;
+
+    for (float x = upperBoundary.x; x <= lowerBoundary.x; x+=tileSize) {
+        for (float y = upperBoundary.y; y <= lowerBoundary.y; y+=tileSize) {
+            if (grid(int(x/tileSize), int(y/tileSize)) != -1) {
+                clampedX = std::max(x, std::min(futurePos.x, x + float(tileSize)));
+                clampedY = std::max(y, std::min(futurePos.y, y + float(tileSize)));
+                distanceX = clampedX - futurePos.x;
+                distanceY = clampedY - futurePos.y;
+                overlap = radius.value - Vector2Length({distanceX, distanceY});
+//                std::cout << "Overlap: " << overlap << "\n";
+//                std::cout << "Distance:" << Vector2Length({distanceX, distanceY}) << "\n\n";
+
+                if (overlap > 0) {
+                    futurePos = Vector2Subtract(futurePos, Vector2Scale(Vector2Normalize({distanceX, distanceY}), overlap));
+                }
+            }
+        }
+    }
+}
+

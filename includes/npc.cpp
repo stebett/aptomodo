@@ -12,22 +12,24 @@
 #include "collisions.h"
 
 
-bool checkCollision(const entt::registry &registry, const int id, Vector2 position, Radius radius,
-                    const Map &grid) {
+void solveCollisionEnemy(const entt::registry &registry, const int id, Position &futurePos, Radius radius) {
+    static Vector2 distance;
+    static Vector2 enemyPos;
+    static float overlap;
     auto enemyView = registry.view<Living, Radius, Position, ID>();
     for (auto [enemy, enemyRadius, enemyPosition, enemyID]: enemyView.each()) {
         if (enemyID.value == id) continue;
-        if (CheckCollisionCircles(position, radius.value, {enemyPosition.x, enemyPosition.y}, enemyRadius.value)) {
-            return true;
+        enemyPos = {enemyPosition.x, enemyPosition.y};
+        if (CheckCollisionCircles(futurePos, radius.value, enemyPos, enemyRadius.value)) {
+            distance = Vector2Subtract(enemyPos, futurePos);
+            overlap = radius.value + enemyRadius.value - Vector2Length(distance);
+            if (overlap > 0) {
+                futurePos = Vector2Subtract(futurePos, Vector2Scale(Vector2Normalize(distance), overlap));
+            }
         }
     }
-    if (position.x > 0 && position.y > 0 && position.x < mapWidth && position.y < mapHeight &&
-        grid((int) position.x / tileSize, (int) position.y / tileSize) != -1)
-        if (CheckCollisionCircleRec(position, radius.value, {position.x, position.y, tileSize, tileSize})) {
-            return true;
-        }
-    return false;
 }
+
 
 bool playerInView(const Vector2 position, const Vector2 &playerPosition, const float range) {
     return CheckCollisionCircles(position, range, playerPosition, 1.0f);
@@ -62,7 +64,7 @@ void enemyAttack(entt::registry &registry, const entt::entity enemy, entt::entit
 
 
 void updateEnemy(entt::registry &registry, entt::entity &player, const Map &grid) {
-    Position newPosition = {0, 0};
+    Position futurePos = {0, 0};
     Position playerPosition = registry.get<Position>(player);
 
     auto enemyView = registry.view<Living, Speed, Radius, Health, Position, Enemy, ID>();
@@ -86,25 +88,27 @@ void updateEnemy(entt::registry &registry, entt::entity &player, const Map &grid
         search.init(start, end);
 
         // Check distance
-
-
         while (!search.completed) { search.step(); }
-//            search.draw();
+//        search.draw();
         if (!search.path.empty()) {
-            newPosition = Vector2Lerp(position, {static_cast<float>(search.path[2].x * tileSize),
-                                                 static_cast<float>(search.path[2].y * tileSize)}, 0.05);
+            // add tileSize/2, so they try to go at the center of the next tile
+            futurePos = Vector2Lerp(position, {static_cast<float>(search.path[2].x * tileSize + tileSize / 2),
+                                               static_cast<float>(search.path[2].y * tileSize + tileSize / 2)}, 0.05);
         }
+        solveCircleRecCollision(futurePos, radius, grid);
+        solveCollisionEnemy(registry, id.value, futurePos, radius);
 
-        if (!checkCollision(registry, id.value, newPosition, radius, grid)) {
-            position = newPosition;
-        } else {
-            newPosition = Vector2Subtract(
-                    {static_cast<float>(search.path[2].x * tileSize), static_cast<float>(search.path[2].y * tileSize)},
-                    position);
-            newPosition = Vector2Rotate(newPosition, rng::uniform_neg500_500(rng::seed)/500*90);
-            newPosition = Vector2Scale(newPosition, 0.05);
-            position = Vector2Add(position, newPosition);
-        }
+//        if (!checkCollision(registry, id.value, futurePos, radius, grid)) {
+//            position = futurePos;
+//        } else {
+//            futurePos = Vector2Subtract(
+//                    {static_cast<float>(search.path[2].x * tileSize), static_cast<float>(search.path[2].y * tileSize)},
+//                    position);
+//            futurePos = Vector2Rotate(futurePos, rng::uniform_neg500_500(rng::seed) / 500 * 90);
+//            futurePos = Vector2Scale(futurePos, 0.05);
+//            position = Vector2Add(position, futurePos);
+//        }
+        position = futurePos;
     }
 
 }

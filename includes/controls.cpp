@@ -81,7 +81,7 @@ void parseInput(entt::registry &registry, entt::entity &player, Position &positi
         playerSecondaryAttack(registry, player);
     }
 
-    static Vector2 futurePos = position;
+    static Position futurePos = position;
 
 //    if (playerState != State::pain) {
     futurePos.y -= 4.0f * static_cast<float>(IsKeyPressed(KEY_W) || IsKeyDown(KEY_W));
@@ -89,45 +89,15 @@ void parseInput(entt::registry &registry, entt::entity &player, Position &positi
     futurePos.x -= 4.0f * static_cast<float>(IsKeyPressed(KEY_A) || IsKeyDown(KEY_A));
     futurePos.x += 4.0f * static_cast<float>(IsKeyPressed(KEY_D) || IsKeyDown(KEY_D));
 //    }
-
-
-
-    Vector2 upperBoundary = {std::max(0.0f, floor(position.x / tileSize) * tileSize - 2 * tileSize),
-                             std::max(0.0f, floor(position.y / tileSize) * tileSize - 2 * tileSize)};
-    Vector2 lowerBoundary = {std::min(float(mapWidth), ceil(position.x / tileSize) * tileSize + 2 * tileSize),
-                             std::min(float(mapHeight), ceil(position.y / tileSize) * tileSize + 2 * tileSize)};
-    DrawRectangleV(upperBoundary, Vector2Subtract(lowerBoundary, upperBoundary), ColorAlpha(RED, 0.2));
     if (futurePos.x - radius.value < 0 || futurePos.x + radius.value > mapWidth) {
         futurePos.x = position.x;
     }
     if (futurePos.y - radius.value < 0 || futurePos.y + radius.value > mapHeight) {
         futurePos.y = position.y;
     }
-
-    float clampedX;
-    float clampedY;
-    float distanceX;
-    float distanceY;
-    float overlap;
-
-    for (float x = upperBoundary.x; x <= lowerBoundary.x; x+=tileSize) {
-        for (float y = upperBoundary.y; y <= lowerBoundary.y; y+=tileSize) {
-            if (grid(int(x/tileSize), int(y/tileSize)) != -1) {
-                clampedX = std::max(x, std::min(futurePos.x, x + float(tileSize)));
-                clampedY = std::max(y, std::min(futurePos.y, y + float(tileSize)));
-                distanceX = clampedX - futurePos.x;
-                distanceY = clampedY - futurePos.y;
-                overlap = radius.value - Vector2Length({distanceX, distanceY});
-//                std::cout << "Overlap: " << overlap << "\n";
-//                std::cout << "Distance:" << Vector2Length({distanceX, distanceY}) << "\n\n";
-
-                if (overlap > 0) {
-                    futurePos = Vector2Subtract(futurePos, Vector2Scale(Vector2Normalize({distanceX, distanceY}), overlap));
-                }
-            }
-        }
-    }
+    solveCircleRecCollision(futurePos, radius, grid);
     position = futurePos;
 
 }
+
 

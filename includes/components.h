@@ -32,6 +32,7 @@ struct Position {
     Position(float x, float y) : x(x), y(y) {}
 };
 
+
 struct Weapon {
     int damage;
     float range;
