@@ -16,15 +16,22 @@
 entt::entity spawnEnemy(entt::registry &registry, Position position, Level::Variables &level) {
     static int id = 0;
     entt::entity enemy = registry.create();
-    registry.emplace<Radius>(enemy, level.radius);
+    registry.emplace<Radius>(enemy, 5.0f);
+    registry.emplace<Spread>(enemy, 10.0f);
     registry.emplace<Enemy>(enemy);
     registry.emplace<Living>(enemy);
     registry.emplace<ID>(enemy, id++);
-    registry.emplace<Weapon>(enemy, level.sword);
     registry.emplace<Speed>(enemy, 5.0f);
     registry.emplace<Health>(enemy, 100, 100);
     registry.emplace<Position>(enemy, position.x, position.y);
-
+    registry.emplace<PhysicalResistance>(enemy, 0.0f);
+    registry.emplace<MagicalResistance>(enemy, 0.0f);
+    registry.emplace<Stamina>(enemy, 0.0f);
+    registry.emplace<TimeLastAttack>(enemy, 0.0f);
+    registry.emplace<AttackSpeed>(enemy, 2.0f);
+    registry.emplace<Damage>(enemy, 1.0f);
+    registry.emplace<AttackRange>(enemy, 3*tileSize);
+    registry.emplace<Pushback>(enemy, 1.0f);
     return enemy;
 }
 
@@ -41,14 +48,20 @@ entt::entity spawnPlayer(entt::registry &registry, GameScene *scene, Level::Vari
     entt::entity player = registry.create();
     registry.emplace<Player>(player);
     registry.emplace<Living>(player);
-    registry.emplace<Radius>(player, level.radius);
+    registry.emplace<Spread>(player, 15.0f);
     registry.emplace<Texture>(player, texture);
     registry.emplace<Animation::Map>(player, animationMap);
-    registry.emplace<Weapon>(player, level.sword);
     registry.emplace<Health>(player, 100, 100);
+    registry.emplace<Radius>(player, 10.0f);
+    registry.emplace<PhysicalResistance>(player, 0.0f);
+    registry.emplace<MagicalResistance>(player, 0.0f);
+    registry.emplace<Stamina>(player, 0.0f);
+    registry.emplace<TimeLastAttack>(player, 0.0f);
+    registry.emplace<AttackSpeed>(player, 2.0f);
+    registry.emplace<Damage>(player, 1.0f);
+    registry.emplace<AttackRange>(player, 25.0f);
+    registry.emplace<Pushback>(player, 1.0f);
     registry.emplace<Position>(player, 500.0f, 500.0f);
-    registry.emplace<PlayerState>(player, State::normal);
-    registry.emplace<Pain>(player, level.pain);
 
     return player;
 }

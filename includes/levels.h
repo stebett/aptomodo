@@ -13,7 +13,7 @@
 
 
 namespace Level {
-    const Variables One{1, {100, 200}, {10, 100, 25, 150}, 15, RED};
+    const Variables One{1, 15, RED};
 }
 
 #endif //ACEROLA_JAM0_LEVELS_H

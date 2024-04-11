@@ -75,25 +75,25 @@ void Search::reset() {
 
 void Search::step() {
     if (completed) {
-        std::cout << "Search is already complete" << '\n';
+//        std::cout << "Search is already complete" << '\n';
         return;
     }
 
-    std::cout << "Stepping..." << '\n';
+//    std::cout << "Stepping..." << '\n';
     if (open.empty()) {
-        std::cout << "Open list is empty" << '\n';
+//        std::cout << "Open list is empty" << '\n';
         completed = true;
         return;
     }
     current = open.top().first;
     if (current == end) {
-        std::cout << "End found" << '\n';
+//        std::cout << "End found" << '\n';
         completed = true;
         getPath();
         return;
     }
     open.pop();
-    std::cout << "Current \nx: " << current.x << "\ny: " << current.y << '\n';
+//    std::cout << "Current \nx: " << current.x << "\ny: " << current.y << '\n';
 
 
     for (auto neighbor: neighbors(grid, current)) {
@@ -102,7 +102,7 @@ void Search::step() {
             open.push(std::pair(neighbor, manhattan(neighbor, end)));
             came_from[neighbor] = current;
             closed[neighbor] = closed[current] + manhattan(neighbor, current);
-            std::cout << "Node added ->   x: " << neighbor.x << "  y: " << neighbor.y << '\n';
+//            std::cout << "Node added ->   x: " << neighbor.x << "  y: " << neighbor.y << '\n';
         }
     }
 }

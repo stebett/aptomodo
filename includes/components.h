@@ -46,34 +46,79 @@ struct Triangle {
     Vector2 v3;
 };
 
-struct Health {
-    float value;
-    float max;
-};
 
 struct Radius {
     float value;
 };
 
+
+struct Spread {
+    float value;
+};
+
+
+/* Stats
+ * John, [08/04/24 21:08]
+Le statistiche saranno roba tipo
+1)Velocità di movimento
+2)Salute massima
+3)Resistenza ai danni fisici
+4)Resistenza ai danni magici
+5)Stamina (o resistenza nel senso atletico)
+6)Velocità di attacco
+5)Danno fisico
+6)Portata fisica
+7)Mana massimo
+8)Rigenerazione mana
+9)danno magico
+10)velocità di Cast
+11)Portata magica
+12)AoE Magico
+(Anche AoE fisico, ma non ho voglia di riscrivere i numeri ahah)
+*/
+
 struct Speed {
     float value;
 };
 
-
-enum class State {
-    casting,
-    normal,
-    pain,
-};
-
-struct PlayerState {
-    State state;
-};
-
-struct Pain {
+struct Health {
     float value;
     float max;
 };
+
+struct PhysicalResistance {
+    float value;
+};
+
+struct MagicalResistance {
+    float value;
+};
+
+struct Stamina {
+    float value;
+};
+
+struct TimeLastAttack {
+    float value;
+};
+
+struct AttackSpeed {
+    float value;
+};
+
+struct Damage {
+    float value;
+};
+
+struct AttackRange {
+    float value;
+};
+
+struct Pushback {
+    float value;
+};
+
+
 
 struct ID {
     int value;
@@ -82,8 +127,6 @@ struct ID {
 namespace Level {
     struct Variables {
         int id;
-        Pain pain;
-        Weapon sword;
         Radius radius;
         Color color;
     };

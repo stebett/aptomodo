@@ -20,23 +20,22 @@ int main() {
 
     entt::entity player = spawnPlayer(registry, scene, level);
     auto &position = registry.get<Position>(player);
-    auto &pain = registry.get<Pain>(player);
     auto &health = registry.get<Health>(player);
 
-    GUI gui = GUI(screenWidth, screenHeight, pain.value, pain.max, health.value, health.max, "gui_style.rgs");
+//    GUI gui = GUI(screenWidth, screenHeight, pain.value, pain.max, health.value, health.max, "gui_style.rgs");
 
 
     auto enemyCounter = 0;
     auto framesCounter = 0u;
-
+    while (enemyCounter < 40) {
+        spawnRandomEnemy(registry, level);
+        ++enemyCounter;
+    }
     SetTargetFPS(60);
     while (!WindowShouldClose() ) {
         updateCamera(camera, position);
 
-        if (framesCounter % 60 == 0 && enemyCounter < 15) {
-            spawnRandomEnemy(registry, level);
-            ++enemyCounter;
-        }
+
 
         BeginDrawing();
 
@@ -46,8 +45,9 @@ int main() {
         updateEnemy(registry, player, scene -> grid);
 
         EndMode2D();
-        gui.drawGameplay();
+//        gui.drawGameplay();
 
+        DrawFPS(10, 10);
 
         EndDrawing();
 

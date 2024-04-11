@@ -39,26 +39,29 @@ bool playerInView(const Vector2 position, const Vector2 &playerPosition, const f
 void enemyAttack(entt::registry &registry, const entt::entity enemy, entt::entity player, Position position) {
     auto &playerPosition = registry.get<Position>(player);
     auto &health = registry.get<Health>(player);
-    auto weapon = registry.get<Weapon>(enemy);
     auto radius = registry.get<Radius>(player);
+    float attackRange  = registry.get<AttackRange>(enemy).value;
+    float attackSpread  = registry.get<Spread>(enemy).value;
+    float damage  = registry.get<Damage>(enemy).value;
+//    float pushback = registry.get<Pushback>(enemy).value;
 
     float click_angle = atan2(playerPosition.y - position.y, playerPosition.x - position.x) * radToDeg;
 
-    DrawCircleSector(position, weapon.range, click_angle - weapon.spread,
-                     click_angle + weapon.spread, 2, RED);
+    DrawCircleSector(position, attackRange, click_angle - attackSpread,
+                     click_angle + attackSpread, 2, RED);
     Vector2 endSegment1 = {
-            playerPosition.x + weapon.range * (float) cos((click_angle - weapon.spread) * degToRad),
-            playerPosition.y + weapon.range * (float) sin((click_angle - weapon.spread) * degToRad)};
+            playerPosition.x + attackRange * (float) cos((click_angle - attackSpread) * degToRad),
+            playerPosition.y + attackRange * (float) sin((click_angle - attackSpread) * degToRad)};
     Vector2 endSegment2 = {
-            playerPosition.x + weapon.range * (float) cos((click_angle + weapon.spread) * degToRad),
-            playerPosition.y + weapon.range * (float) sin((click_angle + weapon.spread) * degToRad)};
+            playerPosition.x + attackRange * (float) cos((click_angle + attackSpread) * degToRad),
+            playerPosition.y + attackRange * (float) sin((click_angle + attackSpread) * degToRad)};
 
     if (CheckCollisionCircleTriangle(playerPosition, radius.value, position,
-                                     endSegment1, endSegment2, weapon.range)) {
-        health.value -= weapon.damage;
-        float m = sqrt(pow(playerPosition.x + position.x, 2) + pow(playerPosition.y + position.y, 2));
-        playerPosition = {(playerPosition.x + (playerPosition.x - position.x) * weapon.pushback / m),
-                          playerPosition.y + (playerPosition.y - position.y) * weapon.pushback / m};
+                                     endSegment1, endSegment2, attackRange)) {
+        health.value -= damage;
+//        float m = sqrt(pow(playerPosition.x + position.x, 2) + pow(playerPosition.y + position.y, 2));
+//        playerPosition = {(playerPosition.x + (playerPosition.x - position.x) * pushback / m),
+//                          playerPosition.y + (playerPosition.y - position.y) * pushback / m};
     }
 }
 
@@ -71,7 +74,7 @@ void updateEnemy(entt::registry &registry, entt::entity &player, const Map &grid
     for (auto [enemy, speed, radius, health, position, id]: enemyView.each()) {
         if (health.value <= 0) {
             registry.remove<Living>(enemy);
-            return;
+            continue;
         }
 
         if (!playerInView(position, playerPosition, 300.0f)) {
@@ -95,19 +98,10 @@ void updateEnemy(entt::registry &registry, entt::entity &player, const Map &grid
             futurePos = Vector2Lerp(position, {static_cast<float>(search.path[2].x * tileSize + tileSize / 2),
                                                static_cast<float>(search.path[2].y * tileSize + tileSize / 2)}, 0.05);
         }
-        solveCircleRecCollision(futurePos, radius, grid);
+//        solveCircleRecCollision(futurePos, radius, grid);
         solveCollisionEnemy(registry, id.value, futurePos, radius);
+        solveCircleRecCollision(futurePos, radius, grid);
 
-//        if (!checkCollision(registry, id.value, futurePos, radius, grid)) {
-//            position = futurePos;
-//        } else {
-//            futurePos = Vector2Subtract(
-//                    {static_cast<float>(search.path[2].x * tileSize), static_cast<float>(search.path[2].y * tileSize)},
-//                    position);
-//            futurePos = Vector2Rotate(futurePos, rng::uniform_neg500_500(rng::seed) / 500 * 90);
-//            futurePos = Vector2Scale(futurePos, 0.05);
-//            position = Vector2Add(position, futurePos);
-//        }
         position = futurePos;
     }
 

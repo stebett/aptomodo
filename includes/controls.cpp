@@ -13,43 +13,48 @@
 
 void playerAttack(entt::registry &registry, entt::entity player, Vector2 clickPosition) {
     Position playerPosition = registry.get<Position>(player);
-    Weapon playerWeapon = registry.get<Weapon>(player);
+    float attackRange  = registry.get<AttackRange>(player).value;
+    float attackSpread  = registry.get<Spread>(player).value;
+    float damage  = registry.get<Damage>(player).value;
+    float pushback = registry.get<Pushback>(player).value;
 
     float click_angle = atan2(clickPosition.y - playerPosition.y, clickPosition.x - playerPosition.x) * radToDeg;
-    DrawCircleSector(playerPosition, playerWeapon.range, click_angle - playerWeapon.spread,
-                     click_angle + playerWeapon.spread, 2, RED);
+    DrawCircleSector(playerPosition, attackRange, click_angle - attackSpread,
+                     click_angle + attackSpread, 2, RED);
     Vector2 endSegment1 = {
-            playerPosition.x + playerWeapon.range * (float) cos((click_angle - playerWeapon.spread) * degToRad),
-            playerPosition.y + playerWeapon.range * (float) sin((click_angle - playerWeapon.spread) * degToRad)};
+            playerPosition.x + attackRange* (float) cos((click_angle - attackSpread) * degToRad),
+            playerPosition.y + attackRange * (float) sin((click_angle - attackSpread) * degToRad)};
     Vector2 endSegment2 = {
-            playerPosition.x + playerWeapon.range * (float) cos((click_angle + playerWeapon.spread) * degToRad),
-            playerPosition.y + playerWeapon.range * (float) sin((click_angle + playerWeapon.spread) * degToRad)};
+            playerPosition.x + attackRange * (float) cos((click_angle + attackSpread) * degToRad),
+            playerPosition.y + attackRange * (float) sin((click_angle + attackSpread) * degToRad)};
 
     auto enemyView = registry.view<Enemy, Living, Health, Radius, Position>();
     for (auto [enemy, health, radius, position]: enemyView.each()) {
         if (CheckCollisionCircleTriangle(position, radius.value, playerPosition,
-                                         endSegment1, endSegment2, playerWeapon.range)) {
-            health.value -= playerWeapon.damage;
+                                         endSegment1, endSegment2, attackRange)) {
+            health.value -= attackRange;
             float m = sqrt(pow(playerPosition.x + position.x, 2) + pow(playerPosition.y + position.y, 2));
-            position = {(position.x + (position.x - playerPosition.x) * playerWeapon.pushback / m),
-                        position.y + (position.y - playerPosition.y) * playerWeapon.pushback / m};
+            position = {(position.x + (position.x - playerPosition.x) * pushback / m),
+                        position.y + (position.y - playerPosition.y) * pushback / m};
         }
     }
 }
 
 void playerSecondaryAttack(entt::registry &registry, entt::entity player) {
     Position playerPosition = registry.get<Position>(player);
-    Weapon playerWeapon = registry.get<Weapon>(player);
-    DrawCircle(playerPosition.x, playerPosition.y, playerWeapon.range, RED);
+    float attackRange  = registry.get<AttackRange>(player).value;
+    float damage  = registry.get<Damage>(player).value;
+    float pushback = registry.get<Pushback>(player).value;
+    DrawCircle(playerPosition.x, playerPosition.y, attackRange, RED);
 
     auto enemyView = registry.view<Enemy, Living, Health, Radius, Position>();
     for (auto [enemy, health, radius, position]: enemyView.each()) {
         if (CheckCollisionCircles(position, radius.value, playerPosition,
-                                  playerWeapon.range)) {
-            health.value -= playerWeapon.damage * 2;
+                                  attackRange)) {
+            health.value -= damage * 2;
             float m = sqrt(pow(playerPosition.x + position.x, 2) + pow(playerPosition.y + position.y, 2));
-            position = {(position.x + (position.x - playerPosition.x) * playerWeapon.pushback / m * 3),
-                        position.y + (position.y - playerPosition.y) * playerWeapon.pushback / m * 3};
+            position = {(position.x + (position.x - playerPosition.x) * pushback / m * 3),
+                        position.y + (position.y - playerPosition.y) * pushback / m * 3};
         }
     }
 }
@@ -57,24 +62,12 @@ void playerSecondaryAttack(entt::registry &registry, entt::entity player) {
 void castFire(entt::registry &registry, entt::entity player, Vector2 clickPosition) {}
 
 void parseInput(entt::registry &registry, entt::entity &player, Position &position, Camera2D &camera, const Map &grid) {
-    State &playerState = registry.get<PlayerState>(player).state;
     Radius radius = registry.get<Radius>(player);
-    if (IsKeyPressed(KEY_P) || IsKeyDown(KEY_P)) {
-        Pain &pain = registry.get<Pain>(player);
-        pain.value += 10;
-        playerState = State::pain;
-        return;
-    }
-    if (IsKeyPressed(KEY_ONE)) {
-        playerState = State::casting;
-    }
-    if (IsKeyPressed(KEY_ZERO)) {
-        playerState = State::normal;
-    }
-    if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && playerState == State::normal) {
+
+    if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
         playerAttack(registry, player, GetScreenToWorld2D(GetMousePosition(), camera));
     }
-    if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && playerState == State::casting) {
+    if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
         castFire(registry, player, GetScreenToWorld2D(GetMousePosition(), camera));
     }
     if (IsMouseButtonPressed(MOUSE_RIGHT_BUTTON)) {
