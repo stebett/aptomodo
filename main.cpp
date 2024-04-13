@@ -29,7 +29,7 @@ int main() {
 //        ++enemyCounter;
 //    }
     SetTargetFPS(60);
-    while (!WindowShouldClose() ) {
+    while (!WindowShouldClose()) {
         updateCamera(camera, position);
 
 
@@ -37,8 +37,8 @@ int main() {
 
         BeginMode2D(camera);
         draw(registry, scene, framesCounter);
-        parseInput(registry, player, position, camera, scene -> grid);
-        updateEnemy(registry, player, scene -> grid);
+        parseInput(registry, player, position, camera, scene->grid);
+        updateEnemy(registry, player, scene->grid);
 
         EndMode2D();
 //        gui.drawGameplay();
@@ -49,7 +49,6 @@ int main() {
 
         ++framesCounter;
     }
-
 
 
     CloseWindow();

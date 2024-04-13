@@ -63,7 +63,7 @@ entt::entity spawnPlayer(entt::registry &registry, Position position, GameScene 
 
 Camera2D spawnCamera() {
     Camera2D camera = {0};
-    camera.target = {0, 0};
+    camera.target = {mapWidth / 2, mapHeight / 2};
     camera.offset = {screenWidth / 2, screenHeight / 2};
     camera.rotation = 0.0f;
     camera.zoom = 3.0f;

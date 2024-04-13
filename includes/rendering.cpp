@@ -13,21 +13,20 @@ void updateCamera(Camera2D &camera, Position &playerPosition) {
     float target_y = playerPosition.y;
 
     // Don't show map end
-    if (playerPosition.x < mapWidth / (2 * camera.zoom)) {
-        target_x = mapWidth / (2 * camera.zoom);
+    if (playerPosition.x < screenWidth / (2 * camera.zoom)) {
+        target_x = screenWidth / (2 * camera.zoom);
     }
-    if (playerPosition.x > mapWidth - mapWidth / (2 * camera.zoom)) {
-        target_x = mapWidth - mapWidth / (2 * camera.zoom);
+    if (playerPosition.x > mapWidth - screenWidth / (2 * camera.zoom)) {
+        target_x = mapWidth - screenWidth / (2 * camera.zoom);
     }
-    if (playerPosition.y < mapHeight / (2 * camera.zoom)) {
-        target_y = mapHeight / (2 * camera.zoom);
+    if (playerPosition.y < screenHeight / (2 * camera.zoom)) {
+        target_y = screenHeight / (2 * camera.zoom);
     }
-    if (playerPosition.y > mapHeight - mapHeight / (2 * camera.zoom)) {
-        target_y = mapHeight - mapHeight / (2 * camera.zoom);
+    if (playerPosition.y > mapHeight - screenHeight / (2 * camera.zoom)) {
+        target_y = mapHeight - screenHeight / (2 * camera.zoom);
     }
 
     camera.target = Vector2Lerp(camera.target, {target_x, target_y}, 0.1);
-    camera.target = {target_x, target_y}; // TODO
 }
 
 
