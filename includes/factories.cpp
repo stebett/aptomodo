@@ -44,6 +44,7 @@ entt::entity spawnPlayer(entt::registry &registry, Position position, GameScene 
     registry.emplace<Player>(player);
     registry.emplace<Living>(player);
     registry.emplace<Spread>(player, 15.0f);
+    registry.emplace<Speed>(player, 5.0f);
     registry.emplace<Texture>(player, texture);
     registry.emplace<Animation::Map>(player, animationMap);
     registry.emplace<Health>(player, 100, 100);

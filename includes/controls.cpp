@@ -63,6 +63,7 @@ void castFire(entt::registry &registry, entt::entity player, Vector2 clickPositi
 
 void parseInput(entt::registry &registry, entt::entity &player, Position &position, Camera2D &camera, const Map &grid) {
     Radius radius = registry.get<Radius>(player);
+    Speed speed = registry.get<Speed>(player);
 
     if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
         playerAttack(registry, player, GetScreenToWorld2D(GetMousePosition(), camera));
@@ -89,6 +90,9 @@ void parseInput(entt::registry &registry, entt::entity &player, Position &positi
         futurePos.y = position.y;
     }
     solveCircleRecCollision(futurePos, radius, grid);
+    Vector2 direction = Vector2Subtract(futurePos, position);
+    Vector2 movement = Vector2Scale(Vector2Normalize(direction), speed.value);
+    futurePos = Vector2Add(position, movement);
     position = futurePos;
 
 }
