@@ -124,13 +124,7 @@ struct ID {
     int value;
 };
 
-namespace Level {
-    struct Variables {
-        int id;
-        Radius radius;
-        Color color;
-    };
-}
+
 namespace Animation {
 
     enum State {

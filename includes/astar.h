@@ -66,6 +66,8 @@ class Search {
     Node start;
     Node end;
     Node current;
+    int stepNumber;
+    int stepLimit = 100;
 
 public:
     bool completed = false;

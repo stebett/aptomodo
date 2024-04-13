@@ -58,8 +58,8 @@ void Search::init(Node nodeStart, Node nodeEnd) {
     start = nodeStart;
     end = nodeEnd;
     closed[start] = 0.0f;
-    open.push(std::pair(start, manhattan(start, end)));
-};
+    open.emplace(start, manhattan(start, end));
+}
 
 void Search::reset() {
     open = {};
@@ -70,10 +70,13 @@ void Search::reset() {
     start = {0, 0};
     end = {0, 0};
     completed = false;
+    stepNumber = 0;
 }
 
 
 void Search::step() {
+    stepNumber++;
+//    if (stepNumber > stepLimit) completed = true;
     if (completed) {
 //        std::cout << "Search is already complete" << '\n';
         return;
@@ -99,9 +102,10 @@ void Search::step() {
     for (auto neighbor: neighbors(grid, current)) {
         if (!came_from.contains(neighbor)) {
             if (neighbor == start | neighbor == came_from[current]) continue;
-            open.push(std::pair(neighbor, manhattan(neighbor, end)));
+            float terrainPenalty = 3.0f * static_cast<float>(grid(neighbor.x, neighbor.y) == 2);
+            open.emplace(neighbor, manhattan(neighbor, end) + terrainPenalty);
             came_from[neighbor] = current;
-            closed[neighbor] = closed[current] + manhattan(neighbor, current);
+            closed[neighbor] = closed[current] + manhattan(neighbor, current) + terrainPenalty;
 //            std::cout << "Node added ->   x: " << neighbor.x << "  y: " << neighbor.y << '\n';
         }
     }

@@ -7,13 +7,9 @@
 #include <random>
 #include "factories.h"
 #include "constants.h"
-#include "levels.h"
 
 
-
-
-
-entt::entity spawnEnemy(entt::registry &registry, Position position, Level::Variables &level) {
+entt::entity spawnEnemy(entt::registry &registry, Position position) {
     static int id = 0;
     entt::entity enemy = registry.create();
     registry.emplace<Radius>(enemy, 5.0f);
@@ -30,21 +26,20 @@ entt::entity spawnEnemy(entt::registry &registry, Position position, Level::Vari
     registry.emplace<TimeLastAttack>(enemy, 0.0f);
     registry.emplace<AttackSpeed>(enemy, 2.0f);
     registry.emplace<Damage>(enemy, 1.0f);
-    registry.emplace<AttackRange>(enemy, 3*tileSize);
+    registry.emplace<AttackRange>(enemy, 3 * tileSize);
     registry.emplace<Pushback>(enemy, 1.0f);
     return enemy;
 }
 
-entt::entity spawnRandomEnemy(entt::registry &registry, Level::Variables &level) {
+entt::entity spawnRandomEnemy(entt::registry &registry) {
     Position randomPos = {static_cast<float>(rng::uniform(rng::seed)),
                           static_cast<float> (rng::uniform(rng::seed))};
-    return spawnEnemy(registry, randomPos, level);
+    return spawnEnemy(registry, randomPos);
 }
 
-entt::entity spawnPlayer(entt::registry &registry, GameScene *scene, Level::Variables &level) {
+entt::entity spawnPlayer(entt::registry &registry, Position position, GameScene *scene) {
     Texture2D texture = LoadTexture(scene->getTexturePath("Player").c_str()); // TODO: remember to unload if needed
     Animation::Map animationMap = scene->getAnimationMap("Player");
-
     entt::entity player = registry.create();
     registry.emplace<Player>(player);
     registry.emplace<Living>(player);
@@ -61,7 +56,7 @@ entt::entity spawnPlayer(entt::registry &registry, GameScene *scene, Level::Vari
     registry.emplace<Damage>(player, 1.0f);
     registry.emplace<AttackRange>(player, 25.0f);
     registry.emplace<Pushback>(player, 1.0f);
-    registry.emplace<Position>(player, 500.0f, 500.0f);
+    registry.emplace<Position>(player, position);
 
     return player;
 }

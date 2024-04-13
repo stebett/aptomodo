@@ -69,7 +69,7 @@ void solveCircleRecCollision(Position &futurePos, Radius radius, const Map &grid
 
     for (float x = upperBoundary.x; x <= lowerBoundary.x; x+=tileSize) {
         for (float y = upperBoundary.y; y <= lowerBoundary.y; y+=tileSize) {
-            if (grid(int(x/tileSize), int(y/tileSize)) != -1) {
+            if (grid(int(x/tileSize), int(y/tileSize)) == 1) {
                 clampedX = std::max(x, std::min(futurePos.x, x + float(tileSize)));
                 clampedY = std::max(y, std::min(futurePos.y, y + float(tileSize)));
                 distanceX = clampedX - futurePos.x;

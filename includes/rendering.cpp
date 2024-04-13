@@ -4,6 +4,7 @@
 
 #include "rendering.h"
 #include "constants.h"
+#include "factories.h"
 #include <raymath.h>
 
 
@@ -11,16 +12,22 @@ void updateCamera(Camera2D &camera, Position &playerPosition) {
     float target_x = playerPosition.x;
     float target_y = playerPosition.y;
 
-    if (playerPosition.x < mapWidth / (2 * camera.zoom)) { target_x = mapWidth / (2 * camera.zoom); }
+    // Don't show map end
+    if (playerPosition.x < mapWidth / (2 * camera.zoom)) {
+        target_x = mapWidth / (2 * camera.zoom);
+    }
     if (playerPosition.x > mapWidth - mapWidth / (2 * camera.zoom)) {
         target_x = mapWidth - mapWidth / (2 * camera.zoom);
     }
-    if (playerPosition.y < mapHeight / (2 * camera.zoom)) { target_y = mapHeight / (2 * camera.zoom); }
+    if (playerPosition.y < mapHeight / (2 * camera.zoom)) {
+        target_y = mapHeight / (2 * camera.zoom);
+    }
     if (playerPosition.y > mapHeight - mapHeight / (2 * camera.zoom)) {
         target_y = mapHeight - mapHeight / (2 * camera.zoom);
     }
 
     camera.target = Vector2Lerp(camera.target, {target_x, target_y}, 0.1);
+    camera.target = {target_x, target_y}; // TODO
 }
 
 
@@ -94,19 +101,19 @@ void GameScene::setLevel(entt::registry &registry, int level) {
 
     BeginTextureMode(renderTexture);
 
-    if (currentLdtkLevel->hasBgImage()) {
-        auto backgroundPath = currentLdtkLevel->getBgImage();
-        auto backgroundTexture = LoadTexture(getAssetPath(backgroundPath.path.c_str()).c_str());
-        SetTextureFilter(backgroundTexture, TEXTURE_FILTER_POINT);
-
-        // tile background texture to cover the whole frame buffer
-        for (int i = 0; i <= (mapWidth / backgroundTexture.width); i++) {
-            for (int j = 0; j <= (mapHeight / backgroundTexture.height); j++) {
-                DrawTextureV(backgroundTexture,
-                             {float(i * backgroundTexture.width), float(j * backgroundTexture.height)}, WHITE);
-            }
-        }
-    }
+//    if (currentLdtkLevel->hasBgImage()) {
+//        auto backgroundPath = currentLdtkLevel->getBgImage();
+//        auto backgroundTexture = LoadTexture(getAssetPath(backgroundPath.path.c_str()).c_str());
+//        SetTextureFilter(backgroundTexture, TEXTURE_FILTER_POINT);
+//
+//        // tile background texture to cover the whole frame buffer
+//        for (int i = 0; i <= (mapWidth / backgroundTexture.width); i++) {
+//            for (int j = 0; j <= (mapHeight / backgroundTexture.height); j++) {
+//                DrawTextureV(backgroundTexture,
+//                             {float(i * backgroundTexture.width), float(j * backgroundTexture.height)}, WHITE);
+//            }
+//        }
+//    }
 
     // draw all tileset layers
     for (auto &&layer: currentLdtkLevel->allLayers()) {
@@ -145,15 +152,16 @@ void GameScene::setLevel(entt::registry &registry, int level) {
         }
     }
 
-//    for (auto &&entity: currentLdtkLevel->getLayer("Entities").allEntities()) {
-//        if (entity.getName() == "Player") {
-//            spawnPlayer(registry, entity, level);
-//        }
-//
-//        if (entity.getName() == "Portal") {
-//            float target_lvl = entity.getField<float>("level_destination").value();
-//        }
-//    }
+    for (auto &&entity: currentLdtkLevel->getLayer("Entities").allEntities()) {
+        Position position = {static_cast<float>(entity.getPosition().x), static_cast<float>(entity.getPosition().y)};
+        if (entity.getName() == "Player") {
+            spawnPlayer(registry, position, this);
+        }
+
+        if (entity.getName() == "Enemy") {
+            spawnEnemy(registry, position);
+        }
+    }
 
 
     EndTextureMode();

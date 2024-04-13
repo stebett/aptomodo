@@ -12,7 +12,7 @@
 #include "collisions.h"
 
 
-void solveCollisionEnemy(const entt::registry &registry, const int id, Position &futurePos, Radius radius) {
+void solveCollisionEnemy(const entt::registry &registry, const int id, Position &futurePos, Radius radius, const Map &grid) {
     static Vector2 distance;
     static Vector2 enemyPos;
     static float overlap;
@@ -25,6 +25,7 @@ void solveCollisionEnemy(const entt::registry &registry, const int id, Position 
             overlap = radius.value + enemyRadius.value - Vector2Length(distance);
             if (overlap > 0) {
                 futurePos = Vector2Subtract(futurePos, Vector2Scale(Vector2Normalize(distance), overlap));
+                solveCircleRecCollision(futurePos, radius, grid);
             }
         }
     }
@@ -40,9 +41,9 @@ void enemyAttack(entt::registry &registry, const entt::entity enemy, entt::entit
     auto &playerPosition = registry.get<Position>(player);
     auto &health = registry.get<Health>(player);
     auto radius = registry.get<Radius>(player);
-    float attackRange  = registry.get<AttackRange>(enemy).value;
-    float attackSpread  = registry.get<Spread>(enemy).value;
-    float damage  = registry.get<Damage>(enemy).value;
+    float attackRange = registry.get<AttackRange>(enemy).value;
+    float attackSpread = registry.get<Spread>(enemy).value;
+    float damage = registry.get<Damage>(enemy).value;
 //    float pushback = registry.get<Pushback>(enemy).value;
 
     float click_angle = atan2(playerPosition.y - position.y, playerPosition.x - position.x) * radToDeg;
@@ -70,6 +71,9 @@ void updateEnemy(entt::registry &registry, entt::entity &player, const Map &grid
     Position futurePos = {0, 0};
     Position playerPosition = registry.get<Position>(player);
 
+    Vector2 target;
+    Vector2 direction;
+    Vector2 movement;
     auto enemyView = registry.view<Living, Speed, Radius, Health, Position, Enemy, ID>();
     for (auto [enemy, speed, radius, health, position, id]: enemyView.each()) {
         if (health.value <= 0) {
@@ -92,15 +96,21 @@ void updateEnemy(entt::registry &registry, entt::entity &player, const Map &grid
 
         // Check distance
         while (!search.completed) { search.step(); }
+        if (search.path.empty()) return;
+
 //        search.draw();
-        if (!search.path.empty()) {
-            // add tileSize/2, so they try to go at the center of the next tile
-            futurePos = Vector2Lerp(position, {static_cast<float>(search.path[2].x * tileSize + tileSize / 2),
-                                               static_cast<float>(search.path[2].y * tileSize + tileSize / 2)}, 0.05);
-        }
-//        solveCircleRecCollision(futurePos, radius, grid);
-        solveCollisionEnemy(registry, id.value, futurePos, radius);
+
+        target = {static_cast<float>(search.path[2].x * tileSize + tileSize / 2),
+                  static_cast<float>(search.path[2].y * tileSize + tileSize / 2)};
+
+        direction = Vector2Subtract(target, position);
+        movement = Vector2Scale(Vector2Normalize(direction), speed.value);
+        futurePos = Vector2Add(position, movement);
+
+
+        solveCollisionEnemy(registry, id.value, futurePos, radius, grid);
         solveCircleRecCollision(futurePos, radius, grid);
+
 
         position = futurePos;
     }
