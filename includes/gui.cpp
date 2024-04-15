@@ -10,7 +10,7 @@
 
 
 void imguiPlayerAttr(entt::registry &registry) {
-    auto view = registry.view<Player, ColorBB, Spread, Speed, Health, Radius, PhysicalResistance, MagicalResistance, Stamina, TimeLastAttack, AttackSpeed, Damage, AttackRange, Pushback, Position>();
+    auto view = registry.view<Player, ColorBB, Spread, Speed, Health, Radius, PhysicalResistance, MagicalResistance, Stamina, AttackTimer, AttackSpeed, Damage, AttackRange, Pushback, Position>();
     for (auto [entity, colorbb, spread, speed, health, radius, physicalresistance, magicalresistance, stamina, timelastattack, attackspeed, damage, attackrange, pushback, position
         ]: view.each()) {
 
@@ -21,7 +21,6 @@ void imguiPlayerAttr(entt::registry &registry) {
         ImGui::SliderFloat("physicalresistance", &physicalresistance.value, 0, 30, "%.3f", 0);
         ImGui::SliderFloat("magicalresistance", &magicalresistance.value, 0, 30, "%.3f", 0);
         ImGui::SliderFloat("stamina", &stamina.value, 0, 30, "%.3f", 0);
-        ImGui::SliderFloat("timelastattack", &timelastattack.value, 0, 30, "%.3f", 0);
         ImGui::SliderFloat("attackspeed", &attackspeed.value, 0, 30, "%.3f", 0);
         ImGui::SliderFloat("damage", &damage.value, 0, 30, "%.3f", 0);
         ImGui::SliderFloat("attackrange", &attackrange.value, 0, 30, "%.3f", 0);
