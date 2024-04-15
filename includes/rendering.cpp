@@ -39,21 +39,17 @@ Rectangle toRectangle(ldtk::Rect<int> rectangle) {
     };
 }
 
+void drawLivingBB(const entt::registry &registry) {
+    auto livingView = registry.view<Living, Radius, Position, ColorBB>();
+    for (auto [entity, radius, position, color]: livingView.each()) {
+        DrawCircle(position.x, position.y, radius.value, color.value);
+    }
+
+}
+
 void draw(const entt::registry &registry, GameScene *scene, unsigned int frame) {
     scene->draw();
-
-    auto playerView = registry.view<Player, Living, Radius, Texture, Animation::Map, Position>();
-    for (auto [entity, radius, texture, animationMap, position]: playerView.each()) {
-//        DrawTexture(texture, position.x, position.y, WHITE);
-        DrawCircle(position.x, position.y, radius.value, RED);
-//        Rectangle sourceRec = animationMap.at(Animation::Stand)[frame / playerUpdateRate % animationMap.at(Animation::Stand).size()];
-//        DrawTextureRec(texture, sourceRec, {position.x, position.y}, WHITE);
-
-    }
-    auto enemyView = registry.view<Enemy, Living, Radius, Position>();
-    for (auto [entity, radius, position]: enemyView.each()) {
-        DrawCircle(position.x, position.y, radius.value, BROWN);
-    }
+    drawLivingBB(registry);
 }
 
 GameScene::GameScene(entt::registry &registry) : m_registry(registry) {

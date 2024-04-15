@@ -3,112 +3,89 @@
 //
 
 #include "gui.h"
-
-#define RAYGUI_IMPLEMENTATION
-
-#include "raygui.h"
-#include "constants.h"
-#include <string>
+#include "rlImGui/imgui_impl_raylib.h"
+#include "components.h"
+#include <format>
+#include <entt/entity/registry.hpp>
 
 
-void GUI::drawStartScreen(bool &start, bool &stop) {
-    BeginDrawing();
-    if (GuiButton(startButtonRec, "START")) startButton(start);
-    if (GuiButton(exitButtonRec, "EXIT")) exitButton(stop);
+void imguiPlayerAttr(entt::registry &registry) {
+    auto view = registry.view<Player, ColorBB, Spread, Speed, Health, Radius, PhysicalResistance, MagicalResistance, Stamina, TimeLastAttack, AttackSpeed, Damage, AttackRange, Pushback, Position>();
+    for (auto [entity, colorbb, spread, speed, health, radius, physicalresistance, magicalresistance, stamina, timelastattack, attackspeed, damage, attackrange, pushback, position
+        ]: view.each()) {
 
-    EndDrawing();
+        ImGui::SliderFloat("spread", &spread.value, 0, 30, "%.3f", 0);
+        ImGui::SliderFloat("speed", &speed.value, 0, 30, "%.3f", 0);
+        ImGui::SliderFloat("health", &health.value, 0, 30, "%.3f", 0);
+        ImGui::SliderFloat("radius", &radius.value, 0, 30, "%.3f", 0);
+        ImGui::SliderFloat("physicalresistance", &physicalresistance.value, 0, 30, "%.3f", 0);
+        ImGui::SliderFloat("magicalresistance", &magicalresistance.value, 0, 30, "%.3f", 0);
+        ImGui::SliderFloat("stamina", &stamina.value, 0, 30, "%.3f", 0);
+        ImGui::SliderFloat("timelastattack", &timelastattack.value, 0, 30, "%.3f", 0);
+        ImGui::SliderFloat("attackspeed", &attackspeed.value, 0, 30, "%.3f", 0);
+        ImGui::SliderFloat("damage", &damage.value, 0, 30, "%.3f", 0);
+        ImGui::SliderFloat("attackrange", &attackrange.value, 0, 30, "%.3f", 0);
+        ImGui::SliderFloat("pushback", &pushback.value, 0, 30, "%.3f", 0);
+        ImGui::SliderFloat("position x", &position.x, 0, 30, "%.3f", 0);
+        ImGui::SliderFloat("positiony ", &position.y, 0, 30, "%.3f", 0);
+
+    }
 }
 
-void GUI::drawGameplay() {
+void imguiWindowMain(entt::registry &registry, ImGuiIO io) {
+    static bool show_demo_window = false;
+    static bool show_player_window = true;
+    if (show_demo_window)
+        ImGui::ShowDemoWindow(&show_demo_window);
 
-    fpsText = std::to_string(GetFPS()).substr(0, 2);
-    mouseXText = "Mouse X: " + std::to_string(GetMouseX());
-    mouseYText = "Mouse Y: " + std::to_string(GetMouseY());
-    painText = std::to_string((int) progressBarValue1);
-    healthText = std::to_string((int) progressBarValue2);
-
-
-    DrawRectangleV({0, screenHeight - guiHeight - 2 * guiPadding},
-                   Vector2{screenWidth, guiHeight + 2 * guiPadding},
-                   {0, 0, 0, 150});
-    GuiStatusBar(fpsRec, fpsText.c_str());
-    GuiStatusBar(mouseXRec, mouseXText.c_str());
-    GuiStatusBar(mouseYRec, mouseYText.c_str());
-    GuiProgressBar(painRec, painText.c_str(), "Pain", &progressBarValue1, 0, progressBarMax1);
-    GuiProgressBar(healthRec, healthText.c_str(), "Health", &progressBarValue2, 0, progressBarMax2);
-    GuiGroupBox(skillBoxRec, "Skills");
-    if (GuiButton(skillButtonRec1, "")) skillButton1();
-    if (GuiButton(skillButtonRec2, "")) skillButton2();
-    if (GuiButton(skillButtonRec3, "")) skillButton3();
-    if (GuiButton(skillButtonRec4, "")) skillButton4();
-    if (GuiButton(skillButtonRec5, "")) skillButton5();
-
-}
+    if (show_player_window)
+        imguiPlayerAttr(registry);
 
 
-void GUI::updateScreen() {
-    startButtonRec = {screenWidth / 2 - guiWidthModule * 2,
-                      screenHeight / 2 - guiHeight / 2,
-                      guiWidthModule * 4,
-                      guiHeight};
+    ImGui::Begin("Main");
 
-    exitButtonRec = {screenWidth / 2 - guiWidthModule * 2,
-                      startButtonRec.y + startButtonRec.height + guiPadding,
-                      guiWidthModule * 4,
-                      guiHeight};
-
-
-
-    fpsRec = {0 + topXPad1, 0 + guiPadding, topWidth1, guiHeight};
-    mouseXRec = {0 + topXPad2, 0 + guiPadding, topWidth2, guiHeight};
-    mouseYRec = {0 + topXPad3, 0 + guiPadding, topWidth3, guiHeight};
-
-    painRec = {0 + botXPad1, screenHeight + botYPad, botWidth1 / 2, guiHeight};
-    healthRec = {0 + botXPad2, screenHeight + botYPad, botWidth2 / 2, guiHeight};
-    skillBoxRec = {screenWidth + botXPad3, screenHeight + botYPad, botWidth3, guiHeight};
-    skillButtonRec1 = {skillBoxRec.x + boxPadding, skillBoxRec.y + boxPadding, boxSide, boxSide};
-    skillButtonRec2 = {skillButtonRec1.x + 1 * (boxSide + boxPadding), skillButtonRec1.y, boxSide, boxSide};
-    skillButtonRec3 = {skillButtonRec1.x + 2 * (boxSide + boxPadding), skillButtonRec1.y, boxSide, boxSide};
-    skillButtonRec4 = {skillButtonRec1.x + 3 * (boxSide + boxPadding), skillButtonRec1.y, boxSide, boxSide};
-    skillButtonRec5 = {skillButtonRec1.x + 4 * (boxSide + boxPadding), skillButtonRec1.y, boxSide, boxSide};
+    ImGui::Checkbox("Demo Window", &show_demo_window);
+    ImGui::Checkbox("Player Window", &show_player_window);
+    ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
+    ImGui::End();
 }
 
 
-GUI::GUI(float screenWidth, float screenHeight, float &progressBarValue1, float &progressBarMax1,
-         float &progressBarValue2, float &progressBarMax2, const char style[]) :
-        screenWidth(screenWidth),
-        screenHeight(screenHeight),
-        progressBarValue1(progressBarValue1),
-        progressBarMax1(progressBarMax1),
-        progressBarValue2(progressBarValue2),
-        progressBarMax2(progressBarMax2) {
-    if (style) GuiLoadStyle(style);
-    GuiSetStyle(DEFAULT, TEXT_ALIGNMENT, TEXT_ALIGN_CENTER);
-    GuiSetStyle(BUTTON, TEXT_ALIGNMENT, TEXT_ALIGN_CENTER);
-    GuiSetStyle(DEFAULT, TEXT_SIZE, 20);
-    updateScreen();
+ImGuiIO InitGui() {
+    ImGui::CreateContext();
+    ImGuiIO &io = ImGui::GetIO();
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+
+    ImGui::StyleColorsDark();
+    ImGui_ImplRaylib_Init();
+
+    io.Fonts->AddFontDefault();
+    Imgui_ImplRaylib_BuildFontAtlas();
+
+    return io;
 }
 
-void GUI::startButton(bool &var) { var = true; }
 
-void GUI::exitButton(bool &var) { var = true; }
+void UpdateGui(entt::registry &registry, ImGuiIO &io) {
+    ImGui_ImplRaylib_ProcessEvents();
 
-void GUI::skillButton1() {
+// Start the Dear ImGui frame
+    ImGui_ImplRaylib_NewFrame();
+    ImGui::NewFrame();
+
+    imguiWindowMain(registry, io);
+
+// Rendering
+    ImGui::Render();
+}
+
+void DrawGui() {
+    ImGui_ImplRaylib_RenderDrawData(ImGui::GetDrawData());
 
 }
 
-void GUI::skillButton2() {
-
-}
-
-void GUI::skillButton3() {
-
-}
-
-void GUI::skillButton4() {
-
-}
-
-void GUI::skillButton5() {
-
+void CloseGui() {
+    ImGui_ImplRaylib_Shutdown();
+    ImGui::DestroyContext();
 }

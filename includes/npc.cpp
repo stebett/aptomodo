@@ -81,7 +81,7 @@ void updateEnemy(entt::registry &registry, entt::entity &player, const Map &grid
             continue;
         }
 
-        if (!playerInView(position, playerPosition, 300.0f)) {
+        if (!playerInView(position, playerPosition, 200.0f)) {
 //            DrawCircleV(position, 150.0f, ColorAlpha(WHITE, 0.1));
             continue;
         }

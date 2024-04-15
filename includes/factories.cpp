@@ -14,6 +14,7 @@ entt::entity spawnEnemy(entt::registry &registry, Position position) {
     entt::entity enemy = registry.create();
     registry.emplace<Radius>(enemy, 5.0f);
     registry.emplace<Spread>(enemy, 10.0f);
+    registry.emplace<ColorBB>(enemy, RED);
     registry.emplace<Enemy>(enemy);
     registry.emplace<Living>(enemy);
     registry.emplace<ID>(enemy, id++);
@@ -42,6 +43,7 @@ entt::entity spawnPlayer(entt::registry &registry, Position position, GameScene 
     Animation::Map animationMap = scene->getAnimationMap("Player");
     entt::entity player = registry.create();
     registry.emplace<Player>(player);
+    registry.emplace<ColorBB>(player, BLUE);
     registry.emplace<Living>(player);
     registry.emplace<Spread>(player, 15.0f);
     registry.emplace<Speed>(player, 5.0f);

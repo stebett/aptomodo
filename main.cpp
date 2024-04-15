@@ -19,30 +19,26 @@ int main() {
     auto &position = registry.get<Position>(player);
     auto &health = registry.get<Health>(player);
 
-//    GUI gui = GUI(screenWidth, screenHeight, pain.value, pain.max, health.value, health.max, "gui_style.rgs");
-
+    auto io = InitGui();
 
     auto enemyCounter = 0;
     auto framesCounter = 0u;
-//    while (enemyCounter < 40) {
-//        spawnRandomEnemy(registry, level);
-//        ++enemyCounter;
-//    }
+
     SetTargetFPS(60);
     while (!WindowShouldClose()) {
         updateCamera(camera, position);
-
+        UpdateGui(registry, io);
 
         BeginDrawing();
 
         BeginMode2D(camera);
         draw(registry, scene, framesCounter);
-        parseInput(registry, player, position, camera, scene->grid);
         updateEnemy(registry, player, scene->grid);
 
         EndMode2D();
-//        gui.drawGameplay();
+        parseInput(registry, player, position, camera, scene->grid);
 
+        DrawGui();
         DrawFPS(10, 10);
 
         EndDrawing();
@@ -50,7 +46,7 @@ int main() {
         ++framesCounter;
     }
 
-
+    CloseGui();
     CloseWindow();
 
     return 0;

@@ -18,6 +18,10 @@ struct Enemy {
 struct Living {
 };
 
+struct ColorBB {
+    Color value;
+};
+
 // Components
 struct Position {
     float x;
