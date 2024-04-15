@@ -38,12 +38,41 @@ public:
     void setLevel(entt::registry &registry, int level);
     void draw();
     std::string getTexturePath(const std::string& tileset);
-    Animation::Map getAnimationMap(const std::string& ldtkEnum);
+//    Animation::Map getAnimationMap(const std::string& ldtkEnum);
 };
 
-void draw(const entt::registry &registry, GameScene *scene, unsigned int frame);
+void draw(entt::registry &registry, GameScene *scene, unsigned int frame);
 
 void updateCamera(Camera2D &camera, Position &playerPosition);
+
+class AttackEffect {
+    Timer m_timer;
+    Position &m_center;
+    Color m_color;
+    float m_radius;
+    float m_duration;
+    float m_startAngle;
+    float m_endAngle;
+
+
+public:
+    AttackEffect(float mDuration, Position &mCenter, const float &mRadius,
+                 float mStartAngle, float mEndangle, const Color &mColor) : m_duration(mDuration),
+                                                                            m_center(mCenter),
+                                                                            m_radius(mRadius),
+                                                                            m_color(mColor),
+                                                                            m_startAngle(mStartAngle),
+                                                                            m_endAngle(mEndangle) {
+        m_timer.Reset();
+    }
+
+    void Draw() const {
+        DrawCircleSector({m_center.x, m_center.y}, m_radius, m_startAngle, m_endAngle, 2,
+                         ColorAlpha(m_color, 1 - m_timer.ElapsedMillis() / m_duration ));
+    }
+
+    [[nodiscard]] bool Expired() const {return m_timer.ElapsedMillis() > m_duration;}
+};
 
 
 #endif //ACEROLA_JAM0_RENDERING_H

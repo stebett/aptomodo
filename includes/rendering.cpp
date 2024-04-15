@@ -39,6 +39,16 @@ Rectangle toRectangle(ldtk::Rect<int> rectangle) {
     };
 }
 
+void drawAttacks(entt::registry &registry) {
+    auto effectView = registry.view<AttackEffect>();
+    for (auto [entity, effect]: effectView.each()) {
+        effect.Draw();
+        if (effect.Expired()) {
+            registry.destroy(entity);
+        }
+    }
+}
+
 void drawLivingBB(const entt::registry &registry) {
     auto livingView = registry.view<Living, Radius, Position, ColorBB>();
     for (auto [entity, radius, position, color]: livingView.each()) {
@@ -47,9 +57,10 @@ void drawLivingBB(const entt::registry &registry) {
 
 }
 
-void draw(const entt::registry &registry, GameScene *scene, unsigned int frame) {
+void draw(entt::registry &registry, GameScene *scene, unsigned int frame) {
     scene->draw();
     drawLivingBB(registry);
+    drawAttacks(registry);
 }
 
 GameScene::GameScene(entt::registry &registry) : m_registry(registry) {
@@ -168,14 +179,14 @@ std::string GameScene::getTexturePath(const std::string &tileset) {
     return getAssetPath(ldtkWorld->getTileset(tileset).path);
 }
 
-Animation::Map GameScene::getAnimationMap(const std::string &ldtkEnum) {
-    auto &playerEnum = ldtkWorld->getEnum(ldtkEnum);
-    auto rec1 = toRectangle(playerEnum["Standing1"].getIconTextureRect());
-    auto rec2 = toRectangle(playerEnum["Standing2"].getIconTextureRect());
-    auto rec3 = toRectangle(playerEnum["Standing3"].getIconTextureRect());
-    auto rec4 = toRectangle(playerEnum["Standing4"].getIconTextureRect());
-    auto rec5 = toRectangle(playerEnum["Standing5"].getIconTextureRect());
-    Animation::Map map;
-    map[Animation::Stand] = {rec1, rec2, rec3, rec4, rec5};
-    return map;
-}
+//Animation::Map GameScene::getAnimationMap(const std::string &ldtkEnum) {
+//    auto &playerEnum = ldtkWorld->getEnum(ldtkEnum);
+//    auto rec1 = toRectangle(playerEnum["Standing1"].getIconTextureRect());
+//    auto rec2 = toRectangle(playerEnum["Standing2"].getIconTextureRect());
+//    auto rec3 = toRectangle(playerEnum["Standing3"].getIconTextureRect());
+//    auto rec4 = toRectangle(playerEnum["Standing4"].getIconTextureRect());
+//    auto rec5 = toRectangle(playerEnum["Standing5"].getIconTextureRect());
+//    Animation::Map map;
+//    map[Animation::Stand] = {rec1, rec2, rec3, rec4, rec5};
+//    return map;
+//}

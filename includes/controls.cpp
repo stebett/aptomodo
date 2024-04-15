@@ -9,18 +9,25 @@
 #include "controls.h"
 #include "collisions.h"
 #include "constants.h"
+#include "rendering.h"
 
 
 void playerAttack(entt::registry &registry, entt::entity player, Vector2 clickPosition) {
-    Position playerPosition = registry.get<Position>(player);
+    auto &attackTimer  = registry.get<AttackTimer>(player).timer;
+    if (attackTimer.Elapsed() < registry.get<AttackSpeed>(player).value) return;
+
+    attackTimer.Reset();
+    Position &playerPosition = registry.get<Position>(player);
     float attackRange  = registry.get<AttackRange>(player).value;
     float attackSpread  = registry.get<Spread>(player).value;
     float damage  = registry.get<Damage>(player).value;
     float pushback = registry.get<Pushback>(player).value;
 
     float click_angle = atan2(clickPosition.y - playerPosition.y, clickPosition.x - playerPosition.x) * radToDeg;
-    DrawCircleSector(playerPosition, attackRange, click_angle - attackSpread,
-                     click_angle + attackSpread, 2, RED);
+
+    registry.emplace<AttackEffect>(registry.create(), 1000, playerPosition, attackRange, click_angle - attackSpread, click_angle + attackSpread, PURPLE);
+
+
     Vector2 endSegment1 = {
             playerPosition.x + attackRange* (float) cos((click_angle - attackSpread) * degToRad),
             playerPosition.y + attackRange * (float) sin((click_angle - attackSpread) * degToRad)};
@@ -32,7 +39,7 @@ void playerAttack(entt::registry &registry, entt::entity player, Vector2 clickPo
     for (auto [enemy, health, radius, position]: enemyView.each()) {
         if (CheckCollisionCircleTriangle(position, radius.value, playerPosition,
                                          endSegment1, endSegment2, attackRange)) {
-            health.value -= attackRange;
+            health.value -= damage;
             float m = sqrt(pow(playerPosition.x + position.x, 2) + pow(playerPosition.y + position.y, 2));
             position = {(position.x + (position.x - playerPosition.x) * pushback / m),
                         position.y + (position.y - playerPosition.y) * pushback / m};
@@ -89,10 +96,10 @@ void parseInput(entt::registry &registry, entt::entity &player, Position &positi
     if (futurePos.y - radius.value < 0 || futurePos.y + radius.value > mapHeight) {
         futurePos.y = position.y;
     }
-    solveCircleRecCollision(futurePos, radius, grid);
     Vector2 direction = Vector2Subtract(futurePos, position);
     Vector2 movement = Vector2Scale(Vector2Normalize(direction), speed.value);
     futurePos = Vector2Add(position, movement);
+    solveCircleRecCollision(futurePos, radius, grid);
     position = futurePos;
 
 }

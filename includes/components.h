@@ -6,9 +6,10 @@
 #define ACEROLA_JAM0_COMPONENTS_H
 
 #include <raylib.h>
+#include <raymath.h>
 #include <unordered_map>
 #include <vector>
-
+#include "timer.h"
 
 // Tags
 struct Player {
@@ -102,8 +103,8 @@ struct Stamina {
     float value;
 };
 
-struct TimeLastAttack {
-    float value;
+struct AttackTimer {
+    Timer timer;
 };
 
 struct AttackSpeed {
@@ -123,22 +124,9 @@ struct Pushback {
 };
 
 
-
 struct ID {
     int value;
 };
-
-
-namespace Animation {
-
-    enum State {
-        Stand,
-        Walk,
-        Attack,
-    };
-    using Map = std::unordered_map<Animation::State, std::vector<Rectangle>>;
-
-}
 
 
 #endif //ACEROLA_JAM0_COMPONENTS_H

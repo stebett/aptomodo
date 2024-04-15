@@ -10,6 +10,7 @@
 #include <raymath.h>
 #include "astar.h"
 #include "collisions.h"
+#include "rendering.h"
 
 
 void solveCollisionEnemy(const entt::registry &registry, const int id, Position &futurePos, Radius radius, const Map &grid) {
@@ -37,7 +38,12 @@ bool playerInView(const Vector2 position, const Vector2 &playerPosition, const f
 }
 
 
-void enemyAttack(entt::registry &registry, const entt::entity enemy, entt::entity player, Position position) {
+void enemyAttack(entt::registry &registry, const entt::entity enemy, entt::entity player, Position &position) {
+    auto &attackTimer  = registry.get<AttackTimer>(enemy).timer;
+    if (attackTimer.Elapsed() < registry.get<AttackSpeed>(enemy).value) return;
+
+    attackTimer.Reset();
+
     auto &playerPosition = registry.get<Position>(player);
     auto &health = registry.get<Health>(player);
     auto radius = registry.get<Radius>(player);
@@ -47,9 +53,8 @@ void enemyAttack(entt::registry &registry, const entt::entity enemy, entt::entit
 //    float pushback = registry.get<Pushback>(enemy).value;
 
     float click_angle = atan2(playerPosition.y - position.y, playerPosition.x - position.x) * radToDeg;
+    registry.emplace<AttackEffect>(registry.create(), 100, position, attackRange, click_angle - attackSpread, click_angle + attackSpread, BROWN);
 
-    DrawCircleSector(position, attackRange, click_angle - attackSpread,
-                     click_angle + attackSpread, 2, RED);
     Vector2 endSegment1 = {
             playerPosition.x + attackRange * (float) cos((click_angle - attackSpread) * degToRad),
             playerPosition.y + attackRange * (float) sin((click_angle - attackSpread) * degToRad)};
@@ -60,9 +65,6 @@ void enemyAttack(entt::registry &registry, const entt::entity enemy, entt::entit
     if (CheckCollisionCircleTriangle(playerPosition, radius.value, position,
                                      endSegment1, endSegment2, attackRange)) {
         health.value -= damage;
-//        float m = sqrt(pow(playerPosition.x + position.x, 2) + pow(playerPosition.y + position.y, 2));
-//        playerPosition = {(playerPosition.x + (playerPosition.x - position.x) * pushback / m),
-//                          playerPosition.y + (playerPosition.y - position.y) * pushback / m};
     }
 }
 
@@ -114,5 +116,4 @@ void updateEnemy(entt::registry &registry, entt::entity &player, const Map &grid
 
         position = futurePos;
     }
-
 }

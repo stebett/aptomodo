@@ -24,8 +24,8 @@ entt::entity spawnEnemy(entt::registry &registry, Position position) {
     registry.emplace<PhysicalResistance>(enemy, 0.0f);
     registry.emplace<MagicalResistance>(enemy, 0.0f);
     registry.emplace<Stamina>(enemy, 0.0f);
-    registry.emplace<TimeLastAttack>(enemy, 0.0f);
-    registry.emplace<AttackSpeed>(enemy, 2.0f);
+    registry.emplace<AttackTimer>(enemy);
+    registry.emplace<AttackSpeed>(enemy, 0.3f);
     registry.emplace<Damage>(enemy, 1.0f);
     registry.emplace<AttackRange>(enemy, 3 * tileSize);
     registry.emplace<Pushback>(enemy, 1.0f);
@@ -40,7 +40,6 @@ entt::entity spawnRandomEnemy(entt::registry &registry) {
 
 entt::entity spawnPlayer(entt::registry &registry, Position position, GameScene *scene) {
     Texture2D texture = LoadTexture(scene->getTexturePath("Player").c_str()); // TODO: remember to unload if needed
-    Animation::Map animationMap = scene->getAnimationMap("Player");
     entt::entity player = registry.create();
     registry.emplace<Player>(player);
     registry.emplace<ColorBB>(player, BLUE);
@@ -48,14 +47,13 @@ entt::entity spawnPlayer(entt::registry &registry, Position position, GameScene 
     registry.emplace<Spread>(player, 15.0f);
     registry.emplace<Speed>(player, 5.0f);
     registry.emplace<Texture>(player, texture);
-    registry.emplace<Animation::Map>(player, animationMap);
     registry.emplace<Health>(player, 100, 100);
     registry.emplace<Radius>(player, 10.0f);
     registry.emplace<PhysicalResistance>(player, 0.0f);
     registry.emplace<MagicalResistance>(player, 0.0f);
     registry.emplace<Stamina>(player, 0.0f);
-    registry.emplace<TimeLastAttack>(player, 0.0f);
-    registry.emplace<AttackSpeed>(player, 2.0f);
+    registry.emplace<AttackTimer>(player);
+    registry.emplace<AttackSpeed>(player, 0.3f);
     registry.emplace<Damage>(player, 1.0f);
     registry.emplace<AttackRange>(player, 25.0f);
     registry.emplace<Pushback>(player, 1.0f);

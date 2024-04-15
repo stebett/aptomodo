@@ -36,6 +36,7 @@ set(sources
         includes/raygui.h
         includes/gui.h
         includes/gui.cpp
+        includes/timer.h
 )
 
 
