@@ -94,6 +94,7 @@ public:
     Search(const Map &map);
 
 
+    Path exportPath();
 };
 
 

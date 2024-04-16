@@ -51,6 +51,9 @@ struct Triangle {
     Vector2 v3;
 };
 
+struct Path {
+    std::array<Vector2, 8> path;
+};
 
 struct Radius {
     float value;

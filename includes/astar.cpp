@@ -149,6 +149,13 @@ void Search::drawPath() {
     for (const Node &node: path) node.draw(ColorAlpha(DARKGREEN, 0.15));
 }
 
+Path Search::exportPath() {
+    Path result = {0};
+    for (int i=0; i<8; i++) {
+        result.path[i] = {static_cast<float>(path[i + 1].x), static_cast<float>(path[i + 1].y)};
+    }
+}
+
 
 void Search::draw() {
 //        drawOpen();

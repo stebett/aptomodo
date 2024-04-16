@@ -98,7 +98,7 @@ void enemyAttack(entt::registry &registry, const entt::entity enemy, entt::entit
     }
 }
 
-Vector2 getPath(Position &position, Position &playerPosition, const Map &grid) {
+Vector2 getPath(entt::registry &registry, entt::entity &enemy, Position &position, Position &playerPosition, const Map &grid) {
     Node start = getTile(position);
     Node end = getTile(playerPosition);
     Search search(grid);
@@ -109,6 +109,8 @@ Vector2 getPath(Position &position, Position &playerPosition, const Map &grid) {
 
     if (search.path.empty()) { return position; }
     if (config::show_astar_path) { search.draw(); }
+
+    registry.emplace<Path>(enemy, search.path[2]);
     return {
             static_cast<float>(search.path[2].x * tileSize + tileSize / 2),
             static_cast<float>(search.path[2].y * tileSize + tileSize / 2)
