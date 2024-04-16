@@ -5,8 +5,9 @@
 #include "gui.h"
 #include "rlImGui/imgui_impl_raylib.h"
 #include "components.h"
-#include <format>
+#include "constants.h"
 #include <entt/entity/registry.hpp>
+#include "config.h"
 
 
 void imguiPlayerAttr(entt::registry &registry) {
@@ -14,38 +15,48 @@ void imguiPlayerAttr(entt::registry &registry) {
     for (auto [entity, colorbb, spread, speed, health, radius, physicalresistance, magicalresistance, stamina, timelastattack, attackspeed, damage, attackrange, pushback, position
         ]: view.each()) {
 
-        ImGui::SliderFloat("spread", &spread.value, 0, 30, "%.3f", 0);
-        ImGui::SliderFloat("speed", &speed.value, 0, 30, "%.3f", 0);
-        ImGui::SliderFloat("health", &health.value, 0, 30, "%.3f", 0);
-        ImGui::SliderFloat("radius", &radius.value, 0, 30, "%.3f", 0);
+        ImGui::SliderFloat("spread", &spread.value, 0, 360, "%.3f", 0);
+        ImGui::SliderFloat("speed", &speed.value, 0, 15, "%.3f", 0);
+        ImGui::SliderFloat("health", &health.value, 0, 200, "%.3f", 0);
+        ImGui::SliderFloat("radius", &radius.value, 0, 50, "%.3f", 0);
         ImGui::SliderFloat("physicalresistance", &physicalresistance.value, 0, 30, "%.3f", 0);
         ImGui::SliderFloat("magicalresistance", &magicalresistance.value, 0, 30, "%.3f", 0);
         ImGui::SliderFloat("stamina", &stamina.value, 0, 30, "%.3f", 0);
-        ImGui::SliderFloat("attackspeed", &attackspeed.value, 0, 30, "%.3f", 0);
-        ImGui::SliderFloat("damage", &damage.value, 0, 30, "%.3f", 0);
-        ImGui::SliderFloat("attackrange", &attackrange.value, 0, 30, "%.3f", 0);
-        ImGui::SliderFloat("pushback", &pushback.value, 0, 30, "%.3f", 0);
-        ImGui::SliderFloat("position x", &position.x, 0, 30, "%.3f", 0);
-        ImGui::SliderFloat("positiony ", &position.y, 0, 30, "%.3f", 0);
+        ImGui::SliderFloat("attackspeed", &attackspeed.value, 0, 5, "%.3f", 0);
+        ImGui::SliderFloat("damage", &damage.value, 0, 200, "%.3f", 0);
+        ImGui::SliderFloat("attackrange", &attackrange.value, 1, 150, "%.3f", 0);
+        ImGui::SliderFloat("pushback", &pushback.value, 0, 150, "%.3f", 0);
+        ImGui::SliderFloat("position x", &position.x, 0, mapWidth, "%.3f", 0);
+        ImGui::SliderFloat("position y ", &position.y, 0, mapHeight, "%.3f", 0);
 
     }
 }
 
+void imguiConfig() {
+    ImGui::Checkbox("Astar path", &config::show_astar_path);
+}
+
 void imguiWindowMain(entt::registry &registry, ImGuiIO io) {
     static bool show_demo_window = false;
-    static bool show_player_window = true;
-    if (show_demo_window)
-        ImGui::ShowDemoWindow(&show_demo_window);
-
-    if (show_player_window)
-        imguiPlayerAttr(registry);
-
+    static bool show_player_window = false;
+    static bool show_config_window = false;
 
     ImGui::Begin("Main");
 
+
     ImGui::Checkbox("Demo Window", &show_demo_window);
+    if (show_demo_window)
+        ImGui::ShowDemoWindow(&show_demo_window);
+
     ImGui::Checkbox("Player Window", &show_player_window);
-    ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
+    if (show_player_window)
+        imguiPlayerAttr(registry);
+
+    ImGui::Checkbox("Config Window", &show_config_window);
+    if (show_config_window)
+        imguiConfig();
+
+//    ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
     ImGui::End();
 }
 

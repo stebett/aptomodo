@@ -139,14 +139,14 @@ void Search::drawNeighbors() {
 
 }
 
-void Search::drawClosed() { for (auto [node, parent]: came_from) node.draw(ColorAlpha(RED, 0.2)); }
+void Search::drawClosed() { for (auto [node, parent]: came_from) node.draw(ColorAlpha(RED, 0.15)); }
 
-void Search::drawStart() { start.draw(ColorAlpha(GREEN, 0.2)); }
+void Search::drawStart() { start.draw(ColorAlpha(GREEN, 0.15)); }
 
-void Search::drawEnd() { end.draw(ColorAlpha(PURPLE, 0.2)); }
+void Search::drawEnd() { end.draw(ColorAlpha(PURPLE, 0.15)); }
 
 void Search::drawPath() {
-    for (const Node &node: path) node.draw(ColorAlpha(DARKGREEN, 0.2));
+    for (const Node &node: path) node.draw(ColorAlpha(DARKGREEN, 0.15));
 }
 
 
@@ -155,7 +155,7 @@ void Search::draw() {
     drawClosed();
     drawStart();
     drawEnd();
-    drawNeighbors();
+//    drawNeighbors();
     if (completed) { drawPath(); }
 }
 

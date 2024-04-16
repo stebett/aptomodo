@@ -25,7 +25,7 @@ void playerAttack(entt::registry &registry, entt::entity player, Vector2 clickPo
 
     float click_angle = atan2(clickPosition.y - playerPosition.y, clickPosition.x - playerPosition.x) * radToDeg;
 
-    registry.emplace<AttackEffect>(registry.create(), 1000, playerPosition, attackRange, click_angle - attackSpread, click_angle + attackSpread, PURPLE);
+    registry.emplace<AttackEffect>(registry.create(), 100, playerPosition, attackRange, click_angle - attackSpread, click_angle + attackSpread, PURPLE);
 
 
     Vector2 endSegment1 = {

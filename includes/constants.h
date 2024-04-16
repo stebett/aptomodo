@@ -35,5 +35,4 @@ inline std::string getAssetPath(const std::string& assetName)
 using Map = Eigen::Matrix<int, mapWidth / tileSize + 1, mapHeight / tileSize + 1>;
 
 
-
 #endif //ACEROLA_JAM0_CONSTANTS_H

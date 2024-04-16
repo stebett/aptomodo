@@ -37,6 +37,8 @@ set(sources
         includes/gui.h
         includes/gui.cpp
         includes/timer.h
+        includes/config.h
+        includes/config.cpp
 )
 
 

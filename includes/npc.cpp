@@ -11,9 +11,10 @@
 #include "astar.h"
 #include "collisions.h"
 #include "rendering.h"
+#include "config.h"
 
-
-void solveCollisionEnemy(const entt::registry &registry, const int id, Position &futurePos, Radius radius, const Map &grid) {
+void
+solveCollisionEnemy(const entt::registry &registry, const int id, Position &futurePos, Radius radius, const Map &grid) {
     static Vector2 distance;
     static Vector2 enemyPos;
     static float overlap;
@@ -39,7 +40,7 @@ bool playerInView(const Vector2 position, const Vector2 &playerPosition, const f
 
 
 void enemyAttack(entt::registry &registry, const entt::entity enemy, entt::entity player, Position &position) {
-    auto &attackTimer  = registry.get<AttackTimer>(enemy).timer;
+    auto &attackTimer = registry.get<AttackTimer>(enemy).timer;
     if (attackTimer.Elapsed() < registry.get<AttackSpeed>(enemy).value) return;
 
     attackTimer.Reset();
@@ -53,7 +54,8 @@ void enemyAttack(entt::registry &registry, const entt::entity enemy, entt::entit
 //    float pushback = registry.get<Pushback>(enemy).value;
 
     float click_angle = atan2(playerPosition.y - position.y, playerPosition.x - position.x) * radToDeg;
-    registry.emplace<AttackEffect>(registry.create(), 100, position, attackRange, click_angle - attackSpread, click_angle + attackSpread, BROWN);
+    registry.emplace<AttackEffect>(registry.create(), 100, position, attackRange, click_angle - attackSpread,
+                                   click_angle + attackSpread, BROWN);
 
     Vector2 endSegment1 = {
             playerPosition.x + attackRange * (float) cos((click_angle - attackSpread) * degToRad),
@@ -98,10 +100,9 @@ void updateEnemy(entt::registry &registry, entt::entity &player, const Map &grid
 
         // Check distance
         while (!search.completed) { search.step(); }
-        if (search.path.empty()) return;
 
-//        search.draw();
-
+        if (search.path.empty()) { return; }
+        if (config::show_astar_path) { search.draw(); }
         target = {static_cast<float>(search.path[2].x * tileSize + tileSize / 2),
                   static_cast<float>(search.path[2].y * tileSize + tileSize / 2)};
 
