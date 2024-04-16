@@ -13,6 +13,7 @@ entt::entity spawnEnemy(entt::registry &registry, Position position) {
     static int id = 0;
     entt::entity enemy = registry.create();
     registry.emplace<Radius>(enemy, 5.0f);
+    registry.emplace<Path>(enemy);
     registry.emplace<LookAngle>(enemy, 0.0f);
     registry.emplace<Spread>(enemy, 10.0f);
     registry.emplace<ColorBB>(enemy, RED);

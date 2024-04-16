@@ -95,6 +95,8 @@ public:
 
 
     Path exportPath();
+
+    void exportPath(Path &pathToUpdate);
 };
 
 

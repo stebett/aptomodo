@@ -149,11 +149,11 @@ void Search::drawPath() {
     for (const Node &node: path) node.draw(ColorAlpha(DARKGREEN, 0.15));
 }
 
-Path Search::exportPath() {
-    Path result = {0};
+void Search::exportPath(Path &pathToUpdate) {
     for (int i=0; i<8; i++) {
-        result.path[i] = {static_cast<float>(path[i + 1].x), static_cast<float>(path[i + 1].y)};
+        pathToUpdate.path[i] = {static_cast<float>(path[i + 3].x), static_cast<float>(path[i + 3].y)};
     }
+    pathToUpdate.index = 0;
 }
 
 

@@ -66,7 +66,8 @@ bool playerInView(const Vector2 &position, const Vector2 &playerPosition, const 
     bool inView = facePlayer && inViewRange;
     if (config::show_enemy_fov) {
         DrawLineV(position, Vector2Add(position, Vector2Scale(lookVector, 20.0f)), PURPLE);
-        DrawCircleSector(position, sightRange, lookingAngleDeg-91.0f, lookingAngleDeg+91.0f, 2, ColorAlpha(WHITE, 0.1));
+        DrawCircleSector(position, sightRange, lookingAngleDeg - 91.0f, lookingAngleDeg + 91.0f, 2,
+                         ColorAlpha(WHITE, 0.1));
         if (inView) { DrawCircle(position.x + 15.0f, position.y + 15.0f, 2, RED); }
     }
     return inView;
@@ -98,7 +99,9 @@ void enemyAttack(entt::registry &registry, const entt::entity enemy, entt::entit
     }
 }
 
-Vector2 getPath(entt::registry &registry, entt::entity &enemy, Position &position, Position &playerPosition, const Map &grid) {
+void updatePath(entt::registry &registry, entt::entity &enemy, Position &position, Position &playerPosition,
+                const Map &grid) {
+    Path path = registry.get<Path>(enemy);
     Node start = getTile(position);
     Node end = getTile(playerPosition);
     Search search(grid);
@@ -107,20 +110,23 @@ Vector2 getPath(entt::registry &registry, entt::entity &enemy, Position &positio
     // Check distance
     while (!search.completed) { search.step(); }
 
-    if (search.path.empty()) { return position; }
+    if (search.path.empty()) { return; }
     if (config::show_astar_path) { search.draw(); }
+    search.exportPath(path);
 
-    registry.emplace<Path>(enemy, search.path[2]);
-    return {
-            static_cast<float>(search.path[2].x * tileSize + tileSize / 2),
-            static_cast<float>(search.path[2].y * tileSize + tileSize / 2)
-    };
+}
+
+Vector2 getPathNext(entt::registry &registry, entt::entity &enemy) {
+    Path &path = registry.get<Path>(enemy);
+    Vector2 nextPath = path.getNext();
+    return {static_cast<float>(nextPath.x * tileSize + tileSize / 2),
+            static_cast<float>(nextPath.y * tileSize + tileSize / 2)};
 }
 
 void faceTarget(const Vector2 &position, const Vector2 &target, const float turningRate, float &lookAngle) {
 
 //    lookAngle = Lerp(lookAngle, atan2(target.y - position.y, target.x - position.x) * RAD2DEG, turningRate);
-    lookAngle =  atan2(target.y - position.y, target.x - position.x) * RAD2DEG;
+    lookAngle = atan2(target.y - position.y, target.x - position.x) * RAD2DEG;
 }
 
 void updateEnemy(entt::registry &registry, entt::entity &player, const Map &grid) {
@@ -151,7 +157,8 @@ void updateEnemy(entt::registry &registry, entt::entity &player, const Map &grid
             continue;
         }
 
-        target = getPath(position, playerPosition, grid);
+        updatePath(registry, enemy, position, playerPosition, grid);
+        target = getPathNext(registry, enemy);
         direction = Vector2Subtract(target, position);
         movement = Vector2Scale(Vector2Normalize(direction), speed.value);
         futurePos = Vector2Add(position, movement);

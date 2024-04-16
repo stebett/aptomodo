@@ -52,7 +52,12 @@ struct Triangle {
 };
 
 struct Path {
-    std::array<Vector2, 8> path;
+    int index {0};
+    std::array<Vector2, 8> path {0};
+
+    Vector2 getNext() {
+        return path[std::min(index++, 8)];
+    }
 };
 
 struct Radius {
