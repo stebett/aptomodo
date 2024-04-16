@@ -56,6 +56,10 @@ struct Radius {
     float value;
 };
 
+struct LookAngle {
+    float value;
+};
+
 
 struct Spread {
     float value;

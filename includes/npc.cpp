@@ -34,15 +34,49 @@ solveCollisionEnemy(const entt::registry &registry, const int id, Position &futu
 }
 
 
-bool playerInView(const Vector2 position, const Vector2 &playerPosition, const float range) {
-    return CheckCollisionCircles(position, range, playerPosition, 1.0f);
+Triangle getTriangle(const Vector2 v1, const float range, const float angle1deg, const float angle2deg) {
+    return {v1,
+            {v1.x + range * cos(angle1deg * DEG2RAD),
+             v1.y + range * sin(angle1deg * DEG2RAD)},
+            {v1.x + range * cos(angle2deg * DEG2RAD),
+             v1.y + range * sin(angle2deg * DEG2RAD)}};
 }
 
+//
+//bool playerInView(const Vector2 &position, const Vector2 &playerPosition, const float radius, const float lookingAngleDeg) {
+//    const float sightRange = 100.0f;
+//    const float sightSpread = 45.0f;
+//    Triangle triangle = getTriangle(position, sightRange, lookingAngleDeg - sightSpread, lookingAngleDeg + sightSpread);
+//
+//    bool inView = CheckCollisionPointTriangle(playerPosition, triangle.v1, triangle.v2, triangle.v3);
+//    if (config::show_enemy_fov) {
+//        DrawCircleSector(triangle.v1, sightRange, lookingAngleDeg - sightSpread, lookingAngleDeg + sightSpread, 2,
+//                         ColorAlpha(WHITE, 0.1));
+//        if (inView) { DrawCircle(position.x, position.y, 2, RED); }
+//    }
+//    return inView;
+//}
+
+bool playerInView(const Vector2 &position, const Vector2 &playerPosition, const float playerRadius,
+                  const float lookingAngleDeg) {
+    const float sightRange = 100.0f;
+    Vector2 lookVector = {cos(lookingAngleDeg * DEG2RAD), sin(lookingAngleDeg * DEG2RAD)};
+    bool facePlayer = Vector2DotProduct(lookVector, Vector2Subtract(playerPosition, position)) > 0;
+    bool inViewRange = CheckCollisionCircles(playerPosition, playerRadius, position, sightRange);
+    bool inView = facePlayer && inViewRange;
+    if (config::show_enemy_fov) {
+        DrawLineV(position, Vector2Add(position, Vector2Scale(lookVector, 20.0f)), PURPLE);
+        DrawCircleSector(position, sightRange, lookingAngleDeg-91.0f, lookingAngleDeg+91.0f, 2, ColorAlpha(WHITE, 0.1));
+        if (inView) { DrawCircle(position.x + 15.0f, position.y + 15.0f, 2, RED); }
+    }
+    return inView;
+}
 
 void enemyAttack(entt::registry &registry, const entt::entity enemy, entt::entity player, Position &position) {
+    static Triangle triangle;
+
     auto &attackTimer = registry.get<AttackTimer>(enemy).timer;
     if (attackTimer.Elapsed() < registry.get<AttackSpeed>(enemy).value) return;
-
     attackTimer.Reset();
 
     auto &playerPosition = registry.get<Position>(player);
@@ -53,59 +87,69 @@ void enemyAttack(entt::registry &registry, const entt::entity enemy, entt::entit
     float damage = registry.get<Damage>(enemy).value;
 //    float pushback = registry.get<Pushback>(enemy).value;
 
-    float click_angle = atan2(playerPosition.y - position.y, playerPosition.x - position.x) * radToDeg;
-    registry.emplace<AttackEffect>(registry.create(), 100, position, attackRange, click_angle - attackSpread,
-                                   click_angle + attackSpread, BROWN);
+    float clickAngle = atan2(playerPosition.y - position.y, playerPosition.x - position.x) * radToDeg;
+    registry.emplace<AttackEffect>(registry.create(), 100, position, attackRange, clickAngle - attackSpread,
+                                   clickAngle + attackSpread, BROWN);
 
-    Vector2 endSegment1 = {
-            playerPosition.x + attackRange * (float) cos((click_angle - attackSpread) * degToRad),
-            playerPosition.y + attackRange * (float) sin((click_angle - attackSpread) * degToRad)};
-    Vector2 endSegment2 = {
-            playerPosition.x + attackRange * (float) cos((click_angle + attackSpread) * degToRad),
-            playerPosition.y + attackRange * (float) sin((click_angle + attackSpread) * degToRad)};
-
-    if (CheckCollisionCircleTriangle(playerPosition, radius.value, position,
-                                     endSegment1, endSegment2, attackRange)) {
+    triangle = getTriangle(position, attackRange, clickAngle - attackSpread, clickAngle + attackSpread);
+    if (CheckCollisionCircleTriangle(playerPosition, radius.value, triangle.v1, triangle.v2, triangle.v3,
+                                     attackRange)) {
         health.value -= damage;
     }
 }
 
+Vector2 getPath(Position &position, Position &playerPosition, const Map &grid) {
+    Node start = getTile(position);
+    Node end = getTile(playerPosition);
+    Search search(grid);
+    search.init(start, end);
+
+    // Check distance
+    while (!search.completed) { search.step(); }
+
+    if (search.path.empty()) { return position; }
+    if (config::show_astar_path) { search.draw(); }
+    return {
+            static_cast<float>(search.path[2].x * tileSize + tileSize / 2),
+            static_cast<float>(search.path[2].y * tileSize + tileSize / 2)
+    };
+}
+
+void faceTarget(const Vector2 &position, const Vector2 &target, const float turningRate, float &lookAngle) {
+
+//    lookAngle = Lerp(lookAngle, atan2(target.y - position.y, target.x - position.x) * RAD2DEG, turningRate);
+    lookAngle =  atan2(target.y - position.y, target.x - position.x) * RAD2DEG;
+}
 
 void updateEnemy(entt::registry &registry, entt::entity &player, const Map &grid) {
     Position futurePos = {0, 0};
     Position playerPosition = registry.get<Position>(player);
-
+    float playerRadius = registry.get<Radius>(player).value;
     Vector2 target;
     Vector2 direction;
     Vector2 movement;
-    auto enemyView = registry.view<Living, Speed, Radius, Health, Position, Enemy, ID>();
-    for (auto [enemy, speed, radius, health, position, id]: enemyView.each()) {
+
+    auto enemyView = registry.view<Living, Speed, Radius, Health, Position, Enemy, ID, LookAngle>();
+    for (auto [enemy, speed, radius, health, position, id, lookAngle]: enemyView.each()) {
         if (health.value <= 0) {
             registry.remove<Living>(enemy);
             continue;
         }
 
-        if (!playerInView(position, playerPosition, 200.0f)) {
-//            DrawCircleV(position, 150.0f, ColorAlpha(WHITE, 0.1));
+        if (!playerInView(position, playerPosition, playerRadius, lookAngle.value)) {
             continue;
         }
+
+        const float turningRate = 0.6f;
+        faceTarget(position, playerPosition, turningRate, lookAngle.value);
+
+
         if (CheckCollisionCircles(playerPosition, radius.value, position, static_cast<float>(2 * tileSize))) {
             enemyAttack(registry, enemy, player, position);
             continue;
         }
-        Node start = getTile(position);
-        Node end = getTile(playerPosition);
-        Search search(grid);
-        search.init(start, end);
 
-        // Check distance
-        while (!search.completed) { search.step(); }
-
-        if (search.path.empty()) { return; }
-        if (config::show_astar_path) { search.draw(); }
-        target = {static_cast<float>(search.path[2].x * tileSize + tileSize / 2),
-                  static_cast<float>(search.path[2].y * tileSize + tileSize / 2)};
-
+        target = getPath(position, playerPosition, grid);
         direction = Vector2Subtract(target, position);
         movement = Vector2Scale(Vector2Normalize(direction), speed.value);
         futurePos = Vector2Add(position, movement);
@@ -113,7 +157,6 @@ void updateEnemy(entt::registry &registry, entt::entity &player, const Map &grid
 
         solveCollisionEnemy(registry, id.value, futurePos, radius, grid);
         solveCircleRecCollision(futurePos, radius, grid);
-
 
         position = futurePos;
     }

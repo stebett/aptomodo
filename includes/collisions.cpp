@@ -48,9 +48,9 @@ bool CheckCollisionCircleTriangle(Vector2 center, float radius, Vector2 v1, Vect
     if (CheckCollisionLineCircle(v1, v3, center, radius)) return true;
     if (CheckCollisionLineCircle(v2, v3, center, radius)) return true;
     if (CheckTriangleContainsCircle(center, v1, v2, v3)) return true;
-
     return false;
 }
+
 
 void solveCircleRecCollision(Position &futurePos, Radius radius, const Map &grid) {
 

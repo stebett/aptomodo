@@ -23,17 +23,17 @@ void playerAttack(entt::registry &registry, entt::entity player, Vector2 clickPo
     float damage  = registry.get<Damage>(player).value;
     float pushback = registry.get<Pushback>(player).value;
 
-    float click_angle = atan2(clickPosition.y - playerPosition.y, clickPosition.x - playerPosition.x) * radToDeg;
+    float clickAngle = atan2(clickPosition.y - playerPosition.y, clickPosition.x - playerPosition.x) * radToDeg;
 
-    registry.emplace<AttackEffect>(registry.create(), 100, playerPosition, attackRange, click_angle - attackSpread, click_angle + attackSpread, PURPLE);
+    registry.emplace<AttackEffect>(registry.create(), 100, playerPosition, attackRange, clickAngle - attackSpread, clickAngle + attackSpread, PURPLE);
 
 
     Vector2 endSegment1 = {
-            playerPosition.x + attackRange* (float) cos((click_angle - attackSpread) * degToRad),
-            playerPosition.y + attackRange * (float) sin((click_angle - attackSpread) * degToRad)};
+            playerPosition.x + attackRange* (float) cos((clickAngle - attackSpread) * degToRad),
+            playerPosition.y + attackRange * (float) sin((clickAngle - attackSpread) * degToRad)};
     Vector2 endSegment2 = {
-            playerPosition.x + attackRange * (float) cos((click_angle + attackSpread) * degToRad),
-            playerPosition.y + attackRange * (float) sin((click_angle + attackSpread) * degToRad)};
+            playerPosition.x + attackRange * (float) cos((clickAngle + attackSpread) * degToRad),
+            playerPosition.y + attackRange * (float) sin((clickAngle + attackSpread) * degToRad)};
 
     auto enemyView = registry.view<Enemy, Living, Health, Radius, Position>();
     for (auto [enemy, health, radius, position]: enemyView.each()) {

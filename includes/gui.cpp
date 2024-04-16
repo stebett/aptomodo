@@ -34,6 +34,7 @@ void imguiPlayerAttr(entt::registry &registry) {
 
 void imguiConfig() {
     ImGui::Checkbox("Astar path", &config::show_astar_path);
+    ImGui::Checkbox("Enemy field of view", &config::show_enemy_fov);
 }
 
 void imguiWindowMain(entt::registry &registry, ImGuiIO io) {
@@ -55,6 +56,8 @@ void imguiWindowMain(entt::registry &registry, ImGuiIO io) {
     ImGui::Checkbox("Config Window", &show_config_window);
     if (show_config_window)
         imguiConfig();
+
+
 
 //    ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
     ImGui::End();

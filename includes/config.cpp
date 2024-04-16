@@ -6,4 +6,5 @@
 
 namespace config {
     bool show_astar_path = false;
+    bool show_enemy_fov = false;
 }

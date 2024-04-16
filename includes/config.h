@@ -5,4 +5,5 @@
 
 namespace config {
     extern bool show_astar_path;
+    extern bool show_enemy_fov;
 }
