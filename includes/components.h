@@ -24,17 +24,17 @@ struct ColorBB {
 };
 
 // Components
-struct Position {
-    float x;
-    float y;
+struct Position : public Vector2 {
+//    float x;
+//    float y;
 
-    operator Vector2() {
-        return Vector2{x, y};
-    }
+//    operator Vector2() {
+//        return Vector2{x, y};
+//    }
 
-    Position(Vector2 v) : x(v.x), y(v.y) {}
-
-    Position(float x, float y) : x(x), y(y) {}
+    Position(Vector2 v) : Vector2(v.x, v.y) {}
+//
+    Position(float x, float y) :  Vector2(x, y) {}
 };
 
 
@@ -56,7 +56,15 @@ struct Path {
     std::array<Vector2, 8> path {0};
 
     Vector2 getNext() {
-        return path[std::min(index++, 8)];
+        return path[std::min(index++, 7)];
+    }
+
+    Vector2 getCurrent() const {
+        return path[std::min(index, 7)];
+    }
+
+    bool isFinished() const {
+        return index > 7;
     }
 };
 

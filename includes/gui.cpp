@@ -35,12 +35,13 @@ void imguiPlayerAttr(entt::registry &registry) {
 void imguiConfig() {
     ImGui::Checkbox("Astar path", &config::show_astar_path);
     ImGui::Checkbox("Enemy field of view", &config::show_enemy_fov);
+    ImGui::SliderInt("FPS", &config::fps, 0, 120);
 }
 
 void imguiWindowMain(entt::registry &registry, ImGuiIO io) {
     static bool show_demo_window = false;
     static bool show_player_window = false;
-    static bool show_config_window = false;
+    static bool show_config_window = true;
 
     ImGui::Begin("Main");
 

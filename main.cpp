@@ -7,6 +7,7 @@
 #include "includes/gui.h"
 #include "includes/factories.h"
 #include "includes/npc.h"
+#include "includes/config.h"
 
 
 int main() {
@@ -24,7 +25,17 @@ int main() {
     auto enemyCounter = 0;
     auto framesCounter = 0u;
 
-    SetTargetFPS(60);
+
+    // Custom timming variables
+    double previousTime = GetTime();    // Previous time measure
+    double currentTime = 0.0;           // Current time measure
+    double updateDrawTime = 0.0;        // Update + Draw time
+    double waitTime = 0.0;              // Wait time (if target fps required)
+    float deltaTime = 0.0f;             // Frame time (Update + Draw + Wait time)
+
+    float timeCounter = 0.0f;           // Accumulative time counter (seconds)
+
+//    SetTargetFPS(60);
     while (!WindowShouldClose()) {
         updateCamera(camera, position);
         UpdateGui(registry, io);
@@ -44,6 +55,22 @@ int main() {
         EndDrawing();
 
         ++framesCounter;
+        currentTime = GetTime();
+        updateDrawTime = currentTime - previousTime;
+
+        if (config::fps > 0)          // We want a fixed frame rate
+        {
+            waitTime = (1.0f/(float)config::fps) - updateDrawTime;
+            if (waitTime > 0.0)
+            {
+                WaitTime((float)waitTime);
+                currentTime = GetTime();
+                deltaTime = (float)(currentTime - previousTime);
+            }
+        }
+        else deltaTime = (float)updateDrawTime;    // Framerate could be variable
+
+        previousTime = currentTime;
     }
 
     CloseGui();

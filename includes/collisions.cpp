@@ -52,7 +52,7 @@ bool CheckCollisionCircleTriangle(Vector2 center, float radius, Vector2 v1, Vect
 }
 
 
-void solveCircleRecCollision(Position &futurePos, Radius radius, const Map &grid) {
+void solveCircleRecCollision(Vector2 &futurePos, float radius, const Map &grid) {
 
     Vector2 upperBoundary = {std::max(0.0f, floor(futurePos.x / tileSize) * tileSize - 2 * tileSize),
                              std::max(0.0f, floor(futurePos.y / tileSize) * tileSize - 2 * tileSize)};
@@ -74,7 +74,7 @@ void solveCircleRecCollision(Position &futurePos, Radius radius, const Map &grid
                 clampedY = std::max(y, std::min(futurePos.y, y + float(tileSize)));
                 distanceX = clampedX - futurePos.x;
                 distanceY = clampedY - futurePos.y;
-                overlap = radius.value - Vector2Length({distanceX, distanceY});
+                overlap = radius - Vector2Length({distanceX, distanceY});
 //                std::cout << "Overlap: " << overlap << "\n";
 //                std::cout << "Distance:" << Vector2Length({distanceX, distanceY}) << "\n\n";
 

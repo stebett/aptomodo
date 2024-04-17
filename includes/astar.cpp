@@ -150,8 +150,9 @@ void Search::drawPath() {
 }
 
 void Search::exportPath(Path &pathToUpdate) {
-    for (int i=0; i<8; i++) {
-        pathToUpdate.path[i] = {static_cast<float>(path[i + 3].x), static_cast<float>(path[i + 3].y)};
+    for (int i = 0; i < 8; i++) {
+        pathToUpdate.path[i] = {static_cast<float>(path[i + 1].x) * tileSize + static_cast<float>(tileSize) / 2,
+                                static_cast<float>(path[i + 1].y) * tileSize + static_cast<float>(tileSize) / 2};
     }
     pathToUpdate.index = 0;
 }

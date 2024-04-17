@@ -82,7 +82,7 @@ void parseInput(entt::registry &registry, entt::entity &player, Position &positi
         playerSecondaryAttack(registry, player);
     }
 
-    static Position futurePos = position;
+    static Vector2 futurePos = position;
 
 //    if (playerState != State::pain) {
     futurePos.y -= 4.0f * static_cast<float>(IsKeyPressed(KEY_W) || IsKeyDown(KEY_W));
@@ -99,7 +99,7 @@ void parseInput(entt::registry &registry, entt::entity &player, Position &positi
     Vector2 direction = Vector2Subtract(futurePos, position);
     Vector2 movement = Vector2Scale(Vector2Normalize(direction), speed.value);
     futurePos = Vector2Add(position, movement);
-    solveCircleRecCollision(futurePos, radius, grid);
+    solveCircleRecCollision(futurePos, radius.value, grid);
     position = futurePos;
 
 }

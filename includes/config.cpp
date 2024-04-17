@@ -5,6 +5,8 @@
 #include "config.h"
 
 namespace config {
-    bool show_astar_path = false;
-    bool show_enemy_fov = false;
+    bool show_astar_path = true;
+    bool show_enemy_fov = true;
+    int fps = 60;
+
 }
