@@ -7,12 +7,16 @@
 #include "includes/gui.h"
 #include "includes/factories.h"
 #include "includes/npc.h"
+#include "includes/audioManager.h"
 #include "includes/config.h"
 #include <format>
 
 int main() {
     entt::registry registry;
     InitWindow(screenWidth, screenHeight, "Apto Modo");
+
+    AudioManager::Instantiate();
+
     auto camera = spawnCamera();
     auto scene = new GameScene(registry);
 

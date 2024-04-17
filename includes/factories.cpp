@@ -57,7 +57,7 @@ entt::entity spawnPlayer(entt::registry &registry, Position position, GameScene 
     registry.emplace<Stamina>(player, 0.0f);
     registry.emplace<AttackTimer>(player);
     registry.emplace<AttackSpeed>(player, 0.15f);
-    registry.emplace<Damage>(player, 20.0f);
+    registry.emplace<Damage>(player, 50.0f);
     registry.emplace<AttackRange>(player, 80.0f);
     registry.emplace<Pushback>(player, 1.0f);
     registry.emplace<Position>(player, position);

@@ -39,6 +39,8 @@ set(sources
         includes/timer.h
         includes/config.h
         includes/config.cpp
+        includes/audioManager.cpp
+        includes/audioManager.h
 )
 
 

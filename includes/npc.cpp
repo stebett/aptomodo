@@ -12,6 +12,7 @@
 #include "collisions.h"
 #include "rendering.h"
 #include "config.h"
+#include "audioManager.h"
 
 void
 solveCollisionEnemy(const entt::registry &registry, const int id, Vector2 &futurePos, const float radius,
@@ -81,6 +82,8 @@ void enemyAttack(entt::registry &registry, const entt::entity enemy, entt::entit
     float clickAngle = atan2(playerPosition.y - position.y, playerPosition.x - position.x) * radToDeg;
     registry.emplace<AttackEffect>(registry.create(), 100, position, attackRange, clickAngle - attackSpread,
                                    clickAngle + attackSpread, BROWN);
+    AudioManager::Instance().Play("enemy_shot");
+
 
     triangle = getTriangle(position, attackRange, clickAngle - attackSpread, clickAngle + attackSpread);
     if (CheckCollisionCircleTriangle(playerPosition, radius, triangle.v1, triangle.v2, triangle.v3,
@@ -172,6 +175,7 @@ void updateEnemy(entt::registry &registry, entt::entity &player, const Map &grid
     for (auto [enemy, speed, radius, health, position, id, lookAngle]: enemyView.each()) {
         if (health <= 0) {
             registry.remove<Living>(enemy);
+            AudioManager::Instance().Play("enemy_explosion");
             continue;
         }
 

@@ -10,6 +10,7 @@
 #include "collisions.h"
 #include "constants.h"
 #include "rendering.h"
+#include "audioManager.h"
 
 
 void playerAttack(entt::registry &registry, entt::entity player, Vector2 clickPosition) {
@@ -27,6 +28,7 @@ void playerAttack(entt::registry &registry, entt::entity player, Vector2 clickPo
 
     registry.emplace<AttackEffect>(registry.create(), 100, playerPosition, attackRange, clickAngle - attackSpread, clickAngle + attackSpread, PURPLE);
 
+    AudioManager::Instance().Play("player_shot");
 
     Vector2 endSegment1 = {
             playerPosition.x + attackRange* (float) cos((clickAngle - attackSpread) * degToRad),
@@ -48,22 +50,22 @@ void playerAttack(entt::registry &registry, entt::entity player, Vector2 clickPo
 }
 
 void playerSecondaryAttack(entt::registry &registry, entt::entity player) {
-    Position playerPosition = registry.get<Position>(player);
-    float attackRange  = registry.get<AttackRange>(player);
-    float damage  = registry.get<Damage>(player);
-    float pushback = registry.get<Pushback>(player);
-    DrawCircle(playerPosition.x, playerPosition.y, attackRange, RED);
-
-    auto enemyView = registry.view<Enemy, Living, Health, Radius, Position>();
-    for (auto [enemy, health, radius, position]: enemyView.each()) {
-        if (CheckCollisionCircles(position, radius, playerPosition,
-                                  attackRange)) {
-            health -= damage * 2;
-            float m = sqrt(pow(playerPosition.x + position.x, 2) + pow(playerPosition.y + position.y, 2));
-            position = {(position.x + (position.x - playerPosition.x) * pushback / m * 3),
-                        position.y + (position.y - playerPosition.y) * pushback / m * 3};
-        }
-    }
+//    Position playerPosition = registry.get<Position>(player);
+//    float attackRange  = registry.get<AttackRange>(player);
+//    float damage  = registry.get<Damage>(player);
+//    float pushback = registry.get<Pushback>(player);
+//    DrawCircle(playerPosition.x, playerPosition.y, attackRange, RED);
+//
+//    auto enemyView = registry.view<Enemy, Living, Health, Radius, Position>();
+//    for (auto [enemy, health, radius, position]: enemyView.each()) {
+//        if (CheckCollisionCircles(position, radius, playerPosition,
+//                                  attackRange)) {
+//            health -= damage * 2;
+//            float m = sqrt(pow(playerPosition.x + position.x, 2) + pow(playerPosition.y + position.y, 2));
+//            position = {(position.x + (position.x - playerPosition.x) * pushback / m * 3),
+//                        position.y + (position.y - playerPosition.y) * pushback / m * 3};
+//        }
+//    }
 }
 
 void castFire(entt::registry &registry, entt::entity player, Vector2 clickPosition) {}
