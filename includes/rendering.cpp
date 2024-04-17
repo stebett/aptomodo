@@ -52,7 +52,7 @@ void drawAttacks(entt::registry &registry) {
 void drawLivingBB(const entt::registry &registry) {
     auto livingView = registry.view<Living, Radius, Position, ColorBB>();
     for (auto [entity, radius, position, color]: livingView.each()) {
-        DrawCircle(position.x, position.y, radius.value, color.value);
+        DrawCircle(position.x, position.y, radius, color);
     }
 
 }

@@ -47,7 +47,7 @@ entt::entity spawnPlayer(entt::registry &registry, Position position, GameScene 
     registry.emplace<ColorBB>(player, BLUE);
     registry.emplace<Living>(player);
     registry.emplace<Spread>(player, 15.0f);
-    registry.emplace<Speed>(player, 5.0f);
+    registry.emplace<Speed>(player, 7.0f);
     registry.emplace<Texture>(player, texture);
     registry.emplace<Health>(player, 100, 100);
     registry.emplace<Radius>(player, 10.0f);
@@ -56,8 +56,8 @@ entt::entity spawnPlayer(entt::registry &registry, Position position, GameScene 
     registry.emplace<Stamina>(player, 0.0f);
     registry.emplace<AttackTimer>(player);
     registry.emplace<AttackSpeed>(player, 0.3f);
-    registry.emplace<Damage>(player, 1.0f);
-    registry.emplace<AttackRange>(player, 25.0f);
+    registry.emplace<Damage>(player, 50.0f);
+    registry.emplace<AttackRange>(player, 40.0f);
     registry.emplace<Pushback>(player, 1.0f);
     registry.emplace<Position>(player, position);
 

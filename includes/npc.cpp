@@ -21,11 +21,11 @@ solveCollisionEnemy(const entt::registry &registry, const int id, Vector2 &futur
     static float overlap;
     auto enemyView = registry.view<Living, Radius, Position, ID>();
     for (auto [enemy, enemyRadius, enemyPosition, enemyID]: enemyView.each()) {
-        if (enemyID.value == id) continue;
+        if (enemyID == id) continue;
         enemyPos = {enemyPosition.x, enemyPosition.y};
-        if (CheckCollisionCircles(futurePos, radius, enemyPos, enemyRadius.value)) {
+        if (CheckCollisionCircles(futurePos, radius, enemyPos, enemyRadius)) {
             distance = Vector2Subtract(enemyPos, futurePos);
-            overlap = radius + enemyRadius.value - Vector2Length(distance);
+            overlap = radius + enemyRadius - Vector2Length(distance);
             if (overlap > 0) {
                 futurePos = Vector2Subtract(futurePos, Vector2Scale(Vector2Normalize(distance), overlap));
                 solveCircleRecCollision(futurePos, radius, grid);
@@ -61,14 +61,17 @@ Triangle getTriangle(const Vector2 v1, const float range, const float angle1deg,
 bool playerInView(const Vector2 &position, const Vector2 &playerPosition, const float playerRadius,
                   const float lookingAngleDeg) {
     const float sightRange = 100.0f;
+    const float hearRange = 40.0f;
     Vector2 lookVector = {cos(lookingAngleDeg * DEG2RAD), sin(lookingAngleDeg * DEG2RAD)};
     bool facePlayer = Vector2DotProduct(lookVector, Vector2Subtract(playerPosition, position)) > 0;
     bool inViewRange = CheckCollisionCircles(playerPosition, playerRadius, position, sightRange);
-    bool inView = facePlayer && inViewRange;
+    bool inHearRange = CheckCollisionCircles(playerPosition, playerRadius, position, hearRange);
+    bool inView = (facePlayer && inViewRange) || inHearRange;
     if (config::show_enemy_fov) {
         DrawLineV(position, Vector2Add(position, Vector2Scale(lookVector, 20.0f)), PURPLE);
         DrawCircleSector(position, sightRange, lookingAngleDeg - 91.0f, lookingAngleDeg + 91.0f, 2,
                          ColorAlpha(WHITE, 0.1));
+        DrawCircleV(position, hearRange, ColorAlpha(WHITE, 0.1));
         if (inView) { DrawCircle(position.x + 15.0f, position.y + 15.0f, 2, RED); }
     }
     return inView;
@@ -78,25 +81,25 @@ void enemyAttack(entt::registry &registry, const entt::entity enemy, entt::entit
     static Triangle triangle;
 
     auto &attackTimer = registry.get<AttackTimer>(enemy).timer;
-    if (attackTimer.Elapsed() < registry.get<AttackSpeed>(enemy).value) return;
+    if (attackTimer.Elapsed() < registry.get<AttackSpeed>(enemy)) return;
     attackTimer.Reset();
 
     auto &playerPosition = registry.get<Position>(player);
     auto &health = registry.get<Health>(player);
     auto radius = registry.get<Radius>(player);
-    float attackRange = registry.get<AttackRange>(enemy).value;
-    float attackSpread = registry.get<Spread>(enemy).value;
-    float damage = registry.get<Damage>(enemy).value;
-//    float pushback = registry.get<Pushback>(enemy).value;
+    auto attackRange = registry.get<AttackRange>(enemy);
+    auto attackSpread = registry.get<Spread>(enemy);
+    auto damage = registry.get<Damage>(enemy);
+//    float pushback = registry.get<Pushback>(enemy);
 
     float clickAngle = atan2(playerPosition.y - position.y, playerPosition.x - position.x) * radToDeg;
     registry.emplace<AttackEffect>(registry.create(), 100, position, attackRange, clickAngle - attackSpread,
                                    clickAngle + attackSpread, BROWN);
 
     triangle = getTriangle(position, attackRange, clickAngle - attackSpread, clickAngle + attackSpread);
-    if (CheckCollisionCircleTriangle(playerPosition, radius.value, triangle.v1, triangle.v2, triangle.v3,
+    if (CheckCollisionCircleTriangle(playerPosition, radius, triangle.v1, triangle.v2, triangle.v3,
                                      attackRange)) {
-        health.value -= damage;
+        health -= damage;
     }
 }
 
@@ -117,9 +120,12 @@ void updatePath(entt::registry &registry, entt::entity &enemy, Position &positio
 }
 
 bool pathNextReached(const entt::registry &registry, const entt::entity &enemy) {
-    Vector2 position = registry.get<Position>(enemy);
     const Path &path = registry.get<Path>(enemy);
-    return Vector2Equals(position, path.getCurrent());
+
+    const Vector2 &position = registry.get<Position>(enemy);
+    const Vector2 &target = path.getCurrent();
+    const float speed = registry.get<Speed>(enemy);
+    return Vector2Length(Vector2Subtract(position, target)) < speed;
 }
 
 
@@ -127,6 +133,7 @@ Vector2 getPathNext(entt::registry &registry, entt::entity &enemy) {
     Vector2 position = registry.get<Position>(enemy);
     Path &path = registry.get<Path>(enemy);
     Vector2 nextPath = pathNextReached(registry, enemy) ? path.getNext() : path.getCurrent();
+    std::cout << pathNextReached(registry, enemy) << "\n";
     if (path.isFinished() || Vector2Equals(nextPath, Vector2Zero())) { return position; }
 
     if (config::show_astar_path) {
@@ -137,7 +144,7 @@ Vector2 getPathNext(entt::registry &registry, entt::entity &enemy) {
 }
 
 
-void faceTarget(const Vector2 &position, const Vector2 &target, const float turningRate, float &lookAngle) {
+void faceTarget(const Vector2 &position, const Vector2 &target, const float turningRate, LookAngle &lookAngle) {
 
 //    lookAngle = Lerp(lookAngle, atan2(target.y - position.y, target.x - position.x) * RAD2DEG, turningRate);
     lookAngle = atan2(target.y - position.y, target.x - position.x) * RAD2DEG;
@@ -146,6 +153,7 @@ void faceTarget(const Vector2 &position, const Vector2 &target, const float turn
 void updatePosition(entt::registry &registry, entt::entity enemy, const int id, const float radius, const float speed,
                     const Map &grid, Position &position) {
     Vector2 target = getPathNext(registry, enemy);
+    if (Vector2Equals(position, target)) {return;}
     Vector2 direction = Vector2Subtract(target, position);
     Vector2 movement = Vector2Scale(Vector2Normalize(direction), speed);
     Vector2 futurePos = Vector2Add(position, movement);
@@ -161,23 +169,23 @@ bool playerInRange(const Vector2 &position, const Vector2 &playerPosition, const
 
 void updateEnemy(entt::registry &registry, entt::entity &player, const Map &grid) {
     Position playerPosition = registry.get<Position>(player);
-    float playerRadius = registry.get<Radius>(player).value;
+    float playerRadius = registry.get<Radius>(player);
 
 
     auto enemyView = registry.view<Living, Speed, Radius, Health, Position, Enemy, ID, LookAngle>();
     for (auto [enemy, speed, radius, health, position, id, lookAngle]: enemyView.each()) {
-        if (health.value <= 0) {
+        if (health <= 0) {
             registry.remove<Living>(enemy);
             continue;
         }
 
-        if (!playerInView(position, playerPosition, playerRadius, lookAngle.value)) {
-            updatePosition(registry, enemy, id.value, radius.value, speed.value, grid, position);
+        if (!playerInView(position, playerPosition, playerRadius, lookAngle)) {
+            updatePosition(registry, enemy, id, radius, speed, grid, position);
             continue;
         }
 
         const float turningRate = 0.6f;
-        faceTarget(position, playerPosition, turningRate, lookAngle.value);
+        faceTarget(position, playerPosition, turningRate, lookAngle);
 
 
         if (playerInRange(position, playerPosition, playerRadius)) {
@@ -186,7 +194,7 @@ void updateEnemy(entt::registry &registry, entt::entity &player, const Map &grid
         }
 
         updatePath(registry, enemy, position, playerPosition, grid);
-        updatePosition(registry, enemy, id.value, radius.value, speed.value, grid, position);
+        updatePosition(registry, enemy, id, radius, speed, grid, position);
 
     }
 }

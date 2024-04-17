@@ -14,14 +14,14 @@
 
 void playerAttack(entt::registry &registry, entt::entity player, Vector2 clickPosition) {
     auto &attackTimer  = registry.get<AttackTimer>(player).timer;
-    if (attackTimer.Elapsed() < registry.get<AttackSpeed>(player).value) return;
+    if (attackTimer.Elapsed() < registry.get<AttackSpeed>(player)) return;
 
     attackTimer.Reset();
     Position &playerPosition = registry.get<Position>(player);
-    float attackRange  = registry.get<AttackRange>(player).value;
-    float attackSpread  = registry.get<Spread>(player).value;
-    float damage  = registry.get<Damage>(player).value;
-    float pushback = registry.get<Pushback>(player).value;
+    float attackRange  = registry.get<AttackRange>(player);
+    float attackSpread  = registry.get<Spread>(player);
+    float damage  = registry.get<Damage>(player);
+    float pushback = registry.get<Pushback>(player);
 
     float clickAngle = atan2(clickPosition.y - playerPosition.y, clickPosition.x - playerPosition.x) * radToDeg;
 
@@ -37,9 +37,9 @@ void playerAttack(entt::registry &registry, entt::entity player, Vector2 clickPo
 
     auto enemyView = registry.view<Enemy, Living, Health, Radius, Position>();
     for (auto [enemy, health, radius, position]: enemyView.each()) {
-        if (CheckCollisionCircleTriangle(position, radius.value, playerPosition,
+        if (CheckCollisionCircleTriangle(position, radius, playerPosition,
                                          endSegment1, endSegment2, attackRange)) {
-            health.value -= damage;
+            health -= damage;
             float m = sqrt(pow(playerPosition.x + position.x, 2) + pow(playerPosition.y + position.y, 2));
             position = {(position.x + (position.x - playerPosition.x) * pushback / m),
                         position.y + (position.y - playerPosition.y) * pushback / m};
@@ -49,16 +49,16 @@ void playerAttack(entt::registry &registry, entt::entity player, Vector2 clickPo
 
 void playerSecondaryAttack(entt::registry &registry, entt::entity player) {
     Position playerPosition = registry.get<Position>(player);
-    float attackRange  = registry.get<AttackRange>(player).value;
-    float damage  = registry.get<Damage>(player).value;
-    float pushback = registry.get<Pushback>(player).value;
+    float attackRange  = registry.get<AttackRange>(player);
+    float damage  = registry.get<Damage>(player);
+    float pushback = registry.get<Pushback>(player);
     DrawCircle(playerPosition.x, playerPosition.y, attackRange, RED);
 
     auto enemyView = registry.view<Enemy, Living, Health, Radius, Position>();
     for (auto [enemy, health, radius, position]: enemyView.each()) {
-        if (CheckCollisionCircles(position, radius.value, playerPosition,
+        if (CheckCollisionCircles(position, radius, playerPosition,
                                   attackRange)) {
-            health.value -= damage * 2;
+            health -= damage * 2;
             float m = sqrt(pow(playerPosition.x + position.x, 2) + pow(playerPosition.y + position.y, 2));
             position = {(position.x + (position.x - playerPosition.x) * pushback / m * 3),
                         position.y + (position.y - playerPosition.y) * pushback / m * 3};
@@ -90,16 +90,16 @@ void parseInput(entt::registry &registry, entt::entity &player, Position &positi
     futurePos.x -= 4.0f * static_cast<float>(IsKeyPressed(KEY_A) || IsKeyDown(KEY_A));
     futurePos.x += 4.0f * static_cast<float>(IsKeyPressed(KEY_D) || IsKeyDown(KEY_D));
 //    }
-    if (futurePos.x - radius.value < 0 || futurePos.x + radius.value > mapWidth) {
+    if (futurePos.x - radius < 0 || futurePos.x + radius > mapWidth) {
         futurePos.x = position.x;
     }
-    if (futurePos.y - radius.value < 0 || futurePos.y + radius.value > mapHeight) {
+    if (futurePos.y - radius < 0 || futurePos.y + radius > mapHeight) {
         futurePos.y = position.y;
     }
     Vector2 direction = Vector2Subtract(futurePos, position);
-    Vector2 movement = Vector2Scale(Vector2Normalize(direction), speed.value);
+    Vector2 movement = Vector2Scale(Vector2Normalize(direction), speed);
     futurePos = Vector2Add(position, movement);
-    solveCircleRecCollision(futurePos, radius.value, grid);
+    solveCircleRecCollision(futurePos, radius, grid);
     position = futurePos;
 
 }

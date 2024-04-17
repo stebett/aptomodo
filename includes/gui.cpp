@@ -9,6 +9,32 @@
 #include <entt/entity/registry.hpp>
 #include "config.h"
 
+void imguiEnemyAttr(entt::registry &registry) {
+    auto view = registry.view<Enemy, Path, ID, ColorBB, Spread, Speed, Health, Radius, PhysicalResistance, MagicalResistance, Stamina, AttackTimer, AttackSpeed, Damage, AttackRange, Pushback, Position>();
+    for (auto [entity, path, id, colorbb, spread, speed, health, radius, physicalresistance, magicalresistance, stamina, timelastattack, attackspeed, damage, attackrange, pushback, position
+        ]: view.each()) {
+        // Only plot this for one enemy
+        static int enemyID = id;
+        if (id != enemyID) break;
+        ImGui::SliderFloat("spread", &spread.value, 0, 360, "%.3f", 0);
+        ImGui::SliderFloat("speed", &speed.value, 0, 15, "%.3f", 0);
+        ImGui::SliderFloat("health", &health.value, 0, 200, "%.3f", 0);
+        ImGui::SliderFloat("radius", &radius.value, 0, 50, "%.3f", 0);
+        ImGui::SliderFloat("physicalresistance", &physicalresistance.value, 0, 30, "%.3f", 0);
+        ImGui::SliderFloat("magicalresistance", &magicalresistance.value, 0, 30, "%.3f", 0);
+        ImGui::SliderFloat("stamina", &stamina.value, 0, 30, "%.3f", 0);
+        ImGui::SliderFloat("attackspeed", &attackspeed.value, 0, 5, "%.3f", 0);
+        ImGui::SliderFloat("damage", &damage.value, 0, 200, "%.3f", 0);
+        ImGui::SliderFloat("attackrange", &attackrange.value, 1, 150, "%.3f", 0);
+        ImGui::SliderFloat("pushback", &pushback.value, 0, 150, "%.3f", 0);
+        ImGui::SliderFloat("position x", &position.x, 0, mapWidth, "%.3f", 0);
+        ImGui::SliderFloat("position y ", &position.y, 0, mapHeight, "%.3f", 0);
+        Vector2 currentPath = path.getCurrent();
+        ImGui::SliderFloat("Target x", &currentPath.x, 0, mapWidth, "%.3f", 0);
+        ImGui::SliderFloat("Target y ", &currentPath.y, 0, mapHeight, "%.3f", 0);
+    }
+}
+
 
 void imguiPlayerAttr(entt::registry &registry) {
     auto view = registry.view<Player, ColorBB, Spread, Speed, Health, Radius, PhysicalResistance, MagicalResistance, Stamina, AttackTimer, AttackSpeed, Damage, AttackRange, Pushback, Position>();
@@ -42,6 +68,7 @@ void imguiWindowMain(entt::registry &registry, ImGuiIO io) {
     static bool show_demo_window = false;
     static bool show_player_window = false;
     static bool show_config_window = true;
+    static bool show_enemy_window = true;
 
     ImGui::Begin("Main");
 
@@ -53,6 +80,10 @@ void imguiWindowMain(entt::registry &registry, ImGuiIO io) {
     ImGui::Checkbox("Player Window", &show_player_window);
     if (show_player_window)
         imguiPlayerAttr(registry);
+
+    ImGui::Checkbox("Enemy Window", &show_enemy_window);
+    if (show_enemy_window)
+        imguiEnemyAttr(registry);
 
     ImGui::Checkbox("Config Window", &show_config_window);
     if (show_config_window)

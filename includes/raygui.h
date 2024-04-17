@@ -4480,7 +4480,7 @@ static void GuiLoadStyleFromMemory(const unsigned char *fileData, int dataSize)
 
                     for (int i = 0; i < font.glyphCount; i++)
                     {
-                        memcpy(&font.glyphs[i].value, glyphsDataUncompPtr, sizeof(int));
+                        memcpy(&font.glyphs[i], glyphsDataUncompPtr, sizeof(int));
                         memcpy(&font.glyphs[i].offsetX, glyphsDataUncompPtr + 4, sizeof(int));
                         memcpy(&font.glyphs[i].offsetY, glyphsDataUncompPtr + 8, sizeof(int));
                         memcpy(&font.glyphs[i].advanceX, glyphsDataUncompPtr + 12, sizeof(int));
@@ -4495,7 +4495,7 @@ static void GuiLoadStyleFromMemory(const unsigned char *fileData, int dataSize)
                     // Glyphs data is uncompressed
                     for (int i = 0; i < font.glyphCount; i++)
                     {
-                        memcpy(&font.glyphs[i].value, fileDataPtr, sizeof(int));
+                        memcpy(&font.glyphs[i], fileDataPtr, sizeof(int));
                         memcpy(&font.glyphs[i].offsetX, fileDataPtr + 4, sizeof(int));
                         memcpy(&font.glyphs[i].offsetY, fileDataPtr + 8, sizeof(int));
                         memcpy(&font.glyphs[i].advanceX, fileDataPtr + 12, sizeof(int));

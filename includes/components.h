@@ -20,29 +20,21 @@ struct Living {
 };
 
 struct ColorBB {
-    Color value;
+    Color color;
+
+    operator Color() const noexcept { return color; }
 };
 
 // Components
-struct Position : public Vector2 {
-//    float x;
-//    float y;
+struct Position {
+    float x;
+    float y;
 
-//    operator Vector2() {
-//        return Vector2{x, y};
-//    }
+    operator Vector2() const noexcept { return Vector2{x, y}; }
 
-    Position(Vector2 v) : Vector2(v.x, v.y) {}
-//
-    Position(float x, float y) :  Vector2(x, y) {}
-};
+    Position(Vector2 v) : x(v.x), y(v.y) {};
 
-
-struct Weapon {
-    int damage;
-    float range;
-    float spread;
-    float pushback;
+    Position(float x, float y) : x(x), y(y) {};
 };
 
 struct Triangle {
@@ -52,33 +44,43 @@ struct Triangle {
 };
 
 struct Path {
-    int index {0};
-    std::array<Vector2, 8> path {0};
+    int index{0};
+    int indexMax{0};
+    std::array<Vector2, 8> path{0};
 
     Vector2 getNext() {
         return path[std::min(index++, 7)];
     }
 
-    Vector2 getCurrent() const {
+    [[nodiscard]] Vector2 getCurrent() const {
         return path[std::min(index, 7)];
     }
 
-    bool isFinished() const {
-        return index > 7;
+    [[nodiscard]] bool isFinished() const {
+        return index > indexMax;
     }
 };
 
 struct Radius {
     float value;
+
+    operator float() const noexcept { return value; }
 };
 
 struct LookAngle {
     float value;
+
+    operator float() const noexcept { return value; }
+
+    LookAngle(float d) : value(d) {};
+
 };
 
 
 struct Spread {
     float value;
+
+    operator float() const noexcept { return value; }
 };
 
 
@@ -104,23 +106,38 @@ Le statistiche saranno roba tipo
 
 struct Speed {
     float value;
+
+    operator float() const noexcept { return value; }
 };
 
 struct Health {
     float value;
     float max;
+
+
+    operator float() const noexcept { return value; }
+
+    float operator-(const float x) const noexcept { return value - x; }
+    void operator-=(const float x) noexcept { value -= x; }
+
 };
 
 struct PhysicalResistance {
     float value;
+
+    operator float() const noexcept { return value; }
 };
 
 struct MagicalResistance {
     float value;
+
+    operator float() const noexcept { return value; }
 };
 
 struct Stamina {
     float value;
+
+    operator float() const noexcept { return value; }
 };
 
 struct AttackTimer {
@@ -129,23 +146,33 @@ struct AttackTimer {
 
 struct AttackSpeed {
     float value;
+
+    operator float() const noexcept { return value; }
 };
 
 struct Damage {
     float value;
+
+    operator float() const noexcept { return value; }
 };
 
 struct AttackRange {
     float value;
+
+    operator float() const noexcept { return value; }
 };
 
 struct Pushback {
     float value;
+
+    operator float() const noexcept { return value; }
 };
 
 
 struct ID {
     int value;
+
+    operator int() const noexcept { return value; }
 };
 
 
