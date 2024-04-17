@@ -21,7 +21,7 @@ entt::entity spawnEnemy(entt::registry &registry, Position position) {
     registry.emplace<Enemy>(enemy);
     registry.emplace<Living>(enemy);
     registry.emplace<ID>(enemy, id++);
-    registry.emplace<Speed>(enemy, 5.0f);
+    registry.emplace<Speed>(enemy, 3.0f);
     registry.emplace<Health>(enemy, 100, 100);
     registry.emplace<Position>(enemy, position.x, position.y);
     registry.emplace<PhysicalResistance>(enemy, 0.0f);
@@ -29,7 +29,7 @@ entt::entity spawnEnemy(entt::registry &registry, Position position) {
     registry.emplace<Stamina>(enemy, 0.0f);
     registry.emplace<AttackTimer>(enemy);
     registry.emplace<AttackSpeed>(enemy, 0.3f);
-    registry.emplace<Damage>(enemy, 1.0f);
+    registry.emplace<Damage>(enemy, 5.0f);
     registry.emplace<AttackRange>(enemy, 3 * tileSize);
     registry.emplace<Pushback>(enemy, 1.0f);
     return enemy;
@@ -56,9 +56,9 @@ entt::entity spawnPlayer(entt::registry &registry, Position position, GameScene 
     registry.emplace<MagicalResistance>(player, 0.0f);
     registry.emplace<Stamina>(player, 0.0f);
     registry.emplace<AttackTimer>(player);
-    registry.emplace<AttackSpeed>(player, 0.3f);
-    registry.emplace<Damage>(player, 50.0f);
-    registry.emplace<AttackRange>(player, 40.0f);
+    registry.emplace<AttackSpeed>(player, 0.15f);
+    registry.emplace<Damage>(player, 20.0f);
+    registry.emplace<AttackRange>(player, 80.0f);
     registry.emplace<Pushback>(player, 1.0f);
     registry.emplace<Position>(player, position);
 

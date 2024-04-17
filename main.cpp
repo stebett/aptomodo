@@ -8,7 +8,7 @@
 #include "includes/factories.h"
 #include "includes/npc.h"
 #include "includes/config.h"
-
+#include <format>
 
 int main() {
     entt::registry registry;
@@ -51,6 +51,8 @@ int main() {
 
         DrawGui();
         DrawFPS(10, 10);
+
+        DrawText(std::format("Health: {}", health.value).c_str(), 10, screenHeight -40, 30, WHITE);
 
         EndDrawing();
 
