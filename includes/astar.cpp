@@ -150,12 +150,15 @@ void Search::drawPath() {
 }
 
 void Search::exportPath(Path &pathToUpdate) {
-    for (int i = 0; i < path.size() - 1; i++) {
+    int size = std::min(path.size() - 1, pathToUpdate.path.max_size());
+    if (path.empty()) {
+        return; }
+    for (int i = 0; i < size; i++) {
         pathToUpdate.path[i] = {static_cast<float>(path[i + 1].x) * tileSize + static_cast<float>(tileSize) / 2,
                                 static_cast<float>(path[i + 1].y) * tileSize + static_cast<float>(tileSize) / 2};
     }
     pathToUpdate.index = 0;
-    pathToUpdate.indexMax = path.size() - 1;
+    pathToUpdate.indexMax = size;
 }
 
 

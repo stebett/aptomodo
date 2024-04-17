@@ -82,6 +82,8 @@ void parseInput(entt::registry &registry, entt::entity &player, Position &positi
         playerSecondaryAttack(registry, player);
     }
 
+    camera.zoom += GetMouseWheelMove()/10;
+
     static Vector2 futurePos = position;
 
 //    if (playerState != State::pain) {

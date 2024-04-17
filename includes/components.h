@@ -10,6 +10,7 @@
 #include <unordered_map>
 #include <vector>
 #include "timer.h"
+#include <iostream>
 
 // Tags
 struct Player {
@@ -44,21 +45,28 @@ struct Triangle {
 };
 
 struct Path {
-    int index{0};
-    int indexMax{0};
-    std::array<Vector2, 8> path{0};
+    int index = 3;
+    int indexMax = 3;
+    std::array<Vector2, 7> path{0};
 
     Vector2 getNext() {
-        return path[std::min(index++, 7)];
+        index = std::min(index, indexMax);
+        Vector2 result = path[index];
+        index++;
+        return result;
     }
 
     [[nodiscard]] Vector2 getCurrent() const {
-        return path[std::min(index, 7)];
+        if (index > 8) {
+            std::cout << "WARNING: path index is too big!" << "\n";
+        }
+        return path[std::min(index, indexMax)];
     }
 
     [[nodiscard]] bool isFinished() const {
-        return index > indexMax;
+        return index >= indexMax;
     }
+    Path() : index(7), indexMax(7), path({0}) {std::cout << "INFO: path being created" << "\n";};
 };
 
 struct Radius {

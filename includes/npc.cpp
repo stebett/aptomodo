@@ -119,22 +119,40 @@ void updatePath(entt::registry &registry, entt::entity &enemy, Position &positio
     search.exportPath(path);
 }
 
-bool pathNextReached(const entt::registry &registry, const entt::entity &enemy) {
-    const Path &path = registry.get<Path>(enemy);
 
-    const Vector2 &position = registry.get<Position>(enemy);
-    const Vector2 &target = path.getCurrent();
-    const float speed = registry.get<Speed>(enemy);
-    return Vector2Length(Vector2Subtract(position, target)) < speed;
+void updatePathRandom(entt::registry &registry, entt::entity &enemy, Position &position, const Map &grid) {
+    Path &path = registry.get<Path>(enemy);
+    if (!path.isFinished()) return;
+
+    Node start = getTile(position);
+    Vector2 target = Vector2Scale({rng::uniform_neg500_500(rng::seed) / 500.0f,
+                                   rng::uniform_neg500_500(rng::seed) / 500.0f}, 100);
+
+    Node end = getTile(Vector2Add(position, target));
+    Search search(grid);
+    search.init(start, end);
+
+    // Check distance
+    while (!search.completed) { search.step(); }
+
+    if (search.path.empty()) { return; }
+    if (config::show_astar_path) { search.draw(); }
+    search.exportPath(path);
+}
+
+bool pathCurrentReached(const Vector2 &position, const Vector2 &currentTarget, const float speed) {
+    return Vector2Length(Vector2Subtract(position, currentTarget)) < speed;
 }
 
 
 Vector2 getPathNext(entt::registry &registry, entt::entity &enemy) {
     Vector2 position = registry.get<Position>(enemy);
     Path &path = registry.get<Path>(enemy);
-    Vector2 nextPath = pathNextReached(registry, enemy) ? path.getNext() : path.getCurrent();
-    std::cout << pathNextReached(registry, enemy) << "\n";
-    if (path.isFinished() || Vector2Equals(nextPath, Vector2Zero())) { return position; }
+    const Vector2 &currentTarget = path.getCurrent();
+    const float speed = registry.get<Speed>(enemy);
+    Vector2 nextPath = pathCurrentReached(position, currentTarget, speed) ? path.getNext() : currentTarget;
+//    if (path.isFinished() || Vector2Equals(nextPath, Vector2Zero())) { return position; }
+    if (path.isFinished()) { return position; }
 
     if (config::show_astar_path) {
         DrawCircleV(nextPath, 2, DARKGREEN);
@@ -153,7 +171,7 @@ void faceTarget(const Vector2 &position, const Vector2 &target, const float turn
 void updatePosition(entt::registry &registry, entt::entity enemy, const int id, const float radius, const float speed,
                     const Map &grid, Position &position) {
     Vector2 target = getPathNext(registry, enemy);
-    if (Vector2Equals(position, target)) {return;}
+    if (Vector2Equals(position, target)) { return; }
     Vector2 direction = Vector2Subtract(target, position);
     Vector2 movement = Vector2Scale(Vector2Normalize(direction), speed);
     Vector2 futurePos = Vector2Add(position, movement);
@@ -180,7 +198,8 @@ void updateEnemy(entt::registry &registry, entt::entity &player, const Map &grid
         }
 
         if (!playerInView(position, playerPosition, playerRadius, lookAngle)) {
-            updatePosition(registry, enemy, id, radius, speed, grid, position);
+            updatePathRandom(registry, enemy, position, grid);
+            updatePosition(registry, enemy, id, radius, speed / 5.0f, grid, position);
             continue;
         }
 
