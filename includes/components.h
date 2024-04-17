@@ -19,6 +19,8 @@ struct Enemy {
 };
 struct Living {
 };
+struct Chasing {
+};
 
 struct ColorBB {
     Color color;
@@ -57,16 +59,19 @@ struct Path {
     }
 
     [[nodiscard]] Vector2 getCurrent() const {
-        if (index > 8) {
-            std::cout << "WARNING: path index is too big!" << "\n";
-        }
         return path[std::min(index, indexMax)];
     }
+
+    Vector2 getCurrent() {
+        return path[std::min(index, indexMax)];
+    }
+
 
     [[nodiscard]] bool isFinished() const {
         return index >= indexMax;
     }
-    Path() : index(7), indexMax(7), path({0}) {std::cout << "INFO: path being created" << "\n";};
+
+    Path() : index(7), indexMax(7), path({0}) { std::cout << "INFO: path being created" << "\n"; };
 };
 
 struct Radius {
@@ -126,6 +131,7 @@ struct Health {
     operator float() const noexcept { return value; }
 
     float operator-(const float x) const noexcept { return value - x; }
+
     void operator-=(const float x) noexcept { value -= x; }
 
 };
