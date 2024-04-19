@@ -47,7 +47,7 @@ Triangle getTriangle(const Vector2 v1, const float range, const float angle1deg,
 
 bool playerInView(const Vector2 &position, const Vector2 &playerPosition, const float playerRadius,
                   const float lookingAngleDeg) {
-    const float sightRange = 100.0f;
+    const float sightRange = 100.0f; // TODO make it bigger when chasing
     const float hearRange = 40.0f;
     Vector2 lookVector = {cos(lookingAngleDeg * DEG2RAD), sin(lookingAngleDeg * DEG2RAD)};
     bool facePlayer = Vector2DotProduct(lookVector, Vector2Subtract(playerPosition, position)) > 0;
@@ -192,6 +192,7 @@ void updateEnemy(entt::registry &registry, entt::entity &player, const Map &grid
 
 
         if (playerInRange(position, playerPosition, playerRadius)) {
+            faceTarget(position, playerPosition, lookAngle);
             enemyAttack(registry, enemy, player, position);
             continue;
         }
