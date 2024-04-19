@@ -16,7 +16,7 @@ class AudioManager {
     static AudioManager instance;
 
 public:
-    Sound operator[](std::string &key) const;
+    Sound& operator[](std::string &key) const;
 
     static void LoadFromFile(const std::string &filename);
 
@@ -32,6 +32,7 @@ public:
 
     void Play(const std::string& key) const;
 
+//    ~AudioManager destroy all files
 };
 
 

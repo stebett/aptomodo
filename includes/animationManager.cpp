@@ -1,0 +1,29 @@
+//
+// Created by ginko on 19/04/24.
+//
+
+#include "animationManager.h"
+#include <filesystem>
+
+std::unordered_map<size_t, TextureAnimation> AnimationManager::resources;
+std::hash<std::string> AnimationManager::hasher;
+const char *AnimationManager::root = "/home/ginko/jems-projects/acerola-jam0/assets/";
+AnimationManager AnimationManager::instance;
+
+Texture2D &AnimationManager::getTexture(std::string &key, unsigned int frame) {
+    TextureAnimation &anim = resources.at(hasher(key));
+    return anim.textures[frame % anim.frameCount];
+}
+
+void AnimationManager::LoadFromDirectory(const std::string &directory) {
+    TextureAnimation anim;
+    for (const auto &entry: std::filesystem::directory_iterator(directory)) {
+        anim.textures.push_back(LoadTexture(entry.path().c_str()));
+        anim.frameCount++;
+    }
+    resources.insert({hasher(directory), anim});
+}
+
+
+AnimationManager &AnimationManager::Instance() { return instance; }
+

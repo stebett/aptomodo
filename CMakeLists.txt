@@ -41,6 +41,8 @@ set(sources
         includes/config.cpp
         includes/audioManager.cpp
         includes/audioManager.h
+        includes/animationManager.cpp
+        includes/animationManager.h
 )
 
 
