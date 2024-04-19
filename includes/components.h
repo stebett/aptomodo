@@ -120,6 +120,7 @@ Le statistiche saranno roba tipo
 struct Speed {
     float value;
     float max;
+    float actual {0};
 
     operator float() const noexcept { return value; }
     Speed(float x) :value(x), max(x) {};

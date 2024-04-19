@@ -17,7 +17,9 @@ void imguiEnemyAttr(entt::registry &registry) {
         static int enemyID = id;
         if (id != enemyID) break;
         ImGui::SliderFloat("spread", &spread.value, 0, 360, "%.3f", 0);
-        ImGui::SliderFloat("speed", &speed.value, 0, 15, "%.3f", 0);
+        ImGui::SliderFloat("speed.value", &speed.value, 0, 15, "%.3f", 0);
+        ImGui::SliderFloat("speed.actual", &speed.actual, 0, 15, "%.3f", 0);
+        ImGui::SliderFloat("speed.max", &speed.max, 0, 15, "%.3f", 0);
         ImGui::SliderFloat("health", &health.value, 0, 200, "%.3f", 0);
         ImGui::SliderFloat("radius", &radius.value, 0, 50, "%.3f", 0);
         ImGui::SliderFloat("physicalresistance", &physicalresistance.value, 0, 30, "%.3f", 0);

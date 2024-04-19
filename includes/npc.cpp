@@ -148,7 +148,7 @@ void faceTarget(const Vector2 &position, const Vector2 &target, LookAngle &lookA
     lookAngle = atan2(target.y - position.y, target.x - position.x) * RAD2DEG;
 }
 
-void updatePosition(entt::registry &registry, entt::entity enemy, const int id, const float radius, const float speed,
+void updatePosition(entt::registry &registry, entt::entity enemy, const int id, const float radius, Speed &speed,
                     const Map &grid, Position &position, LookAngle &lookAngle) {
     Vector2 target = getPathNext(registry, enemy);
     if (Vector2Equals(position, target)) { return; }
@@ -158,6 +158,7 @@ void updatePosition(entt::registry &registry, entt::entity enemy, const int id, 
     solveCollisionEnemy(registry, id, futurePos, radius, grid);
     solveCircleRecCollision(futurePos, radius, grid);
     faceTarget(position, futurePos, lookAngle);
+    speed.actual = Vector2Distance(position, futurePos);
     position = futurePos;
 }
 
@@ -194,6 +195,7 @@ void updateEnemy(entt::registry &registry, entt::entity &player, const Map &grid
         if (playerInRange(position, playerPosition, playerRadius)) {
             faceTarget(position, playerPosition, lookAngle);
             enemyAttack(registry, enemy, player, position);
+            speed.actual = 0;
             continue;
         }
 
