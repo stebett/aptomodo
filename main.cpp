@@ -10,12 +10,14 @@
 #include "includes/audioManager.h"
 #include "includes/config.h"
 #include <format>
+#include "includes/animationManager.h"
 
 int main() {
     entt::registry registry;
     InitWindow(screenWidth, screenHeight, "Apto Modo");
 
     AudioManager::Instantiate();
+    AnimationManager::Instantiate();
 
     auto camera = spawnCamera();
     auto scene = new GameScene(registry);

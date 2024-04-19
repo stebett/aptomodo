@@ -11,18 +11,18 @@
 #include <string>
 
 struct TextureAnimation {
-    std::vector <Texture2D> textures {};
-    unsigned int frameCount {0};
+    std::vector<Texture2D> textures{};
+    unsigned int frameCount{0};
 };
 
 class AnimationManager {
-    static std::unordered_map <size_t, TextureAnimation> resources;
-    static std::hash <std::string> hasher;
+    static std::unordered_map<size_t, TextureAnimation> resources;
+    static std::hash<std::string> hasher;
     static const char *root;
     static AnimationManager instance;
 
 public:
-    static Texture2D& getTexture(std::string &key, unsigned int frame) ;
+    static Texture2D &getTexture(const std::string &key, unsigned int frame);
 
     static void LoadFromDirectory(const std::string &directory);
 
@@ -33,8 +33,6 @@ public:
         LoadFromDirectory("enemy/walking/v1/");
     }
 };
-
-
 
 
 #endif //ACEROLA_JAM0_ANIMATIONMANAGER_H

@@ -119,8 +119,10 @@ Le statistiche saranno roba tipo
 
 struct Speed {
     float value;
+    float max;
 
     operator float() const noexcept { return value; }
+    Speed(float x) :value(x), max(x) {};
 };
 
 struct Health {
@@ -133,6 +135,7 @@ struct Health {
     float operator-(const float x) const noexcept { return value - x; }
 
     void operator-=(const float x) noexcept { value -= x; }
+    Health(float x) :value(x), max(x) {};
 
 };
 

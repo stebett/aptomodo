@@ -13,7 +13,7 @@ entt::entity spawnEnemy(entt::registry &registry, Position position) {
     static int id = 0;
     entt::entity enemy = registry.create();
 //    if (id > 0) { return enemy; }
-    registry.emplace<Radius>(enemy, 5.0f);
+    registry.emplace<Radius>(enemy, 22.0f);
     registry.emplace<Path>(enemy);
     registry.emplace<LookAngle>(enemy, 0.0f);
     registry.emplace<Spread>(enemy, 10.0f);
@@ -22,7 +22,7 @@ entt::entity spawnEnemy(entt::registry &registry, Position position) {
     registry.emplace<Living>(enemy);
     registry.emplace<ID>(enemy, id++);
     registry.emplace<Speed>(enemy, 3.0f);
-    registry.emplace<Health>(enemy, 100, 100);
+    registry.emplace<Health>(enemy, 100);
     registry.emplace<Position>(enemy, position.x, position.y);
     registry.emplace<PhysicalResistance>(enemy, 0.0f);
     registry.emplace<MagicalResistance>(enemy, 0.0f);
@@ -50,7 +50,7 @@ entt::entity spawnPlayer(entt::registry &registry, Position position, GameScene 
     registry.emplace<Spread>(player, 15.0f);
     registry.emplace<Speed>(player, 7.0f);
     registry.emplace<Texture>(player, texture);
-    registry.emplace<Health>(player, 100, 100);
+    registry.emplace<Health>(player, 100);
     registry.emplace<Radius>(player, 10.0f);
     registry.emplace<PhysicalResistance>(player, 0.0f);
     registry.emplace<MagicalResistance>(player, 0.0f);

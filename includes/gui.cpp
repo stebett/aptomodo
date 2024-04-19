@@ -62,6 +62,7 @@ void imguiConfig() {
     ImGui::Checkbox("Astar path", &config::show_astar_path);
     ImGui::Checkbox("Enemy field of view", &config::show_enemy_fov);
     ImGui::SliderInt("FPS", &config::fps, 0, 120);
+    ImGui::SliderInt("enemy_walking_animation_fps", &config::enemy_walking_animation_fps, 1, 120);
 }
 
 void imguiWindowMain(entt::registry &registry, ImGuiIO io) {

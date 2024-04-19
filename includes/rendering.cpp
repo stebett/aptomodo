@@ -6,7 +6,8 @@
 #include "constants.h"
 #include "factories.h"
 #include <raymath.h>
-
+#include "animationManager.h"
+#include "config.h"
 
 void updateCamera(Camera2D &camera, Position &playerPosition) {
     float target_x = playerPosition.x;
@@ -52,14 +53,26 @@ void drawAttacks(entt::registry &registry) {
 void drawLivingBB(const entt::registry &registry) {
     auto livingView = registry.view<Living, Radius, Position, ColorBB>();
     for (auto [entity, radius, position, color]: livingView.each()) {
-        DrawCircle(position.x, position.y, radius, color);
+        DrawCircle(position.x, position.y, radius, ColorAlpha(color, 0.3));
     }
+}
 
+void drawEnemyTexture(const entt::registry &registry, unsigned int frame) {
+    auto livingView = registry.view<Living, Radius, Position, LookAngle, Speed>();
+    for (auto [entity, radius, position, rotation, speed]: livingView.each()) {
+        DrawTexturePro(AnimationManager::Instance().getTexture("enemy/walking/v1/", frame * speed),
+                       {0, 0, 300, 300},
+                       {position.x, position.y, 60, 60},
+                       {30, 30},
+                       rotation + 90,
+                       WHITE);
+    }
 }
 
 void draw(entt::registry &registry, GameScene *scene, unsigned int frame) {
     scene->draw();
     drawLivingBB(registry);
+    drawEnemyTexture(registry, frame / config::enemy_walking_animation_fps);
     drawAttacks(registry);
 }
 

@@ -182,11 +182,13 @@ void updateEnemy(entt::registry &registry, entt::entity &player, const Map &grid
         if (!playerInView(position, playerPosition, playerRadius, lookAngle)) {
             Position randomPos = getRandomPos(position);
             float speedDivider = registry.all_of<Chasing>(enemy) ? 1.0f : 5.0f;
+            speed.value = speed.max / speedDivider;
             updatePath(registry, enemy, position, randomPos, grid);
-            updatePosition(registry, enemy, id, radius, speed / speedDivider, grid, position, lookAngle);
+            updatePosition(registry, enemy, id, radius, speed, grid, position, lookAngle);
             continue;
         }
         registry.emplace_or_replace<Chasing>(enemy);
+        speed.value = speed.max;
 
 
         if (playerInRange(position, playerPosition, playerRadius)) {

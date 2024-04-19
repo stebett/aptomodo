@@ -16,11 +16,11 @@ class AudioManager {
     static AudioManager instance;
 
 public:
-    Sound& operator[](std::string &key) const;
+    Sound &operator[](std::string &key) const;
 
     static void LoadFromFile(const std::string &filename);
 
-    static AudioManager& Instance();
+    static AudioManager &Instance();
 
     static void Instantiate() {
         instance = *new AudioManager();
@@ -30,7 +30,7 @@ public:
         LoadFromFile("enemy_explosion");
     }
 
-    void Play(const std::string& key) const;
+    void Play(const std::string &key) const;
 
 //    ~AudioManager destroy all files
 };
