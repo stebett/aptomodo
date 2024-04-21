@@ -8,9 +8,6 @@
 #include <raymath.h>
 
 
-float distanceBetweenPoints(Position p1, Position p2) {
-    return static_cast<float>(sqrt(pow(p1.x - p2.x, 2) + pow(p1.y - p2.y, 2)));
-}
 
 bool CheckCollisionLineCircle(Vector2 start, Vector2 end, Vector2 center, float radius) {
     if (CheckCollisionPointCircle(end, center, radius)) return true;

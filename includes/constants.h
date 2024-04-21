@@ -7,7 +7,6 @@
 
 
 #include <random>
-#include "components.h"
 #include <eigen3/Eigen/Dense>
 
 const int screenWidth = 1000;

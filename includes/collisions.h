@@ -5,7 +5,6 @@
 #ifndef ACEROLA_JAM0_COLLISIONS_H
 #define ACEROLA_JAM0_COLLISIONS_H
 
-#include "components.h"
 #include "constants.h"
 
 bool

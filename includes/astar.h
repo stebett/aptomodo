@@ -11,6 +11,8 @@
 #include <raylib.h>
 #include <boost/container_hash/hash.hpp>
 #include "constants.h"
+#include "components.h"
+
 
 
 class Node {

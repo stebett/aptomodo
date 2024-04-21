@@ -61,7 +61,7 @@ void drawEnemyTexture(const entt::registry &registry, unsigned int frame) {
     auto livingView = registry.view<Living, Radius, Position, LookAngle, Speed>();
     for (auto [entity, radius, position, rotation, speed]: livingView.each()) {
         DrawTexturePro(AnimationManager::Instance().getTexture("enemy/walking/v1/", frame * speed.actual),
-                       {0, 0, 300, 300},
+                       {0, 0, 240, 240},
                        {position.x, position.y, 60, 60},
                        {30, 30},
                        rotation + 90,
