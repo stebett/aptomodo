@@ -39,10 +39,14 @@ set(sources
         includes/timer.h
         includes/config.h
         includes/config.cpp
-        includes/audioManager.cpp
-        includes/audioManager.h
-        includes/animationManager.cpp
-        includes/animationManager.h
+        includes/managers/audioManager.cpp
+        includes/managers/audioManager.h
+        includes/managers/animationManager.cpp
+        includes/managers/animationManager.h
+        includes/managers/levelManager.cpp
+        includes/managers/levelManager.h
+        includes/managers/renderingManager.cpp
+        includes/managers/renderingManager.h
 )
 
 

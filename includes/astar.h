@@ -47,20 +47,10 @@ struct std::hash<Node> {
 
 
 
-class Grid {
-    Map grid;
-
-public:
-    [[nodiscard]] std::vector<Node> neighbors(Node node) const;
-
-    explicit Grid(Map matrix);
-};
-
 using EvaluatedNode= std::pair<Node, float> ;
 static auto f = [](EvaluatedNode node1, EvaluatedNode node2) {return node1.second > node2.second;};
 class Search {
 
-    const Map &grid;
     std::priority_queue<EvaluatedNode, std::vector<EvaluatedNode>, decltype(f)> open;
     unsigned int frontier_idx = 0;
     std::unordered_map<Node, float> closed{};
@@ -92,8 +82,6 @@ public:
     void drawPath();
 
     void draw();
-
-    Search(const Map &map);
 
 
     Path exportPath();

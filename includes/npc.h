@@ -8,6 +8,6 @@
 #include "components.h"
 #include "constants.h"
 
-void updateEnemy(entt::registry &registry, entt::entity &player, const Map &grid);
+void updateEnemy(entt::registry &registry, entt::entity &player);
 
 #endif //ACEROLA_JAM0_NPC_H

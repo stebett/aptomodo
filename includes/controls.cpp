@@ -9,8 +9,8 @@
 #include "controls.h"
 #include "collisions.h"
 #include "constants.h"
-#include "rendering.h"
-#include "audioManager.h"
+#include "managers/audioManager.h"
+#include "managers/animationManager.h"
 
 
 void playerAttack(entt::registry &registry, entt::entity player, Vector2 clickPosition) {
@@ -26,7 +26,7 @@ void playerAttack(entt::registry &registry, entt::entity player, Vector2 clickPo
 
     float clickAngle = atan2(clickPosition.y - playerPosition.y, clickPosition.x - playerPosition.x) * radToDeg;
 
-    registry.emplace<AttackEffect>(registry.create(), 100, playerPosition, attackRange, clickAngle - attackSpread, clickAngle + attackSpread, PURPLE);
+//    registry.emplace<AttackEffect>(registry.create(), 100, playerPosition, attackRange, clickAngle - attackSpread, clickAngle + attackSpread, PURPLE);
 
     AudioManager::Instance().Play("player_shot");
 
@@ -70,7 +70,7 @@ void playerSecondaryAttack(entt::registry &registry, entt::entity player) {
 
 void castFire(entt::registry &registry, entt::entity player, Vector2 clickPosition) {}
 
-void parseInput(entt::registry &registry, entt::entity &player, Position &position, Camera2D &camera, const Map &grid) {
+void parseInput(entt::registry &registry, entt::entity &player, Position &position, Camera2D &camera) {
     Radius radius = registry.get<Radius>(player);
     Speed speed = registry.get<Speed>(player);
 
@@ -103,7 +103,7 @@ void parseInput(entt::registry &registry, entt::entity &player, Position &positi
     Vector2 direction = Vector2Subtract(futurePos, position);
     Vector2 movement = Vector2Scale(Vector2Normalize(direction), speed);
     futurePos = Vector2Add(position, movement);
-    solveCircleRecCollision(futurePos, radius, grid);
+    solveCircleRecCollision(futurePos, radius);
     position = futurePos;
 
 }

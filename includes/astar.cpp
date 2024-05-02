@@ -3,6 +3,7 @@
 //
 
 #include "astar.h"
+#include "managers/levelManager.h"
 
 #include <iostream>
 
@@ -31,7 +32,7 @@ Node getTile(const Vector2 &position) {
 
 
 // GRID
-std::vector<Node> neighbors(const Map &grid, const Node node) {
+std::vector<Node> neighbors(const Node node) {
     std::vector<Node> neighbors;
     for (int x = -1; x <= 1; x++)
         for (int y = -1; y <= 1; y++) {
@@ -41,13 +42,11 @@ std::vector<Node> neighbors(const Map &grid, const Node node) {
             if (x == 0 && y == 0) continue;
             if (neighbor_x < 0 || neighbor_x > mapWidth / tileSize) continue;
             if (neighbor_y < 0 || neighbor_y > mapHeight / tileSize) continue;
-            if (grid(neighbor_x, neighbor_y) == 1) continue;
+            if (LevelManager::grid(neighbor_x, neighbor_y) == 1) continue;
             neighbors.emplace_back(neighbor_x, neighbor_y);
         }
     return neighbors;
 }
-
-Grid::Grid(Map matrix) : grid(matrix) {}
 
 float manhattan(const Node &start, const Node &end) {
     return abs(end.x - start.x) + abs(end.y - start.y);
@@ -99,10 +98,10 @@ void Search::step() {
 //    std::cout << "Current \nx: " << current.x << "\ny: " << current.y << '\n';
 
 
-    for (auto neighbor: neighbors(grid, current)) {
+    for (auto neighbor: neighbors(current)) {
         if (!came_from.contains(neighbor)) {
             if (neighbor == start | neighbor == came_from[current]) continue;
-            float terrainPenalty = 3.0f * static_cast<float>(grid(neighbor.x, neighbor.y) == 2);
+            float terrainPenalty = 3.0f * static_cast<float>(LevelManager::grid(neighbor.x, neighbor.y) == 2);
             open.emplace(neighbor, manhattan(neighbor, end) + terrainPenalty);
             came_from[neighbor] = current;
             closed[neighbor] = closed[current] + manhattan(neighbor, current) + terrainPenalty;
@@ -131,7 +130,7 @@ void Search::drawNeighbors() {
         if (parent == start) break;
         parent = came_from[parent];
     }
-    for (auto neighbor: neighbors(grid, current)) {
+    for (auto neighbor: neighbors(current)) {
         if (!came_from.contains(neighbor)) {
             neighbor.draw({0, 250, 250, 120});
         }
@@ -172,5 +171,4 @@ void Search::draw() {
 }
 
 
-Search::Search(const Map &map) : grid(map) {}
 

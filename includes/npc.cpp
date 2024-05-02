@@ -10,13 +10,12 @@
 #include <raymath.h>
 #include "astar.h"
 #include "collisions.h"
-#include "rendering.h"
 #include "config.h"
-#include "audioManager.h"
+#include "managers/audioManager.h"
+#include "managers/animationManager.h"
 
 void
-solveCollisionEnemy(const entt::registry &registry, const int id, Vector2 &futurePos, const float radius,
-                    const Map &grid) {
+solveCollisionEnemy(const entt::registry &registry, const int id, Vector2 &futurePos, const float radius) {
     static Vector2 distance;
     static Vector2 enemyPos;
     static float overlap;
@@ -29,7 +28,7 @@ solveCollisionEnemy(const entt::registry &registry, const int id, Vector2 &futur
             overlap = radius + enemyRadius - Vector2Length(distance);
             if (overlap > 0) {
                 futurePos = Vector2Subtract(futurePos, Vector2Scale(Vector2Normalize(distance), overlap));
-                solveCircleRecCollision(futurePos, radius, grid);
+                solveCircleRecCollision(futurePos, radius);
             }
         }
     }
@@ -80,8 +79,8 @@ void enemyAttack(entt::registry &registry, const entt::entity enemy, entt::entit
 //    float pushback = registry.get<Pushback>(enemy);
 
     float clickAngle = atan2(playerPosition.y - position.y, playerPosition.x - position.x) * radToDeg;
-    registry.emplace<AttackEffect>(registry.create(), 100, position, attackRange, clickAngle - attackSpread,
-                                   clickAngle + attackSpread, BROWN);
+//    registry.emplace<AttackEffect>(registry.create(), 100, position, attackRange, clickAngle - attackSpread,
+//                                   clickAngle + attackSpread, BROWN);
     AudioManager::Instance().Play("enemy_shot");
 
 
@@ -92,8 +91,7 @@ void enemyAttack(entt::registry &registry, const entt::entity enemy, entt::entit
     }
 }
 
-void updatePath(entt::registry &registry, entt::entity &enemy, Position &position, Position &playerPosition,
-                const Map &grid) {
+void updatePath(entt::registry &registry, entt::entity &enemy, Position &position, Position &playerPosition) {
     Path &path = registry.get<Path>(enemy);
     if (!path.isFinished())
         if (!registry.all_of<Chasing>(enemy))
@@ -101,7 +99,7 @@ void updatePath(entt::registry &registry, entt::entity &enemy, Position &positio
     registry.remove<Chasing>(enemy);
     Node start = getTile(position);
     Node end = getTile(playerPosition);
-    Search search(grid);
+    Search search;
     search.init(start, end);
 
     // Check distance
@@ -149,14 +147,14 @@ void faceTarget(const Vector2 &position, const Vector2 &target, LookAngle &lookA
 }
 
 void updatePosition(entt::registry &registry, entt::entity enemy, const int id, const float radius, Speed &speed,
-                    const Map &grid, Position &position, LookAngle &lookAngle) {
+                    Position &position, LookAngle &lookAngle) {
     Vector2 target = getPathNext(registry, enemy);
     if (Vector2Equals(position, target)) { return; }
     Vector2 direction = Vector2Subtract(target, position);
     Vector2 movement = Vector2Scale(Vector2Normalize(direction), speed);
     Vector2 futurePos = Vector2Add(position, movement);
-    solveCollisionEnemy(registry, id, futurePos, radius, grid);
-    solveCircleRecCollision(futurePos, radius, grid);
+    solveCollisionEnemy(registry, id, futurePos, radius);
+    solveCircleRecCollision(futurePos, radius);
     faceTarget(position, futurePos, lookAngle);
     speed.actual = Vector2Distance(position, futurePos);
     position = futurePos;
@@ -167,7 +165,7 @@ bool playerInRange(const Vector2 &position, const Vector2 &playerPosition, const
     return CheckCollisionCircles(playerPosition, radius, position, static_cast<float>(2 * tileSize));
 }
 
-void updateEnemy(entt::registry &registry, entt::entity &player, const Map &grid) {
+void updateEnemy(entt::registry &registry, entt::entity &player) {
     Position playerPosition = registry.get<Position>(player);
     float playerRadius = registry.get<Radius>(player);
     const float turningRate = 0.6f;
@@ -184,8 +182,8 @@ void updateEnemy(entt::registry &registry, entt::entity &player, const Map &grid
             Position randomPos = getRandomPos(position);
             float speedDivider = registry.all_of<Chasing>(enemy) ? 1.0f : 5.0f;
             speed.value = speed.max / speedDivider;
-            updatePath(registry, enemy, position, randomPos, grid);
-            updatePosition(registry, enemy, id, radius, speed, grid, position, lookAngle);
+            updatePath(registry, enemy, position, randomPos);
+            updatePosition(registry, enemy, id, radius, speed, position, lookAngle);
             continue;
         }
         registry.emplace_or_replace<Chasing>(enemy);
@@ -199,8 +197,8 @@ void updateEnemy(entt::registry &registry, entt::entity &player, const Map &grid
             continue;
         }
 
-        updatePath(registry, enemy, position, playerPosition, grid);
-        updatePosition(registry, enemy, id, radius, speed, grid, position, lookAngle);
+        updatePath(registry, enemy, position, playerPosition);
+        updatePosition(registry, enemy, id, radius, speed, position, lookAngle);
 
     }
 }

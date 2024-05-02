@@ -5,6 +5,7 @@
 #include <raylib.h>
 #include <valarray>
 #include "collisions.h"
+#include "managers/levelManager.h"
 #include <raymath.h>
 
 
@@ -49,7 +50,7 @@ bool CheckCollisionCircleTriangle(Vector2 center, float radius, Vector2 v1, Vect
 }
 
 
-void solveCircleRecCollision(Vector2 &futurePos, float radius, const Map &grid) {
+void solveCircleRecCollision(Vector2 &futurePos, float radius) {
 
     Vector2 upperBoundary = {std::max(0.0f, floor(futurePos.x / tileSize) * tileSize - 2 * tileSize),
                              std::max(0.0f, floor(futurePos.y / tileSize) * tileSize - 2 * tileSize)};
@@ -66,7 +67,7 @@ void solveCircleRecCollision(Vector2 &futurePos, float radius, const Map &grid) 
 
     for (float x = upperBoundary.x; x <= lowerBoundary.x; x+=tileSize) {
         for (float y = upperBoundary.y; y <= lowerBoundary.y; y+=tileSize) {
-            if (grid(int(x/tileSize), int(y/tileSize)) == 1) {
+            if (LevelManager::grid(int(x/tileSize), int(y/tileSize)) == 1) {
                 clampedX = std::max(x, std::min(futurePos.x, x + float(tileSize)));
                 clampedY = std::max(y, std::min(futurePos.y, y + float(tileSize)));
                 distanceX = clampedX - futurePos.x;

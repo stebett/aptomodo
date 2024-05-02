@@ -61,8 +61,11 @@ void imguiPlayerAttr(entt::registry &registry) {
 }
 
 void imguiConfig() {
-    ImGui::Checkbox("Astar path", &config::show_astar_path);
-    ImGui::Checkbox("Enemy field of view", &config::show_enemy_fov);
+    ImGui::Checkbox("show_astar_path", &config::show_astar_path);
+    ImGui::Checkbox("show_enemy_fov", &config::show_enemy_fov);
+    ImGui::Checkbox("show_bounding_box", &config::show_bounding_box);
+    ImGui::Checkbox("show_enemy_texture", &config::show_enemy_texture);
+    ImGui::Checkbox("show_attacks", &config::show_attacks);
     ImGui::SliderInt("FPS", &config::fps, 0, 120);
     ImGui::SliderInt("enemy_walking_animation_fps", &config::enemy_walking_animation_fps, 1, 120);
 }

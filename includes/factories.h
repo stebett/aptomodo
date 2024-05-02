@@ -7,11 +7,10 @@
 
 #include <LDtkLoader/Entity.hpp>
 #include "components.h"
-#include "rendering.h"
 
 entt::entity spawnRandomEnemy(entt::registry &registry);
-entt::entity spawnEnemy(entt::registry &registry, Position position);
-entt::entity spawnPlayer(entt::registry &registry, Position position, GameScene *scene);
+entt::entity spawnEnemy(entt::registry &registry, Vector2 position);
+entt::entity spawnPlayer(entt::registry &registry);
 Camera2D spawnCamera();
 
 #endif //ACEROLA_JAM0_FACTORIES_H

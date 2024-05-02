@@ -4,12 +4,14 @@
 
 #include <entt/entity/registry.hpp>
 #include <raylib.h>
-#include <random>
 #include "factories.h"
 #include "constants.h"
+#include "managers/levelManager.h"
+
+// TODO Make a common factory, and define components used here in factories.h
 
 
-entt::entity spawnEnemy(entt::registry &registry, Position position) {
+entt::entity spawnEnemy(entt::registry &registry, Vector2 position) {
     static int id = 0;
     entt::entity enemy = registry.create();
 //    if (id > 0) { return enemy; }
@@ -41,15 +43,13 @@ entt::entity spawnRandomEnemy(entt::registry &registry) {
     return spawnEnemy(registry, randomPos);
 }
 
-entt::entity spawnPlayer(entt::registry &registry, Position position, GameScene *scene) {
-    Texture2D texture = LoadTexture(scene->getTexturePath("Player").c_str()); // TODO: remember to unload if needed
+entt::entity spawnPlayer(entt::registry &registry, Vector2 position) {
     entt::entity player = registry.create();
     registry.emplace<Player>(player);
     registry.emplace<ColorBB>(player, BLUE);
     registry.emplace<Living>(player);
     registry.emplace<Spread>(player, 15.0f);
     registry.emplace<Speed>(player, 7.0f);
-    registry.emplace<Texture>(player, texture);
     registry.emplace<Health>(player, 100);
     registry.emplace<Radius>(player, 10.0f);
     registry.emplace<PhysicalResistance>(player, 0.0f);
@@ -63,6 +63,13 @@ entt::entity spawnPlayer(entt::registry &registry, Position position, GameScene 
     registry.emplace<Position>(player, position);
 
     return player;
+}
+
+entt::entity spawnPlayer(entt::registry &registry) {
+    auto entitiesPositions = LevelManager::GetEntitiesPositions();
+    for (const auto& [label, position]: entitiesPositions) {
+        if (label == "player") return spawnPlayer(registry, position);
+    }
 }
 
 Camera2D spawnCamera() {

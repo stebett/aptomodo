@@ -9,6 +9,7 @@
 #include <vector>
 #include <unordered_map>
 #include <string>
+#include "../timer.h"
 
 struct TextureAnimation {
     std::vector<Texture2D> textures{};
@@ -19,7 +20,7 @@ class AnimationManager {
     static std::unordered_map<size_t, TextureAnimation> resources;
     static std::hash<std::string> hasher;
     static const char *root;
-    static AnimationManager instance;
+    static AnimationManager *instance;
 
 public:
     static Texture2D &getTexture(const std::string &key, unsigned int frame);
@@ -29,9 +30,28 @@ public:
     static AnimationManager &Instance();
 
     static void Instantiate() {
-        instance = *new AnimationManager();
+        instance = new AnimationManager();
         LoadFromDirectory("enemy/walking/v1/");
     }
+};
+
+class AttackEffect {
+    Timer m_timer;
+    Vector2 &m_center;
+    Color m_color;
+    float m_radius;
+    float m_duration;
+    float m_startAngle;
+    float m_endAngle;
+
+
+public:
+    AttackEffect(float mDuration, Vector2 &mCenter, const float &mRadius,
+                 float mStartAngle, float mEndangle, const Color &mColor);
+
+    void Draw() const ;
+
+    [[nodiscard]] bool Expired() const;
 };
 
 

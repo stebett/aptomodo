@@ -3,26 +3,29 @@
 #include "includes/components.h"
 #include "includes/constants.h"
 #include "includes/controls.h"
-#include "includes/rendering.h"
 #include "includes/gui.h"
 #include "includes/factories.h"
 #include "includes/npc.h"
-#include "includes/audioManager.h"
 #include "includes/config.h"
+#include "includes/rendering.h"
 #include <format>
-#include "includes/animationManager.h"
+#include "includes/managers/audioManager.h"
+#include "includes/managers/animationManager.h"
+#include "includes/managers/renderingManager.h"
+#include "includes/managers/levelManager.h"
 
 int main() {
     entt::registry registry;
     InitWindow(screenWidth, screenHeight, "Apto Modo");
 
+    RenderingManager::Instantiate(registry);
     AudioManager::Instantiate();
     AnimationManager::Instantiate();
+    LevelManager::Instantiate();
 
     auto camera = spawnCamera();
-    auto scene = new GameScene(registry);
 
-    auto player = registry.view<Player>().front();
+    auto player = spawnPlayer(registry);
     auto &position = registry.get<Position>(player);
     auto &health = registry.get<Health>(player);
 
@@ -49,11 +52,14 @@ int main() {
         BeginDrawing();
 
         BeginMode2D(camera);
-        draw(registry, scene, framesCounter);
-        updateEnemy(registry, player, scene->grid);
+        ClearBackground(WHITE);
+        LevelManager::Draw(camera);
+        RenderingManager::Draw(framesCounter);
+
+        updateEnemy(registry, player);
 
         EndMode2D();
-        parseInput(registry, player, position, camera, scene->grid);
+        parseInput(registry, player, position, camera);
 
         DrawGui();
         DrawFPS(10, 10);
