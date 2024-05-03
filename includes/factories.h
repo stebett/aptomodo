@@ -15,4 +15,13 @@ entt::entity spawnEnemy(entt::registry &registry, Vector2 position);
 entt::entity spawnPlayer(entt::registry &registry);
 Camera2D spawnCamera();
 
+namespace Attr {
+    class Strength {
+        int value;
+        int damagePhysical;
+        int health;
+        int resistancePhysical;
+    };
+}
+
 #endif //ACEROLA_JAM0_FACTORIES_H

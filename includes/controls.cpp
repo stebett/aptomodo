@@ -13,7 +13,7 @@
 #include "managers/animationManager.h"
 
 
-void playerAttack(entt::registry &registry, entt::entity player, Vector2 clickPosition) {
+void playerAttack(entt::registry &registry, entt::entity &player, Vector2 clickPosition) {
     auto &attackTimer  = registry.get<AttackTimer>(player).timer;
     if (attackTimer.Elapsed() < registry.get<AttackSpeed>(player)) return;
 
@@ -26,7 +26,8 @@ void playerAttack(entt::registry &registry, entt::entity player, Vector2 clickPo
 
     float clickAngle = atan2(clickPosition.y - playerPosition.y, clickPosition.x - playerPosition.x) * radToDeg;
 
-//    registry.emplace<AttackEffect>(registry.create(), 100, playerPosition, attackRange, clickAngle - attackSpread, clickAngle + attackSpread, PURPLE);
+    AttackEffect effect = {100, playerPosition, attackRange, clickAngle - attackSpread, clickAngle + attackSpread, PURPLE};
+    registry.emplace<AttackEffect>(registry.create(), effect);
 
     AudioManager::Instance().Play("player_shot");
 

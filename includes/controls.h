@@ -9,7 +9,7 @@
 #include "components.h"
 #include "constants.h"
 
-void playerAttack(entt::registry &registry, entt::entity player, Vector2 clickPosition);
+void playerAttack(entt::registry &registry, entt::entity &player, Vector2 clickPosition);
 
 void playerSecondaryAttack(entt::registry &registry, entt::entity player);
 

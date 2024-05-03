@@ -38,7 +38,7 @@ public:
 
 class AttackEffect {
     Timer m_timer;
-    Vector2 &m_center;
+    Vector2 m_center;
     Color m_color;
     float m_radius;
     float m_duration;
@@ -47,7 +47,7 @@ class AttackEffect {
 
 
 public:
-    AttackEffect(float mDuration, Vector2 &mCenter, const float &mRadius,
+    AttackEffect(float mDuration, Vector2 mCenter, const float &mRadius,
                  float mStartAngle, float mEndangle, const Color &mColor);
 
     void Draw() const ;

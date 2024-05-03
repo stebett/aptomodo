@@ -37,7 +37,7 @@ void AnimationManager::LoadFromDirectory(const std::string &directory) {
 AnimationManager &AnimationManager::Instance() { return *instance; }
 
 
-AttackEffect::AttackEffect(float mDuration, Vector2 &mCenter, const float &mRadius,
+AttackEffect::AttackEffect(float mDuration, Vector2 mCenter, const float &mRadius,
                            float mStartAngle, float mEndangle, const Color &mColor) : m_duration(mDuration),
                                                                                       m_center(mCenter),
                                                                                       m_radius(mRadius),

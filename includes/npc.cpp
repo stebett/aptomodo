@@ -78,8 +78,8 @@ void enemyAttack(entt::registry &registry, const entt::entity enemy, entt::entit
 //    float pushback = registry.get<Pushback>(enemy);
 
     float clickAngle = atan2(playerPosition.y - position.y, playerPosition.x - position.x) * radToDeg;
-//    registry.emplace<AttackEffect>(registry.create(), 100, position, attackRange, clickAngle - attackSpread,
-//                                   clickAngle + attackSpread, BROWN);
+    registry.emplace<AttackEffect>(registry.create(), 100, position, attackRange, clickAngle - attackSpread,
+                                   clickAngle + attackSpread, BROWN);
     AudioManager::Instance().Play("enemy_shot");
 
 

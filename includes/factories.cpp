@@ -10,31 +10,36 @@
 
 // TODO Make a common factory, and define components used here in factories.h
 
+entt::entity spawnLiving(entt::registry &registry) {
+    entt::entity e = registry.create();
+    registry.emplace<Living>(e);
+    registry.emplace<Radius>(e, 22.0f);
+    registry.emplace<Speed>(e, 3.0f);
+    registry.emplace<Health>(e, 100);
+    registry.emplace<PhysicalResistance>(e, 0.0f);
+    registry.emplace<MagicalResistance>(e, 0.0f);
+    registry.emplace<Stamina>(e, 0.0f);
+    registry.emplace<AttackTimer>(e);
+    registry.emplace<AttackSpeed>(e, 0.3f);
+    registry.emplace<Damage>(e, 5.0f);
+    registry.emplace<AttackRange>(e, 3 * tileSize);
+    registry.emplace<Pushback>(e, 1.0f);
+    registry.emplace<Spread>(e, 10.0f);
+    return e;
+}
 
 entt::entity spawnEnemy(entt::registry &registry, Vector2 position) {
     static int id = 0;
-    entt::entity enemy = registry.create();
+    entt::entity e = spawnLiving(registry);
 //    if (id > 0) { return enemy; }
-    registry.emplace<Radius>(enemy, 22.0f);
-    registry.emplace<Path>(enemy);
-    registry.emplace<LookAngle>(enemy, 0.0f);
-    registry.emplace<Spread>(enemy, 10.0f);
-    registry.emplace<ColorBB>(enemy, RED);
-    registry.emplace<Enemy>(enemy);
-    registry.emplace<Living>(enemy);
-    registry.emplace<ID>(enemy, id++);
-    registry.emplace<Speed>(enemy, 3.0f);
-    registry.emplace<Health>(enemy, 100);
-    registry.emplace<Position>(enemy, position.x, position.y);
-    registry.emplace<PhysicalResistance>(enemy, 0.0f);
-    registry.emplace<MagicalResistance>(enemy, 0.0f);
-    registry.emplace<Stamina>(enemy, 0.0f);
-    registry.emplace<AttackTimer>(enemy);
-    registry.emplace<AttackSpeed>(enemy, 0.3f);
-    registry.emplace<Damage>(enemy, 5.0f);
-    registry.emplace<AttackRange>(enemy, 3 * tileSize);
-    registry.emplace<Pushback>(enemy, 1.0f);
-    return enemy;
+    registry.emplace<Path>(e);
+    registry.emplace<LookAngle>(e, 0.0f);
+    registry.emplace<Position>(e, position);
+    registry.emplace<ColorBB>(e, RED);
+    registry.emplace<Enemy>(e);
+    registry.emplace<ID>(e, id++);
+
+    return e;
 }
 
 entt::entity spawnRandomEnemy(entt::registry &registry) {
@@ -44,25 +49,13 @@ entt::entity spawnRandomEnemy(entt::registry &registry) {
 }
 
 entt::entity spawnPlayer(entt::registry &registry, Vector2 position) {
-    entt::entity player = registry.create();
-    registry.emplace<Player>(player);
-    registry.emplace<ColorBB>(player, BLUE);
-    registry.emplace<Living>(player);
-    registry.emplace<Spread>(player, 15.0f);
-    registry.emplace<Speed>(player, 7.0f);
-    registry.emplace<Health>(player, 100);
-    registry.emplace<Radius>(player, 10.0f);
-    registry.emplace<PhysicalResistance>(player, 0.0f);
-    registry.emplace<MagicalResistance>(player, 0.0f);
-    registry.emplace<Stamina>(player, 0.0f);
-    registry.emplace<AttackTimer>(player);
-    registry.emplace<AttackSpeed>(player, 0.15f);
-    registry.emplace<Damage>(player, 50.0f);
-    registry.emplace<AttackRange>(player, 80.0f);
-    registry.emplace<Pushback>(player, 1.0f);
-    registry.emplace<Position>(player, position);
+    entt::entity e = spawnLiving(registry);
+    registry.emplace<Player>(e);
+    registry.emplace<Position>(e, position);
+    registry.emplace<ColorBB>(e, BLUE);
 
-    return player;
+
+    return e;
 }
 
 entt::entity spawnPlayer(entt::registry &registry) {
