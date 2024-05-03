@@ -72,6 +72,13 @@ entt::entity spawnPlayer(entt::registry &registry) {
     }
 }
 
+void spawnEnemies(entt::registry &registry) {
+    auto entitiesPositions = LevelManager::GetEntitiesPositions();
+    for (const auto& [label, position]: entitiesPositions) {
+        if (label == "Enemy") spawnEnemy(registry, position);
+    }
+}
+
 Camera2D spawnCamera() {
     Camera2D camera = {0};
     camera.target = {mapWidth / 2, mapHeight / 2};

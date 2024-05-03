@@ -9,6 +9,8 @@
 #include "components.h"
 
 entt::entity spawnRandomEnemy(entt::registry &registry);
+void spawnEnemies(entt::registry &registry);
+
 entt::entity spawnEnemy(entt::registry &registry, Vector2 position);
 entt::entity spawnPlayer(entt::registry &registry);
 Camera2D spawnCamera();

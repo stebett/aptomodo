@@ -25,8 +25,9 @@ int main() {
     LevelManager::Instantiate();
 
     auto camera = spawnCamera();
-
     auto player = spawnPlayer(registry);
+    spawnEnemies(registry);
+    
     auto &position = registry.get<Position>(player);
     auto &health = registry.get<Health>(player);
 
@@ -50,7 +51,7 @@ int main() {
         UpdateGui(registry, io);
 
         BeginDrawing();
-        BeginMode2D(camera);
+        BeginMode2D(camera); // TODO add option to activate second debug camera
 
         ClearBackground(WHITE);
         LevelManager::Draw(camera);

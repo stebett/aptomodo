@@ -91,6 +91,9 @@ void enemyAttack(entt::registry &registry, const entt::entity enemy, entt::entit
 }
 
 void updatePath(entt::registry &registry, entt::entity &enemy, Position &position, Position &playerPosition) {
+    static Search search;
+    search.reset();
+
     Path &path = registry.get<Path>(enemy);
     if (!path.isFinished())
         if (!registry.all_of<Chasing>(enemy))
@@ -98,7 +101,6 @@ void updatePath(entt::registry &registry, entt::entity &enemy, Position &positio
     registry.remove<Chasing>(enemy);
     Node start = getTile(position);
     Node end = getTile(playerPosition);
-    Search search; // TODO Make this static lol
     search.init(start, end);
 
     // Check distance
