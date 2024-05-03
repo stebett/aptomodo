@@ -7,7 +7,7 @@
 
 
 #include <entt/entity/registry.hpp>
-#include "imgui/imgui.h"
+#include "../vendors/imgui/imgui.h"
 
 ImGuiIO InitGui();
 // TODO Make this a class

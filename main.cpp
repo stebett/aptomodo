@@ -1,3 +1,4 @@
+// TODO move raylib in vendors dir
 #include <raylib.h>
 #include <entt/entity/registry.hpp>
 #include "includes/components.h"
@@ -14,7 +15,6 @@
 #include "includes/managers/renderingManager.h"
 #include "includes/managers/levelManager.h"
 
-// TODO move rllImGui, ImGui, raygui, and raylib in vendors dir
 int main() {
     entt::registry registry;
     InitWindow(screenWidth, screenHeight, "Apto Modo");

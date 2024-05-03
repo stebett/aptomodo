@@ -6,19 +6,19 @@ find_package(raylib REQUIRED)
 find_package(LDtkLoader 1.5)
 
 set(sources
-        includes/rlImGui/rlImGui.h
-        includes/rlImGui/rlImGui.cpp
-        includes/imgui/imconfig.h
-        includes/imgui/imgui.cpp
-        includes/imgui/imgui.h
-        includes/imgui/imgui_demo.cpp
-        includes/imgui/imgui_draw.cpp
-        includes/imgui/imgui_internal.h
-        includes/imgui/imgui_tables.cpp
-        includes/imgui/imgui_widgets.cpp
-        includes/imgui/imstb_rectpack.h
-        includes/imgui/imstb_textedit.h
-        includes/imgui/imstb_truetype.h
+        vendors/rlImGui/rlImGui.h
+        vendors/rlImGui/rlImGui.cpp
+        vendors/imgui/imconfig.h
+        vendors/imgui/imgui.cpp
+        vendors/imgui/imgui.h
+        vendors/imgui/imgui_demo.cpp
+        vendors/imgui/imgui_draw.cpp
+        vendors/imgui/imgui_internal.h
+        vendors/imgui/imgui_tables.cpp
+        vendors/imgui/imgui_widgets.cpp
+        vendors/imgui/imstb_rectpack.h
+        vendors/imgui/imstb_textedit.h
+        vendors/imgui/imstb_truetype.h
         includes/astar.h
         includes/astar.cpp
         includes/components.h
@@ -33,7 +33,7 @@ set(sources
         includes/controls.h
         includes/npc.cpp
         includes/npc.h
-        includes/raygui.h
+        vendors/raygui.h
         includes/gui.h
         includes/gui.cpp
         includes/timer.h

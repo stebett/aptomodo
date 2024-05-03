@@ -3,7 +3,7 @@
 //
 
 #include "gui.h"
-#include "rlImGui/imgui_impl_raylib.h"
+#include "../vendors/rlImGui/imgui_impl_raylib.h"
 #include "components.h"
 #include "constants.h"
 #include <entt/entity/registry.hpp>
