@@ -4,7 +4,7 @@
 
 #include "levelManager.h"
 
-std::vector<std::pair<std::string, Vector2>> entitiesPositions;
+std::vector<std::pair<std::string, Vector2>> LevelManager::entitiesPositions;
 LevelManager *LevelManager::instance;
 int LevelManager::current_level;
 ldtk::Project *LevelManager::ldtkProject;

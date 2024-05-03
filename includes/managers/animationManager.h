@@ -16,6 +16,7 @@ struct TextureAnimation {
     unsigned int frameCount{0};
 };
 
+// TODO this class is actually just a resource manager, the animations are played out by the renderer
 class AnimationManager {
     static std::unordered_map<size_t, TextureAnimation> resources;
     static std::hash<std::string> hasher;

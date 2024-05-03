@@ -71,15 +71,13 @@ void playerSecondaryAttack(entt::registry &registry, entt::entity player) {
 void castFire(entt::registry &registry, entt::entity player, Vector2 clickPosition) {}
 
 void parseInput(entt::registry &registry, entt::entity &player, Position &position, Camera2D &camera) {
-    Radius radius = registry.get<Radius>(player);
+    Radius radius = registry.get<Radius>(player); // This could be static, or a static ref
     Speed speed = registry.get<Speed>(player);
 
     if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
         playerAttack(registry, player, GetScreenToWorld2D(GetMousePosition(), camera));
     }
-    if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
-        castFire(registry, player, GetScreenToWorld2D(GetMousePosition(), camera));
-    }
+
     if (IsMouseButtonPressed(MOUSE_RIGHT_BUTTON)) {
         playerSecondaryAttack(registry, player);
     }
@@ -88,12 +86,10 @@ void parseInput(entt::registry &registry, entt::entity &player, Position &positi
 
     static Vector2 futurePos = position;
 
-//    if (playerState != State::pain) {
     futurePos.y -= 4.0f * static_cast<float>(IsKeyPressed(KEY_W) || IsKeyDown(KEY_W));
     futurePos.y += 4.0f * static_cast<float>(IsKeyPressed(KEY_S) || IsKeyDown(KEY_S));
     futurePos.x -= 4.0f * static_cast<float>(IsKeyPressed(KEY_A) || IsKeyDown(KEY_A));
     futurePos.x += 4.0f * static_cast<float>(IsKeyPressed(KEY_D) || IsKeyDown(KEY_D));
-//    }
     if (futurePos.x - radius < 0 || futurePos.x + radius > mapWidth) {
         futurePos.x = position.x;
     }

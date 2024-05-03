@@ -14,8 +14,7 @@
 #include "managers/audioManager.h"
 #include "managers/animationManager.h"
 
-void
-solveCollisionEnemy(const entt::registry &registry, const int id, Vector2 &futurePos, const float radius) {
+void solveCollisionEnemy(const entt::registry &registry, const int id, Vector2 &futurePos, const float radius) {
     static Vector2 distance;
     static Vector2 enemyPos;
     static float overlap;
@@ -95,11 +94,11 @@ void updatePath(entt::registry &registry, entt::entity &enemy, Position &positio
     Path &path = registry.get<Path>(enemy);
     if (!path.isFinished())
         if (!registry.all_of<Chasing>(enemy))
-                return;
+            return;
     registry.remove<Chasing>(enemy);
     Node start = getTile(position);
     Node end = getTile(playerPosition);
-    Search search;
+    Search search; // TODO Make this static lol
     search.init(start, end);
 
     // Check distance
@@ -110,7 +109,7 @@ void updatePath(entt::registry &registry, entt::entity &enemy, Position &positio
     search.exportPath(path);
 }
 
-
+// TODO make it choose directly from the grid, and only from walkable points of the grid
 Position getRandomPos(Position &position) {
     Vector2 target = Vector2Scale({rng::uniform_neg500_500(rng::seed) / 500.0f,
                                    rng::uniform_neg500_500(rng::seed) / 500.0f}, 100);

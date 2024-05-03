@@ -68,7 +68,7 @@ entt::entity spawnPlayer(entt::registry &registry, Vector2 position) {
 entt::entity spawnPlayer(entt::registry &registry) {
     auto entitiesPositions = LevelManager::GetEntitiesPositions();
     for (const auto& [label, position]: entitiesPositions) {
-        if (label == "player") return spawnPlayer(registry, position);
+        if (label == "Player") return spawnPlayer(registry, position);
     }
 }
 

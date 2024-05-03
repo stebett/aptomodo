@@ -34,6 +34,7 @@ public:
     static Map grid;
 
     ~LevelManager();
+    // TODO add an update function which keeps tracks of all living positions and ranges and updates the grid based on it
 
     static std::vector<std::pair<std::string, Vector2>> & GetEntitiesPositions();
     static void Draw(Camera2D &camera);

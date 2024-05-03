@@ -14,6 +14,7 @@
 #include "includes/managers/renderingManager.h"
 #include "includes/managers/levelManager.h"
 
+// TODO move rllImGui, ImGui, raygui, and raylib in vendors dir
 int main() {
     entt::registry registry;
     InitWindow(screenWidth, screenHeight, "Apto Modo");
@@ -31,7 +32,6 @@ int main() {
 
     auto io = InitGui();
 
-    auto enemyCounter = 0;
     auto framesCounter = 0u;
 
 
@@ -50,13 +50,13 @@ int main() {
         UpdateGui(registry, io);
 
         BeginDrawing();
-
         BeginMode2D(camera);
+
         ClearBackground(WHITE);
         LevelManager::Draw(camera);
         RenderingManager::Draw(framesCounter);
 
-        updateEnemy(registry, player);
+        updateEnemy(registry, player); // TODO This should be before drawing
 
         EndMode2D();
         parseInput(registry, player, position, camera);
@@ -89,6 +89,5 @@ int main() {
 
     CloseGui();
     CloseWindow();
-
     return 0;
 }

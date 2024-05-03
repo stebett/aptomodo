@@ -10,7 +10,7 @@
 #include "imgui/imgui.h"
 
 ImGuiIO InitGui();
-
+// TODO Make this a class
 void UpdateGui(entt::registry &registry, ImGuiIO &io);
 
 void DrawGui();
