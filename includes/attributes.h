@@ -72,7 +72,7 @@ public:
     std::unordered_map<AttributeName, std::string> attributeString;
 private:
 
-    int level;
+    int level {3};
     static constexpr int pointsByLevel{3};
     static constexpr int pointsByAttr{3};
 

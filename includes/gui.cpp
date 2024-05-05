@@ -62,10 +62,18 @@ void imguiPlayerAttr(entt::registry &registry) {
 }
 
 void imguiAttributes(entt::registry &registry) {
+    int n = {0};
     auto view = registry.view<Player, Attributes>();
     for (auto [entity, attributes]: view.each()) {
         for (auto attrName: Attributes::attributeVec) {
-            ImGui::LabelText(attributes.attributeString[attrName].c_str(),  std::format("{}", attributes.get(attrName)).c_str());
+            ImGui::PushID(n);
+            ImGui::Separator();
+            if (ImGui::Button("Up")) attributes.increase(attrName);
+            ImGui::SameLine();
+            ImGui::LabelText(attributes.attributeString[attrName].c_str(),
+                             std::format("{}", attributes.get(attrName)).c_str());
+            ImGui::PopID();
+            n++;
         }
     }
 }
