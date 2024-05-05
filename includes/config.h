@@ -11,4 +11,6 @@ namespace config {
     extern int enemy_walking_animation_fps;
     extern bool show_enemy_texture;
     extern bool show_attacks;
+
+    extern bool show_attr_window;
 }

@@ -69,7 +69,9 @@ public:
 
     std::unordered_map<AttributeName, std::array<SubAttributeName, 3>> subAttrByAttr;  // TODO make constexpr static
     std::unordered_map<SubAttributeName, AttributeName> attrBySubAttr;
-    std::unordered_map<AttributeName, std::string> attributeString;
+    std::unordered_map<AttributeName, char const *> attributeString;
+    std::unordered_map<SubAttributeName, char const *> subAttributeString;
+
 private:
 
     int level {3};
@@ -109,6 +111,25 @@ public:
         attributeString[willpower] = "willpower";
         attributeString[coordination] = "coordination";
         attributeString[perception] = "perception";
+
+        subAttributeString[damagePhysical]      = "damagePhysical";
+        subAttributeString[health]              = "health";
+        subAttributeString[resistancePhysical]  = "resistancePhysical";
+        subAttributeString[damageMagical]       = "damageMagical";
+        subAttributeString[mana]                = "mana";
+        subAttributeString[resistanceMagical]   = "resistanceMagical";
+        subAttributeString[speed]               = "speed";
+        subAttributeString[attackSpeed]         = "attackSpeed";
+        subAttributeString[spellSpeed]          = "spellSpeed";
+        subAttributeString[regenerationMana]    = "regenerationMana";
+        subAttributeString[regenerationStamina] = "regenerationStamina";
+        subAttributeString[resistanceStatus]    = "resistanceStatus";
+        subAttributeString[spread]              = "spread";
+        subAttributeString[range]               = "range";
+        subAttributeString[dodgeRange]          = "dodgeRange";
+        subAttributeString[visualRange]         = "visualRange";
+        subAttributeString[critChance]          = "critChance";
+        subAttributeString[critMultiplier]      = "critMultiplier";
 
 
         for (auto attr: attributeVec)

@@ -11,6 +11,7 @@
 #include "constants.h"
 #include "managers/audioManager.h"
 #include "managers/animationManager.h"
+#include "config.h"
 
 
 void playerAttack(entt::registry &registry, entt::entity &player, Vector2 clickPosition) {
@@ -82,6 +83,8 @@ void parseInput(entt::registry &registry, entt::entity &player, Position &positi
     if (IsMouseButtonPressed(MOUSE_RIGHT_BUTTON)) {
         playerSecondaryAttack(registry, player);
     }
+
+    if (IsKeyPressed(KEY_I)) config::show_attr_window = !config::show_attr_window;
 
     camera.zoom += GetMouseWheelMove()/10;
 

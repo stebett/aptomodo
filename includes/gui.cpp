@@ -62,20 +62,37 @@ void imguiPlayerAttr(entt::registry &registry) {
 }
 
 void imguiAttributes(entt::registry &registry) {
+     ImGui::Begin("Attributes");
+
     int n = {0};
+    int m = {0};
     auto view = registry.view<Player, Attributes>();
     for (auto [entity, attributes]: view.each()) {
         for (auto attrName: Attributes::attributeVec) {
             ImGui::PushID(n);
             ImGui::Separator();
-            if (ImGui::Button("Up")) attributes.increase(attrName);
+            if (ImGui::ArrowButton("##up", ImGuiDir_Up)) { attributes.increase(attrName); }
             ImGui::SameLine();
-            ImGui::LabelText(attributes.attributeString[attrName].c_str(),
-                             std::format("{}", attributes.get(attrName)).c_str());
+            ImGui::Text("%d", attributes.get(attrName));
+            ImGui::SameLine();
+            ImGui::Text("%s", attributes.attributeString[attrName]);
+            for (auto subAttrName: attributes.subAttrByAttr[attrName]) {
+                ImGui::PushID(m);
+                if (ImGui::ArrowButton("##up", ImGuiDir_Up)) { attributes.increase(subAttrName); }
+                ImGui::SameLine();
+                if (ImGui::ArrowButton("##down", ImGuiDir_Down)) { attributes.decrease(subAttrName); }
+                ImGui::SameLine();
+                ImGui::Text("%d", attributes.get(subAttrName));
+                ImGui::SameLine();
+                ImGui::Text("%s", attributes.subAttributeString[subAttrName]);
+                ImGui::PopID();
+                m++;
+            }
             ImGui::PopID();
             n++;
         }
     }
+    ImGui::End();
 }
 
 void imguiConfig() {
@@ -91,9 +108,8 @@ void imguiConfig() {
 void imguiWindowMain(entt::registry &registry, ImGuiIO io) {
     static bool show_demo_window = false;
     static bool show_player_window = false;
-    static bool show_config_window = true;
-    static bool show_enemy_window = true;
-    static bool show_attr_window = true;
+    static bool show_config_window = false;
+    static bool show_enemy_window = false;
 
     ImGui::Begin("Main");
 
@@ -114,8 +130,8 @@ void imguiWindowMain(entt::registry &registry, ImGuiIO io) {
     if (show_config_window)
         imguiConfig();
 
-    ImGui::Checkbox("Attributes Window", &show_attr_window);
-    if (show_attr_window)
+    ImGui::Checkbox("Attributes Window", &config::show_attr_window);
+    if (config::show_attr_window)
         imguiAttributes(registry);
 
 
