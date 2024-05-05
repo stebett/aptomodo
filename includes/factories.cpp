@@ -7,6 +7,7 @@
 #include "factories.h"
 #include "constants.h"
 #include "managers/levelManager.h"
+#include "attributes.h"
 
 // TODO Make a common factory, and define components used here in factories.h
 
@@ -53,7 +54,8 @@ entt::entity spawnPlayer(entt::registry &registry, Vector2 position) {
     registry.emplace<Player>(e);
     registry.emplace<Position>(e, position);
     registry.emplace<ColorBB>(e, BLUE);
-
+    auto attr = Attributes(2, 1, 1, 1, 1, 1);
+    registry.emplace<Attributes>(e, attr);
 
     return e;
 }

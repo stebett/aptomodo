@@ -8,6 +8,7 @@
 #include "constants.h"
 #include <entt/entity/registry.hpp>
 #include "config.h"
+#include "attributes.h"
 
 void imguiEnemyAttr(entt::registry &registry) {
     auto view = registry.view<Enemy, Path, ID, ColorBB, Spread, Speed, Health, Radius, PhysicalResistance, MagicalResistance, Stamina, AttackTimer, AttackSpeed, Damage, AttackRange, Pushback, Position>();
@@ -60,6 +61,15 @@ void imguiPlayerAttr(entt::registry &registry) {
     }
 }
 
+void imguiAttributes(entt::registry &registry) {
+    auto view = registry.view<Player, Attributes>();
+    for (auto [entity, attributes]: view.each()) {
+        for (auto attrName: Attributes::attributeVec) {
+            ImGui::LabelText(attributes.attributeString[attrName].c_str(),  std::format("{}", attributes.get(attrName)).c_str());
+        }
+    }
+}
+
 void imguiConfig() {
     ImGui::Checkbox("show_astar_path", &config::show_astar_path);
     ImGui::Checkbox("show_enemy_fov", &config::show_enemy_fov);
@@ -75,6 +85,7 @@ void imguiWindowMain(entt::registry &registry, ImGuiIO io) {
     static bool show_player_window = false;
     static bool show_config_window = true;
     static bool show_enemy_window = true;
+    static bool show_attr_window = true;
 
     ImGui::Begin("Main");
 
@@ -95,6 +106,9 @@ void imguiWindowMain(entt::registry &registry, ImGuiIO io) {
     if (show_config_window)
         imguiConfig();
 
+    ImGui::Checkbox("Attributes Window", &show_attr_window);
+    if (show_attr_window)
+        imguiAttributes(registry);
 
 
 //    ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);

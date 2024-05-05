@@ -47,6 +47,7 @@ set(sources
         includes/managers/levelManager.h
         includes/managers/renderingManager.cpp
         includes/managers/renderingManager.h
+        includes/attributes.h
 )
 
 
