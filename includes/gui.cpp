@@ -73,6 +73,8 @@ void imguiAttributes(entt::registry &registry) {
             ImGui::Separator();
             if (ImGui::ArrowButton("##up", ImGuiDir_Up)) { attributes.increase(attrName); }
             ImGui::SameLine();
+            if (ImGui::ArrowButton("##down", ImGuiDir_Down)) { attributes.decrease(attrName); }
+            ImGui::SameLine();
             ImGui::Text("%d", attributes.get(attrName));
             ImGui::SameLine();
             ImGui::Text("%s", attributes.attributeString[attrName]);

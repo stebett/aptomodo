@@ -77,6 +77,7 @@ private:
     int level {3};
     static constexpr int pointsByLevel{3};
     static constexpr int pointsByAttr{3};
+    static constexpr int pointsAtStart{10};
 
     std::array<int, 6> values{};
     std::array<int, 18> subValues{};
@@ -134,7 +135,7 @@ public:
 
         for (auto attr: attributeVec)
             for (auto subAttr: subAttrByAttr[attr])
-                subValues[subAttr] = values[attr];
+                subValues[subAttr] = pointsAtStart;
     }
 
     Attributes() {
@@ -144,9 +145,10 @@ public:
     [[nodiscard]] int get(AttributeName attr) const { return values[attr]; }
 
     [[nodiscard]] int get(SubAttributeName subAttr) const { return subValues[subAttr]; }
+    [[nodiscard]] int& get(SubAttributeName subAttr) { return subValues[subAttr]; }
 
     void increase(AttributeName attr) {
-        if (std::accumulate(values.begin(), values.end(), -6 + pointsByLevel) == level * pointsByLevel) {
+        if (std::accumulate(values.begin(), values.end(), 0) >= level * pointsByLevel) {
             std::cout << "You don't have free attribute points\n";
             return;
         }
@@ -157,12 +159,17 @@ public:
         AttributeName attr = attrBySubAttr[subAttr];
         int attrValue = values[attr];
         int subAttrTotal = 0;
-        for (auto sa: subAttrByAttr[attr]) subAttrTotal += subValues[subAttr];
-        if (subAttrTotal > pointsByAttr * attrValue) {
+        for (auto sa: subAttrByAttr[attr]) subAttrTotal += subValues[sa] - pointsAtStart;
+        if (subAttrTotal >= pointsByAttr * attrValue) {
             std::cout << "You don't have free subattribute points\n";
             return;
         }
         subValues[subAttr] += 1;
+    }
+
+    void decrease(AttributeName attr) {
+        if (values[attr] <= 0) return;
+        values[attr] -= 1;
     }
 
     void decrease(SubAttributeName subAttr) {
