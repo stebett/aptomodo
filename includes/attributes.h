@@ -9,7 +9,7 @@
 #include <unordered_map>
 #include <numeric>
 #include <iostream>
-
+#include "config.h"
 
 
 //struct Attribute {
@@ -29,6 +29,7 @@
 //};
 
 class Attributes {
+public:
     enum SubAttributeName {
         damagePhysical,
         health,
@@ -63,18 +64,43 @@ class Attributes {
         coordination,
         perception,
     };
-public:
     constexpr static std::array<AttributeName, 6> attributeVec{strength, intelligence, agility, willpower, coordination,
                                                                perception,};
+
+    constexpr static std::array<SubAttributeName, 18> subAttributeVec{
+            damagePhysical, health, resistancePhysical,
+            damageMagical, mana, resistanceMagical,
+            speed, attackSpeed, spellSpeed,
+            regenerationMana, regenerationStamina, resistanceStatus,
+            spread, range, dodgeRange,
+            visualRange, critChance, critMultiplier
+    };
 
     std::unordered_map<AttributeName, std::array<SubAttributeName, 3>> subAttrByAttr;  // TODO make constexpr static
     std::unordered_map<SubAttributeName, AttributeName> attrBySubAttr;
     std::unordered_map<AttributeName, char const *> attributeString;
-    std::unordered_map<SubAttributeName, char const *> subAttributeString;
+    constexpr static std::array<char const *, 18> subAttributeString = {"damagePhysical",
+                                                                        "health",
+                                                                        "resistancePhysical",
+                                                                        "damageMagical",
+                                                                        "mana",
+                                                                        "resistanceMagical",
+                                                                        "speed",
+                                                                        "attackSpeed",
+                                                                        "spellSpeed",
+                                                                        "regenerationMana",
+                                                                        "regenerationStamina",
+                                                                        "resistanceStatus",
+                                                                        "spread",
+                                                                        "range",
+                                                                        "dodgeRange",
+                                                                        "visualRange",
+                                                                        "critChance",
+                                                                        "critMultiplier"};
 
 private:
 
-    int level {3};
+    int level{3};
     static constexpr int pointsByLevel{3};
     static constexpr int pointsByAttr{3};
     static constexpr int pointsAtStart{10};
@@ -113,25 +139,6 @@ public:
         attributeString[coordination] = "coordination";
         attributeString[perception] = "perception";
 
-        subAttributeString[damagePhysical]      = "damagePhysical";
-        subAttributeString[health]              = "health";
-        subAttributeString[resistancePhysical]  = "resistancePhysical";
-        subAttributeString[damageMagical]       = "damageMagical";
-        subAttributeString[mana]                = "mana";
-        subAttributeString[resistanceMagical]   = "resistanceMagical";
-        subAttributeString[speed]               = "speed";
-        subAttributeString[attackSpeed]         = "attackSpeed";
-        subAttributeString[spellSpeed]          = "spellSpeed";
-        subAttributeString[regenerationMana]    = "regenerationMana";
-        subAttributeString[regenerationStamina] = "regenerationStamina";
-        subAttributeString[resistanceStatus]    = "resistanceStatus";
-        subAttributeString[spread]              = "spread";
-        subAttributeString[range]               = "range";
-        subAttributeString[dodgeRange]          = "dodgeRange";
-        subAttributeString[visualRange]         = "visualRange";
-        subAttributeString[critChance]          = "critChance";
-        subAttributeString[critMultiplier]      = "critMultiplier";
-
 
         for (auto attr: attributeVec)
             for (auto subAttr: subAttrByAttr[attr])
@@ -145,7 +152,10 @@ public:
     [[nodiscard]] int get(AttributeName attr) const { return values[attr]; }
 
     [[nodiscard]] int get(SubAttributeName subAttr) const { return subValues[subAttr]; }
-    [[nodiscard]] int& get(SubAttributeName subAttr) { return subValues[subAttr]; }
+
+    [[nodiscard]] int getMultiplied(SubAttributeName subAttr) {
+        return subValues[subAttr] * config::attrMultipliers[subAttr];
+    }
 
     void increase(AttributeName attr) {
         if (std::accumulate(values.begin(), values.end(), 0) >= level * pointsByLevel) {

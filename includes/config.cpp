@@ -3,6 +3,7 @@
 //
 
 #include "config.h"
+#include "attributes.h"
 
 namespace config {
     bool show_astar_path = false;
@@ -13,4 +14,25 @@ namespace config {
     bool show_enemy_texture = true;
     bool show_attacks = true;
     bool show_attr_window = true;
-}
+
+    std::array<float, 18> attrMultipliers{
+            3.0f, // damagePhysical
+            10.0f, // health
+            10.0f, // resistancePhysical
+            10.0f, // damageMagical
+            10.0f, // mana
+            10.0f, // resistanceMagical
+            0.50f, // speed
+            10.0f, // attackSpeed
+            10.0f, // spellSpeed
+            10.0f, // regenerationMana
+            10.0f, // regenerationStamina
+            10.0f, // resistanceStatus
+            1.0f, // spread
+            6.0f, // range
+            10.0f, // dodgeRange
+            10.0f, // visualRange
+            10.0f, // critChance
+            10.0f, // critMultiplier
+    };
+};

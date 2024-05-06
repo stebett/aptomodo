@@ -12,18 +12,19 @@
 #include "managers/audioManager.h"
 #include "managers/animationManager.h"
 #include "config.h"
+#include "attributes.h"
 
 
-void playerAttack(entt::registry &registry, entt::entity &player, Vector2 clickPosition) {
+void playerAttack(entt::registry &registry, entt::entity &player, Attributes& attributes, Vector2 clickPosition) {
     auto &attackTimer  = registry.get<AttackTimer>(player).timer;
-    if (attackTimer.Elapsed() < registry.get<AttackSpeed>(player)) return;
-
+    if (attackTimer.Elapsed() < attributes.getMultiplied(Attributes::attackSpeed)) return;
     attackTimer.Reset();
     Position &playerPosition = registry.get<Position>(player);
-    float attackRange  = registry.get<AttackRange>(player);
-    float attackSpread  = registry.get<Spread>(player);
-    float damage  = registry.get<Damage>(player);
-    float pushback = registry.get<Pushback>(player);
+
+    float attackRange  = attributes.getMultiplied(Attributes::range);
+    float attackSpread  = attributes.getMultiplied(Attributes::spread);
+    float damage  = attributes.getMultiplied(Attributes::damagePhysical);
+//    float pushback = registry.get<Pushback>(player);
 
     float clickAngle = atan2(clickPosition.y - playerPosition.y, clickPosition.x - playerPosition.x) * radToDeg;
 
@@ -45,8 +46,8 @@ void playerAttack(entt::registry &registry, entt::entity &player, Vector2 clickP
                                          endSegment1, endSegment2, attackRange)) {
             health -= damage;
             float m = sqrt(pow(playerPosition.x + position.x, 2) + pow(playerPosition.y + position.y, 2));
-            position = {(position.x + (position.x - playerPosition.x) * pushback / m),
-                        position.y + (position.y - playerPosition.y) * pushback / m};
+//            position = {(position.x + (position.x - playerPosition.x) * pushback / m),
+//                        position.y + (position.y - playerPosition.y) * pushback / m};
         }
     }
 }
@@ -74,10 +75,10 @@ void castFire(entt::registry &registry, entt::entity player, Vector2 clickPositi
 
 void parseInput(entt::registry &registry, entt::entity &player, Position &position, Camera2D &camera) {
     Radius radius = registry.get<Radius>(player); // This could be static, or a static ref
-    Speed speed = registry.get<Speed>(player);
+    Attributes attributes = registry.get<Attributes>(player);
 
     if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
-        playerAttack(registry, player, GetScreenToWorld2D(GetMousePosition(), camera));
+        playerAttack(registry, player, attributes, GetScreenToWorld2D(GetMousePosition(), camera));
     }
 
     if (IsMouseButtonPressed(MOUSE_RIGHT_BUTTON)) {
@@ -101,7 +102,7 @@ void parseInput(entt::registry &registry, entt::entity &player, Position &positi
         futurePos.y = position.y;
     }
     Vector2 direction = Vector2Subtract(futurePos, position);
-    Vector2 movement = Vector2Scale(Vector2Normalize(direction), speed);
+    Vector2 movement = Vector2Scale(Vector2Normalize(direction), attributes.getMultiplied(Attributes::speed));
     futurePos = Vector2Add(position, movement);
     solveCircleRecCollision(futurePos, radius);
     position = futurePos;

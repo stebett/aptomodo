@@ -61,8 +61,19 @@ void imguiPlayerAttr(entt::registry &registry) {
     }
 }
 
+void imguiAttributesMultipliers() {
+    ImGui::Begin("Attribute multipliers");
+    int n = {0};
+    for (auto subAttr: Attributes::subAttributeVec) {
+        ImGui::PushID(n);
+        ImGui::SliderFloat(Attributes::subAttributeString[subAttr], &config::attrMultipliers[subAttr], 0, 30, "%.3f", 0);
+        ImGui::PopID();
+    }
+    ImGui::End();
+}
+
 void imguiAttributes(entt::registry &registry) {
-     ImGui::Begin("Attributes");
+    ImGui::Begin("Attributes");
 
     int n = {0};
     int m = {0};
@@ -94,8 +105,13 @@ void imguiAttributes(entt::registry &registry) {
             n++;
         }
     }
+    static bool show_multipliers = false;
+    ImGui::Checkbox("show_multipliers", &show_multipliers);
+    if (show_multipliers)
+        imguiAttributesMultipliers();
     ImGui::End();
 }
+
 
 void imguiConfig() {
     ImGui::Checkbox("show_astar_path", &config::show_astar_path);

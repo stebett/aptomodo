@@ -3,6 +3,8 @@
 //
 #pragma once
 
+#include <array>
+
 namespace config {
     extern bool show_astar_path;
     extern bool show_enemy_fov;
@@ -11,6 +13,7 @@ namespace config {
     extern int enemy_walking_animation_fps;
     extern bool show_enemy_texture;
     extern bool show_attacks;
-
     extern bool show_attr_window;
+
+    extern std::array<float, 18> attrMultipliers;
 }
