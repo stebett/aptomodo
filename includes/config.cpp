@@ -23,7 +23,7 @@ namespace config {
             10.0f, // mana
             10.0f, // resistanceMagical
             0.50f, // speed
-            10.0f, // attackSpeed
+            0.03f, // attackSpeed
             10.0f, // spellSpeed
             10.0f, // regenerationMana
             10.0f, // regenerationStamina

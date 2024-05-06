@@ -56,7 +56,7 @@ entt::entity spawnPlayer(entt::registry &registry, Vector2 position) {
     registry.emplace<ColorBB>(e, BLUE);
     auto attr = Attributes(2, 1, 1, 1, 1, 1);
     registry.emplace<Attributes>(e, attr);
-
+    registry.emplace_or_replace<Health>(e, attr.get(Attributes::health));
     return e;
 }
 

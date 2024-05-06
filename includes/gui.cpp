@@ -43,18 +43,8 @@ void imguiPlayerAttr(entt::registry &registry) {
     auto view = registry.view<Player, ColorBB, Spread, Speed, Health, Radius, PhysicalResistance, MagicalResistance, Stamina, AttackTimer, AttackSpeed, Damage, AttackRange, Pushback, Position>();
     for (auto [entity, colorbb, spread, speed, health, radius, physicalresistance, magicalresistance, stamina, timelastattack, attackspeed, damage, attackrange, pushback, position
         ]: view.each()) {
-
-        ImGui::SliderFloat("spread", &spread.value, 0, 360, "%.3f", 0);
-        ImGui::SliderFloat("speed", &speed.value, 0, 15, "%.3f", 0);
         ImGui::SliderFloat("health", &health.value, 0, 200, "%.3f", 0);
         ImGui::SliderFloat("radius", &radius.value, 0, 50, "%.3f", 0);
-        ImGui::SliderFloat("physicalresistance", &physicalresistance.value, 0, 30, "%.3f", 0);
-        ImGui::SliderFloat("magicalresistance", &magicalresistance.value, 0, 30, "%.3f", 0);
-        ImGui::SliderFloat("stamina", &stamina.value, 0, 30, "%.3f", 0);
-        ImGui::SliderFloat("attackspeed", &attackspeed.value, 0, 5, "%.3f", 0);
-        ImGui::SliderFloat("damage", &damage.value, 0, 200, "%.3f", 0);
-        ImGui::SliderFloat("attackrange", &attackrange.value, 1, 150, "%.3f", 0);
-        ImGui::SliderFloat("pushback", &pushback.value, 0, 150, "%.3f", 0);
         ImGui::SliderFloat("position x", &position.x, 0, mapWidth, "%.3f", 0);
         ImGui::SliderFloat("position y ", &position.y, 0, mapHeight, "%.3f", 0);
 
@@ -79,6 +69,8 @@ void imguiAttributes(entt::registry &registry) {
     int m = {0};
     auto view = registry.view<Player, Attributes>();
     for (auto [entity, attributes]: view.each()) {
+        ImGui::Text("Level %d", attributes.getLevel());
+        ImGui::SeparatorText("Attributes");
         for (auto attrName: Attributes::attributeVec) {
             ImGui::PushID(n);
             ImGui::Separator();

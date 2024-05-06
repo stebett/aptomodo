@@ -45,7 +45,7 @@ void playerAttack(entt::registry &registry, entt::entity &player, Attributes& at
         if (CheckCollisionCircleTriangle(position, radius, playerPosition,
                                          endSegment1, endSegment2, attackRange)) {
             health -= damage;
-            float m = sqrt(pow(playerPosition.x + position.x, 2) + pow(playerPosition.y + position.y, 2));
+//            float m = sqrt(pow(playerPosition.x + position.x, 2) + pow(playerPosition.y + position.y, 2));
 //            position = {(position.x + (position.x - playerPosition.x) * pushback / m),
 //                        position.y + (position.y - playerPosition.y) * pushback / m};
         }

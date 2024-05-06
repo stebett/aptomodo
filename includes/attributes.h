@@ -149,6 +149,9 @@ public:
         Attributes(1, 1, 1, 1, 1, 1);
     }
 
+
+    [[nodiscard]] int getLevel() const { return level; }
+
     [[nodiscard]] int get(AttributeName attr) const { return values[attr]; }
 
     [[nodiscard]] int get(SubAttributeName subAttr) const { return subValues[subAttr]; }
@@ -179,6 +182,9 @@ public:
 
     void decrease(AttributeName attr) {
         if (values[attr] <= 0) return;
+        int subAttrTotal = 0;
+        for (auto sa: subAttrByAttr[attr]) subAttrTotal += subValues[sa] - pointsAtStart;
+        if (subAttrTotal == pointsByAttr * values[attr]) { return; }
         values[attr] -= 1;
     }
 
