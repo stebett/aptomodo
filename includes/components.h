@@ -128,7 +128,7 @@ struct Speed {
 
 struct Health {
     float value;
-    float max;
+    const float * const max;
 
 
     operator float() const noexcept { return value; }
@@ -136,7 +136,9 @@ struct Health {
     float operator-(const float x) const noexcept { return value - x; }
 
     void operator-=(const float x) noexcept { value -= x; }
-    Health(float x) :value(x), max(x) {};
+//    Health(float x) :value(x), max(x) {}
+
+    Health(float value, const float * const max) : value(value), max(max) {};
 
 };
 

@@ -16,7 +16,6 @@ entt::entity spawnLiving(entt::registry &registry) {
     registry.emplace<Living>(e);
     registry.emplace<Radius>(e, 22.0f);
     registry.emplace<Speed>(e, 3.0f);
-    registry.emplace<Health>(e, 100);
     registry.emplace<PhysicalResistance>(e, 0.0f);
     registry.emplace<MagicalResistance>(e, 0.0f);
     registry.emplace<Stamina>(e, 0.0f);
@@ -39,7 +38,9 @@ entt::entity spawnEnemy(entt::registry &registry, Vector2 position) {
     registry.emplace<ColorBB>(e, RED);
     registry.emplace<Enemy>(e);
     registry.emplace<ID>(e, id++);
-
+    auto attr = Attributes();
+    registry.emplace<Attributes>(e, attr);
+    registry.emplace<Health>(e, attr.getMultiplied(Attributes::health), attr.getPointerMultiplied(Attributes::health));
     return e;
 }
 
@@ -56,7 +57,7 @@ entt::entity spawnPlayer(entt::registry &registry, Vector2 position) {
     registry.emplace<ColorBB>(e, BLUE);
     auto attr = Attributes(2, 1, 1, 1, 1, 1);
     registry.emplace<Attributes>(e, attr);
-    registry.emplace_or_replace<Health>(e, attr.get(Attributes::health));
+    registry.emplace<Health>(e, attr.getMultiplied(Attributes::health), attr.getPointerMultiplied(Attributes::health));
     return e;
 }
 

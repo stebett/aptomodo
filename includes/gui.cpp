@@ -54,9 +54,9 @@ void imguiPlayerAttr(entt::registry &registry) {
 void imguiAttributesMultipliers() {
     ImGui::Begin("Attribute multipliers");
     int n = {0};
-    for (auto subAttr: Attributes::subAttributeVec) {
+    for (auto subattr: Attributes::subAttributeVec) {
         ImGui::PushID(n);
-        ImGui::SliderFloat(Attributes::subAttributeString[subAttr], &config::attrMultipliers[subAttr], 0, 30, "%.3f", 0);
+        ImGui::SliderFloat(Attributes::subAttributeString[subattr], &config::attrMultipliers[subattr], 0, 30, "%.3f", 0);
         ImGui::PopID();
     }
     ImGui::End();
@@ -89,7 +89,9 @@ void imguiAttributes(entt::registry &registry) {
                 ImGui::SameLine();
                 ImGui::Text("%d", attributes.get(subAttrName));
                 ImGui::SameLine();
-                ImGui::Text("%s", attributes.subAttributeString[subAttrName]);
+                ImGui::Text("%s: ", attributes.subAttributeString[subAttrName]);
+                ImGui::SameLine();
+                ImGui::Text("%.1f", attributes.getMultiplied(subAttrName));
                 ImGui::PopID();
                 m++;
             }

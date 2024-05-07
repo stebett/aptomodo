@@ -107,6 +107,7 @@ private:
 
     std::array<int, 6> values{};
     std::array<int, 18> subValues{};
+    std::array<float, 18> subValuesMultiplied{};
 
 
     void Initialize() {
@@ -117,8 +118,8 @@ private:
         subAttrByAttr[coordination] = {spread, range, dodgeRange};
         subAttrByAttr[perception] = {visualRange, critChance, critMultiplier};
         for (auto attr: attributeVec)
-            for (auto subAttr: subAttrByAttr[attr])
-                attrBySubAttr[subAttr] = attr;
+            for (auto subattr: subAttrByAttr[attr])
+                attrBySubAttr[subattr] = attr;
     }
 
 public:
@@ -141,8 +142,8 @@ public:
 
 
         for (auto attr: attributeVec)
-            for (auto subAttr: subAttrByAttr[attr])
-                subValues[subAttr] = pointsAtStart;
+            for (auto subattr: subAttrByAttr[attr])
+                subValues[subattr] = pointsAtStart;
     }
 
     Attributes() {
@@ -154,10 +155,14 @@ public:
 
     [[nodiscard]] int get(AttributeName attr) const { return values[attr]; }
 
-    [[nodiscard]] int get(SubAttributeName subAttr) const { return subValues[subAttr]; }
+    [[nodiscard]] int get(SubAttributeName subattr) const { return subValues[subattr]; }
+    [[nodiscard]] float const * getPointerMultiplied(SubAttributeName subattr) {
+        subValuesMultiplied[subattr] = subValues[subattr] * config::attrMultipliers[subattr];
+        return &subValuesMultiplied[subattr];
+    }
 
-    [[nodiscard]] int getMultiplied(SubAttributeName subAttr) {
-        return subValues[subAttr] * config::attrMultipliers[subAttr];
+    [[nodiscard]] float getMultiplied(SubAttributeName subattr) {
+        return subValues[subattr] * config::attrMultipliers[subattr];
     }
 
     void increase(AttributeName attr) {
@@ -168,8 +173,8 @@ public:
         values[attr] += 1;
     }
 
-    void increase(SubAttributeName subAttr) {
-        AttributeName attr = attrBySubAttr[subAttr];
+    void increase(SubAttributeName subattr) {
+        AttributeName attr = attrBySubAttr[subattr];
         int attrValue = values[attr];
         int subAttrTotal = 0;
         for (auto sa: subAttrByAttr[attr]) subAttrTotal += subValues[sa] - pointsAtStart;
@@ -177,7 +182,7 @@ public:
             std::cout << "You don't have free subattribute points\n";
             return;
         }
-        subValues[subAttr] += 1;
+        subValues[subattr] += 1;
     }
 
     void decrease(AttributeName attr) {
@@ -188,9 +193,9 @@ public:
         values[attr] -= 1;
     }
 
-    void decrease(SubAttributeName subAttr) {
-        if (subValues[subAttr] <= 0) return;
-        subValues[subAttr] -= 1;
+    void decrease(SubAttributeName subattr) {
+        if (subValues[subattr] <= 0) return;
+        subValues[subattr] -= 1;
     }
 
 
