@@ -182,7 +182,7 @@ public:
     bool atMinAttrPoints(AttributeName attr) const {
         int subAttrTotal = 0;
         for (auto sa: subAttrByAttr.at(attr)) subAttrTotal += subValues[sa] - pointsAtStart;
-        return values[attr] <= 0 || subAttrTotal >= pointsByAttr * values[attr];
+        return values[attr] <= 1 || subAttrTotal > pointsByAttr * values[attr] - pointsByAttr;
     }
 
 
@@ -216,11 +216,7 @@ public:
         }
         subValues[subattr] += 1;
     }
-//    bool maxed() const {
-//        return
-//                strength.value + intelligence.value + agility.value + willpower.value + coordination.value +
-//                perception.value >= level;
-//    }
+
 };
 
 #endif //ACEROLA_JAM0_ATTRIBUTES_H
