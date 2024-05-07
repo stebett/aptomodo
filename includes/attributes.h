@@ -153,52 +153,69 @@ public:
 
     [[nodiscard]] int getLevel() const { return level; }
 
-    [[nodiscard]] int get(AttributeName attr) const { return values[attr]; }
+    [[nodiscard]] int get(const AttributeName attr) const { return values[attr]; }
 
-    [[nodiscard]] int get(SubAttributeName subattr) const { return subValues[subattr]; }
-    [[nodiscard]] float const * getPointerMultiplied(SubAttributeName subattr) {
+    [[nodiscard]] int get(const SubAttributeName subattr) const { return subValues[subattr]; }
+
+    [[nodiscard]] float const *getPointerMultiplied(SubAttributeName subattr) {
         subValuesMultiplied[subattr] = subValues[subattr] * config::attrMultipliers[subattr];
         return &subValuesMultiplied[subattr];
     }
 
-    [[nodiscard]] float getMultiplied(SubAttributeName subattr) {
+    [[nodiscard]] float getMultiplied(const SubAttributeName subattr) {
         return subValues[subattr] * config::attrMultipliers[subattr];
     }
 
-    void increase(AttributeName attr) {
-        if (std::accumulate(values.begin(), values.end(), 0) >= level * pointsByLevel) {
+
+    bool outOfAttrPoints() const {
+        return std::accumulate(values.begin(), values.end(), 0) >= level * pointsByLevel;
+    }
+
+    bool outOfSubAttrPoints(const SubAttributeName subattr) const {
+        AttributeName attr = attrBySubAttr.at(subattr);
+        int attrValue = values[attr];
+        int subAttrTotal = 0;
+        for (auto sa: subAttrByAttr.at(attr)) subAttrTotal += subValues[sa] - pointsAtStart;
+        return subAttrTotal >= pointsByAttr * attrValue;
+    }
+
+    bool atMinAttrPoints(AttributeName attr) const {
+        int subAttrTotal = 0;
+        for (auto sa: subAttrByAttr.at(attr)) subAttrTotal += subValues[sa] - pointsAtStart;
+        return values[attr] <= 0 || subAttrTotal >= pointsByAttr * values[attr];
+    }
+
+
+    bool atMinSubAttrPoints(SubAttributeName subattr) const {
+        return subValues[subattr] <= 0;
+    }
+
+
+    void decrease(const AttributeName attr) {
+        if (atMinAttrPoints(attr)) return;
+        values[attr] -= 1;
+    }
+
+    void decrease(const SubAttributeName subattr) {
+        if (atMinSubAttrPoints(subattr)) return;
+        subValues[subattr] -= 1;
+    }
+
+    void increase(const AttributeName attr) {
+        if (outOfAttrPoints()) {
             std::cout << "You don't have free attribute points\n";
             return;
         }
         values[attr] += 1;
     }
 
-    void increase(SubAttributeName subattr) {
-        AttributeName attr = attrBySubAttr[subattr];
-        int attrValue = values[attr];
-        int subAttrTotal = 0;
-        for (auto sa: subAttrByAttr[attr]) subAttrTotal += subValues[sa] - pointsAtStart;
-        if (subAttrTotal >= pointsByAttr * attrValue) {
+    void increase(const SubAttributeName subattr) {
+        if (outOfSubAttrPoints(subattr)) {
             std::cout << "You don't have free subattribute points\n";
             return;
         }
         subValues[subattr] += 1;
     }
-
-    void decrease(AttributeName attr) {
-        if (values[attr] <= 0) return;
-        int subAttrTotal = 0;
-        for (auto sa: subAttrByAttr[attr]) subAttrTotal += subValues[sa] - pointsAtStart;
-        if (subAttrTotal == pointsByAttr * values[attr]) { return; }
-        values[attr] -= 1;
-    }
-
-    void decrease(SubAttributeName subattr) {
-        if (subValues[subattr] <= 0) return;
-        subValues[subattr] -= 1;
-    }
-
-
 //    bool maxed() const {
 //        return
 //                strength.value + intelligence.value + agility.value + willpower.value + coordination.value +

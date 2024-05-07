@@ -56,7 +56,8 @@ void imguiAttributesMultipliers() {
     int n = {0};
     for (auto subattr: Attributes::subAttributeVec) {
         ImGui::PushID(n);
-        ImGui::SliderFloat(Attributes::subAttributeString[subattr], &config::attrMultipliers[subattr], 0, 30, "%.3f", 0);
+        ImGui::SliderFloat(Attributes::subAttributeString[subattr], &config::attrMultipliers[subattr], 0, 30, "%.3f",
+                           0);
         ImGui::PopID();
     }
     ImGui::End();
@@ -67,31 +68,45 @@ void imguiAttributes(entt::registry &registry) {
 
     int n = {0};
     int m = {0};
+    bool disableUp{false};
+    bool disableDown{false};
     auto view = registry.view<Player, Attributes>();
     for (auto [entity, attributes]: view.each()) {
         ImGui::Text("Level %d", attributes.getLevel());
         ImGui::SeparatorText("Attributes");
-        for (auto attrName: Attributes::attributeVec) {
+        for (auto attr: Attributes::attributeVec) {
             ImGui::PushID(n);
             ImGui::Separator();
-            if (ImGui::ArrowButton("##up", ImGuiDir_Up)) { attributes.increase(attrName); }
+            disableUp = attributes.outOfAttrPoints();
+            disableDown = attributes.atMinAttrPoints(attr);
+            if (disableUp) ImGui::BeginDisabled(true);
+            if (ImGui::ArrowButton("##up", ImGuiDir_Up)) attributes.increase(attr);
+            if (disableUp) ImGui::EndDisabled();
             ImGui::SameLine();
-            if (ImGui::ArrowButton("##down", ImGuiDir_Down)) { attributes.decrease(attrName); }
+            if (disableDown) ImGui::BeginDisabled(true);
+            if (ImGui::ArrowButton("##down", ImGuiDir_Down)) attributes.decrease(attr);
+            if (disableDown) ImGui::EndDisabled();
             ImGui::SameLine();
-            ImGui::Text("%d", attributes.get(attrName));
+            ImGui::Text("%d", attributes.get(attr));
             ImGui::SameLine();
-            ImGui::Text("%s", attributes.attributeString[attrName]);
-            for (auto subAttrName: attributes.subAttrByAttr[attrName]) {
+            ImGui::Text("%s", attributes.attributeString[attr]);
+            for (auto subattr: attributes.subAttrByAttr[attr]) {
                 ImGui::PushID(m);
-                if (ImGui::ArrowButton("##up", ImGuiDir_Up)) { attributes.increase(subAttrName); }
+                disableUp = attributes.outOfSubAttrPoints(subattr);
+                disableDown = attributes.atMinSubAttrPoints(subattr);
+                if (disableUp) ImGui::BeginDisabled(true);
+                if (ImGui::ArrowButton("##up", ImGuiDir_Up)) attributes.increase(subattr);
+                if (disableUp) ImGui::EndDisabled();
                 ImGui::SameLine();
-                if (ImGui::ArrowButton("##down", ImGuiDir_Down)) { attributes.decrease(subAttrName); }
+                if (disableDown) ImGui::BeginDisabled(true);
+                if (ImGui::ArrowButton("##down", ImGuiDir_Down)) attributes.decrease(subattr);
+                if (disableDown) ImGui::EndDisabled();
                 ImGui::SameLine();
-                ImGui::Text("%d", attributes.get(subAttrName));
+                ImGui::Text("%d", attributes.get(subattr));
                 ImGui::SameLine();
-                ImGui::Text("%s: ", attributes.subAttributeString[subAttrName]);
+                ImGui::Text("%s: ", attributes.subAttributeString[subattr]);
                 ImGui::SameLine();
-                ImGui::Text("%.1f", attributes.getMultiplied(subAttrName));
+                ImGui::Text("%.1f", attributes.getMultiplied(subattr));
                 ImGui::PopID();
                 m++;
             }
