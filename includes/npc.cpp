@@ -168,12 +168,14 @@ bool playerInRange(const Vector2 &position, const Vector2 &playerPosition, const
 
 void updateEnemy(entt::registry &registry, entt::entity &player) {
     Position playerPosition = registry.get<Position>(player);
+    Experience& playerExp = registry.get<Experience>(player);
     float playerRadius = registry.get<Radius>(player);
     const float turningRate = 0.6f;
 
-    auto enemyView = registry.view<Living, Speed, Radius, Health, Position, Enemy, ID, LookAngle>();
-    for (auto [enemy, speed, radius, health, position, id, lookAngle]: enemyView.each()) {
+    auto enemyView = registry.view<Living, Experience, Speed, Radius, Health, Position, Enemy, ID, LookAngle>();
+    for (auto [enemy, expValue, speed, radius, health, position, id, lookAngle]: enemyView.each()) {
         if (health <= 0) {
+            playerExp += expValue;
             registry.remove<Living>(enemy);
             AudioManager::Instance().Play("enemy_explosion");
             continue;

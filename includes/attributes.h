@@ -100,7 +100,8 @@ public:
 
 private:
 
-    int level{3};
+    int level{1};
+    static constexpr int expByLevel{100};
     static constexpr int pointsByLevel{3};
     static constexpr int pointsByAttr{3};
     static constexpr int pointsAtStart{10};
@@ -146,9 +147,7 @@ public:
                 subValues[subattr] = pointsAtStart;
     }
 
-    Attributes() {
-        Attributes(1, 1, 1, 1, 1, 1);
-    }
+    Attributes() : Attributes(1, 1, 1, 1, 1, 1) {}
 
 
     [[nodiscard]] int getLevel() const { return level; }
@@ -215,6 +214,14 @@ public:
             return;
         }
         subValues[subattr] += 1;
+    }
+
+    int getExpByLevel() const {
+        return level * expByLevel;
+    }
+
+    void levelUp() {
+        level += 1;
     }
 
 };

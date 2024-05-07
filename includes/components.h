@@ -195,5 +195,11 @@ struct ID {
     operator int() const noexcept { return value; }
 };
 
+struct Experience {
+    int value;
+
+    operator int() const noexcept { return value; }
+    void operator+=(const int x) noexcept { value += x; }
+};
 
 #endif //ACEROLA_JAM0_COMPONENTS_H

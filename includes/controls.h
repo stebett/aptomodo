@@ -18,4 +18,5 @@ void castFire(entt::registry &registry, entt::entity player, Vector2 clickPositi
 void parseInput(entt::registry &registry, entt::entity &player, Position &position, Camera2D &camera);
 
 
+
 #endif //ACEROLA_JAM0_CONTROLS_H

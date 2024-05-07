@@ -10,6 +10,8 @@
 #include "config.h"
 #include "attributes.h"
 
+
+
 void imguiEnemyAttr(entt::registry &registry) {
     auto view = registry.view<Enemy, Path, ID, ColorBB, Spread, Speed, Health, Radius, PhysicalResistance, MagicalResistance, Stamina, AttackTimer, AttackSpeed, Damage, AttackRange, Pushback, Position>();
     for (auto [entity, path, id, colorbb, spread, speed, health, radius, physicalresistance, magicalresistance, stamina, timelastattack, attackspeed, damage, attackrange, pushback, position
@@ -70,9 +72,12 @@ void imguiAttributes(entt::registry &registry) {
     int m = {0};
     bool disableUp{false};
     bool disableDown{false};
-    auto view = registry.view<Player, Attributes>();
-    for (auto [entity, attributes]: view.each()) {
+    auto view = registry.view<Player, Experience, Attributes>();
+    for (auto [entity, experience, attributes]: view.each()) {
         ImGui::Text("Level %d", attributes.getLevel());
+        ImGui::SameLine();
+        ImGui::ProgressBar(static_cast<float>(experience) / static_cast<float>(attributes.getExpByLevel()));
+        ImGui::Text("Exp %d", experience);
         ImGui::SeparatorText("Attributes");
         for (auto attr: Attributes::attributeVec) {
             ImGui::PushID(n);

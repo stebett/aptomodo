@@ -109,4 +109,7 @@ void parseInput(entt::registry &registry, entt::entity &player, Position &positi
 
 }
 
+// clamp health to maxhealth, put all functions here
+// put levelup here as well
+void updatePlayer() {}
 

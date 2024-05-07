@@ -41,6 +41,7 @@ entt::entity spawnEnemy(entt::registry &registry, Vector2 position) {
     auto attr = Attributes();
     registry.emplace<Attributes>(e, attr);
     registry.emplace<Health>(e, attr.getMultiplied(Attributes::health), attr.getPointerMultiplied(Attributes::health));
+    registry.emplace<Experience>(e, 50);
     return e;
 }
 
@@ -58,6 +59,7 @@ entt::entity spawnPlayer(entt::registry &registry, Vector2 position) {
     auto attr = Attributes(2, 1, 1, 1, 1, 1);
     registry.emplace<Attributes>(e, attr);
     registry.emplace<Health>(e, attr.getMultiplied(Attributes::health), attr.getPointerMultiplied(Attributes::health));
+    registry.emplace<Experience>(e, 0);
     return e;
 }
 
