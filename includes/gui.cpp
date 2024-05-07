@@ -11,7 +11,6 @@
 #include "attributes.h"
 
 
-
 void imguiEnemyAttr(entt::registry &registry) {
     auto view = registry.view<Enemy, Path, ID, ColorBB, Spread, Speed, Health, Radius, PhysicalResistance, MagicalResistance, Stamina, AttackTimer, AttackSpeed, Damage, AttackRange, Pushback, Position>();
     for (auto [entity, path, id, colorbb, spread, speed, health, radius, physicalresistance, magicalresistance, stamina, timelastattack, attackspeed, damage, attackrange, pushback, position
@@ -76,12 +75,13 @@ void imguiAttributes(entt::registry &registry) {
     for (auto [entity, experience, attributes]: view.each()) {
         ImGui::Text("Level %d", attributes.getLevel());
         ImGui::SameLine();
-        ImGui::ProgressBar(static_cast<float>(experience) / static_cast<float>(attributes.getExpByLevel()));
+        ImGui::ProgressBar(static_cast<float>(experience - attributes.expForCurrentLevel()) /
+                           static_cast<float>(attributes.expToNextLevel()- attributes.expForCurrentLevel()));
         ImGui::Text("Exp %d", experience);
-        ImGui::SeparatorText("Attributes");
+
+        ImGui::SeparatorText(std::format("Attributes - free points: {}", attributes.freeAttrPoints()).c_str());
         for (auto attr: Attributes::attributeVec) {
             ImGui::PushID(n);
-            ImGui::Separator();
             disableUp = attributes.outOfAttrPoints();
             disableDown = attributes.atMinAttrPoints(attr);
             if (disableUp) ImGui::BeginDisabled(true);
@@ -95,10 +95,13 @@ void imguiAttributes(entt::registry &registry) {
             ImGui::Text("%d", attributes.get(attr));
             ImGui::SameLine();
             ImGui::Text("%s", attributes.attributeString[attr]);
+            ImGui::SeparatorText(std::format("Sub-Attributes - free points: {}", attributes.freeSubAttrPoints(attr)).c_str());
+
             for (auto subattr: attributes.subAttrByAttr[attr]) {
                 ImGui::PushID(m);
                 disableUp = attributes.outOfSubAttrPoints(subattr);
                 disableDown = attributes.atMinSubAttrPoints(subattr);
+                ImGui::PushButtonRepeat(true);
                 if (disableUp) ImGui::BeginDisabled(true);
                 if (ImGui::ArrowButton("##up", ImGuiDir_Up)) attributes.increase(subattr);
                 if (disableUp) ImGui::EndDisabled();
@@ -106,6 +109,7 @@ void imguiAttributes(entt::registry &registry) {
                 if (disableDown) ImGui::BeginDisabled(true);
                 if (ImGui::ArrowButton("##down", ImGuiDir_Down)) attributes.decrease(subattr);
                 if (disableDown) ImGui::EndDisabled();
+                ImGui::PopButtonRepeat();
                 ImGui::SameLine();
                 ImGui::Text("%d", attributes.get(subattr));
                 ImGui::SameLine();

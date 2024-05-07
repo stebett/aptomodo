@@ -75,9 +75,9 @@ void castFire(entt::registry &registry, entt::entity player, Vector2 clickPositi
 
 void parseInput(entt::registry &registry, entt::entity &player, Position &position, Camera2D &camera) {
     Radius radius = registry.get<Radius>(player); // This could be static, or a static ref
-    Attributes attributes = registry.get<Attributes>(player);
+    Attributes& attributes = registry.get<Attributes>(player);
 
-    if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+    if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) || IsMouseButtonDown(MOUSE_LEFT_BUTTON)) {
         playerAttack(registry, player, attributes, GetScreenToWorld2D(GetMousePosition(), camera));
     }
 
@@ -109,7 +109,14 @@ void parseInput(entt::registry &registry, entt::entity &player, Position &positi
 
 }
 
-// clamp health to maxhealth, put all functions here
-// put levelup here as well
-void updatePlayer() {}
+
+void updatePlayer(entt::registry &registry, entt::entity &player, Position &position, Camera2D &camera) {
+    parseInput(registry,  player,  position,  camera);
+    Attributes& attributes = registry.get<Attributes>(player);
+    Health health = registry.get<Health>(player);
+    Experience exp = registry.get<Experience>(player);
+
+    if (*health.max < health.value) health.value = *health.max;
+    if (exp >= attributes.expToNextLevel()) attributes.levelUp();
+}
 

@@ -60,7 +60,7 @@ int main() {
         updateEnemy(registry, player); // TODO This should be before drawing
 
         EndMode2D();
-        parseInput(registry, player, position, camera);
+        updatePlayer(registry, player, position, camera);
 
         DrawGui();
         DrawFPS(10, 10);

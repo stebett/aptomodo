@@ -165,17 +165,28 @@ public:
         return subValues[subattr] * config::attrMultipliers[subattr];
     }
 
-
-    bool outOfAttrPoints() const {
-        return std::accumulate(values.begin(), values.end(), 0) >= level * pointsByLevel;
+    int freeAttrPoints() const {
+        return (level - 1) * pointsByLevel - std::accumulate(values.begin(), values.end(), 0) + 6;
     }
 
-    bool outOfSubAttrPoints(const SubAttributeName subattr) const {
-        AttributeName attr = attrBySubAttr.at(subattr);
+    int freeSubAttrPoints(AttributeName attr) const {
         int attrValue = values[attr];
         int subAttrTotal = 0;
         for (auto sa: subAttrByAttr.at(attr)) subAttrTotal += subValues[sa] - pointsAtStart;
-        return subAttrTotal >= pointsByAttr * attrValue;
+        return pointsByAttr * attrValue - subAttrTotal;
+    }
+
+    int freeSubAttrPoints(SubAttributeName subattr) const {
+        AttributeName attr = attrBySubAttr.at(subattr);
+        return freeSubAttrPoints(attr);
+    }
+
+    bool outOfAttrPoints() const {
+        return freeAttrPoints() <= 0;
+    }
+
+    bool outOfSubAttrPoints(const SubAttributeName subattr) const {
+        return freeSubAttrPoints(subattr) <= 0;
     }
 
     bool atMinAttrPoints(AttributeName attr) const {
@@ -216,8 +227,19 @@ public:
         subValues[subattr] += 1;
     }
 
-    int getExpByLevel() const {
-        return level * expByLevel;
+
+    int expForCurrentLevel() const {
+        int total = 0;
+        int l = level - 1;
+        while (l > 0) {
+            total += l * expByLevel;
+            l -= 1;
+        }
+        return total;
+    }
+
+    int expToNextLevel() const {
+        return expForCurrentLevel() + level * expByLevel;
     }
 
     void levelUp() {

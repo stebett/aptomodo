@@ -56,7 +56,7 @@ entt::entity spawnPlayer(entt::registry &registry, Vector2 position) {
     registry.emplace<Player>(e);
     registry.emplace<Position>(e, position);
     registry.emplace<ColorBB>(e, BLUE);
-    auto attr = Attributes(2, 1, 1, 1, 1, 1);
+    auto attr = Attributes();
     registry.emplace<Attributes>(e, attr);
     registry.emplace<Health>(e, attr.getMultiplied(Attributes::health), attr.getPointerMultiplied(Attributes::health));
     registry.emplace<Experience>(e, 0);
