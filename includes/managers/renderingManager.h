@@ -22,7 +22,7 @@ public:
         instance = new RenderingManager(registry);
     }
 
-    static void Draw(unsigned int frame);
+    static void Draw(const Camera2D &camera, unsigned int frame);
 
     ~RenderingManager() {
         delete instance;

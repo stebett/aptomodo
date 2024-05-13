@@ -125,18 +125,6 @@ void parseInput(entt::registry &registry, entt::entity &player, Position &positi
 
 }
 
-/*
- * If player is close enough -> Pop message
- */
-void updateTooltips(const entt::registry &registry, const entt::entity player) {
-    Position playerPosition = registry.get<Position>(player); // This could be static, or a static ref
-    for (auto [entity, position]: registry.view<Item, Position>().each()) {
-        if (Vector2Distance(playerPosition, position) < 20) {
-            DrawText("Press F to pick up", position.x, position.y, 24, BLACK);
-            return; // Only draw it for one item
-        }
-    }
-}
 
 void updatePlayer(entt::registry &registry, entt::entity &player, Position &position, Camera2D &camera) {
     parseInput(registry, player, position, camera);
@@ -146,7 +134,6 @@ void updatePlayer(entt::registry &registry, entt::entity &player, Position &posi
 
     if (*health.max < health.value) health.value = *health.max;
     if (exp >= attributes.expToNextLevel()) attributes.levelUp();
-    updateTooltips(registry, player);
 }
 
 

@@ -58,12 +58,25 @@ void drawItems(const entt::registry &registry) {
         DrawRectangleV(position, {16, 16}, GOLD);
     }
 }
+/*
+ * If player is close enough -> Pop message
+ */
+void drawTooltips(const entt::registry &registry) {
+    auto player = registry.view<Player>().front();
+    auto playerPosition = registry.get<Position>(player); // This could be static, or a static ref
+    for (auto [entity, position]: registry.view<Item, Position>().each()) {
+        if (Vector2Distance(playerPosition, position) < 20) {
+            DrawText("Press F to pick up", position.x, position.y, 12, BLACK);
+            return; // Only draw it for one item
+        }
+    }
+}
 
 
-void RenderingManager::Draw(unsigned int frame) {
+void RenderingManager::Draw(const Camera2D &camera, unsigned int frame) {
     drawItems(*m_registry);
     if (config::show_bounding_box) drawLivingBB(*m_registry);
     if (config::show_enemy_texture) drawEnemyTexture(*m_registry, frame / config::enemy_walking_animation_fps);
     if (config::show_attacks) drawAttacks(*m_registry);
-
+    drawTooltips(*m_registry);
 }

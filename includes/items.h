@@ -21,8 +21,8 @@
     The Items will be then just an entity created through a factory.
     The factory will take in the enum of the item and create it (with randomness if wanted)
     To assign them spawn probabilities we will need some table (or a separated registry) where we can sort by rarity
-
-    We will need a function loadItemFromFile
+ function l
+    We will need aoadItemFromFile
  */
 
 
