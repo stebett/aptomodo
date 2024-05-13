@@ -56,7 +56,7 @@ int main() {
 
         ClearBackground(WHITE);
         LevelManager::Draw(camera);
-        RenderingManager::Draw(framesCounter);
+        RenderingManager::Draw(camera, framesCounter);
 
         updateEnemy(registry, player); // TODO This should be before drawing
 
