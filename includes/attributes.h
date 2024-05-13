@@ -10,7 +10,8 @@
 #include <numeric>
 #include <iostream>
 #include "config.h"
-
+#include <vector>
+#include "items.h"
 
 //struct Attribute {
 //    int value;
@@ -27,6 +28,12 @@
 //                               }) >= pointsByLevel();
 //    }
 //};
+
+enum class ModifierOperator {
+    ADD,
+    MUL
+};
+
 
 class Attributes {
 public:
@@ -63,6 +70,13 @@ public:
         willpower,
         coordination,
         perception,
+    };
+
+
+    struct Modifier {
+        AttributeName name;
+        float value;
+        ModifierOperator operation;
     };
     constexpr static std::array<AttributeName, 6> attributeVec{strength, intelligence, agility, willpower, coordination,
                                                                perception,};
@@ -109,7 +123,7 @@ private:
     std::array<int, 6> values{};
     std::array<int, 18> subValues{};
     std::array<float, 18> subValuesMultiplied{};
-
+    std::vector<Modifier> attributeModifiers{};
 
     void Initialize() {
         subAttrByAttr[strength] = {damagePhysical, health, resistancePhysical};
@@ -149,19 +163,42 @@ public:
 
     Attributes() : Attributes(1, 1, 1, 1, 1, 1) {}
 
+    void updateModifiers(const std::vector<Modifier> &modifiers) {
+        attributeModifiers = modifiers;
+    }
 
     [[nodiscard]] int getLevel() const { return level; }
 
-    [[nodiscard]] int get(const AttributeName attr) const { return values[attr]; }
+    [[nodiscard]] int get(const AttributeName attr) const {
+        int value = values[attr];
+        for (auto modifier: attributeModifiers) {
+            if (modifier.name == attr) {
+                switch (modifier.operation) {
+                    case ModifierOperator::ADD:
+                        value += modifier.value;
+                        break;
+                    case ModifierOperator::MUL:
+                        value *= modifier.value;
+                        break;
+                }
+            }
+        }
+        return value;
+    }
 
     [[nodiscard]] int get(const SubAttributeName subattr) const { return subValues[subattr]; }
 
+
     [[nodiscard]] float const *getPointerMultiplied(SubAttributeName subattr) {
-        subValuesMultiplied[subattr] = subValues[subattr] * config::attrMultipliers[subattr];
+        // TODO account for modifiers here
+        subValuesMultiplied[subattr] = subValues[subattr] *
+                                       config::attrMultipliers[subattr]; //TODO add a check that the attr is not too small to support the subattrs
         return &subValuesMultiplied[subattr];
     }
 
     [[nodiscard]] float getMultiplied(const SubAttributeName subattr) {
+        //TODO add a check that the attr is not too small to support the subattrs
+//        return subValuesMultiplied[subattr]; ?
         return subValues[subattr] * config::attrMultipliers[subattr];
     }
 
@@ -170,7 +207,7 @@ public:
     }
 
     int freeSubAttrPoints(AttributeName attr) const {
-        int attrValue = values[attr];
+        int attrValue = get(attr);
         int subAttrTotal = 0;
         for (auto sa: subAttrByAttr.at(attr)) subAttrTotal += subValues[sa] - pointsAtStart;
         return pointsByAttr * attrValue - subAttrTotal;
@@ -247,5 +284,6 @@ public:
     }
 
 };
+
 
 #endif //ACEROLA_JAM0_ATTRIBUTES_H

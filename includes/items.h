@@ -6,15 +6,14 @@
 #define ACEROLA_JAM0_ITEMS_H
 
 #include <map>
-#include "attributes.h"
 /*
     Detect items when close (maybe in the collision loop)
      show a toooltip
      every item could store a map <subattr, float> to be checked when calculating final subattr values
      it could work like this: in updatePlayer we calculate the subattrs using
         1) The attributes themselves with the function getMultiplied
-        2) A view of all the buffs on the player (registry.view<Buff, OnPlayer, AttributeModifier)
-        3) A view of all the items on the player (registry.view<Item, OnPlayer, AttributeModifier)
+        2) A view of all the buffs on the player (registry.view<Buff, OnPlayer, Attributes::Modifier)
+        3) A view of all the items on the player (registry.view<Item, OnPlayer, Attributes::Modifier)
     The action of picking up an item will mean
         1) Remove its component Position
         2) Add tag OnPlayer
@@ -25,24 +24,14 @@
     We will need aoadItemFromFile
  */
 
-
-enum class ModifierOperator {
-    ADD,
-    MUL
-};
 struct OnPlayer {};
 struct Item {};
 
-struct AttributeModifier {
-    Attributes::AttributeName name;
-    float value;
-    ModifierOperator operation;
-};
-
-struct SubAttributeModifier {
-    std::map<Attributes::SubAttributeName, float> dict;
-};
-
+//
+//struct SubAttributeModifier {
+//    std::map<Attributes::SubAttributeName, float> dict;
+//};
+//
 
 
 #endif //ACEROLA_JAM0_ITEMS_H

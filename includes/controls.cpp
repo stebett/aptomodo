@@ -125,6 +125,14 @@ void parseInput(entt::registry &registry, entt::entity &player, Position &positi
 
 }
 
+void updateAttributes(const entt::registry &registry, Attributes &attributes) {
+    std::vector<Attributes::Modifier> modifiers{};
+    auto modifiersView = registry.view<OnPlayer, Attributes::Modifier>();
+    for (auto [entity, modifier]: modifiersView.each()) {
+        modifiers.emplace_back(modifier);
+    }
+    attributes.updateModifiers(modifiers);
+}
 
 void updatePlayer(entt::registry &registry, entt::entity &player, Position &position, Camera2D &camera) {
     parseInput(registry, player, position, camera);
@@ -134,6 +142,7 @@ void updatePlayer(entt::registry &registry, entt::entity &player, Position &posi
 
     if (*health.max < health.value) health.value = *health.max;
     if (exp >= attributes.expToNextLevel()) attributes.levelUp();
+    updateAttributes(registry, attributes);
 }
 
 

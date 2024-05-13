@@ -92,10 +92,10 @@ void spawnAmulet(entt::registry& registry)
     for (const auto& [label, pos]: LevelManager::GetEntitiesPositions()) {
         if (label == "Amulet") position = pos;
     }
-    AttributeModifier modifier = {Attributes::strength, 2, ModifierOperator::ADD};
+    Attributes::Modifier modifier = {Attributes::strength, 2, ModifierOperator::ADD};
 
     entt::entity e = registry.create();
     registry.emplace<Item>(e);
     registry.emplace<Position>(e, position);
-    registry.emplace<AttributeModifier>(e, modifier);
+    registry.emplace<Attributes::Modifier>(e, modifier);
 }
