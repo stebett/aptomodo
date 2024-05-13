@@ -13,28 +13,30 @@
 #include "managers/animationManager.h"
 #include "config.h"
 #include "attributes.h"
+#include "items.h"
 
 
-void playerAttack(entt::registry &registry, entt::entity &player, Attributes& attributes, Vector2 clickPosition) {
-    auto &attackTimer  = registry.get<AttackTimer>(player).timer;
+void playerAttack(entt::registry &registry, entt::entity &player, Attributes &attributes, Vector2 clickPosition) {
+    auto &attackTimer = registry.get<AttackTimer>(player).timer;
     if (attackTimer.Elapsed() < attributes.getMultiplied(Attributes::attackSpeed)) return;
     attackTimer.Reset();
     Position &playerPosition = registry.get<Position>(player);
 
-    float attackRange  = attributes.getMultiplied(Attributes::range);
-    float attackSpread  = attributes.getMultiplied(Attributes::spread);
-    float damage  = attributes.getMultiplied(Attributes::damagePhysical);
+    float attackRange = attributes.getMultiplied(Attributes::range);
+    float attackSpread = attributes.getMultiplied(Attributes::spread);
+    float damage = attributes.getMultiplied(Attributes::damagePhysical);
 //    float pushback = registry.get<Pushback>(player);
 
     float clickAngle = atan2(clickPosition.y - playerPosition.y, clickPosition.x - playerPosition.x) * radToDeg;
 
-    AttackEffect effect = {100, playerPosition, attackRange, clickAngle - attackSpread, clickAngle + attackSpread, PURPLE};
+    AttackEffect effect = {100, playerPosition, attackRange, clickAngle - attackSpread, clickAngle + attackSpread,
+                           PURPLE};
     registry.emplace<AttackEffect>(registry.create(), effect);
 
     AudioManager::Instance().Play("player_shot");
 
     Vector2 endSegment1 = {
-            playerPosition.x + attackRange* (float) cos((clickAngle - attackSpread) * degToRad),
+            playerPosition.x + attackRange * (float) cos((clickAngle - attackSpread) * degToRad),
             playerPosition.y + attackRange * (float) sin((clickAngle - attackSpread) * degToRad)};
     Vector2 endSegment2 = {
             playerPosition.x + attackRange * (float) cos((clickAngle + attackSpread) * degToRad),
@@ -73,9 +75,20 @@ void playerSecondaryAttack(entt::registry &registry, entt::entity player) {
 
 void castFire(entt::registry &registry, entt::entity player, Vector2 clickPosition) {}
 
+void PickUpItem(entt::registry &registry, const entt::entity player) {
+    Position playerPosition = registry.get<Position>(player); // This could be static, or a static ref
+    for (auto [entity, position]: registry.view<Item, Position>().each()) {
+        if (Vector2Distance(playerPosition, position) < 20) {
+            registry.emplace<OnPlayer>(entity);
+            registry.remove<Position>(entity);
+            return; // Only draw it for one item
+        }
+    }
+}
+
 void parseInput(entt::registry &registry, entt::entity &player, Position &position, Camera2D &camera) {
     Radius radius = registry.get<Radius>(player); // This could be static, or a static ref
-    Attributes& attributes = registry.get<Attributes>(player);
+    Attributes &attributes = registry.get<Attributes>(player);
 
     if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) || IsMouseButtonDown(MOUSE_LEFT_BUTTON)) {
         playerAttack(registry, player, attributes, GetScreenToWorld2D(GetMousePosition(), camera));
@@ -87,7 +100,10 @@ void parseInput(entt::registry &registry, entt::entity &player, Position &positi
 
     if (IsKeyPressed(KEY_I)) config::show_attr_window = !config::show_attr_window;
 
-    camera.zoom += GetMouseWheelMove()/10;
+    if (IsKeyPressed(KEY_F)) {
+        PickUpItem(registry, player);
+    }
+    camera.zoom += GetMouseWheelMove() / 10;
 
     static Vector2 futurePos = position;
 
@@ -109,14 +125,28 @@ void parseInput(entt::registry &registry, entt::entity &player, Position &positi
 
 }
 
+/*
+ * If player is close enough -> Pop message
+ */
+void updateTooltips(const entt::registry &registry, const entt::entity player) {
+    Position playerPosition = registry.get<Position>(player); // This could be static, or a static ref
+    for (auto [entity, position]: registry.view<Item, Position>().each()) {
+        if (Vector2Distance(playerPosition, position) < 20) {
+            DrawText("Press F to pick up", position.x, position.y, 24, BLACK);
+            return; // Only draw it for one item
+        }
+    }
+}
 
 void updatePlayer(entt::registry &registry, entt::entity &player, Position &position, Camera2D &camera) {
-    parseInput(registry,  player,  position,  camera);
-    Attributes& attributes = registry.get<Attributes>(player);
+    parseInput(registry, player, position, camera);
+    Attributes &attributes = registry.get<Attributes>(player);
     Health health = registry.get<Health>(player);
     Experience exp = registry.get<Experience>(player);
 
     if (*health.max < health.value) health.value = *health.max;
     if (exp >= attributes.expToNextLevel()) attributes.levelUp();
+    updateTooltips(registry, player);
 }
+
 
