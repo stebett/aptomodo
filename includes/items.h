@@ -6,6 +6,7 @@
 #define ACEROLA_JAM0_ITEMS_H
 
 #include <map>
+#include <string>
 /*
     Detect items when close (maybe in the collision loop)
      show a toooltip
@@ -26,6 +27,10 @@
 
 struct OnPlayer {};
 struct Item {};
+struct Name {
+    std::string value;
+    operator std::string() const noexcept { return value; }
+};
 
 //
 //struct SubAttributeModifier {

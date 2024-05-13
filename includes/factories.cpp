@@ -98,4 +98,26 @@ void spawnAmulet(entt::registry& registry)
     registry.emplace<Item>(e);
     registry.emplace<Position>(e, position);
     registry.emplace<Attributes::Modifier>(e, modifier);
+    registry.emplace<Name>(e, "Amuleto de sto'cazzo");
+}
+
+
+void spawnAmulet2(entt::registry& registry)
+{
+    Vector2 position {};
+    for (const auto& [label, pos]: LevelManager::GetEntitiesPositions()) {
+        if (label == "Amulet2") position = pos;
+    }
+    Attributes::Modifier modifier = {Attributes::strength, 2, ModifierOperator::MUL};
+
+    entt::entity e = registry.create();
+    registry.emplace<Item>(e);
+    registry.emplace<Position>(e, position);
+    registry.emplace<Attributes::Modifier>(e, modifier);
+    registry.emplace<Name>(e, "Amuleto della mia minchia");
+}
+
+void spawnItems(entt::registry& registry) {
+    spawnAmulet(registry);
+    spawnAmulet2(registry);
 }

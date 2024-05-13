@@ -19,6 +19,6 @@ entt::entity spawnPlayer(entt::registry &registry);
 
 Camera2D spawnCamera();
 
-void spawnAmulet(entt::registry& registry);
+void spawnItems(entt::registry& registry);
 
 #endif //ACEROLA_JAM0_FACTORIES_H

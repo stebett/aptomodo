@@ -52,12 +52,26 @@ void imguiPlayerAttr(entt::registry &registry) {
     }
 }
 
+void imguiItems(entt::registry &registry) {
+    auto view = registry.view<OnPlayer, Item, Name>();
+    for (auto [entity, name]: view.each()) {
+        if (ImGui::Button(name.value.c_str())) {
+            for (auto [player, position]: registry.view<Player, Position>().each()) {
+                registry.remove<OnPlayer>(entity);
+                registry.emplace<Position>(entity, Vector2Add(position, {10, 10}));
+            }
+        }
+    }
+}
+
+
 void imguiAttributesMultipliers() {
     ImGui::Begin("Attribute multipliers");
     int n = {0};
     for (auto subattr: Attributes::subAttributeVec) {
         ImGui::PushID(n);
-        ImGui::SliderFloat(Attributes::subAttributeString[subattr], &config::attrMultipliers[subattr], 0, 30, "%.3f",
+        ImGui::SliderFloat(Attributes::subAttributeString[subattr], &config::attrMultipliers[subattr], 0, 30,
+                           "%.3f",
                            0);
         ImGui::PopID();
     }
@@ -76,7 +90,7 @@ void imguiAttributes(entt::registry &registry) {
         ImGui::Text("Level %d", attributes.getLevel());
         ImGui::SameLine();
         ImGui::ProgressBar(static_cast<float>(experience - attributes.expForCurrentLevel()) /
-                           static_cast<float>(attributes.expToNextLevel()- attributes.expForCurrentLevel()));
+                           static_cast<float>(attributes.expToNextLevel() - attributes.expForCurrentLevel()));
         ImGui::Text("Exp %d", experience);
 
         ImGui::SeparatorText(std::format("Attributes - free points: {}", attributes.freeAttrPoints()).c_str());
@@ -95,7 +109,8 @@ void imguiAttributes(entt::registry &registry) {
             ImGui::Text("%d", attributes.get(attr));
             ImGui::SameLine();
             ImGui::Text("%s", attributes.attributeString[attr]);
-            ImGui::SeparatorText(std::format("Sub-Attributes - free points: {}", attributes.freeSubAttrPoints(attr)).c_str());
+            ImGui::SeparatorText(
+                    std::format("Sub-Attributes - free points: {}", attributes.freeSubAttrPoints(attr)).c_str());
 
             for (auto subattr: attributes.subAttrByAttr[attr]) {
                 ImGui::PushID(m);
@@ -127,6 +142,12 @@ void imguiAttributes(entt::registry &registry) {
     ImGui::Checkbox("show_multipliers", &show_multipliers);
     if (show_multipliers)
         imguiAttributesMultipliers();
+
+    static bool show_items = false;
+    ImGui::Checkbox("show_items", &show_items);
+    if (show_items)
+        imguiItems(registry);
+
     ImGui::End();
 }
 

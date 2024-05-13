@@ -27,7 +27,7 @@ int main() {
     auto camera = spawnCamera();
     auto player = spawnPlayer(registry);
     spawnEnemies(registry);
-    spawnAmulet(registry);
+    spawnItems(registry);
 
     auto &position = registry.get<Position>(player);
     auto &health = registry.get<Health>(player);
