@@ -48,6 +48,8 @@ set(sources
         includes/managers/renderingManager.cpp
         includes/managers/renderingManager.h
         includes/attributes.h
+        includes/items.cpp
+        includes/items.h
 )
 
 

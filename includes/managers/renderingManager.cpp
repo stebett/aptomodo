@@ -7,7 +7,7 @@
 #include "../components.h"
 #include "animationManager.h"
 #include "../config.h"
-
+#include "../items.h"
 
 
 RenderingManager *RenderingManager::instance;
@@ -53,11 +53,15 @@ void drawLivingBB(const entt::registry &registry) {
     }
 }
 
-
-void draw(entt::registry &registry, unsigned int frame) {
-    drawLivingBB(registry);
+void drawItems(const entt::registry &registry) {
+    for (auto [entity, position]: registry.view<Item, Position>().each()) {
+        DrawRectangleV(position, {16, 16}, GOLD);
+    }
 }
+
+
 void RenderingManager::Draw(unsigned int frame) {
+    drawItems(*m_registry);
     if (config::show_bounding_box) drawLivingBB(*m_registry);
     if (config::show_enemy_texture) drawEnemyTexture(*m_registry, frame / config::enemy_walking_animation_fps);
     if (config::show_attacks) drawAttacks(*m_registry);

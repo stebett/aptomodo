@@ -8,7 +8,7 @@
 #include "constants.h"
 #include "managers/levelManager.h"
 #include "attributes.h"
-
+#include "items.h"
 // TODO Make a common factory, and define components used here in factories.h
 
 entt::entity spawnLiving(entt::registry &registry) {
@@ -86,3 +86,16 @@ Camera2D spawnCamera() {
     return camera;
 }
 
+void spawnAmulet(entt::registry& registry)
+{
+    Vector2 position {};
+    for (const auto& [label, pos]: LevelManager::GetEntitiesPositions()) {
+        if (label == "Amulet") position = pos;
+    }
+    AttributeModifier modifier = {Attributes::strength, 2, ModifierOperator::ADD};
+
+    entt::entity e = registry.create();
+    registry.emplace<Item>(e);
+    registry.emplace<Position>(e, position);
+    registry.emplace<AttributeModifier>(e, modifier);
+}
