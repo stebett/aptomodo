@@ -48,7 +48,7 @@ bool playerInView(const Vector2 &position, const Vector2 &playerPosition, const 
                   const float lookingAngleDeg, bool chasing) {
     const float sightRange = chasing ? 250.0f : 100.0f; // TODO make it bigger when chasing
 
-    const float hearRange = 40.0f;
+    const float hearRange = chasing ? 120.0f : 40.0f;
     Vector2 lookVector = {cos(lookingAngleDeg * DEG2RAD), sin(lookingAngleDeg * DEG2RAD)};
     bool facePlayer = Vector2DotProduct(lookVector, Vector2Subtract(playerPosition, position)) > 0;
     bool inViewRange = CheckCollisionCircles(playerPosition, playerRadius, position, sightRange);
@@ -229,12 +229,17 @@ namespace Strategy {
                   const ID &id, const Radius radius) {
         Attributes &attributes = registry.get<Attributes>(enemy);
         auto attackRange = attributes.getMultiplied(Attributes::range) * 2;
-        if (CheckCollisionCircles(position, attackRange, playerPosition, playerRadius)) {
+
+        bool playerInRange = CheckCollisionCircles(position, attackRange, playerPosition, playerRadius);
+        bool playerTooClose = CheckCollisionCircles(position, attackRange / 2, playerPosition, playerRadius);
+        if (playerInRange && !playerTooClose) {
             faceTarget(position, playerPosition, lookAngle);
             enemyAttackDistance(registry, enemy, player, position);
             speed.actual = 0;
         } else {
-            updatePath(registry, enemy, position, playerPosition);
+            Position target = Vector2Add(playerPosition,
+                                        Vector2Scale(Vector2Normalize(Vector2Subtract(position, playerPosition)), attackRange));
+            updatePath(registry, enemy, position, target);
             updatePosition(registry, enemy, id, radius, speed, position, lookAngle);
         }
     }
@@ -294,3 +299,4 @@ void updateEnemy(entt::registry &registry, entt::entity &player) {
         }
     }
 }
+
