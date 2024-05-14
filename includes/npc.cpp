@@ -103,8 +103,8 @@ void enemyAttackDistance(entt::registry &registry, const entt::entity enemy, ent
     auto attackRange = attributes.getMultiplied(Attributes::range) * 2;
     auto damage = attributes.getMultiplied(Attributes::damagePhysical) / 2;
 //    float pushback = registry.get<Pushback>(enemy);
-//    Vector2 target = Vector2Scale(Vector2Normalize(Vector2Subtract(position, playerPosition)), attackRange);
-    Projectile projectile = {position, playerPosition, 1, 5, damage};
+    Vector2 target = Vector2Add(position, Vector2Scale(Vector2Normalize(Vector2Subtract(playerPosition, position)), attackRange));
+    Projectile projectile = {position, target, 1, 5, damage};
     registry.emplace<Projectile>(registry.create(), projectile);
     AudioManager::Instance().Play("enemy_shot");
 }
@@ -119,6 +119,7 @@ void updateProjectile(entt::registry &registry, entt::entity player) {
         if (Vector2Equals(projectile.position, projectile.target)) registry.destroy(entity);
         if (CheckCollisionCircles(playerPosition, playerRadius, projectile.position, projectile.radius)) {
             playerHealth -= projectile.damage;
+            registry.destroy(entity);
         }
     }
 };

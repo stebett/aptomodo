@@ -14,7 +14,7 @@
 entt::entity spawnLiving(entt::registry &registry) {
     entt::entity e = registry.create();
     registry.emplace<Living>(e);
-    registry.emplace<Radius>(e, 22.0f);
+    registry.emplace<Radius>(e, 10.0f);
     registry.emplace<Speed>(e, 3.0f);
     registry.emplace<PhysicalResistance>(e, 0.0f);
     registry.emplace<MagicalResistance>(e, 0.0f);
