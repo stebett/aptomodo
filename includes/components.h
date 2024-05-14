@@ -202,4 +202,12 @@ struct Experience {
     void operator+=(const int x) noexcept { value += x; }
 };
 
+struct Projectile {
+    Vector2 position;
+    Vector2 target;
+    float speed;
+    float radius;
+    float damage;
+};
+
 #endif //ACEROLA_JAM0_COMPONENTS_H

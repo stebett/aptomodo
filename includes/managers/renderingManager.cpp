@@ -72,11 +72,19 @@ void drawTooltips(const entt::registry &registry) {
     }
 }
 
+void drawProjectiles(const entt::registry &registry) {
+    auto projectileView = registry.view<Projectile>();
+    for (auto [entity, projectile]: projectileView.each()) {
+        DrawCircleV(projectile.position, projectile.radius, BLUE);
+//        DrawCircleV(projectile.target, 5, RED);
+    }
+}
 
 void RenderingManager::Draw(const Camera2D &camera, unsigned int frame) {
     drawItems(*m_registry);
     if (config::show_bounding_box) drawLivingBB(*m_registry);
     if (config::show_enemy_texture) drawEnemyTexture(*m_registry, frame / config::enemy_walking_animation_fps);
     if (config::show_attacks) drawAttacks(*m_registry);
+    drawProjectiles(*m_registry);
     drawTooltips(*m_registry);
 }

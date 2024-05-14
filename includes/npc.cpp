@@ -13,6 +13,7 @@
 #include "config.h"
 #include "managers/audioManager.h"
 #include "managers/animationManager.h"
+#include "attributes.h"
 
 void solveCollisionEnemy(const entt::registry &registry, const int id, Vector2 &futurePos, const float radius) {
     static Vector2 distance;
@@ -89,6 +90,39 @@ void enemyAttack(entt::registry &registry, const entt::entity enemy, entt::entit
         health -= damage;
     }
 }
+
+void enemyAttackDistance(entt::registry &registry, const entt::entity enemy, entt::entity player, Position &position) {
+    // TODO add actual distance range, attack speed and damage
+    Attributes &attributes = registry.get<Attributes>(enemy);
+    auto &attackTimer = registry.get<AttackTimer>(enemy).timer;
+    if (attackTimer.Elapsed() < attributes.getMultiplied(Attributes::attackSpeed) * 2)return;
+    attackTimer.Reset();
+
+    auto &playerPosition = registry.get<Position>(player);
+    auto radius = registry.get<Radius>(player);
+    auto attackRange = attributes.getMultiplied(Attributes::range) * 2;
+    auto damage = attributes.getMultiplied(Attributes::damagePhysical) / 2;
+//    float pushback = registry.get<Pushback>(enemy);
+//    Vector2 target = Vector2Scale(Vector2Normalize(Vector2Subtract(position, playerPosition)), attackRange);
+    Projectile projectile = {position, playerPosition, 1, 5, damage};
+    registry.emplace<Projectile>(registry.create(), projectile);
+    AudioManager::Instance().Play("enemy_shot");
+}
+
+void updateProjectile(entt::registry &registry, entt::entity player) {
+    const auto &playerPosition = registry.get<Position>(player);
+    const auto &playerRadius = registry.get<Radius>(player);
+    auto &playerHealth = registry.get<Health>(player);
+    auto projectileView = registry.view<Projectile>();
+    for (auto [entity, projectile]: projectileView.each()) {
+        projectile.position = Vector2MoveTowards(projectile.position, projectile.target, projectile.speed);
+        if (Vector2Equals(projectile.position, projectile.target)) registry.destroy(entity);
+        if (CheckCollisionCircles(playerPosition, playerRadius, projectile.position, projectile.radius)) {
+            playerHealth -= projectile.damage;
+        }
+    }
+};
+
 
 void updatePath(entt::registry &registry, entt::entity &enemy, Position &position, Position &playerPosition) {
     static Search search;
@@ -168,9 +202,10 @@ bool playerInRange(const Vector2 &position, const Vector2 &playerPosition, const
 
 void updateEnemy(entt::registry &registry, entt::entity &player) {
     Position playerPosition = registry.get<Position>(player);
-    Experience& playerExp = registry.get<Experience>(player);
+    Experience &playerExp = registry.get<Experience>(player);
     float playerRadius = registry.get<Radius>(player);
     const float turningRate = 0.6f;
+    updateProjectile(registry, player);
 
     auto enemyView = registry.view<Living, Experience, Speed, Radius, Health, Position, Enemy, ID, LookAngle>();
     for (auto [enemy, expValue, speed, radius, health, position, id, lookAngle]: enemyView.each()) {
@@ -195,7 +230,7 @@ void updateEnemy(entt::registry &registry, entt::entity &player) {
 
         if (playerInRange(position, playerPosition, playerRadius)) {
             faceTarget(position, playerPosition, lookAngle);
-            enemyAttack(registry, enemy, player, position);
+            enemyAttackDistance(registry, enemy, player, position);
             speed.actual = 0;
             continue;
         }
