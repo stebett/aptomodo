@@ -45,8 +45,9 @@ Triangle getTriangle(const Vector2 v1, const float range, const float angle1deg,
 
 
 bool playerInView(const Vector2 &position, const Vector2 &playerPosition, const float playerRadius,
-                  const float lookingAngleDeg) {
-    const float sightRange = 100.0f; // TODO make it bigger when chasing
+                  const float lookingAngleDeg, bool chasing) {
+    const float sightRange = chasing ? 250.0f : 100.0f; // TODO make it bigger when chasing
+
     const float hearRange = 40.0f;
     Vector2 lookVector = {cos(lookingAngleDeg * DEG2RAD), sin(lookingAngleDeg * DEG2RAD)};
     bool facePlayer = Vector2DotProduct(lookVector, Vector2Subtract(playerPosition, position)) > 0;
@@ -63,7 +64,7 @@ bool playerInView(const Vector2 &position, const Vector2 &playerPosition, const 
     return inView;
 }
 
-void enemyAttack(entt::registry &registry, const entt::entity enemy, entt::entity player, Position &position) {
+void enemyAttack(entt::registry &registry, const entt::entity enemy, entt::entity player, const Position &position) {
     static Triangle triangle;
 
     auto &attackTimer = registry.get<AttackTimer>(enemy).timer;
@@ -103,7 +104,8 @@ void enemyAttackDistance(entt::registry &registry, const entt::entity enemy, ent
     auto attackRange = attributes.getMultiplied(Attributes::range) * 2;
     auto damage = attributes.getMultiplied(Attributes::damagePhysical) / 2;
 //    float pushback = registry.get<Pushback>(enemy);
-    Vector2 target = Vector2Add(position, Vector2Scale(Vector2Normalize(Vector2Subtract(playerPosition, position)), attackRange));
+    Vector2 target = Vector2Add(position,
+                                Vector2Scale(Vector2Normalize(Vector2Subtract(playerPosition, position)), attackRange));
     Projectile projectile = {position, target, 1, 5, damage};
     registry.emplace<Projectile>(registry.create(), projectile);
     AudioManager::Instance().Play("enemy_shot");
@@ -133,7 +135,12 @@ void updatePath(entt::registry &registry, entt::entity &enemy, Position &positio
     if (!path.isFinished())
         if (!registry.all_of<Chasing>(enemy))
             return;
-    registry.remove<Chasing>(enemy);
+
+    LookAngle lookAngle = registry.get<LookAngle>(enemy);
+    if (!playerInView(position, playerPosition, 2, lookAngle, registry.all_of<Chasing>(enemy))) {
+        registry.remove<Chasing>(enemy);
+    }
+
     Node start = getTile(position);
     Node end = getTile(playerPosition);
     search.init(start, end);
@@ -182,8 +189,8 @@ void faceTarget(const Vector2 &position, const Vector2 &target, LookAngle &lookA
     lookAngle = atan2(target.y - position.y, target.x - position.x) * RAD2DEG;
 }
 
-void updatePosition(entt::registry &registry, entt::entity enemy, const int id, const float radius, Speed &speed,
-                    Position &position, LookAngle &lookAngle) {
+void updatePosition(entt::registry &registry, entt::entity enemy, const int id, const float radius,
+                    Speed &speed, Position &position, LookAngle &lookAngle) {
     Vector2 target = getPathNext(registry, enemy);
     if (Vector2Equals(position, target)) { return; }
     Vector2 direction = Vector2Subtract(target, position);
@@ -199,6 +206,53 @@ void updatePosition(entt::registry &registry, entt::entity enemy, const int id, 
 
 bool playerInRange(const Vector2 &position, const Vector2 &playerPosition, const float radius) {
     return CheckCollisionCircles(playerPosition, radius, position, static_cast<float>(2 * tileSize));
+}
+
+
+namespace Strategy {
+
+    void melee(entt::registry &registry, entt::entity &player, entt::entity &enemy, Position &position,
+                Position &playerPosition, const float playerRadius, LookAngle &lookAngle, Speed &speed,
+                const ID &id, const Radius radius) {
+        if (playerInRange(position, playerPosition, playerRadius)) {
+            faceTarget(position, playerPosition, lookAngle);
+            enemyAttack(registry, enemy, player, position);
+            speed.actual = 0;
+        } else {
+            updatePath(registry, enemy, position, playerPosition);
+            updatePosition(registry, enemy, id, radius, speed, position, lookAngle);
+        }
+    }
+
+    void ranged(entt::registry &registry, entt::entity &player, entt::entity &enemy, Position &position,
+                  Position &playerPosition, const float playerRadius, LookAngle &lookAngle, Speed &speed,
+                  const ID &id, const Radius radius) {
+        Attributes &attributes = registry.get<Attributes>(enemy);
+        auto attackRange = attributes.getMultiplied(Attributes::range) * 2;
+        if (CheckCollisionCircles(position, attackRange, playerPosition, playerRadius)) {
+            faceTarget(position, playerPosition, lookAngle);
+            enemyAttackDistance(registry, enemy, player, position);
+            speed.actual = 0;
+        } else {
+            updatePath(registry, enemy, position, playerPosition);
+            updatePosition(registry, enemy, id, radius, speed, position, lookAngle);
+        }
+    }
+
+    void provoke(entt::registry &registry, entt::entity &player, entt::entity &enemy, Position &position,
+                  Position &playerPosition, const float playerRadius, LookAngle &lookAngle, Speed &speed,
+                  const ID &id, const Radius radius) {
+        Attributes &attributes = registry.get<Attributes>(enemy);
+        auto attackRange = attributes.getMultiplied(Attributes::range) * 2;
+        if (CheckCollisionCircles(position, attackRange, playerPosition, playerRadius)) {
+            faceTarget(position, playerPosition, lookAngle);
+            enemyAttackDistance(registry, enemy, player, position);
+            speed.actual = 0;
+        } else {
+            updatePath(registry, enemy, position, playerPosition);
+            updatePosition(registry, enemy, id, radius, speed, position, lookAngle);
+        }
+    }
 }
 
 void updateEnemy(entt::registry &registry, entt::entity &player) {
@@ -217,7 +271,7 @@ void updateEnemy(entt::registry &registry, entt::entity &player) {
             continue;
         }
 
-        if (!playerInView(position, playerPosition, playerRadius, lookAngle)) {
+        if (!playerInView(position, playerPosition, playerRadius, lookAngle, registry.all_of<Chasing>(enemy))) {
             Position randomPos = getRandomPos(position);
             float speedDivider = registry.all_of<Chasing>(enemy) ? 1.0f : 5.0f;
             speed.value = speed.max / speedDivider;
@@ -228,16 +282,15 @@ void updateEnemy(entt::registry &registry, entt::entity &player) {
         registry.emplace_or_replace<Chasing>(enemy);
         speed.value = speed.max;
 
-
-        if (playerInRange(position, playerPosition, playerRadius)) {
-            faceTarget(position, playerPosition, lookAngle);
-            enemyAttackDistance(registry, enemy, player, position);
-            speed.actual = 0;
-            continue;
+        switch (config::strategy) {
+            case 0:
+                Strategy::melee(registry, player, enemy, position, playerPosition, playerRadius, lookAngle, speed, id, radius);
+                break;
+            case 1:
+                Strategy::ranged(registry, player, enemy, position, playerPosition, playerRadius, lookAngle, speed, id, radius);
+                break;
+            default:
+                break;
         }
-
-        updatePath(registry, enemy, position, playerPosition);
-        updatePosition(registry, enemy, id, radius, speed, position, lookAngle);
-
     }
 }

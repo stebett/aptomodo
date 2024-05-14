@@ -160,6 +160,7 @@ void imguiConfig() {
     ImGui::Checkbox("show_attacks", &config::show_attacks);
     ImGui::SliderInt("FPS", &config::fps, 0, 120);
     ImGui::SliderInt("enemy_walking_animation_fps", &config::enemy_walking_animation_fps, 1, 120);
+    ImGui::SliderInt("strategy", &config::strategy, 0, 2);
 }
 
 void imguiWindowMain(entt::registry &registry, ImGuiIO io) {
