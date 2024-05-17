@@ -1,0 +1,134 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"install"
+		],
+		"files" : 
+		[
+			"vendors/LDtkLoader/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 83,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 85,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 87,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 89,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 90,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 91,
+				"parent" : 0
+			}
+		]
+	},
+	"installers" : 
+	[
+		{
+			"backtrace" : 1,
+			"component" : "Unspecified",
+			"destination" : "share/doc/LDtkLoader",
+			"paths" : 
+			[
+				"vendors/LDtkLoader/LICENSE.md",
+				"vendors/LDtkLoader/README.md"
+			],
+			"type" : "file"
+		},
+		{
+			"backtrace" : 2,
+			"component" : "Unspecified",
+			"destination" : "include",
+			"paths" : 
+			[
+				"vendors/LDtkLoader/include/LDtkLoader"
+			],
+			"type" : "directory"
+		},
+		{
+			"backtrace" : 3,
+			"component" : "Unspecified",
+			"destination" : "lib",
+			"paths" : 
+			[
+				"vendors/LDtkLoader/lib/libLDtkLoader.a"
+			],
+			"targetId" : "LDtkLoader::@1d3d1f4d5fc7fd45a023",
+			"targetIndex" : 0,
+			"type" : "target"
+		},
+		{
+			"backtrace" : 4,
+			"component" : "Unspecified",
+			"destination" : "lib/cmake/LDtkLoader",
+			"exportName" : "LDtkLoaderTargets",
+			"exportTargets" : 
+			[
+				{
+					"id" : "LDtkLoader::@1d3d1f4d5fc7fd45a023",
+					"index" : 0
+				}
+			],
+			"paths" : 
+			[
+				"vendors/LDtkLoader/CMakeFiles/Export/f9647eb62aabc71d50658ff864394ae9/LDtkLoaderTargets.cmake"
+			],
+			"type" : "export"
+		},
+		{
+			"backtrace" : 5,
+			"component" : "Unspecified",
+			"destination" : "lib/cmake/LDtkLoader",
+			"paths" : 
+			[
+				"cmake-build-windows/vendors/LDtkLoader/LDtkLoaderConfig.cmake"
+			],
+			"type" : "file"
+		},
+		{
+			"backtrace" : 6,
+			"component" : "Unspecified",
+			"destination" : "lib/cmake/LDtkLoader",
+			"paths" : 
+			[
+				"cmake-build-windows/vendors/LDtkLoader/LDtkLoaderConfigVersion.cmake"
+			],
+			"type" : "file"
+		}
+	],
+	"paths" : 
+	{
+		"build" : "vendors/LDtkLoader",
+		"source" : "vendors/LDtkLoader"
+	}
+}

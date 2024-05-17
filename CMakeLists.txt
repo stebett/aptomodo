@@ -3,58 +3,41 @@ project(acerola_jam0)
 set(CMAKE_CXX_STANDARD 20)
 
 find_package(raylib REQUIRED)
-find_package(LDtkLoader 1.5)
+#find_package(LDtkLoader 1.5)
 
-set(sources
-        vendors/rlImGui/rlImGui.h
-        vendors/rlImGui/rlImGui.cpp
-        vendors/imgui/imconfig.h
-        vendors/imgui/imgui.cpp
-        vendors/imgui/imgui.h
-        vendors/imgui/imgui_demo.cpp
-        vendors/imgui/imgui_draw.cpp
-        vendors/imgui/imgui_internal.h
-        vendors/imgui/imgui_tables.cpp
-        vendors/imgui/imgui_widgets.cpp
-        vendors/imgui/imstb_rectpack.h
-        vendors/imgui/imstb_textedit.h
-        vendors/imgui/imstb_truetype.h
-        includes/astar.h
-        includes/astar.cpp
-        includes/components.h
-        includes/factories.cpp
-        includes/factories.h
-        includes/constants.h
-        includes/rendering.cpp
-        includes/rendering.h
-        includes/collisions.cpp
-        includes/collisions.h
-        includes/controls.cpp
-        includes/controls.h
-        includes/npc.cpp
-        includes/npc.h
+set(Boost_ROOT "vendors/boost")  # Adjust this path to where you extracted Boost
+set(rlImGui_ROOT "vendors/rlImGui")
+set(imgui_ROOT "vendors/imgui")
+set(entt_ROOT "vendors/entt/src/")
+set(eigen_ROOT "vendors/eigen/")
+set(LDTKLOADER_ROOT "vendors/LDtkLoader")
+
+set(INCLUDE "includes/")
+
+include_directories(${Boost_ROOT})
+include_directories(${rlImGui_ROOT})
+include_directories(${imgui_ROOT})
+include_directories(${entt_ROOT})
+include_directories(${eigen_ROOT})
+include_directories(${INCLUDE})
+
+add_subdirectory(${LDTKLOADER_ROOT})
+
+#file(GLOB LDTKLOADER_SOURCES ${LDTKLOADER_ROOT}/src/*.cpp)
+file(GLOB rlImGui_SOURCES ${rlImGui_ROOT}/*.cpp)
+file(GLOB imgui_SOURCES ${imgui_ROOT}/*.cpp)
+file(GLOB_RECURSE INCLUDE_SOURCES ${INCLUDE}/*.cpp)
+
+set(SOURCES
+        ${LDTKLOADER_SOURCES}
+        ${imgui_SOURCES}
+        ${rlImGui_SOURCES}
+        ${INCLUDE_SOURCES}
         vendors/raygui.h
-        includes/gui.h
-        includes/gui.cpp
-        includes/timer.h
-        includes/config.h
-        includes/config.cpp
-        includes/managers/audioManager.cpp
-        includes/managers/audioManager.h
-        includes/managers/animationManager.cpp
-        includes/managers/animationManager.h
-        includes/managers/levelManager.cpp
-        includes/managers/levelManager.h
-        includes/managers/renderingManager.cpp
-        includes/managers/renderingManager.h
-        includes/attributes.h
-        includes/items.cpp
-        includes/items.h
 )
 
 
-add_executable(acerola_jam0 main.cpp ${sources})
-
+add_executable(acerola_jam0 main.cpp ${SOURCES})
 
 target_link_libraries(acerola_jam0 PRIVATE raylib)
 target_link_libraries(acerola_jam0 PRIVATE LDtkLoader)

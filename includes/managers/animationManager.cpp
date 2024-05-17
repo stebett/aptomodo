@@ -26,7 +26,7 @@ void AnimationManager::LoadFromDirectory(const std::string &directory) {
     }
 
     for (auto &filename : sorted_by_name) {
-        anim.textures.push_back(LoadTexture(filename.c_str()));
+        anim.textures.push_back(LoadTexture(reinterpret_cast<const char *>(filename.c_str())));
         anim.frameCount++;
     }
 
