@@ -41,191 +41,191 @@ include CMakeFiles/rules.ninja
 
 cmake_ninja_workdir = /home/ginko/jems-project/acerola-jam0/cmake-build-windows/
 # =============================================================================
-# Object build statements for EXECUTABLE target acerola_jam0
+# Object build statements for EXECUTABLE target game
 
 
 #############################################
-# Order-only phony target for acerola_jam0
+# Order-only phony target for game
 
-build cmake_object_order_depends_target_acerola_jam0: phony || cmake_object_order_depends_target_LDtkLoader
+build cmake_object_order_depends_target_game: phony || cmake_object_order_depends_target_LDtkLoader
 
-build CMakeFiles/acerola_jam0.dir/main.cpp.obj: CXX_COMPILER__acerola_jam0_unscanned_Release /home/ginko/jems-project/acerola-jam0/main.cpp || cmake_object_order_depends_target_acerola_jam0
-  DEFINES = -DASSETS_PATH=\"/home/ginko/jems-project/acerola-jam0/assets/current/\"
-  DEP_FILE = CMakeFiles/acerola_jam0.dir/main.cpp.obj.d
+build CMakeFiles/game.dir/main.cpp.obj: CXX_COMPILER__game_unscanned_Release /home/ginko/jems-project/acerola-jam0/main.cpp || cmake_object_order_depends_target_game
+  DEFINES = -DASSETS_PATH=\"assets/current/\"
+  DEP_FILE = CMakeFiles/game.dir/main.cpp.obj.d
   FLAGS = -O3 -DNDEBUG -std=gnu++20 -fdiagnostics-color=always
   INCLUDES = -I/home/ginko/jems-project/acerola-jam0/vendors/boost -I/home/ginko/jems-project/acerola-jam0/vendors/rlImGui -I/home/ginko/jems-project/acerola-jam0/vendors/imgui -I/home/ginko/jems-project/acerola-jam0/vendors/entt/src -I/home/ginko/jems-project/acerola-jam0/vendors/eigen -I/home/ginko/jems-project/acerola-jam0/includes -I/home/ginko/jems-project/acerola-jam0/vendors/LDtkLoader/include -I/home/ginko/jems-project/acerola-jam0/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
-  OBJECT_DIR = CMakeFiles/acerola_jam0.dir
-  OBJECT_FILE_DIR = CMakeFiles/acerola_jam0.dir
+  OBJECT_DIR = CMakeFiles/game.dir
+  OBJECT_FILE_DIR = CMakeFiles/game.dir
 
-build CMakeFiles/acerola_jam0.dir/vendors/imgui/imgui.cpp.obj: CXX_COMPILER__acerola_jam0_unscanned_Release /home/ginko/jems-project/acerola-jam0/vendors/imgui/imgui.cpp || cmake_object_order_depends_target_acerola_jam0
-  DEFINES = -DASSETS_PATH=\"/home/ginko/jems-project/acerola-jam0/assets/current/\"
-  DEP_FILE = CMakeFiles/acerola_jam0.dir/vendors/imgui/imgui.cpp.obj.d
+build CMakeFiles/game.dir/vendors/imgui/imgui.cpp.obj: CXX_COMPILER__game_unscanned_Release /home/ginko/jems-project/acerola-jam0/vendors/imgui/imgui.cpp || cmake_object_order_depends_target_game
+  DEFINES = -DASSETS_PATH=\"assets/current/\"
+  DEP_FILE = CMakeFiles/game.dir/vendors/imgui/imgui.cpp.obj.d
   FLAGS = -O3 -DNDEBUG -std=gnu++20 -fdiagnostics-color=always
   INCLUDES = -I/home/ginko/jems-project/acerola-jam0/vendors/boost -I/home/ginko/jems-project/acerola-jam0/vendors/rlImGui -I/home/ginko/jems-project/acerola-jam0/vendors/imgui -I/home/ginko/jems-project/acerola-jam0/vendors/entt/src -I/home/ginko/jems-project/acerola-jam0/vendors/eigen -I/home/ginko/jems-project/acerola-jam0/includes -I/home/ginko/jems-project/acerola-jam0/vendors/LDtkLoader/include -I/home/ginko/jems-project/acerola-jam0/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
-  OBJECT_DIR = CMakeFiles/acerola_jam0.dir
-  OBJECT_FILE_DIR = CMakeFiles/acerola_jam0.dir/vendors/imgui
+  OBJECT_DIR = CMakeFiles/game.dir
+  OBJECT_FILE_DIR = CMakeFiles/game.dir/vendors/imgui
 
-build CMakeFiles/acerola_jam0.dir/vendors/imgui/imgui_demo.cpp.obj: CXX_COMPILER__acerola_jam0_unscanned_Release /home/ginko/jems-project/acerola-jam0/vendors/imgui/imgui_demo.cpp || cmake_object_order_depends_target_acerola_jam0
-  DEFINES = -DASSETS_PATH=\"/home/ginko/jems-project/acerola-jam0/assets/current/\"
-  DEP_FILE = CMakeFiles/acerola_jam0.dir/vendors/imgui/imgui_demo.cpp.obj.d
+build CMakeFiles/game.dir/vendors/imgui/imgui_demo.cpp.obj: CXX_COMPILER__game_unscanned_Release /home/ginko/jems-project/acerola-jam0/vendors/imgui/imgui_demo.cpp || cmake_object_order_depends_target_game
+  DEFINES = -DASSETS_PATH=\"assets/current/\"
+  DEP_FILE = CMakeFiles/game.dir/vendors/imgui/imgui_demo.cpp.obj.d
   FLAGS = -O3 -DNDEBUG -std=gnu++20 -fdiagnostics-color=always
   INCLUDES = -I/home/ginko/jems-project/acerola-jam0/vendors/boost -I/home/ginko/jems-project/acerola-jam0/vendors/rlImGui -I/home/ginko/jems-project/acerola-jam0/vendors/imgui -I/home/ginko/jems-project/acerola-jam0/vendors/entt/src -I/home/ginko/jems-project/acerola-jam0/vendors/eigen -I/home/ginko/jems-project/acerola-jam0/includes -I/home/ginko/jems-project/acerola-jam0/vendors/LDtkLoader/include -I/home/ginko/jems-project/acerola-jam0/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
-  OBJECT_DIR = CMakeFiles/acerola_jam0.dir
-  OBJECT_FILE_DIR = CMakeFiles/acerola_jam0.dir/vendors/imgui
+  OBJECT_DIR = CMakeFiles/game.dir
+  OBJECT_FILE_DIR = CMakeFiles/game.dir/vendors/imgui
 
-build CMakeFiles/acerola_jam0.dir/vendors/imgui/imgui_draw.cpp.obj: CXX_COMPILER__acerola_jam0_unscanned_Release /home/ginko/jems-project/acerola-jam0/vendors/imgui/imgui_draw.cpp || cmake_object_order_depends_target_acerola_jam0
-  DEFINES = -DASSETS_PATH=\"/home/ginko/jems-project/acerola-jam0/assets/current/\"
-  DEP_FILE = CMakeFiles/acerola_jam0.dir/vendors/imgui/imgui_draw.cpp.obj.d
+build CMakeFiles/game.dir/vendors/imgui/imgui_draw.cpp.obj: CXX_COMPILER__game_unscanned_Release /home/ginko/jems-project/acerola-jam0/vendors/imgui/imgui_draw.cpp || cmake_object_order_depends_target_game
+  DEFINES = -DASSETS_PATH=\"assets/current/\"
+  DEP_FILE = CMakeFiles/game.dir/vendors/imgui/imgui_draw.cpp.obj.d
   FLAGS = -O3 -DNDEBUG -std=gnu++20 -fdiagnostics-color=always
   INCLUDES = -I/home/ginko/jems-project/acerola-jam0/vendors/boost -I/home/ginko/jems-project/acerola-jam0/vendors/rlImGui -I/home/ginko/jems-project/acerola-jam0/vendors/imgui -I/home/ginko/jems-project/acerola-jam0/vendors/entt/src -I/home/ginko/jems-project/acerola-jam0/vendors/eigen -I/home/ginko/jems-project/acerola-jam0/includes -I/home/ginko/jems-project/acerola-jam0/vendors/LDtkLoader/include -I/home/ginko/jems-project/acerola-jam0/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
-  OBJECT_DIR = CMakeFiles/acerola_jam0.dir
-  OBJECT_FILE_DIR = CMakeFiles/acerola_jam0.dir/vendors/imgui
+  OBJECT_DIR = CMakeFiles/game.dir
+  OBJECT_FILE_DIR = CMakeFiles/game.dir/vendors/imgui
 
-build CMakeFiles/acerola_jam0.dir/vendors/imgui/imgui_tables.cpp.obj: CXX_COMPILER__acerola_jam0_unscanned_Release /home/ginko/jems-project/acerola-jam0/vendors/imgui/imgui_tables.cpp || cmake_object_order_depends_target_acerola_jam0
-  DEFINES = -DASSETS_PATH=\"/home/ginko/jems-project/acerola-jam0/assets/current/\"
-  DEP_FILE = CMakeFiles/acerola_jam0.dir/vendors/imgui/imgui_tables.cpp.obj.d
+build CMakeFiles/game.dir/vendors/imgui/imgui_tables.cpp.obj: CXX_COMPILER__game_unscanned_Release /home/ginko/jems-project/acerola-jam0/vendors/imgui/imgui_tables.cpp || cmake_object_order_depends_target_game
+  DEFINES = -DASSETS_PATH=\"assets/current/\"
+  DEP_FILE = CMakeFiles/game.dir/vendors/imgui/imgui_tables.cpp.obj.d
   FLAGS = -O3 -DNDEBUG -std=gnu++20 -fdiagnostics-color=always
   INCLUDES = -I/home/ginko/jems-project/acerola-jam0/vendors/boost -I/home/ginko/jems-project/acerola-jam0/vendors/rlImGui -I/home/ginko/jems-project/acerola-jam0/vendors/imgui -I/home/ginko/jems-project/acerola-jam0/vendors/entt/src -I/home/ginko/jems-project/acerola-jam0/vendors/eigen -I/home/ginko/jems-project/acerola-jam0/includes -I/home/ginko/jems-project/acerola-jam0/vendors/LDtkLoader/include -I/home/ginko/jems-project/acerola-jam0/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
-  OBJECT_DIR = CMakeFiles/acerola_jam0.dir
-  OBJECT_FILE_DIR = CMakeFiles/acerola_jam0.dir/vendors/imgui
+  OBJECT_DIR = CMakeFiles/game.dir
+  OBJECT_FILE_DIR = CMakeFiles/game.dir/vendors/imgui
 
-build CMakeFiles/acerola_jam0.dir/vendors/imgui/imgui_widgets.cpp.obj: CXX_COMPILER__acerola_jam0_unscanned_Release /home/ginko/jems-project/acerola-jam0/vendors/imgui/imgui_widgets.cpp || cmake_object_order_depends_target_acerola_jam0
-  DEFINES = -DASSETS_PATH=\"/home/ginko/jems-project/acerola-jam0/assets/current/\"
-  DEP_FILE = CMakeFiles/acerola_jam0.dir/vendors/imgui/imgui_widgets.cpp.obj.d
+build CMakeFiles/game.dir/vendors/imgui/imgui_widgets.cpp.obj: CXX_COMPILER__game_unscanned_Release /home/ginko/jems-project/acerola-jam0/vendors/imgui/imgui_widgets.cpp || cmake_object_order_depends_target_game
+  DEFINES = -DASSETS_PATH=\"assets/current/\"
+  DEP_FILE = CMakeFiles/game.dir/vendors/imgui/imgui_widgets.cpp.obj.d
   FLAGS = -O3 -DNDEBUG -std=gnu++20 -fdiagnostics-color=always
   INCLUDES = -I/home/ginko/jems-project/acerola-jam0/vendors/boost -I/home/ginko/jems-project/acerola-jam0/vendors/rlImGui -I/home/ginko/jems-project/acerola-jam0/vendors/imgui -I/home/ginko/jems-project/acerola-jam0/vendors/entt/src -I/home/ginko/jems-project/acerola-jam0/vendors/eigen -I/home/ginko/jems-project/acerola-jam0/includes -I/home/ginko/jems-project/acerola-jam0/vendors/LDtkLoader/include -I/home/ginko/jems-project/acerola-jam0/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
-  OBJECT_DIR = CMakeFiles/acerola_jam0.dir
-  OBJECT_FILE_DIR = CMakeFiles/acerola_jam0.dir/vendors/imgui
+  OBJECT_DIR = CMakeFiles/game.dir
+  OBJECT_FILE_DIR = CMakeFiles/game.dir/vendors/imgui
 
-build CMakeFiles/acerola_jam0.dir/vendors/rlImGui/rlImGui.cpp.obj: CXX_COMPILER__acerola_jam0_unscanned_Release /home/ginko/jems-project/acerola-jam0/vendors/rlImGui/rlImGui.cpp || cmake_object_order_depends_target_acerola_jam0
-  DEFINES = -DASSETS_PATH=\"/home/ginko/jems-project/acerola-jam0/assets/current/\"
-  DEP_FILE = CMakeFiles/acerola_jam0.dir/vendors/rlImGui/rlImGui.cpp.obj.d
+build CMakeFiles/game.dir/vendors/rlImGui/rlImGui.cpp.obj: CXX_COMPILER__game_unscanned_Release /home/ginko/jems-project/acerola-jam0/vendors/rlImGui/rlImGui.cpp || cmake_object_order_depends_target_game
+  DEFINES = -DASSETS_PATH=\"assets/current/\"
+  DEP_FILE = CMakeFiles/game.dir/vendors/rlImGui/rlImGui.cpp.obj.d
   FLAGS = -O3 -DNDEBUG -std=gnu++20 -fdiagnostics-color=always
   INCLUDES = -I/home/ginko/jems-project/acerola-jam0/vendors/boost -I/home/ginko/jems-project/acerola-jam0/vendors/rlImGui -I/home/ginko/jems-project/acerola-jam0/vendors/imgui -I/home/ginko/jems-project/acerola-jam0/vendors/entt/src -I/home/ginko/jems-project/acerola-jam0/vendors/eigen -I/home/ginko/jems-project/acerola-jam0/includes -I/home/ginko/jems-project/acerola-jam0/vendors/LDtkLoader/include -I/home/ginko/jems-project/acerola-jam0/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
-  OBJECT_DIR = CMakeFiles/acerola_jam0.dir
-  OBJECT_FILE_DIR = CMakeFiles/acerola_jam0.dir/vendors/rlImGui
+  OBJECT_DIR = CMakeFiles/game.dir
+  OBJECT_FILE_DIR = CMakeFiles/game.dir/vendors/rlImGui
 
-build CMakeFiles/acerola_jam0.dir/includes/astar.cpp.obj: CXX_COMPILER__acerola_jam0_unscanned_Release /home/ginko/jems-project/acerola-jam0/includes/astar.cpp || cmake_object_order_depends_target_acerola_jam0
-  DEFINES = -DASSETS_PATH=\"/home/ginko/jems-project/acerola-jam0/assets/current/\"
-  DEP_FILE = CMakeFiles/acerola_jam0.dir/includes/astar.cpp.obj.d
+build CMakeFiles/game.dir/includes/astar.cpp.obj: CXX_COMPILER__game_unscanned_Release /home/ginko/jems-project/acerola-jam0/includes/astar.cpp || cmake_object_order_depends_target_game
+  DEFINES = -DASSETS_PATH=\"assets/current/\"
+  DEP_FILE = CMakeFiles/game.dir/includes/astar.cpp.obj.d
   FLAGS = -O3 -DNDEBUG -std=gnu++20 -fdiagnostics-color=always
   INCLUDES = -I/home/ginko/jems-project/acerola-jam0/vendors/boost -I/home/ginko/jems-project/acerola-jam0/vendors/rlImGui -I/home/ginko/jems-project/acerola-jam0/vendors/imgui -I/home/ginko/jems-project/acerola-jam0/vendors/entt/src -I/home/ginko/jems-project/acerola-jam0/vendors/eigen -I/home/ginko/jems-project/acerola-jam0/includes -I/home/ginko/jems-project/acerola-jam0/vendors/LDtkLoader/include -I/home/ginko/jems-project/acerola-jam0/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
-  OBJECT_DIR = CMakeFiles/acerola_jam0.dir
-  OBJECT_FILE_DIR = CMakeFiles/acerola_jam0.dir/includes
+  OBJECT_DIR = CMakeFiles/game.dir
+  OBJECT_FILE_DIR = CMakeFiles/game.dir/includes
 
-build CMakeFiles/acerola_jam0.dir/includes/collisions.cpp.obj: CXX_COMPILER__acerola_jam0_unscanned_Release /home/ginko/jems-project/acerola-jam0/includes/collisions.cpp || cmake_object_order_depends_target_acerola_jam0
-  DEFINES = -DASSETS_PATH=\"/home/ginko/jems-project/acerola-jam0/assets/current/\"
-  DEP_FILE = CMakeFiles/acerola_jam0.dir/includes/collisions.cpp.obj.d
+build CMakeFiles/game.dir/includes/collisions.cpp.obj: CXX_COMPILER__game_unscanned_Release /home/ginko/jems-project/acerola-jam0/includes/collisions.cpp || cmake_object_order_depends_target_game
+  DEFINES = -DASSETS_PATH=\"assets/current/\"
+  DEP_FILE = CMakeFiles/game.dir/includes/collisions.cpp.obj.d
   FLAGS = -O3 -DNDEBUG -std=gnu++20 -fdiagnostics-color=always
   INCLUDES = -I/home/ginko/jems-project/acerola-jam0/vendors/boost -I/home/ginko/jems-project/acerola-jam0/vendors/rlImGui -I/home/ginko/jems-project/acerola-jam0/vendors/imgui -I/home/ginko/jems-project/acerola-jam0/vendors/entt/src -I/home/ginko/jems-project/acerola-jam0/vendors/eigen -I/home/ginko/jems-project/acerola-jam0/includes -I/home/ginko/jems-project/acerola-jam0/vendors/LDtkLoader/include -I/home/ginko/jems-project/acerola-jam0/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
-  OBJECT_DIR = CMakeFiles/acerola_jam0.dir
-  OBJECT_FILE_DIR = CMakeFiles/acerola_jam0.dir/includes
+  OBJECT_DIR = CMakeFiles/game.dir
+  OBJECT_FILE_DIR = CMakeFiles/game.dir/includes
 
-build CMakeFiles/acerola_jam0.dir/includes/config.cpp.obj: CXX_COMPILER__acerola_jam0_unscanned_Release /home/ginko/jems-project/acerola-jam0/includes/config.cpp || cmake_object_order_depends_target_acerola_jam0
-  DEFINES = -DASSETS_PATH=\"/home/ginko/jems-project/acerola-jam0/assets/current/\"
-  DEP_FILE = CMakeFiles/acerola_jam0.dir/includes/config.cpp.obj.d
+build CMakeFiles/game.dir/includes/config.cpp.obj: CXX_COMPILER__game_unscanned_Release /home/ginko/jems-project/acerola-jam0/includes/config.cpp || cmake_object_order_depends_target_game
+  DEFINES = -DASSETS_PATH=\"assets/current/\"
+  DEP_FILE = CMakeFiles/game.dir/includes/config.cpp.obj.d
   FLAGS = -O3 -DNDEBUG -std=gnu++20 -fdiagnostics-color=always
   INCLUDES = -I/home/ginko/jems-project/acerola-jam0/vendors/boost -I/home/ginko/jems-project/acerola-jam0/vendors/rlImGui -I/home/ginko/jems-project/acerola-jam0/vendors/imgui -I/home/ginko/jems-project/acerola-jam0/vendors/entt/src -I/home/ginko/jems-project/acerola-jam0/vendors/eigen -I/home/ginko/jems-project/acerola-jam0/includes -I/home/ginko/jems-project/acerola-jam0/vendors/LDtkLoader/include -I/home/ginko/jems-project/acerola-jam0/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
-  OBJECT_DIR = CMakeFiles/acerola_jam0.dir
-  OBJECT_FILE_DIR = CMakeFiles/acerola_jam0.dir/includes
+  OBJECT_DIR = CMakeFiles/game.dir
+  OBJECT_FILE_DIR = CMakeFiles/game.dir/includes
 
-build CMakeFiles/acerola_jam0.dir/includes/controls.cpp.obj: CXX_COMPILER__acerola_jam0_unscanned_Release /home/ginko/jems-project/acerola-jam0/includes/controls.cpp || cmake_object_order_depends_target_acerola_jam0
-  DEFINES = -DASSETS_PATH=\"/home/ginko/jems-project/acerola-jam0/assets/current/\"
-  DEP_FILE = CMakeFiles/acerola_jam0.dir/includes/controls.cpp.obj.d
+build CMakeFiles/game.dir/includes/controls.cpp.obj: CXX_COMPILER__game_unscanned_Release /home/ginko/jems-project/acerola-jam0/includes/controls.cpp || cmake_object_order_depends_target_game
+  DEFINES = -DASSETS_PATH=\"assets/current/\"
+  DEP_FILE = CMakeFiles/game.dir/includes/controls.cpp.obj.d
   FLAGS = -O3 -DNDEBUG -std=gnu++20 -fdiagnostics-color=always
   INCLUDES = -I/home/ginko/jems-project/acerola-jam0/vendors/boost -I/home/ginko/jems-project/acerola-jam0/vendors/rlImGui -I/home/ginko/jems-project/acerola-jam0/vendors/imgui -I/home/ginko/jems-project/acerola-jam0/vendors/entt/src -I/home/ginko/jems-project/acerola-jam0/vendors/eigen -I/home/ginko/jems-project/acerola-jam0/includes -I/home/ginko/jems-project/acerola-jam0/vendors/LDtkLoader/include -I/home/ginko/jems-project/acerola-jam0/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
-  OBJECT_DIR = CMakeFiles/acerola_jam0.dir
-  OBJECT_FILE_DIR = CMakeFiles/acerola_jam0.dir/includes
+  OBJECT_DIR = CMakeFiles/game.dir
+  OBJECT_FILE_DIR = CMakeFiles/game.dir/includes
 
-build CMakeFiles/acerola_jam0.dir/includes/factories.cpp.obj: CXX_COMPILER__acerola_jam0_unscanned_Release /home/ginko/jems-project/acerola-jam0/includes/factories.cpp || cmake_object_order_depends_target_acerola_jam0
-  DEFINES = -DASSETS_PATH=\"/home/ginko/jems-project/acerola-jam0/assets/current/\"
-  DEP_FILE = CMakeFiles/acerola_jam0.dir/includes/factories.cpp.obj.d
+build CMakeFiles/game.dir/includes/factories.cpp.obj: CXX_COMPILER__game_unscanned_Release /home/ginko/jems-project/acerola-jam0/includes/factories.cpp || cmake_object_order_depends_target_game
+  DEFINES = -DASSETS_PATH=\"assets/current/\"
+  DEP_FILE = CMakeFiles/game.dir/includes/factories.cpp.obj.d
   FLAGS = -O3 -DNDEBUG -std=gnu++20 -fdiagnostics-color=always
   INCLUDES = -I/home/ginko/jems-project/acerola-jam0/vendors/boost -I/home/ginko/jems-project/acerola-jam0/vendors/rlImGui -I/home/ginko/jems-project/acerola-jam0/vendors/imgui -I/home/ginko/jems-project/acerola-jam0/vendors/entt/src -I/home/ginko/jems-project/acerola-jam0/vendors/eigen -I/home/ginko/jems-project/acerola-jam0/includes -I/home/ginko/jems-project/acerola-jam0/vendors/LDtkLoader/include -I/home/ginko/jems-project/acerola-jam0/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
-  OBJECT_DIR = CMakeFiles/acerola_jam0.dir
-  OBJECT_FILE_DIR = CMakeFiles/acerola_jam0.dir/includes
+  OBJECT_DIR = CMakeFiles/game.dir
+  OBJECT_FILE_DIR = CMakeFiles/game.dir/includes
 
-build CMakeFiles/acerola_jam0.dir/includes/gui.cpp.obj: CXX_COMPILER__acerola_jam0_unscanned_Release /home/ginko/jems-project/acerola-jam0/includes/gui.cpp || cmake_object_order_depends_target_acerola_jam0
-  DEFINES = -DASSETS_PATH=\"/home/ginko/jems-project/acerola-jam0/assets/current/\"
-  DEP_FILE = CMakeFiles/acerola_jam0.dir/includes/gui.cpp.obj.d
+build CMakeFiles/game.dir/includes/gui.cpp.obj: CXX_COMPILER__game_unscanned_Release /home/ginko/jems-project/acerola-jam0/includes/gui.cpp || cmake_object_order_depends_target_game
+  DEFINES = -DASSETS_PATH=\"assets/current/\"
+  DEP_FILE = CMakeFiles/game.dir/includes/gui.cpp.obj.d
   FLAGS = -O3 -DNDEBUG -std=gnu++20 -fdiagnostics-color=always
   INCLUDES = -I/home/ginko/jems-project/acerola-jam0/vendors/boost -I/home/ginko/jems-project/acerola-jam0/vendors/rlImGui -I/home/ginko/jems-project/acerola-jam0/vendors/imgui -I/home/ginko/jems-project/acerola-jam0/vendors/entt/src -I/home/ginko/jems-project/acerola-jam0/vendors/eigen -I/home/ginko/jems-project/acerola-jam0/includes -I/home/ginko/jems-project/acerola-jam0/vendors/LDtkLoader/include -I/home/ginko/jems-project/acerola-jam0/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
-  OBJECT_DIR = CMakeFiles/acerola_jam0.dir
-  OBJECT_FILE_DIR = CMakeFiles/acerola_jam0.dir/includes
+  OBJECT_DIR = CMakeFiles/game.dir
+  OBJECT_FILE_DIR = CMakeFiles/game.dir/includes
 
-build CMakeFiles/acerola_jam0.dir/includes/items.cpp.obj: CXX_COMPILER__acerola_jam0_unscanned_Release /home/ginko/jems-project/acerola-jam0/includes/items.cpp || cmake_object_order_depends_target_acerola_jam0
-  DEFINES = -DASSETS_PATH=\"/home/ginko/jems-project/acerola-jam0/assets/current/\"
-  DEP_FILE = CMakeFiles/acerola_jam0.dir/includes/items.cpp.obj.d
+build CMakeFiles/game.dir/includes/items.cpp.obj: CXX_COMPILER__game_unscanned_Release /home/ginko/jems-project/acerola-jam0/includes/items.cpp || cmake_object_order_depends_target_game
+  DEFINES = -DASSETS_PATH=\"assets/current/\"
+  DEP_FILE = CMakeFiles/game.dir/includes/items.cpp.obj.d
   FLAGS = -O3 -DNDEBUG -std=gnu++20 -fdiagnostics-color=always
   INCLUDES = -I/home/ginko/jems-project/acerola-jam0/vendors/boost -I/home/ginko/jems-project/acerola-jam0/vendors/rlImGui -I/home/ginko/jems-project/acerola-jam0/vendors/imgui -I/home/ginko/jems-project/acerola-jam0/vendors/entt/src -I/home/ginko/jems-project/acerola-jam0/vendors/eigen -I/home/ginko/jems-project/acerola-jam0/includes -I/home/ginko/jems-project/acerola-jam0/vendors/LDtkLoader/include -I/home/ginko/jems-project/acerola-jam0/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
-  OBJECT_DIR = CMakeFiles/acerola_jam0.dir
-  OBJECT_FILE_DIR = CMakeFiles/acerola_jam0.dir/includes
+  OBJECT_DIR = CMakeFiles/game.dir
+  OBJECT_FILE_DIR = CMakeFiles/game.dir/includes
 
-build CMakeFiles/acerola_jam0.dir/includes/managers/animationManager.cpp.obj: CXX_COMPILER__acerola_jam0_unscanned_Release /home/ginko/jems-project/acerola-jam0/includes/managers/animationManager.cpp || cmake_object_order_depends_target_acerola_jam0
-  DEFINES = -DASSETS_PATH=\"/home/ginko/jems-project/acerola-jam0/assets/current/\"
-  DEP_FILE = CMakeFiles/acerola_jam0.dir/includes/managers/animationManager.cpp.obj.d
+build CMakeFiles/game.dir/includes/managers/animationManager.cpp.obj: CXX_COMPILER__game_unscanned_Release /home/ginko/jems-project/acerola-jam0/includes/managers/animationManager.cpp || cmake_object_order_depends_target_game
+  DEFINES = -DASSETS_PATH=\"assets/current/\"
+  DEP_FILE = CMakeFiles/game.dir/includes/managers/animationManager.cpp.obj.d
   FLAGS = -O3 -DNDEBUG -std=gnu++20 -fdiagnostics-color=always
   INCLUDES = -I/home/ginko/jems-project/acerola-jam0/vendors/boost -I/home/ginko/jems-project/acerola-jam0/vendors/rlImGui -I/home/ginko/jems-project/acerola-jam0/vendors/imgui -I/home/ginko/jems-project/acerola-jam0/vendors/entt/src -I/home/ginko/jems-project/acerola-jam0/vendors/eigen -I/home/ginko/jems-project/acerola-jam0/includes -I/home/ginko/jems-project/acerola-jam0/vendors/LDtkLoader/include -I/home/ginko/jems-project/acerola-jam0/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
-  OBJECT_DIR = CMakeFiles/acerola_jam0.dir
-  OBJECT_FILE_DIR = CMakeFiles/acerola_jam0.dir/includes/managers
+  OBJECT_DIR = CMakeFiles/game.dir
+  OBJECT_FILE_DIR = CMakeFiles/game.dir/includes/managers
 
-build CMakeFiles/acerola_jam0.dir/includes/managers/audioManager.cpp.obj: CXX_COMPILER__acerola_jam0_unscanned_Release /home/ginko/jems-project/acerola-jam0/includes/managers/audioManager.cpp || cmake_object_order_depends_target_acerola_jam0
-  DEFINES = -DASSETS_PATH=\"/home/ginko/jems-project/acerola-jam0/assets/current/\"
-  DEP_FILE = CMakeFiles/acerola_jam0.dir/includes/managers/audioManager.cpp.obj.d
+build CMakeFiles/game.dir/includes/managers/audioManager.cpp.obj: CXX_COMPILER__game_unscanned_Release /home/ginko/jems-project/acerola-jam0/includes/managers/audioManager.cpp || cmake_object_order_depends_target_game
+  DEFINES = -DASSETS_PATH=\"assets/current/\"
+  DEP_FILE = CMakeFiles/game.dir/includes/managers/audioManager.cpp.obj.d
   FLAGS = -O3 -DNDEBUG -std=gnu++20 -fdiagnostics-color=always
   INCLUDES = -I/home/ginko/jems-project/acerola-jam0/vendors/boost -I/home/ginko/jems-project/acerola-jam0/vendors/rlImGui -I/home/ginko/jems-project/acerola-jam0/vendors/imgui -I/home/ginko/jems-project/acerola-jam0/vendors/entt/src -I/home/ginko/jems-project/acerola-jam0/vendors/eigen -I/home/ginko/jems-project/acerola-jam0/includes -I/home/ginko/jems-project/acerola-jam0/vendors/LDtkLoader/include -I/home/ginko/jems-project/acerola-jam0/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
-  OBJECT_DIR = CMakeFiles/acerola_jam0.dir
-  OBJECT_FILE_DIR = CMakeFiles/acerola_jam0.dir/includes/managers
+  OBJECT_DIR = CMakeFiles/game.dir
+  OBJECT_FILE_DIR = CMakeFiles/game.dir/includes/managers
 
-build CMakeFiles/acerola_jam0.dir/includes/managers/levelManager.cpp.obj: CXX_COMPILER__acerola_jam0_unscanned_Release /home/ginko/jems-project/acerola-jam0/includes/managers/levelManager.cpp || cmake_object_order_depends_target_acerola_jam0
-  DEFINES = -DASSETS_PATH=\"/home/ginko/jems-project/acerola-jam0/assets/current/\"
-  DEP_FILE = CMakeFiles/acerola_jam0.dir/includes/managers/levelManager.cpp.obj.d
+build CMakeFiles/game.dir/includes/managers/levelManager.cpp.obj: CXX_COMPILER__game_unscanned_Release /home/ginko/jems-project/acerola-jam0/includes/managers/levelManager.cpp || cmake_object_order_depends_target_game
+  DEFINES = -DASSETS_PATH=\"assets/current/\"
+  DEP_FILE = CMakeFiles/game.dir/includes/managers/levelManager.cpp.obj.d
   FLAGS = -O3 -DNDEBUG -std=gnu++20 -fdiagnostics-color=always
   INCLUDES = -I/home/ginko/jems-project/acerola-jam0/vendors/boost -I/home/ginko/jems-project/acerola-jam0/vendors/rlImGui -I/home/ginko/jems-project/acerola-jam0/vendors/imgui -I/home/ginko/jems-project/acerola-jam0/vendors/entt/src -I/home/ginko/jems-project/acerola-jam0/vendors/eigen -I/home/ginko/jems-project/acerola-jam0/includes -I/home/ginko/jems-project/acerola-jam0/vendors/LDtkLoader/include -I/home/ginko/jems-project/acerola-jam0/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
-  OBJECT_DIR = CMakeFiles/acerola_jam0.dir
-  OBJECT_FILE_DIR = CMakeFiles/acerola_jam0.dir/includes/managers
+  OBJECT_DIR = CMakeFiles/game.dir
+  OBJECT_FILE_DIR = CMakeFiles/game.dir/includes/managers
 
-build CMakeFiles/acerola_jam0.dir/includes/managers/renderingManager.cpp.obj: CXX_COMPILER__acerola_jam0_unscanned_Release /home/ginko/jems-project/acerola-jam0/includes/managers/renderingManager.cpp || cmake_object_order_depends_target_acerola_jam0
-  DEFINES = -DASSETS_PATH=\"/home/ginko/jems-project/acerola-jam0/assets/current/\"
-  DEP_FILE = CMakeFiles/acerola_jam0.dir/includes/managers/renderingManager.cpp.obj.d
+build CMakeFiles/game.dir/includes/managers/renderingManager.cpp.obj: CXX_COMPILER__game_unscanned_Release /home/ginko/jems-project/acerola-jam0/includes/managers/renderingManager.cpp || cmake_object_order_depends_target_game
+  DEFINES = -DASSETS_PATH=\"assets/current/\"
+  DEP_FILE = CMakeFiles/game.dir/includes/managers/renderingManager.cpp.obj.d
   FLAGS = -O3 -DNDEBUG -std=gnu++20 -fdiagnostics-color=always
   INCLUDES = -I/home/ginko/jems-project/acerola-jam0/vendors/boost -I/home/ginko/jems-project/acerola-jam0/vendors/rlImGui -I/home/ginko/jems-project/acerola-jam0/vendors/imgui -I/home/ginko/jems-project/acerola-jam0/vendors/entt/src -I/home/ginko/jems-project/acerola-jam0/vendors/eigen -I/home/ginko/jems-project/acerola-jam0/includes -I/home/ginko/jems-project/acerola-jam0/vendors/LDtkLoader/include -I/home/ginko/jems-project/acerola-jam0/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
-  OBJECT_DIR = CMakeFiles/acerola_jam0.dir
-  OBJECT_FILE_DIR = CMakeFiles/acerola_jam0.dir/includes/managers
+  OBJECT_DIR = CMakeFiles/game.dir
+  OBJECT_FILE_DIR = CMakeFiles/game.dir/includes/managers
 
-build CMakeFiles/acerola_jam0.dir/includes/npc.cpp.obj: CXX_COMPILER__acerola_jam0_unscanned_Release /home/ginko/jems-project/acerola-jam0/includes/npc.cpp || cmake_object_order_depends_target_acerola_jam0
-  DEFINES = -DASSETS_PATH=\"/home/ginko/jems-project/acerola-jam0/assets/current/\"
-  DEP_FILE = CMakeFiles/acerola_jam0.dir/includes/npc.cpp.obj.d
+build CMakeFiles/game.dir/includes/npc.cpp.obj: CXX_COMPILER__game_unscanned_Release /home/ginko/jems-project/acerola-jam0/includes/npc.cpp || cmake_object_order_depends_target_game
+  DEFINES = -DASSETS_PATH=\"assets/current/\"
+  DEP_FILE = CMakeFiles/game.dir/includes/npc.cpp.obj.d
   FLAGS = -O3 -DNDEBUG -std=gnu++20 -fdiagnostics-color=always
   INCLUDES = -I/home/ginko/jems-project/acerola-jam0/vendors/boost -I/home/ginko/jems-project/acerola-jam0/vendors/rlImGui -I/home/ginko/jems-project/acerola-jam0/vendors/imgui -I/home/ginko/jems-project/acerola-jam0/vendors/entt/src -I/home/ginko/jems-project/acerola-jam0/vendors/eigen -I/home/ginko/jems-project/acerola-jam0/includes -I/home/ginko/jems-project/acerola-jam0/vendors/LDtkLoader/include -I/home/ginko/jems-project/acerola-jam0/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
-  OBJECT_DIR = CMakeFiles/acerola_jam0.dir
-  OBJECT_FILE_DIR = CMakeFiles/acerola_jam0.dir/includes
+  OBJECT_DIR = CMakeFiles/game.dir
+  OBJECT_FILE_DIR = CMakeFiles/game.dir/includes
 
-build CMakeFiles/acerola_jam0.dir/includes/rendering.cpp.obj: CXX_COMPILER__acerola_jam0_unscanned_Release /home/ginko/jems-project/acerola-jam0/includes/rendering.cpp || cmake_object_order_depends_target_acerola_jam0
-  DEFINES = -DASSETS_PATH=\"/home/ginko/jems-project/acerola-jam0/assets/current/\"
-  DEP_FILE = CMakeFiles/acerola_jam0.dir/includes/rendering.cpp.obj.d
+build CMakeFiles/game.dir/includes/rendering.cpp.obj: CXX_COMPILER__game_unscanned_Release /home/ginko/jems-project/acerola-jam0/includes/rendering.cpp || cmake_object_order_depends_target_game
+  DEFINES = -DASSETS_PATH=\"assets/current/\"
+  DEP_FILE = CMakeFiles/game.dir/includes/rendering.cpp.obj.d
   FLAGS = -O3 -DNDEBUG -std=gnu++20 -fdiagnostics-color=always
   INCLUDES = -I/home/ginko/jems-project/acerola-jam0/vendors/boost -I/home/ginko/jems-project/acerola-jam0/vendors/rlImGui -I/home/ginko/jems-project/acerola-jam0/vendors/imgui -I/home/ginko/jems-project/acerola-jam0/vendors/entt/src -I/home/ginko/jems-project/acerola-jam0/vendors/eigen -I/home/ginko/jems-project/acerola-jam0/includes -I/home/ginko/jems-project/acerola-jam0/vendors/LDtkLoader/include -I/home/ginko/jems-project/acerola-jam0/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
-  OBJECT_DIR = CMakeFiles/acerola_jam0.dir
-  OBJECT_FILE_DIR = CMakeFiles/acerola_jam0.dir/includes
+  OBJECT_DIR = CMakeFiles/game.dir
+  OBJECT_FILE_DIR = CMakeFiles/game.dir/includes
 
 
 # =============================================================================
-# Link build statements for EXECUTABLE target acerola_jam0
+# Link build statements for EXECUTABLE target game
 
 
 #############################################
-# Link the executable acerola_jam0.exe
+# Link the executable game.exe
 
-build acerola_jam0.exe: CXX_EXECUTABLE_LINKER__acerola_jam0_Release CMakeFiles/acerola_jam0.dir/main.cpp.obj CMakeFiles/acerola_jam0.dir/vendors/imgui/imgui.cpp.obj CMakeFiles/acerola_jam0.dir/vendors/imgui/imgui_demo.cpp.obj CMakeFiles/acerola_jam0.dir/vendors/imgui/imgui_draw.cpp.obj CMakeFiles/acerola_jam0.dir/vendors/imgui/imgui_tables.cpp.obj CMakeFiles/acerola_jam0.dir/vendors/imgui/imgui_widgets.cpp.obj CMakeFiles/acerola_jam0.dir/vendors/rlImGui/rlImGui.cpp.obj CMakeFiles/acerola_jam0.dir/includes/astar.cpp.obj CMakeFiles/acerola_jam0.dir/includes/collisions.cpp.obj CMakeFiles/acerola_jam0.dir/includes/config.cpp.obj CMakeFiles/acerola_jam0.dir/includes/controls.cpp.obj CMakeFiles/acerola_jam0.dir/includes/factories.cpp.obj CMakeFiles/acerola_jam0.dir/includes/gui.cpp.obj CMakeFiles/acerola_jam0.dir/includes/items.cpp.obj CMakeFiles/acerola_jam0.dir/includes/managers/animationManager.cpp.obj CMakeFiles/acerola_jam0.dir/includes/managers/audioManager.cpp.obj CMakeFiles/acerola_jam0.dir/includes/managers/levelManager.cpp.obj CMakeFiles/acerola_jam0.dir/includes/managers/renderingManager.cpp.obj CMakeFiles/acerola_jam0.dir/includes/npc.cpp.obj CMakeFiles/acerola_jam0.dir/includes/rendering.cpp.obj | /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/lib/raylib.dll vendors/LDtkLoader/lib/libLDtkLoader.a || vendors/LDtkLoader/lib/libLDtkLoader.a
+build game.exe: CXX_EXECUTABLE_LINKER__game_Release CMakeFiles/game.dir/main.cpp.obj CMakeFiles/game.dir/vendors/imgui/imgui.cpp.obj CMakeFiles/game.dir/vendors/imgui/imgui_demo.cpp.obj CMakeFiles/game.dir/vendors/imgui/imgui_draw.cpp.obj CMakeFiles/game.dir/vendors/imgui/imgui_tables.cpp.obj CMakeFiles/game.dir/vendors/imgui/imgui_widgets.cpp.obj CMakeFiles/game.dir/vendors/rlImGui/rlImGui.cpp.obj CMakeFiles/game.dir/includes/astar.cpp.obj CMakeFiles/game.dir/includes/collisions.cpp.obj CMakeFiles/game.dir/includes/config.cpp.obj CMakeFiles/game.dir/includes/controls.cpp.obj CMakeFiles/game.dir/includes/factories.cpp.obj CMakeFiles/game.dir/includes/gui.cpp.obj CMakeFiles/game.dir/includes/items.cpp.obj CMakeFiles/game.dir/includes/managers/animationManager.cpp.obj CMakeFiles/game.dir/includes/managers/audioManager.cpp.obj CMakeFiles/game.dir/includes/managers/levelManager.cpp.obj CMakeFiles/game.dir/includes/managers/renderingManager.cpp.obj CMakeFiles/game.dir/includes/npc.cpp.obj CMakeFiles/game.dir/includes/rendering.cpp.obj | /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/lib/raylib.dll vendors/LDtkLoader/lib/libLDtkLoader.a || vendors/LDtkLoader/lib/libLDtkLoader.a
   FLAGS = -O3 -DNDEBUG
   LINK_LIBRARIES = /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/lib/raylib.dll  vendors/LDtkLoader/lib/libLDtkLoader.a  -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
-  OBJECT_DIR = CMakeFiles/acerola_jam0.dir
-  POST_BUILD = :
+  OBJECT_DIR = CMakeFiles/game.dir
+  POST_BUILD = cd /home/ginko/jems-project/acerola-jam0/cmake-build-windows && /opt/clion/bin/cmake/linux/x64/bin/cmake -E copy_directory /home/ginko/jems-project/acerola-jam0/assets /home/ginko/jems-project/acerola-jam0/cmake-build-windows/assets && cd /home/ginko/jems-project/acerola-jam0/cmake-build-windows && /opt/clion/bin/cmake/linux/x64/bin/cmake -E copy_if_different /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/lib/raylib.dll /home/ginko/jems-project/acerola-jam0/cmake-build-windows
   PRE_LINK = :
-  TARGET_FILE = acerola_jam0.exe
-  TARGET_IMPLIB = libacerola_jam0.dll.a
-  TARGET_PDB = acerola_jam0.exe.dbg
+  TARGET_FILE = game.exe
+  TARGET_IMPLIB = libgame.dll.a
+  TARGET_PDB = game.exe.dbg
 
 
 #############################################
@@ -490,7 +490,7 @@ build vendors/LDtkLoader/install/strip: phony vendors/LDtkLoader/CMakeFiles/inst
 
 build LDtkLoader: phony vendors/LDtkLoader/lib/libLDtkLoader.a
 
-build acerola_jam0: phony acerola_jam0.exe
+build game: phony game.exe
 
 build libLDtkLoader.a: phony vendors/LDtkLoader/lib/libLDtkLoader.a
 
@@ -502,7 +502,7 @@ build libLDtkLoader.a: phony vendors/LDtkLoader/lib/libLDtkLoader.a
 #############################################
 # Folder: /home/ginko/jems-project/acerola-jam0/cmake-build-windows
 
-build all: phony acerola_jam0.exe vendors/LDtkLoader/all
+build all: phony game.exe vendors/LDtkLoader/all
 
 # =============================================================================
 

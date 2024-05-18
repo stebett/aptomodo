@@ -1,4 +1,4 @@
-/home/ginko/jems-project/acerola-jam0/cmake-build-windows/CMakeFiles/acerola_jam0.dir
+/home/ginko/jems-project/acerola-jam0/cmake-build-windows/CMakeFiles/game.dir
 /home/ginko/jems-project/acerola-jam0/cmake-build-windows/CMakeFiles/edit_cache.dir
 /home/ginko/jems-project/acerola-jam0/cmake-build-windows/CMakeFiles/rebuild_cache.dir
 /home/ginko/jems-project/acerola-jam0/cmake-build-windows/CMakeFiles/list_install_components.dir

@@ -11,7 +11,7 @@
 #include "attributes.h"
 
 
-void imguiEnemyAttr(entt::registry &registry) {
+void imguiEnemyAttr(entt::registry &registry) { //TODO: make this work on selected enemy
     auto view = registry.view<Enemy, Path, ID, ColorBB, Spread, Speed, Health, Radius, PhysicalResistance, MagicalResistance, Stamina, AttackTimer, AttackSpeed, Damage, AttackRange, Pushback, Position>();
     for (auto [entity, path, id, colorbb, spread, speed, health, radius, physicalresistance, magicalresistance, stamina, timelastattack, attackspeed, damage, attackrange, pushback, position
         ]: view.each()) {

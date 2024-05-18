@@ -27,6 +27,7 @@ void LevelManager::Instantiate() {
     SetLevel(0);
 }
 
+
 LevelManager &LevelManager::Instance() {
     return *instance;
 }
