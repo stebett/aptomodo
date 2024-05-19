@@ -6,7 +6,6 @@
 
 std::unordered_map<size_t, Sound> AudioManager::resources;
 std::hash<std::string> AudioManager::hasher;
-const char *AudioManager::root = "/home/ginko/Documents/tracce/";
 AudioManager AudioManager::instance;
 
 Sound &AudioManager::operator[](std::string &key) const {
@@ -14,7 +13,7 @@ Sound &AudioManager::operator[](std::string &key) const {
 }
 
 void AudioManager::LoadFromFile(const std::string &filename) {
-    resources.insert({hasher(filename), LoadSound((root + filename + ".mp3").c_str())});
+    resources.insert({hasher(filename), LoadSound((getAssetPath("tracce/" + filename + ".mp3").c_str()))});
 }
 
 // TODO make a copy for each sound?

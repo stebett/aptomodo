@@ -8,11 +8,11 @@
 #include <raylib.h>
 #include <unordered_map>
 #include <string>
+#include "../constants.h"
 
 class AudioManager {
     static std::unordered_map<size_t, Sound> resources;
     static std::hash<std::string> hasher;
-    static const char *root;
     static AudioManager instance;
 
 public:
