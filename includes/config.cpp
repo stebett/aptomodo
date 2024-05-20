@@ -9,12 +9,15 @@ namespace config {
     bool show_astar_path = false;
     bool show_enemy_fov = false;
     bool show_bounding_box = true;
-    int fps = 60;
-    int enemy_walking_animation_fps = 8;
-    int strategy = 0;
     bool show_enemy_texture = false;
     bool show_attacks = true;
     bool show_attr_window = true;
+    bool show_inv_window = false;
+
+    int fps = 60;
+    int enemy_walking_animation_fps = 8;
+    int strategy = 0;
+
 
     std::array<float, 18> attrMultipliers{
             3.0f, // damagePhysical

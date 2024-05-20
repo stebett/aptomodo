@@ -21,6 +21,8 @@ struct Living {
 };
 struct Chasing {
 };
+struct Selected {
+};
 
 struct ColorBB {
     Color color;
@@ -120,15 +122,16 @@ Le statistiche saranno roba tipo
 struct Speed {
     float value;
     float max;
-    float actual {0};
+    float actual{0};
 
     operator float() const noexcept { return value; }
-    Speed(float x) :value(x), max(x) {};
+
+    Speed(float x) : value(x), max(x) {};
 };
 
 struct Health {
     float value;
-    const float * const max;
+    const float *const max;
 
 
     operator float() const noexcept { return value; }
@@ -138,7 +141,7 @@ struct Health {
     void operator-=(const float x) noexcept { value -= x; }
 //    Health(float x) :value(x), max(x) {}
 
-    Health(float value, const float * const max) : value(value), max(max) {};
+    Health(float value, const float *const max) : value(value), max(max) {};
 
 };
 
@@ -199,6 +202,7 @@ struct Experience {
     int value;
 
     operator int() const noexcept { return value; }
+
     void operator+=(const int x) noexcept { value += x; }
 };
 

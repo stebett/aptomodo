@@ -24,6 +24,12 @@ namespace AttributeConstants {
         ADD,
         MUL
     };
+
+    constexpr std::array<char const *, 2> operatorString {
+        "ADD",
+        "MUL"
+    };
+
     enum SubAttributeName {
         damagePhysical,
         health,

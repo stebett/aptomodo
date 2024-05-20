@@ -98,7 +98,8 @@ void parseInput(entt::registry &registry, entt::entity &player, Position &positi
         playerSecondaryAttack(registry, player);
     }
 
-    if (IsKeyPressed(KEY_I)) config::show_attr_window = !config::show_attr_window;
+    if (IsKeyPressed(KEY_O)) config::show_attr_window = !config::show_attr_window;
+    if (IsKeyPressed(KEY_I)) config::show_inv_window = !config::show_inv_window;
 
     if (IsKeyPressed(KEY_F)) {
         PickUpItem(registry, player);

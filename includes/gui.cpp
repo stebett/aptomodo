@@ -10,6 +10,19 @@
 #include "config.h"
 #include "attributes.h"
 
+void imguiInstructions() {
+
+    ImGui::Begin("Main");
+    ImGui::SeparatorText("Hotkeys");
+
+    ImGui::Text("Q per chiudere");
+    ImGui::Text("R per restartare");
+    ImGui::Text("P per pausare");
+    ImGui::Text("I per togglare inventario");
+    ImGui::Text("O per togglare attributi");
+
+    ImGui::End();
+}
 
 void imguiEnemyAttr(entt::registry &registry) { //TODO: make this work on selected enemy
     auto view = registry.view<Enemy, Path, ID, ColorBB, Spread, Speed, Health, Radius, PhysicalResistance, MagicalResistance, Stamina, AttackTimer, AttackSpeed, Damage, AttackRange, Pushback, Position>();
@@ -49,18 +62,6 @@ void imguiPlayerAttr(entt::registry &registry) {
         ImGui::SliderFloat("position x", &position.x, 0, mapWidth, "%.3f", 0);
         ImGui::SliderFloat("position y ", &position.y, 0, mapHeight, "%.3f", 0);
 
-    }
-}
-
-void imguiItems(entt::registry &registry) {
-    auto view = registry.view<OnPlayer, Item, Name>();
-    for (auto [entity, name]: view.each()) {
-        if (ImGui::Button(name.value.c_str())) {
-            for (auto [player, position]: registry.view<Player, Position>().each()) {
-                registry.remove<OnPlayer>(entity);
-                registry.emplace<Position>(entity, Vector2Add(position, {10, 10}));
-            }
-        }
     }
 }
 
@@ -143,16 +144,34 @@ void imguiAttributes(entt::registry &registry) {
     if (show_multipliers)
         imguiAttributesMultipliers();
 
-    static bool show_items = false;
-    ImGui::Checkbox("show_items", &show_items);
-    if (show_items)
-        imguiItems(registry);
+
+    ImGui::End();
+}
+
+void imguiInventory(entt::registry &registry) {
+    ImGui::Begin("Inventory");
+
+    auto view = registry.view<OnPlayer, Item, Name, AttributeConstants::Modifier>();
+    for (auto [entity, name, modifier]: view.each()) {
+        ImGui::Text("%s", name.value.c_str());
+        ImGui::SameLine();
+        if (ImGui::Button("Drop")) {
+            for (auto [player, position]: registry.view<Player, Position>().each()) {
+                registry.remove<OnPlayer>(entity);
+                registry.emplace<Position>(entity, Vector2Add(position, {10, 10}));
+            }
+        }
+        ImGui::Text("Modifier: %s", AttributeConstants::attributeString[modifier.name]);
+        ImGui::Text("Operation: %s", AttributeConstants::operatorString[static_cast<int>(modifier.operation)]);
+        ImGui::Text("Value: %f", modifier.value);
+    }
 
     ImGui::End();
 }
 
 
 void imguiConfig() {
+    ImGui::Begin("Config");
     ImGui::Checkbox("show_astar_path", &config::show_astar_path);
     ImGui::Checkbox("show_enemy_fov", &config::show_enemy_fov);
     ImGui::Checkbox("show_bounding_box", &config::show_bounding_box);
@@ -161,6 +180,7 @@ void imguiConfig() {
     ImGui::SliderInt("FPS", &config::fps, 0, 120);
     ImGui::SliderInt("enemy_walking_animation_fps", &config::enemy_walking_animation_fps, 1, 120);
     ImGui::SliderInt("strategy", &config::strategy, 0, 2);
+    ImGui::End();
 }
 
 void imguiWindowMain(entt::registry &registry, ImGuiIO io) {
@@ -191,6 +211,10 @@ void imguiWindowMain(entt::registry &registry, ImGuiIO io) {
     ImGui::Checkbox("Attributes Window", &config::show_attr_window);
     if (config::show_attr_window)
         imguiAttributes(registry);
+
+    ImGui::Checkbox("Inventory Window", &config::show_inv_window);
+    if (config::show_inv_window)
+        imguiInventory(registry);
 
 
 //    ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);

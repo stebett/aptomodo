@@ -15,5 +15,6 @@ namespace config {
     extern bool show_enemy_texture;
     extern bool show_attacks;
     extern bool show_attr_window;
+    extern bool show_inv_window;
     extern std::array<float, 18> attrMultipliers;
 }
