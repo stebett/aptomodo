@@ -51,11 +51,11 @@ LevelOutcome PlayLevel() {
         BeginMode2D(camera); // TODO add option to activate second debug camera
         ClearBackground(WHITE);
         LevelManager::Draw(camera);
-        RenderingManager::Draw(camera, framerateManager.framesCounter);
         if (!paused) {
             updateEnemy(registry, player); // TODO This should be before drawing
             updatePlayer(registry, player, position, camera);
         }
+        RenderingManager::Draw(camera, framerateManager.framesCounter); // This has to stay after updatePlayer
         EndMode2D();
         DrawGui();
         DrawFPS(10, 10);

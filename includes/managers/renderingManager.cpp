@@ -49,7 +49,8 @@ void drawEnemyTexture(const entt::registry &registry, unsigned int frame) {
 void drawLivingBB(const entt::registry &registry) {
     auto livingView = registry.view<Living, Radius, Position, ColorBB>();
     for (auto [entity, radius, position, color]: livingView.each()) {
-        DrawCircle(position.x, position.y, radius, color);
+        if (registry.all_of<Selected>(entity)) { DrawCircleV(position, radius + 2, PURPLE); }
+        DrawCircleV(position, radius, color);
     }
 }
 
@@ -81,17 +82,10 @@ void drawProjectiles(const entt::registry &registry) {
     }
 }
 
-void drawSelected(const entt::registry &registry) {
-    auto selectedView = registry.view<Selected, Position, Radius>();
-    for (auto [entity, position, radius]: selectedView.each()) {
-        DrawCircleLinesV(position, radius, PURPLE);
-    }
-}
 
 void RenderingManager::Draw(const Camera2D &camera, unsigned int frame) {
     drawItems(*m_registry);
     if (config::show_bounding_box) drawLivingBB(*m_registry);
-    drawSelected(*m_registry);
     if (config::show_enemy_texture) drawEnemyTexture(*m_registry, frame / config::enemy_walking_animation_fps);
     if (config::show_attacks) drawAttacks(*m_registry);
     drawProjectiles(*m_registry);

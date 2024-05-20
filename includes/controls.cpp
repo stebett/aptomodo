@@ -91,7 +91,7 @@ void selectEnemy(entt::registry &registry, Vector2 worldPosition) {
     registry.clear<Selected>();
     for (auto [enemy, radius, position]: enemyView.each()) {
         if (CheckCollisionPointCircle(worldPosition, position, radius)) {
-            registry.emplace_or_replace<Selected>(enemy);
+           registry.emplace<Selected>(enemy);
         }
     }
 }
