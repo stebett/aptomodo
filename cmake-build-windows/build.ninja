@@ -47,13 +47,13 @@ cmake_ninja_workdir = /home/ginko/jems-project/aptomodo/cmake-build-windows/
 #############################################
 # Order-only phony target for game
 
-build cmake_object_order_depends_target_game: phony || cmake_object_order_depends_target_LDtkLoader
+build cmake_object_order_depends_target_game: phony || /home/ginko/jems-project/aptomodo/config/attributes.h cmake_object_order_depends_target_LDtkLoader generate.exe
 
 build CMakeFiles/game.dir/main.cpp.obj: CXX_COMPILER__game_unscanned_Release /home/ginko/jems-project/aptomodo/main.cpp || cmake_object_order_depends_target_game
   DEFINES = -DASSETS_PATH=\"assets/current/\"
   DEP_FILE = CMakeFiles/game.dir/main.cpp.obj.d
   FLAGS = -O3 -DNDEBUG -std=gnu++20 -fdiagnostics-color=always
-  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/vendors/toml++/include -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
+  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
   OBJECT_DIR = CMakeFiles/game.dir
   OBJECT_FILE_DIR = CMakeFiles/game.dir
 
@@ -61,7 +61,7 @@ build CMakeFiles/game.dir/vendors/imgui/imgui.cpp.obj: CXX_COMPILER__game_unscan
   DEFINES = -DASSETS_PATH=\"assets/current/\"
   DEP_FILE = CMakeFiles/game.dir/vendors/imgui/imgui.cpp.obj.d
   FLAGS = -O3 -DNDEBUG -std=gnu++20 -fdiagnostics-color=always
-  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/vendors/toml++/include -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
+  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
   OBJECT_DIR = CMakeFiles/game.dir
   OBJECT_FILE_DIR = CMakeFiles/game.dir/vendors/imgui
 
@@ -69,7 +69,7 @@ build CMakeFiles/game.dir/vendors/imgui/imgui_demo.cpp.obj: CXX_COMPILER__game_u
   DEFINES = -DASSETS_PATH=\"assets/current/\"
   DEP_FILE = CMakeFiles/game.dir/vendors/imgui/imgui_demo.cpp.obj.d
   FLAGS = -O3 -DNDEBUG -std=gnu++20 -fdiagnostics-color=always
-  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/vendors/toml++/include -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
+  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
   OBJECT_DIR = CMakeFiles/game.dir
   OBJECT_FILE_DIR = CMakeFiles/game.dir/vendors/imgui
 
@@ -77,7 +77,7 @@ build CMakeFiles/game.dir/vendors/imgui/imgui_draw.cpp.obj: CXX_COMPILER__game_u
   DEFINES = -DASSETS_PATH=\"assets/current/\"
   DEP_FILE = CMakeFiles/game.dir/vendors/imgui/imgui_draw.cpp.obj.d
   FLAGS = -O3 -DNDEBUG -std=gnu++20 -fdiagnostics-color=always
-  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/vendors/toml++/include -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
+  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
   OBJECT_DIR = CMakeFiles/game.dir
   OBJECT_FILE_DIR = CMakeFiles/game.dir/vendors/imgui
 
@@ -85,7 +85,7 @@ build CMakeFiles/game.dir/vendors/imgui/imgui_tables.cpp.obj: CXX_COMPILER__game
   DEFINES = -DASSETS_PATH=\"assets/current/\"
   DEP_FILE = CMakeFiles/game.dir/vendors/imgui/imgui_tables.cpp.obj.d
   FLAGS = -O3 -DNDEBUG -std=gnu++20 -fdiagnostics-color=always
-  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/vendors/toml++/include -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
+  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
   OBJECT_DIR = CMakeFiles/game.dir
   OBJECT_FILE_DIR = CMakeFiles/game.dir/vendors/imgui
 
@@ -93,7 +93,7 @@ build CMakeFiles/game.dir/vendors/imgui/imgui_widgets.cpp.obj: CXX_COMPILER__gam
   DEFINES = -DASSETS_PATH=\"assets/current/\"
   DEP_FILE = CMakeFiles/game.dir/vendors/imgui/imgui_widgets.cpp.obj.d
   FLAGS = -O3 -DNDEBUG -std=gnu++20 -fdiagnostics-color=always
-  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/vendors/toml++/include -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
+  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
   OBJECT_DIR = CMakeFiles/game.dir
   OBJECT_FILE_DIR = CMakeFiles/game.dir/vendors/imgui
 
@@ -101,7 +101,7 @@ build CMakeFiles/game.dir/vendors/rlImGui/rlImGui.cpp.obj: CXX_COMPILER__game_un
   DEFINES = -DASSETS_PATH=\"assets/current/\"
   DEP_FILE = CMakeFiles/game.dir/vendors/rlImGui/rlImGui.cpp.obj.d
   FLAGS = -O3 -DNDEBUG -std=gnu++20 -fdiagnostics-color=always
-  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/vendors/toml++/include -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
+  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
   OBJECT_DIR = CMakeFiles/game.dir
   OBJECT_FILE_DIR = CMakeFiles/game.dir/vendors/rlImGui
 
@@ -109,7 +109,7 @@ build CMakeFiles/game.dir/includes/astar.cpp.obj: CXX_COMPILER__game_unscanned_R
   DEFINES = -DASSETS_PATH=\"assets/current/\"
   DEP_FILE = CMakeFiles/game.dir/includes/astar.cpp.obj.d
   FLAGS = -O3 -DNDEBUG -std=gnu++20 -fdiagnostics-color=always
-  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/vendors/toml++/include -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
+  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
   OBJECT_DIR = CMakeFiles/game.dir
   OBJECT_FILE_DIR = CMakeFiles/game.dir/includes
 
@@ -117,7 +117,7 @@ build CMakeFiles/game.dir/includes/collisions.cpp.obj: CXX_COMPILER__game_unscan
   DEFINES = -DASSETS_PATH=\"assets/current/\"
   DEP_FILE = CMakeFiles/game.dir/includes/collisions.cpp.obj.d
   FLAGS = -O3 -DNDEBUG -std=gnu++20 -fdiagnostics-color=always
-  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/vendors/toml++/include -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
+  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
   OBJECT_DIR = CMakeFiles/game.dir
   OBJECT_FILE_DIR = CMakeFiles/game.dir/includes
 
@@ -125,15 +125,7 @@ build CMakeFiles/game.dir/includes/config.cpp.obj: CXX_COMPILER__game_unscanned_
   DEFINES = -DASSETS_PATH=\"assets/current/\"
   DEP_FILE = CMakeFiles/game.dir/includes/config.cpp.obj.d
   FLAGS = -O3 -DNDEBUG -std=gnu++20 -fdiagnostics-color=always
-  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/vendors/toml++/include -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
-  OBJECT_DIR = CMakeFiles/game.dir
-  OBJECT_FILE_DIR = CMakeFiles/game.dir/includes
-
-build CMakeFiles/game.dir/includes/configuration.cpp.obj: CXX_COMPILER__game_unscanned_Release /home/ginko/jems-project/aptomodo/includes/configuration.cpp || cmake_object_order_depends_target_game
-  DEFINES = -DASSETS_PATH=\"assets/current/\"
-  DEP_FILE = CMakeFiles/game.dir/includes/configuration.cpp.obj.d
-  FLAGS = -O3 -DNDEBUG -std=gnu++20 -fdiagnostics-color=always
-  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/vendors/toml++/include -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
+  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
   OBJECT_DIR = CMakeFiles/game.dir
   OBJECT_FILE_DIR = CMakeFiles/game.dir/includes
 
@@ -141,7 +133,7 @@ build CMakeFiles/game.dir/includes/controls.cpp.obj: CXX_COMPILER__game_unscanne
   DEFINES = -DASSETS_PATH=\"assets/current/\"
   DEP_FILE = CMakeFiles/game.dir/includes/controls.cpp.obj.d
   FLAGS = -O3 -DNDEBUG -std=gnu++20 -fdiagnostics-color=always
-  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/vendors/toml++/include -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
+  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
   OBJECT_DIR = CMakeFiles/game.dir
   OBJECT_FILE_DIR = CMakeFiles/game.dir/includes
 
@@ -149,7 +141,7 @@ build CMakeFiles/game.dir/includes/factories.cpp.obj: CXX_COMPILER__game_unscann
   DEFINES = -DASSETS_PATH=\"assets/current/\"
   DEP_FILE = CMakeFiles/game.dir/includes/factories.cpp.obj.d
   FLAGS = -O3 -DNDEBUG -std=gnu++20 -fdiagnostics-color=always
-  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/vendors/toml++/include -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
+  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
   OBJECT_DIR = CMakeFiles/game.dir
   OBJECT_FILE_DIR = CMakeFiles/game.dir/includes
 
@@ -157,7 +149,7 @@ build CMakeFiles/game.dir/includes/gui.cpp.obj: CXX_COMPILER__game_unscanned_Rel
   DEFINES = -DASSETS_PATH=\"assets/current/\"
   DEP_FILE = CMakeFiles/game.dir/includes/gui.cpp.obj.d
   FLAGS = -O3 -DNDEBUG -std=gnu++20 -fdiagnostics-color=always
-  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/vendors/toml++/include -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
+  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
   OBJECT_DIR = CMakeFiles/game.dir
   OBJECT_FILE_DIR = CMakeFiles/game.dir/includes
 
@@ -165,7 +157,7 @@ build CMakeFiles/game.dir/includes/items.cpp.obj: CXX_COMPILER__game_unscanned_R
   DEFINES = -DASSETS_PATH=\"assets/current/\"
   DEP_FILE = CMakeFiles/game.dir/includes/items.cpp.obj.d
   FLAGS = -O3 -DNDEBUG -std=gnu++20 -fdiagnostics-color=always
-  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/vendors/toml++/include -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
+  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
   OBJECT_DIR = CMakeFiles/game.dir
   OBJECT_FILE_DIR = CMakeFiles/game.dir/includes
 
@@ -173,7 +165,7 @@ build CMakeFiles/game.dir/includes/managers/animationManager.cpp.obj: CXX_COMPIL
   DEFINES = -DASSETS_PATH=\"assets/current/\"
   DEP_FILE = CMakeFiles/game.dir/includes/managers/animationManager.cpp.obj.d
   FLAGS = -O3 -DNDEBUG -std=gnu++20 -fdiagnostics-color=always
-  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/vendors/toml++/include -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
+  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
   OBJECT_DIR = CMakeFiles/game.dir
   OBJECT_FILE_DIR = CMakeFiles/game.dir/includes/managers
 
@@ -181,7 +173,7 @@ build CMakeFiles/game.dir/includes/managers/audioManager.cpp.obj: CXX_COMPILER__
   DEFINES = -DASSETS_PATH=\"assets/current/\"
   DEP_FILE = CMakeFiles/game.dir/includes/managers/audioManager.cpp.obj.d
   FLAGS = -O3 -DNDEBUG -std=gnu++20 -fdiagnostics-color=always
-  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/vendors/toml++/include -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
+  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
   OBJECT_DIR = CMakeFiles/game.dir
   OBJECT_FILE_DIR = CMakeFiles/game.dir/includes/managers
 
@@ -189,7 +181,7 @@ build CMakeFiles/game.dir/includes/managers/levelManager.cpp.obj: CXX_COMPILER__
   DEFINES = -DASSETS_PATH=\"assets/current/\"
   DEP_FILE = CMakeFiles/game.dir/includes/managers/levelManager.cpp.obj.d
   FLAGS = -O3 -DNDEBUG -std=gnu++20 -fdiagnostics-color=always
-  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/vendors/toml++/include -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
+  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
   OBJECT_DIR = CMakeFiles/game.dir
   OBJECT_FILE_DIR = CMakeFiles/game.dir/includes/managers
 
@@ -197,7 +189,7 @@ build CMakeFiles/game.dir/includes/managers/renderingManager.cpp.obj: CXX_COMPIL
   DEFINES = -DASSETS_PATH=\"assets/current/\"
   DEP_FILE = CMakeFiles/game.dir/includes/managers/renderingManager.cpp.obj.d
   FLAGS = -O3 -DNDEBUG -std=gnu++20 -fdiagnostics-color=always
-  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/vendors/toml++/include -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
+  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
   OBJECT_DIR = CMakeFiles/game.dir
   OBJECT_FILE_DIR = CMakeFiles/game.dir/includes/managers
 
@@ -205,7 +197,7 @@ build CMakeFiles/game.dir/includes/npc.cpp.obj: CXX_COMPILER__game_unscanned_Rel
   DEFINES = -DASSETS_PATH=\"assets/current/\"
   DEP_FILE = CMakeFiles/game.dir/includes/npc.cpp.obj.d
   FLAGS = -O3 -DNDEBUG -std=gnu++20 -fdiagnostics-color=always
-  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/vendors/toml++/include -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
+  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
   OBJECT_DIR = CMakeFiles/game.dir
   OBJECT_FILE_DIR = CMakeFiles/game.dir/includes
 
@@ -213,7 +205,7 @@ build CMakeFiles/game.dir/includes/rendering.cpp.obj: CXX_COMPILER__game_unscann
   DEFINES = -DASSETS_PATH=\"assets/current/\"
   DEP_FILE = CMakeFiles/game.dir/includes/rendering.cpp.obj.d
   FLAGS = -O3 -DNDEBUG -std=gnu++20 -fdiagnostics-color=always
-  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/vendors/toml++/include -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
+  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
   OBJECT_DIR = CMakeFiles/game.dir
   OBJECT_FILE_DIR = CMakeFiles/game.dir/includes
 
@@ -225,7 +217,7 @@ build CMakeFiles/game.dir/includes/rendering.cpp.obj: CXX_COMPILER__game_unscann
 #############################################
 # Link the executable game.exe
 
-build game.exe: CXX_EXECUTABLE_LINKER__game_Release CMakeFiles/game.dir/main.cpp.obj CMakeFiles/game.dir/vendors/imgui/imgui.cpp.obj CMakeFiles/game.dir/vendors/imgui/imgui_demo.cpp.obj CMakeFiles/game.dir/vendors/imgui/imgui_draw.cpp.obj CMakeFiles/game.dir/vendors/imgui/imgui_tables.cpp.obj CMakeFiles/game.dir/vendors/imgui/imgui_widgets.cpp.obj CMakeFiles/game.dir/vendors/rlImGui/rlImGui.cpp.obj CMakeFiles/game.dir/includes/astar.cpp.obj CMakeFiles/game.dir/includes/collisions.cpp.obj CMakeFiles/game.dir/includes/config.cpp.obj CMakeFiles/game.dir/includes/configuration.cpp.obj CMakeFiles/game.dir/includes/controls.cpp.obj CMakeFiles/game.dir/includes/factories.cpp.obj CMakeFiles/game.dir/includes/gui.cpp.obj CMakeFiles/game.dir/includes/items.cpp.obj CMakeFiles/game.dir/includes/managers/animationManager.cpp.obj CMakeFiles/game.dir/includes/managers/audioManager.cpp.obj CMakeFiles/game.dir/includes/managers/levelManager.cpp.obj CMakeFiles/game.dir/includes/managers/renderingManager.cpp.obj CMakeFiles/game.dir/includes/npc.cpp.obj CMakeFiles/game.dir/includes/rendering.cpp.obj | /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/lib/raylib.dll vendors/LDtkLoader/lib/libLDtkLoader.a || vendors/LDtkLoader/lib/libLDtkLoader.a
+build game.exe: CXX_EXECUTABLE_LINKER__game_Release CMakeFiles/game.dir/main.cpp.obj CMakeFiles/game.dir/vendors/imgui/imgui.cpp.obj CMakeFiles/game.dir/vendors/imgui/imgui_demo.cpp.obj CMakeFiles/game.dir/vendors/imgui/imgui_draw.cpp.obj CMakeFiles/game.dir/vendors/imgui/imgui_tables.cpp.obj CMakeFiles/game.dir/vendors/imgui/imgui_widgets.cpp.obj CMakeFiles/game.dir/vendors/rlImGui/rlImGui.cpp.obj CMakeFiles/game.dir/includes/astar.cpp.obj CMakeFiles/game.dir/includes/collisions.cpp.obj CMakeFiles/game.dir/includes/config.cpp.obj CMakeFiles/game.dir/includes/controls.cpp.obj CMakeFiles/game.dir/includes/factories.cpp.obj CMakeFiles/game.dir/includes/gui.cpp.obj CMakeFiles/game.dir/includes/items.cpp.obj CMakeFiles/game.dir/includes/managers/animationManager.cpp.obj CMakeFiles/game.dir/includes/managers/audioManager.cpp.obj CMakeFiles/game.dir/includes/managers/levelManager.cpp.obj CMakeFiles/game.dir/includes/managers/renderingManager.cpp.obj CMakeFiles/game.dir/includes/npc.cpp.obj CMakeFiles/game.dir/includes/rendering.cpp.obj | /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/lib/raylib.dll vendors/LDtkLoader/lib/libLDtkLoader.a || generate.exe vendors/LDtkLoader/lib/libLDtkLoader.a
   FLAGS = -O3 -DNDEBUG
   LINK_LIBRARIES = /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/lib/raylib.dll  vendors/LDtkLoader/lib/libLDtkLoader.a  -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles/game.dir
@@ -234,6 +226,40 @@ build game.exe: CXX_EXECUTABLE_LINKER__game_Release CMakeFiles/game.dir/main.cpp
   TARGET_FILE = game.exe
   TARGET_IMPLIB = libgame.dll.a
   TARGET_PDB = game.exe.dbg
+
+# =============================================================================
+# Object build statements for EXECUTABLE target generate
+
+
+#############################################
+# Order-only phony target for generate
+
+build cmake_object_order_depends_target_generate: phony || CMakeFiles/generate.dir
+
+build CMakeFiles/generate.dir/config/generate_header.cpp.obj: CXX_COMPILER__generate_unscanned_Release /home/ginko/jems-project/aptomodo/config/generate_header.cpp || cmake_object_order_depends_target_generate
+  DEP_FILE = CMakeFiles/generate.dir/config/generate_header.cpp.obj.d
+  FLAGS = -O3 -DNDEBUG -std=gnu++20 -fdiagnostics-color=always
+  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/toml++/include
+  OBJECT_DIR = CMakeFiles/generate.dir
+  OBJECT_FILE_DIR = CMakeFiles/generate.dir/config
+
+
+# =============================================================================
+# Link build statements for EXECUTABLE target generate
+
+
+#############################################
+# Link the executable generate.exe
+
+build generate.exe: CXX_EXECUTABLE_LINKER__generate_Release CMakeFiles/generate.dir/config/generate_header.cpp.obj
+  FLAGS = -O3 -DNDEBUG
+  LINK_LIBRARIES = -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
+  OBJECT_DIR = CMakeFiles/generate.dir
+  POST_BUILD = :
+  PRE_LINK = :
+  TARGET_FILE = generate.exe
+  TARGET_IMPLIB = libgenerate.dll.a
+  TARGET_PDB = generate.exe.dbg
 
 
 #############################################
@@ -300,6 +326,15 @@ build CMakeFiles/install/strip.util: CUSTOM_COMMAND all
 
 build install/strip: phony CMakeFiles/install/strip.util
 
+
+#############################################
+# Custom command for /home/ginko/jems-project/aptomodo/config/attributes.h
+
+build /home/ginko/jems-project/aptomodo/config/attributes.h: CUSTOM_COMMAND generate.exe /home/ginko/jems-project/aptomodo/config/attributes.toml || generate.exe vendors/LDtkLoader/lib/libLDtkLoader.a
+  COMMAND = cd /home/ginko/jems-project/aptomodo/cmake-build-windows && generate
+  DESC = Generating /home/ginko/jems-project/aptomodo/config/attributes.h
+  restat = 1
+
 # =============================================================================
 # Write statements declared in CMakeLists.txt:
 # /home/ginko/jems-project/aptomodo/CMakeLists.txt
@@ -317,98 +352,98 @@ build cmake_object_order_depends_target_LDtkLoader: phony || vendors/LDtkLoader/
 build vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir/src/DataTypes.cpp.obj: CXX_COMPILER__LDtkLoader_unscanned_Release /home/ginko/jems-project/aptomodo/vendors/LDtkLoader/src/DataTypes.cpp || cmake_object_order_depends_target_LDtkLoader
   DEP_FILE = vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir/src/DataTypes.cpp.obj.d
   FLAGS = -O3 -DNDEBUG -std=gnu++11 -fdiagnostics-color=always
-  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/vendors/toml++/include -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include
+  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include
   OBJECT_DIR = vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir
   OBJECT_FILE_DIR = vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir/src
 
 build vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir/src/Entity.cpp.obj: CXX_COMPILER__LDtkLoader_unscanned_Release /home/ginko/jems-project/aptomodo/vendors/LDtkLoader/src/Entity.cpp || cmake_object_order_depends_target_LDtkLoader
   DEP_FILE = vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir/src/Entity.cpp.obj.d
   FLAGS = -O3 -DNDEBUG -std=gnu++11 -fdiagnostics-color=always
-  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/vendors/toml++/include -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include
+  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include
   OBJECT_DIR = vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir
   OBJECT_FILE_DIR = vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir/src
 
 build vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir/src/EntityDef.cpp.obj: CXX_COMPILER__LDtkLoader_unscanned_Release /home/ginko/jems-project/aptomodo/vendors/LDtkLoader/src/EntityDef.cpp || cmake_object_order_depends_target_LDtkLoader
   DEP_FILE = vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir/src/EntityDef.cpp.obj.d
   FLAGS = -O3 -DNDEBUG -std=gnu++11 -fdiagnostics-color=always
-  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/vendors/toml++/include -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include
+  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include
   OBJECT_DIR = vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir
   OBJECT_FILE_DIR = vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir/src
 
 build vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir/src/Enum.cpp.obj: CXX_COMPILER__LDtkLoader_unscanned_Release /home/ginko/jems-project/aptomodo/vendors/LDtkLoader/src/Enum.cpp || cmake_object_order_depends_target_LDtkLoader
   DEP_FILE = vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir/src/Enum.cpp.obj.d
   FLAGS = -O3 -DNDEBUG -std=gnu++11 -fdiagnostics-color=always
-  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/vendors/toml++/include -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include
+  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include
   OBJECT_DIR = vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir
   OBJECT_FILE_DIR = vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir/src
 
 build vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir/src/FieldsContainer.cpp.obj: CXX_COMPILER__LDtkLoader_unscanned_Release /home/ginko/jems-project/aptomodo/vendors/LDtkLoader/src/FieldsContainer.cpp || cmake_object_order_depends_target_LDtkLoader
   DEP_FILE = vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir/src/FieldsContainer.cpp.obj.d
   FLAGS = -O3 -DNDEBUG -std=gnu++11 -fdiagnostics-color=always
-  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/vendors/toml++/include -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include
+  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include
   OBJECT_DIR = vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir
   OBJECT_FILE_DIR = vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir/src
 
 build vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir/src/Layer.cpp.obj: CXX_COMPILER__LDtkLoader_unscanned_Release /home/ginko/jems-project/aptomodo/vendors/LDtkLoader/src/Layer.cpp || cmake_object_order_depends_target_LDtkLoader
   DEP_FILE = vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir/src/Layer.cpp.obj.d
   FLAGS = -O3 -DNDEBUG -std=gnu++11 -fdiagnostics-color=always
-  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/vendors/toml++/include -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include
+  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include
   OBJECT_DIR = vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir
   OBJECT_FILE_DIR = vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir/src
 
 build vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir/src/LayerDef.cpp.obj: CXX_COMPILER__LDtkLoader_unscanned_Release /home/ginko/jems-project/aptomodo/vendors/LDtkLoader/src/LayerDef.cpp || cmake_object_order_depends_target_LDtkLoader
   DEP_FILE = vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir/src/LayerDef.cpp.obj.d
   FLAGS = -O3 -DNDEBUG -std=gnu++11 -fdiagnostics-color=always
-  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/vendors/toml++/include -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include
+  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include
   OBJECT_DIR = vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir
   OBJECT_FILE_DIR = vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir/src
 
 build vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir/src/Level.cpp.obj: CXX_COMPILER__LDtkLoader_unscanned_Release /home/ginko/jems-project/aptomodo/vendors/LDtkLoader/src/Level.cpp || cmake_object_order_depends_target_LDtkLoader
   DEP_FILE = vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir/src/Level.cpp.obj.d
   FLAGS = -O3 -DNDEBUG -std=gnu++11 -fdiagnostics-color=always
-  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/vendors/toml++/include -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include
+  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include
   OBJECT_DIR = vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir
   OBJECT_FILE_DIR = vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir/src
 
 build vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir/src/Project.cpp.obj: CXX_COMPILER__LDtkLoader_unscanned_Release /home/ginko/jems-project/aptomodo/vendors/LDtkLoader/src/Project.cpp || cmake_object_order_depends_target_LDtkLoader
   DEP_FILE = vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir/src/Project.cpp.obj.d
   FLAGS = -O3 -DNDEBUG -std=gnu++11 -fdiagnostics-color=always
-  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/vendors/toml++/include -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include
+  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include
   OBJECT_DIR = vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir
   OBJECT_FILE_DIR = vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir/src
 
 build vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir/src/TagsContainer.cpp.obj: CXX_COMPILER__LDtkLoader_unscanned_Release /home/ginko/jems-project/aptomodo/vendors/LDtkLoader/src/TagsContainer.cpp || cmake_object_order_depends_target_LDtkLoader
   DEP_FILE = vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir/src/TagsContainer.cpp.obj.d
   FLAGS = -O3 -DNDEBUG -std=gnu++11 -fdiagnostics-color=always
-  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/vendors/toml++/include -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include
+  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include
   OBJECT_DIR = vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir
   OBJECT_FILE_DIR = vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir/src
 
 build vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir/src/Tile.cpp.obj: CXX_COMPILER__LDtkLoader_unscanned_Release /home/ginko/jems-project/aptomodo/vendors/LDtkLoader/src/Tile.cpp || cmake_object_order_depends_target_LDtkLoader
   DEP_FILE = vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir/src/Tile.cpp.obj.d
   FLAGS = -O3 -DNDEBUG -std=gnu++11 -fdiagnostics-color=always
-  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/vendors/toml++/include -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include
+  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include
   OBJECT_DIR = vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir
   OBJECT_FILE_DIR = vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir/src
 
 build vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir/src/Tileset.cpp.obj: CXX_COMPILER__LDtkLoader_unscanned_Release /home/ginko/jems-project/aptomodo/vendors/LDtkLoader/src/Tileset.cpp || cmake_object_order_depends_target_LDtkLoader
   DEP_FILE = vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir/src/Tileset.cpp.obj.d
   FLAGS = -O3 -DNDEBUG -std=gnu++11 -fdiagnostics-color=always
-  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/vendors/toml++/include -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include
+  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include
   OBJECT_DIR = vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir
   OBJECT_FILE_DIR = vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir/src
 
 build vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir/src/Utils.cpp.obj: CXX_COMPILER__LDtkLoader_unscanned_Release /home/ginko/jems-project/aptomodo/vendors/LDtkLoader/src/Utils.cpp || cmake_object_order_depends_target_LDtkLoader
   DEP_FILE = vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir/src/Utils.cpp.obj.d
   FLAGS = -O3 -DNDEBUG -std=gnu++11 -fdiagnostics-color=always
-  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/vendors/toml++/include -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include
+  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include
   OBJECT_DIR = vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir
   OBJECT_FILE_DIR = vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir/src
 
 build vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir/src/World.cpp.obj: CXX_COMPILER__LDtkLoader_unscanned_Release /home/ginko/jems-project/aptomodo/vendors/LDtkLoader/src/World.cpp || cmake_object_order_depends_target_LDtkLoader
   DEP_FILE = vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir/src/World.cpp.obj.d
   FLAGS = -O3 -DNDEBUG -std=gnu++11 -fdiagnostics-color=always
-  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/vendors/toml++/include -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include
+  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include
   OBJECT_DIR = vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir
   OBJECT_FILE_DIR = vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir/src
 
@@ -500,6 +535,8 @@ build LDtkLoader: phony vendors/LDtkLoader/lib/libLDtkLoader.a
 
 build game: phony game.exe
 
+build generate: phony generate.exe
+
 build libLDtkLoader.a: phony vendors/LDtkLoader/lib/libLDtkLoader.a
 
 # =============================================================================
@@ -510,7 +547,7 @@ build libLDtkLoader.a: phony vendors/LDtkLoader/lib/libLDtkLoader.a
 #############################################
 # Folder: /home/ginko/jems-project/aptomodo/cmake-build-windows
 
-build all: phony game.exe vendors/LDtkLoader/all
+build all: phony game.exe generate.exe vendors/LDtkLoader/all
 
 # =============================================================================
 

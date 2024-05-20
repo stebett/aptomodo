@@ -73,6 +73,12 @@ void imguiAttributesMultipliers() {
     ImGui::End();
 }
 
+//void imguiSubAttributesStartValues() {
+//    ImGui::Begin("Start values for SubAttributes");
+//    config::loadAttributes();
+//}
+
+
 void imguiAttributes(entt::registry &registry) {
     ImGui::Begin("Attributes");
 

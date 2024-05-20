@@ -1,4 +1,5 @@
 /home/ginko/jems-project/aptomodo/cmake-build-windows/CMakeFiles/game.dir
+/home/ginko/jems-project/aptomodo/cmake-build-windows/CMakeFiles/generate.dir
 /home/ginko/jems-project/aptomodo/cmake-build-windows/CMakeFiles/edit_cache.dir
 /home/ginko/jems-project/aptomodo/cmake-build-windows/CMakeFiles/rebuild_cache.dir
 /home/ginko/jems-project/aptomodo/cmake-build-windows/CMakeFiles/list_install_components.dir
