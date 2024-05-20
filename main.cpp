@@ -16,14 +16,19 @@
 #include "includes/managers/levelManager.h"
 #include "managers/framerateManager.h"
 
-int main() {
-    entt::registry registry;
-    InitWindow(screenWidth, screenHeight, "Apto Modo");
+enum class LevelOutcome {
+    WIN,
+    LOSE,
+    RESTART,
+    QUIT,
+    NONE,
+};
 
+LevelOutcome PlayLevel() {
+    LevelOutcome outcome = LevelOutcome::NONE;
+    entt::registry registry;
     RenderingManager::Instantiate(registry);
-    AudioManager::Instantiate();
-    AnimationManager::Instantiate();
-    LevelManager::Instantiate();
+
 
     auto camera = spawnCamera();
     auto player = spawnPlayer(registry);
@@ -36,32 +41,63 @@ int main() {
     auto io = InitGui();
 
     FramerateManager framerateManager;
-//    SetTargetFPS(60);
-    while (!WindowShouldClose()) {
-        updateCamera(camera, position);
-        UpdateGui(registry, io);
 
+    bool windowsShouldClose = false;
+    bool paused = false;
+    while (!windowsShouldClose) {
+        UpdateGui(registry, io);
+        updateCamera(camera, position);
         BeginDrawing();
         BeginMode2D(camera); // TODO add option to activate second debug camera
-
         ClearBackground(WHITE);
         LevelManager::Draw(camera);
         RenderingManager::Draw(camera, framerateManager.framesCounter);
-
-        updateEnemy(registry, player); // TODO This should be before drawing
-
+        if (!paused) {
+            updateEnemy(registry, player); // TODO This should be before drawing
+            updatePlayer(registry, player, position, camera);
+        }
         EndMode2D();
-        updatePlayer(registry, player, position, camera);
-
         DrawGui();
         DrawFPS(10, 10);
 
-        DrawText(std::format("Health: {}", health.value).c_str(), 10, screenHeight -40, 30, WHITE);
+        DrawText(std::format("Health: {}", health.value).c_str(), 10, screenHeight - 40, 30, WHITE);
+        if (paused) {
+            DrawText("PAUSE", screenHeight / 2 - 50, screenWidth / 2 - MeasureText("PAUSE", 50), 50, WHITE);
+        }
 
         EndDrawing();
+
         framerateManager.Update();
+        if (IsKeyPressed(KEY_Q)) {
+            windowsShouldClose = true;
+            outcome = LevelOutcome::QUIT;
+        }
+        if (IsKeyPressed(KEY_R)) {
+            windowsShouldClose = true;
+            outcome = LevelOutcome::RESTART;
+        }
+        if (IsKeyPressed(KEY_P)) { paused = !paused; }
     }
 
+    return
+            outcome;
+}
+
+void GameLoop() {
+    LevelOutcome outcome = LevelOutcome::NONE;
+    do {
+        outcome = PlayLevel();
+    } while (outcome != LevelOutcome::QUIT);
+}
+
+int main() {
+    InitWindow(screenWidth, screenHeight, "Apto Modo");
+
+    AudioManager::Instantiate();
+    AnimationManager::Instantiate();
+    LevelManager::Instantiate();
+
+    GameLoop();
     CloseGui();
     CloseWindow();
     return 0;
