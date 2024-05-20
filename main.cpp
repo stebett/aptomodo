@@ -14,6 +14,7 @@
 #include "includes/managers/animationManager.h"
 #include "includes/managers/renderingManager.h"
 #include "includes/managers/levelManager.h"
+#include "managers/framerateManager.h"
 
 int main() {
     entt::registry registry;
@@ -34,18 +35,7 @@ int main() {
 
     auto io = InitGui();
 
-    auto framesCounter = 0u;
-
-
-    // Custom timming variables
-    double previousTime = GetTime();    // Previous time measure
-    double currentTime = 0.0;           // Current time measure
-    double updateDrawTime = 0.0;        // Update + Draw time
-    double waitTime = 0.0;              // Wait time (if target fps required)
-    float deltaTime = 0.0f;             // Frame time (Update + Draw + Wait time)
-
-    float timeCounter = 0.0f;           // Accumulative time counter (seconds)
-
+    FramerateManager framerateManager;
 //    SetTargetFPS(60);
     while (!WindowShouldClose()) {
         updateCamera(camera, position);
@@ -56,7 +46,7 @@ int main() {
 
         ClearBackground(WHITE);
         LevelManager::Draw(camera);
-        RenderingManager::Draw(camera, framesCounter);
+        RenderingManager::Draw(camera, framerateManager.framesCounter);
 
         updateEnemy(registry, player); // TODO This should be before drawing
 
@@ -69,24 +59,7 @@ int main() {
         DrawText(std::format("Health: {}", health.value).c_str(), 10, screenHeight -40, 30, WHITE);
 
         EndDrawing();
-
-        ++framesCounter;
-        currentTime = GetTime();
-        updateDrawTime = currentTime - previousTime;
-
-        if (config::fps > 0)          // We want a fixed frame rate
-        {
-            waitTime = (1.0f/(float)config::fps) - updateDrawTime;
-            if (waitTime > 0.0)
-            {
-                WaitTime((float)waitTime);
-                currentTime = GetTime();
-                deltaTime = (float)(currentTime - previousTime);
-            }
-        }
-        else deltaTime = (float)updateDrawTime;    // Framerate could be variable
-
-        previousTime = currentTime;
+        framerateManager.Update();
     }
 
     CloseGui();
