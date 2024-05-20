@@ -4,3 +4,5 @@
 /vendors/
 /cmake-build-windows/vendors/
 /cmake-build-windows/bin/
+/cmake-build-windows/
+/bin-windows/

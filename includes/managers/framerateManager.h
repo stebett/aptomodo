@@ -2,8 +2,8 @@
 // Created by ginko on 20/05/24.
 //
 
-#ifndef ACEROLA_JAM0_FRAMERATEMANAGER_H
-#define ACEROLA_JAM0_FRAMERATEMANAGER_H
+#ifndef APTOMODO_FRAMERATEMANAGER_H
+#define APTOMODO_FRAMERATEMANAGER_H
 
 #include <raylib.h>
 #include "../config.h"
@@ -40,4 +40,4 @@ struct FramerateManager {
         previousTime = currentTime;
     }
 };
-#endif //ACEROLA_JAM0_FRAMERATEMANAGER_H
+#endif //APTOMODO_FRAMERATEMANAGER_H

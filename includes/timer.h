@@ -2,8 +2,8 @@
 // Created by ginko on 15/04/24.
 //
 
-#ifndef ACEROLA_JAM0_TIMER_H
-#define ACEROLA_JAM0_TIMER_H
+#ifndef APTOMODO_TIMER_H
+#define APTOMODO_TIMER_H
 
 #include <chrono>
 
@@ -31,4 +31,4 @@ private:
     std::chrono::time_point<std::chrono::high_resolution_clock> m_Start;
 };
 
-#endif //ACEROLA_JAM0_TIMER_H
+#endif //APTOMODO_TIMER_H

@@ -1,4 +1,4 @@
-# Install script for directory: /home/ginko/jems-project/acerola-jam0
+# Install script for directory: /home/ginko/jems-project/aptomodo
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -39,7 +39,7 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/ginko/jems-project/acerola-jam0/cmake-build-windows/vendors/LDtkLoader/cmake_install.cmake")
+  include("/home/ginko/jems-project/aptomodo/cmake-build-windows/vendors/LDtkLoader/cmake_install.cmake")
 endif()
 
 if(CMAKE_INSTALL_COMPONENT)
@@ -50,5 +50,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/ginko/jems-project/acerola-jam0/cmake-build-windows/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/ginko/jems-project/aptomodo/cmake-build-windows/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

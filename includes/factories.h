@@ -2,8 +2,8 @@
 // Created by ginko on 02/03/24.
 //
 
-#ifndef ACEROLA_JAM0_FACTORIES_H
-#define ACEROLA_JAM0_FACTORIES_H
+#ifndef APTOMODO_FACTORIES_H
+#define APTOMODO_FACTORIES_H
 
 #include <LDtkLoader/Entity.hpp>
 #include "components.h"
@@ -21,4 +21,4 @@ Camera2D spawnCamera();
 
 void spawnItems(entt::registry& registry);
 
-#endif //ACEROLA_JAM0_FACTORIES_H
+#endif //APTOMODO_FACTORIES_H

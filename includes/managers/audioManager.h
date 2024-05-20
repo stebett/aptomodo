@@ -2,8 +2,8 @@
 // Created by ginko on 17/04/24.
 //
 
-#ifndef ACEROLA_JAM0_AUDIOMANAGER_H
-#define ACEROLA_JAM0_AUDIOMANAGER_H
+#ifndef APTOMODO_AUDIOMANAGER_H
+#define APTOMODO_AUDIOMANAGER_H
 
 #include <raylib.h>
 #include <unordered_map>
@@ -36,4 +36,4 @@ public:
 };
 
 
-#endif //ACEROLA_JAM0_AUDIOMANAGER_H
+#endif //APTOMODO_AUDIOMANAGER_H

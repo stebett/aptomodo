@@ -2,8 +2,8 @@
 // Created by ginko on 02/03/24.
 //
 
-#ifndef ACEROLA_JAM0_COLLISIONS_H
-#define ACEROLA_JAM0_COLLISIONS_H
+#ifndef APTOMODO_COLLISIONS_H
+#define APTOMODO_COLLISIONS_H
 
 #include "constants.h"
 
@@ -12,4 +12,4 @@ CheckCollisionCircleTriangle(Vector2 center, float radius, Vector2 v1, Vector2 v
 void solveCircleRecCollision(Vector2 &futurePos, float radius);
 
 
-#endif //ACEROLA_JAM0_COLLISIONS_H
+#endif //APTOMODO_COLLISIONS_H

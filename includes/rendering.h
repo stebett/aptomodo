@@ -3,8 +3,8 @@
 //
 // Credits to https://github.com/tupini07/raylib-cpp-cmake-template
 
-#ifndef ACEROLA_JAM0_RENDERING_H
-#define ACEROLA_JAM0_RENDERING_H
+#ifndef APTOMODO_RENDERING_H
+#define APTOMODO_RENDERING_H
 
 #include <LDtkLoader/Project.hpp>
 #include <LDtkLoader/World.hpp>
@@ -77,4 +77,4 @@ void updateCamera(Camera2D &camera, Position &playerPosition);
 //};
 
 
-#endif //ACEROLA_JAM0_RENDERING_H
+#endif //APTOMODO_RENDERING_H

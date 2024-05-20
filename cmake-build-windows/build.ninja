@@ -11,7 +11,7 @@
 # =============================================================================
 
 # =============================================================================
-# Project: acerola_jam0
+# Project: aptomodo
 # Configurations: Release
 # =============================================================================
 
@@ -39,7 +39,7 @@ include CMakeFiles/rules.ninja
 #############################################
 # Logical path to working directory; prefix for absolute paths.
 
-cmake_ninja_workdir = /home/ginko/jems-project/acerola-jam0/cmake-build-windows/
+cmake_ninja_workdir = /home/ginko/jems-project/aptomodo/cmake-build-windows/
 # =============================================================================
 # Object build statements for EXECUTABLE target game
 
@@ -49,163 +49,171 @@ cmake_ninja_workdir = /home/ginko/jems-project/acerola-jam0/cmake-build-windows/
 
 build cmake_object_order_depends_target_game: phony || cmake_object_order_depends_target_LDtkLoader
 
-build CMakeFiles/game.dir/main.cpp.obj: CXX_COMPILER__game_unscanned_Release /home/ginko/jems-project/acerola-jam0/main.cpp || cmake_object_order_depends_target_game
+build CMakeFiles/game.dir/main.cpp.obj: CXX_COMPILER__game_unscanned_Release /home/ginko/jems-project/aptomodo/main.cpp || cmake_object_order_depends_target_game
   DEFINES = -DASSETS_PATH=\"assets/current/\"
   DEP_FILE = CMakeFiles/game.dir/main.cpp.obj.d
   FLAGS = -O3 -DNDEBUG -std=gnu++20 -fdiagnostics-color=always
-  INCLUDES = -I/home/ginko/jems-project/acerola-jam0/vendors/boost -I/home/ginko/jems-project/acerola-jam0/vendors/rlImGui -I/home/ginko/jems-project/acerola-jam0/vendors/imgui -I/home/ginko/jems-project/acerola-jam0/vendors/entt/src -I/home/ginko/jems-project/acerola-jam0/vendors/eigen -I/home/ginko/jems-project/acerola-jam0/includes -I/home/ginko/jems-project/acerola-jam0/vendors/LDtkLoader/include -I/home/ginko/jems-project/acerola-jam0/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
+  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/vendors/toml++/include -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
   OBJECT_DIR = CMakeFiles/game.dir
   OBJECT_FILE_DIR = CMakeFiles/game.dir
 
-build CMakeFiles/game.dir/vendors/imgui/imgui.cpp.obj: CXX_COMPILER__game_unscanned_Release /home/ginko/jems-project/acerola-jam0/vendors/imgui/imgui.cpp || cmake_object_order_depends_target_game
+build CMakeFiles/game.dir/vendors/imgui/imgui.cpp.obj: CXX_COMPILER__game_unscanned_Release /home/ginko/jems-project/aptomodo/vendors/imgui/imgui.cpp || cmake_object_order_depends_target_game
   DEFINES = -DASSETS_PATH=\"assets/current/\"
   DEP_FILE = CMakeFiles/game.dir/vendors/imgui/imgui.cpp.obj.d
   FLAGS = -O3 -DNDEBUG -std=gnu++20 -fdiagnostics-color=always
-  INCLUDES = -I/home/ginko/jems-project/acerola-jam0/vendors/boost -I/home/ginko/jems-project/acerola-jam0/vendors/rlImGui -I/home/ginko/jems-project/acerola-jam0/vendors/imgui -I/home/ginko/jems-project/acerola-jam0/vendors/entt/src -I/home/ginko/jems-project/acerola-jam0/vendors/eigen -I/home/ginko/jems-project/acerola-jam0/includes -I/home/ginko/jems-project/acerola-jam0/vendors/LDtkLoader/include -I/home/ginko/jems-project/acerola-jam0/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
+  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/vendors/toml++/include -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
   OBJECT_DIR = CMakeFiles/game.dir
   OBJECT_FILE_DIR = CMakeFiles/game.dir/vendors/imgui
 
-build CMakeFiles/game.dir/vendors/imgui/imgui_demo.cpp.obj: CXX_COMPILER__game_unscanned_Release /home/ginko/jems-project/acerola-jam0/vendors/imgui/imgui_demo.cpp || cmake_object_order_depends_target_game
+build CMakeFiles/game.dir/vendors/imgui/imgui_demo.cpp.obj: CXX_COMPILER__game_unscanned_Release /home/ginko/jems-project/aptomodo/vendors/imgui/imgui_demo.cpp || cmake_object_order_depends_target_game
   DEFINES = -DASSETS_PATH=\"assets/current/\"
   DEP_FILE = CMakeFiles/game.dir/vendors/imgui/imgui_demo.cpp.obj.d
   FLAGS = -O3 -DNDEBUG -std=gnu++20 -fdiagnostics-color=always
-  INCLUDES = -I/home/ginko/jems-project/acerola-jam0/vendors/boost -I/home/ginko/jems-project/acerola-jam0/vendors/rlImGui -I/home/ginko/jems-project/acerola-jam0/vendors/imgui -I/home/ginko/jems-project/acerola-jam0/vendors/entt/src -I/home/ginko/jems-project/acerola-jam0/vendors/eigen -I/home/ginko/jems-project/acerola-jam0/includes -I/home/ginko/jems-project/acerola-jam0/vendors/LDtkLoader/include -I/home/ginko/jems-project/acerola-jam0/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
+  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/vendors/toml++/include -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
   OBJECT_DIR = CMakeFiles/game.dir
   OBJECT_FILE_DIR = CMakeFiles/game.dir/vendors/imgui
 
-build CMakeFiles/game.dir/vendors/imgui/imgui_draw.cpp.obj: CXX_COMPILER__game_unscanned_Release /home/ginko/jems-project/acerola-jam0/vendors/imgui/imgui_draw.cpp || cmake_object_order_depends_target_game
+build CMakeFiles/game.dir/vendors/imgui/imgui_draw.cpp.obj: CXX_COMPILER__game_unscanned_Release /home/ginko/jems-project/aptomodo/vendors/imgui/imgui_draw.cpp || cmake_object_order_depends_target_game
   DEFINES = -DASSETS_PATH=\"assets/current/\"
   DEP_FILE = CMakeFiles/game.dir/vendors/imgui/imgui_draw.cpp.obj.d
   FLAGS = -O3 -DNDEBUG -std=gnu++20 -fdiagnostics-color=always
-  INCLUDES = -I/home/ginko/jems-project/acerola-jam0/vendors/boost -I/home/ginko/jems-project/acerola-jam0/vendors/rlImGui -I/home/ginko/jems-project/acerola-jam0/vendors/imgui -I/home/ginko/jems-project/acerola-jam0/vendors/entt/src -I/home/ginko/jems-project/acerola-jam0/vendors/eigen -I/home/ginko/jems-project/acerola-jam0/includes -I/home/ginko/jems-project/acerola-jam0/vendors/LDtkLoader/include -I/home/ginko/jems-project/acerola-jam0/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
+  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/vendors/toml++/include -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
   OBJECT_DIR = CMakeFiles/game.dir
   OBJECT_FILE_DIR = CMakeFiles/game.dir/vendors/imgui
 
-build CMakeFiles/game.dir/vendors/imgui/imgui_tables.cpp.obj: CXX_COMPILER__game_unscanned_Release /home/ginko/jems-project/acerola-jam0/vendors/imgui/imgui_tables.cpp || cmake_object_order_depends_target_game
+build CMakeFiles/game.dir/vendors/imgui/imgui_tables.cpp.obj: CXX_COMPILER__game_unscanned_Release /home/ginko/jems-project/aptomodo/vendors/imgui/imgui_tables.cpp || cmake_object_order_depends_target_game
   DEFINES = -DASSETS_PATH=\"assets/current/\"
   DEP_FILE = CMakeFiles/game.dir/vendors/imgui/imgui_tables.cpp.obj.d
   FLAGS = -O3 -DNDEBUG -std=gnu++20 -fdiagnostics-color=always
-  INCLUDES = -I/home/ginko/jems-project/acerola-jam0/vendors/boost -I/home/ginko/jems-project/acerola-jam0/vendors/rlImGui -I/home/ginko/jems-project/acerola-jam0/vendors/imgui -I/home/ginko/jems-project/acerola-jam0/vendors/entt/src -I/home/ginko/jems-project/acerola-jam0/vendors/eigen -I/home/ginko/jems-project/acerola-jam0/includes -I/home/ginko/jems-project/acerola-jam0/vendors/LDtkLoader/include -I/home/ginko/jems-project/acerola-jam0/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
+  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/vendors/toml++/include -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
   OBJECT_DIR = CMakeFiles/game.dir
   OBJECT_FILE_DIR = CMakeFiles/game.dir/vendors/imgui
 
-build CMakeFiles/game.dir/vendors/imgui/imgui_widgets.cpp.obj: CXX_COMPILER__game_unscanned_Release /home/ginko/jems-project/acerola-jam0/vendors/imgui/imgui_widgets.cpp || cmake_object_order_depends_target_game
+build CMakeFiles/game.dir/vendors/imgui/imgui_widgets.cpp.obj: CXX_COMPILER__game_unscanned_Release /home/ginko/jems-project/aptomodo/vendors/imgui/imgui_widgets.cpp || cmake_object_order_depends_target_game
   DEFINES = -DASSETS_PATH=\"assets/current/\"
   DEP_FILE = CMakeFiles/game.dir/vendors/imgui/imgui_widgets.cpp.obj.d
   FLAGS = -O3 -DNDEBUG -std=gnu++20 -fdiagnostics-color=always
-  INCLUDES = -I/home/ginko/jems-project/acerola-jam0/vendors/boost -I/home/ginko/jems-project/acerola-jam0/vendors/rlImGui -I/home/ginko/jems-project/acerola-jam0/vendors/imgui -I/home/ginko/jems-project/acerola-jam0/vendors/entt/src -I/home/ginko/jems-project/acerola-jam0/vendors/eigen -I/home/ginko/jems-project/acerola-jam0/includes -I/home/ginko/jems-project/acerola-jam0/vendors/LDtkLoader/include -I/home/ginko/jems-project/acerola-jam0/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
+  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/vendors/toml++/include -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
   OBJECT_DIR = CMakeFiles/game.dir
   OBJECT_FILE_DIR = CMakeFiles/game.dir/vendors/imgui
 
-build CMakeFiles/game.dir/vendors/rlImGui/rlImGui.cpp.obj: CXX_COMPILER__game_unscanned_Release /home/ginko/jems-project/acerola-jam0/vendors/rlImGui/rlImGui.cpp || cmake_object_order_depends_target_game
+build CMakeFiles/game.dir/vendors/rlImGui/rlImGui.cpp.obj: CXX_COMPILER__game_unscanned_Release /home/ginko/jems-project/aptomodo/vendors/rlImGui/rlImGui.cpp || cmake_object_order_depends_target_game
   DEFINES = -DASSETS_PATH=\"assets/current/\"
   DEP_FILE = CMakeFiles/game.dir/vendors/rlImGui/rlImGui.cpp.obj.d
   FLAGS = -O3 -DNDEBUG -std=gnu++20 -fdiagnostics-color=always
-  INCLUDES = -I/home/ginko/jems-project/acerola-jam0/vendors/boost -I/home/ginko/jems-project/acerola-jam0/vendors/rlImGui -I/home/ginko/jems-project/acerola-jam0/vendors/imgui -I/home/ginko/jems-project/acerola-jam0/vendors/entt/src -I/home/ginko/jems-project/acerola-jam0/vendors/eigen -I/home/ginko/jems-project/acerola-jam0/includes -I/home/ginko/jems-project/acerola-jam0/vendors/LDtkLoader/include -I/home/ginko/jems-project/acerola-jam0/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
+  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/vendors/toml++/include -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
   OBJECT_DIR = CMakeFiles/game.dir
   OBJECT_FILE_DIR = CMakeFiles/game.dir/vendors/rlImGui
 
-build CMakeFiles/game.dir/includes/astar.cpp.obj: CXX_COMPILER__game_unscanned_Release /home/ginko/jems-project/acerola-jam0/includes/astar.cpp || cmake_object_order_depends_target_game
+build CMakeFiles/game.dir/includes/astar.cpp.obj: CXX_COMPILER__game_unscanned_Release /home/ginko/jems-project/aptomodo/includes/astar.cpp || cmake_object_order_depends_target_game
   DEFINES = -DASSETS_PATH=\"assets/current/\"
   DEP_FILE = CMakeFiles/game.dir/includes/astar.cpp.obj.d
   FLAGS = -O3 -DNDEBUG -std=gnu++20 -fdiagnostics-color=always
-  INCLUDES = -I/home/ginko/jems-project/acerola-jam0/vendors/boost -I/home/ginko/jems-project/acerola-jam0/vendors/rlImGui -I/home/ginko/jems-project/acerola-jam0/vendors/imgui -I/home/ginko/jems-project/acerola-jam0/vendors/entt/src -I/home/ginko/jems-project/acerola-jam0/vendors/eigen -I/home/ginko/jems-project/acerola-jam0/includes -I/home/ginko/jems-project/acerola-jam0/vendors/LDtkLoader/include -I/home/ginko/jems-project/acerola-jam0/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
+  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/vendors/toml++/include -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
   OBJECT_DIR = CMakeFiles/game.dir
   OBJECT_FILE_DIR = CMakeFiles/game.dir/includes
 
-build CMakeFiles/game.dir/includes/collisions.cpp.obj: CXX_COMPILER__game_unscanned_Release /home/ginko/jems-project/acerola-jam0/includes/collisions.cpp || cmake_object_order_depends_target_game
+build CMakeFiles/game.dir/includes/collisions.cpp.obj: CXX_COMPILER__game_unscanned_Release /home/ginko/jems-project/aptomodo/includes/collisions.cpp || cmake_object_order_depends_target_game
   DEFINES = -DASSETS_PATH=\"assets/current/\"
   DEP_FILE = CMakeFiles/game.dir/includes/collisions.cpp.obj.d
   FLAGS = -O3 -DNDEBUG -std=gnu++20 -fdiagnostics-color=always
-  INCLUDES = -I/home/ginko/jems-project/acerola-jam0/vendors/boost -I/home/ginko/jems-project/acerola-jam0/vendors/rlImGui -I/home/ginko/jems-project/acerola-jam0/vendors/imgui -I/home/ginko/jems-project/acerola-jam0/vendors/entt/src -I/home/ginko/jems-project/acerola-jam0/vendors/eigen -I/home/ginko/jems-project/acerola-jam0/includes -I/home/ginko/jems-project/acerola-jam0/vendors/LDtkLoader/include -I/home/ginko/jems-project/acerola-jam0/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
+  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/vendors/toml++/include -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
   OBJECT_DIR = CMakeFiles/game.dir
   OBJECT_FILE_DIR = CMakeFiles/game.dir/includes
 
-build CMakeFiles/game.dir/includes/config.cpp.obj: CXX_COMPILER__game_unscanned_Release /home/ginko/jems-project/acerola-jam0/includes/config.cpp || cmake_object_order_depends_target_game
+build CMakeFiles/game.dir/includes/config.cpp.obj: CXX_COMPILER__game_unscanned_Release /home/ginko/jems-project/aptomodo/includes/config.cpp || cmake_object_order_depends_target_game
   DEFINES = -DASSETS_PATH=\"assets/current/\"
   DEP_FILE = CMakeFiles/game.dir/includes/config.cpp.obj.d
   FLAGS = -O3 -DNDEBUG -std=gnu++20 -fdiagnostics-color=always
-  INCLUDES = -I/home/ginko/jems-project/acerola-jam0/vendors/boost -I/home/ginko/jems-project/acerola-jam0/vendors/rlImGui -I/home/ginko/jems-project/acerola-jam0/vendors/imgui -I/home/ginko/jems-project/acerola-jam0/vendors/entt/src -I/home/ginko/jems-project/acerola-jam0/vendors/eigen -I/home/ginko/jems-project/acerola-jam0/includes -I/home/ginko/jems-project/acerola-jam0/vendors/LDtkLoader/include -I/home/ginko/jems-project/acerola-jam0/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
+  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/vendors/toml++/include -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
   OBJECT_DIR = CMakeFiles/game.dir
   OBJECT_FILE_DIR = CMakeFiles/game.dir/includes
 
-build CMakeFiles/game.dir/includes/controls.cpp.obj: CXX_COMPILER__game_unscanned_Release /home/ginko/jems-project/acerola-jam0/includes/controls.cpp || cmake_object_order_depends_target_game
+build CMakeFiles/game.dir/includes/configuration.cpp.obj: CXX_COMPILER__game_unscanned_Release /home/ginko/jems-project/aptomodo/includes/configuration.cpp || cmake_object_order_depends_target_game
+  DEFINES = -DASSETS_PATH=\"assets/current/\"
+  DEP_FILE = CMakeFiles/game.dir/includes/configuration.cpp.obj.d
+  FLAGS = -O3 -DNDEBUG -std=gnu++20 -fdiagnostics-color=always
+  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/vendors/toml++/include -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
+  OBJECT_DIR = CMakeFiles/game.dir
+  OBJECT_FILE_DIR = CMakeFiles/game.dir/includes
+
+build CMakeFiles/game.dir/includes/controls.cpp.obj: CXX_COMPILER__game_unscanned_Release /home/ginko/jems-project/aptomodo/includes/controls.cpp || cmake_object_order_depends_target_game
   DEFINES = -DASSETS_PATH=\"assets/current/\"
   DEP_FILE = CMakeFiles/game.dir/includes/controls.cpp.obj.d
   FLAGS = -O3 -DNDEBUG -std=gnu++20 -fdiagnostics-color=always
-  INCLUDES = -I/home/ginko/jems-project/acerola-jam0/vendors/boost -I/home/ginko/jems-project/acerola-jam0/vendors/rlImGui -I/home/ginko/jems-project/acerola-jam0/vendors/imgui -I/home/ginko/jems-project/acerola-jam0/vendors/entt/src -I/home/ginko/jems-project/acerola-jam0/vendors/eigen -I/home/ginko/jems-project/acerola-jam0/includes -I/home/ginko/jems-project/acerola-jam0/vendors/LDtkLoader/include -I/home/ginko/jems-project/acerola-jam0/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
+  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/vendors/toml++/include -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
   OBJECT_DIR = CMakeFiles/game.dir
   OBJECT_FILE_DIR = CMakeFiles/game.dir/includes
 
-build CMakeFiles/game.dir/includes/factories.cpp.obj: CXX_COMPILER__game_unscanned_Release /home/ginko/jems-project/acerola-jam0/includes/factories.cpp || cmake_object_order_depends_target_game
+build CMakeFiles/game.dir/includes/factories.cpp.obj: CXX_COMPILER__game_unscanned_Release /home/ginko/jems-project/aptomodo/includes/factories.cpp || cmake_object_order_depends_target_game
   DEFINES = -DASSETS_PATH=\"assets/current/\"
   DEP_FILE = CMakeFiles/game.dir/includes/factories.cpp.obj.d
   FLAGS = -O3 -DNDEBUG -std=gnu++20 -fdiagnostics-color=always
-  INCLUDES = -I/home/ginko/jems-project/acerola-jam0/vendors/boost -I/home/ginko/jems-project/acerola-jam0/vendors/rlImGui -I/home/ginko/jems-project/acerola-jam0/vendors/imgui -I/home/ginko/jems-project/acerola-jam0/vendors/entt/src -I/home/ginko/jems-project/acerola-jam0/vendors/eigen -I/home/ginko/jems-project/acerola-jam0/includes -I/home/ginko/jems-project/acerola-jam0/vendors/LDtkLoader/include -I/home/ginko/jems-project/acerola-jam0/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
+  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/vendors/toml++/include -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
   OBJECT_DIR = CMakeFiles/game.dir
   OBJECT_FILE_DIR = CMakeFiles/game.dir/includes
 
-build CMakeFiles/game.dir/includes/gui.cpp.obj: CXX_COMPILER__game_unscanned_Release /home/ginko/jems-project/acerola-jam0/includes/gui.cpp || cmake_object_order_depends_target_game
+build CMakeFiles/game.dir/includes/gui.cpp.obj: CXX_COMPILER__game_unscanned_Release /home/ginko/jems-project/aptomodo/includes/gui.cpp || cmake_object_order_depends_target_game
   DEFINES = -DASSETS_PATH=\"assets/current/\"
   DEP_FILE = CMakeFiles/game.dir/includes/gui.cpp.obj.d
   FLAGS = -O3 -DNDEBUG -std=gnu++20 -fdiagnostics-color=always
-  INCLUDES = -I/home/ginko/jems-project/acerola-jam0/vendors/boost -I/home/ginko/jems-project/acerola-jam0/vendors/rlImGui -I/home/ginko/jems-project/acerola-jam0/vendors/imgui -I/home/ginko/jems-project/acerola-jam0/vendors/entt/src -I/home/ginko/jems-project/acerola-jam0/vendors/eigen -I/home/ginko/jems-project/acerola-jam0/includes -I/home/ginko/jems-project/acerola-jam0/vendors/LDtkLoader/include -I/home/ginko/jems-project/acerola-jam0/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
+  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/vendors/toml++/include -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
   OBJECT_DIR = CMakeFiles/game.dir
   OBJECT_FILE_DIR = CMakeFiles/game.dir/includes
 
-build CMakeFiles/game.dir/includes/items.cpp.obj: CXX_COMPILER__game_unscanned_Release /home/ginko/jems-project/acerola-jam0/includes/items.cpp || cmake_object_order_depends_target_game
+build CMakeFiles/game.dir/includes/items.cpp.obj: CXX_COMPILER__game_unscanned_Release /home/ginko/jems-project/aptomodo/includes/items.cpp || cmake_object_order_depends_target_game
   DEFINES = -DASSETS_PATH=\"assets/current/\"
   DEP_FILE = CMakeFiles/game.dir/includes/items.cpp.obj.d
   FLAGS = -O3 -DNDEBUG -std=gnu++20 -fdiagnostics-color=always
-  INCLUDES = -I/home/ginko/jems-project/acerola-jam0/vendors/boost -I/home/ginko/jems-project/acerola-jam0/vendors/rlImGui -I/home/ginko/jems-project/acerola-jam0/vendors/imgui -I/home/ginko/jems-project/acerola-jam0/vendors/entt/src -I/home/ginko/jems-project/acerola-jam0/vendors/eigen -I/home/ginko/jems-project/acerola-jam0/includes -I/home/ginko/jems-project/acerola-jam0/vendors/LDtkLoader/include -I/home/ginko/jems-project/acerola-jam0/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
+  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/vendors/toml++/include -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
   OBJECT_DIR = CMakeFiles/game.dir
   OBJECT_FILE_DIR = CMakeFiles/game.dir/includes
 
-build CMakeFiles/game.dir/includes/managers/animationManager.cpp.obj: CXX_COMPILER__game_unscanned_Release /home/ginko/jems-project/acerola-jam0/includes/managers/animationManager.cpp || cmake_object_order_depends_target_game
+build CMakeFiles/game.dir/includes/managers/animationManager.cpp.obj: CXX_COMPILER__game_unscanned_Release /home/ginko/jems-project/aptomodo/includes/managers/animationManager.cpp || cmake_object_order_depends_target_game
   DEFINES = -DASSETS_PATH=\"assets/current/\"
   DEP_FILE = CMakeFiles/game.dir/includes/managers/animationManager.cpp.obj.d
   FLAGS = -O3 -DNDEBUG -std=gnu++20 -fdiagnostics-color=always
-  INCLUDES = -I/home/ginko/jems-project/acerola-jam0/vendors/boost -I/home/ginko/jems-project/acerola-jam0/vendors/rlImGui -I/home/ginko/jems-project/acerola-jam0/vendors/imgui -I/home/ginko/jems-project/acerola-jam0/vendors/entt/src -I/home/ginko/jems-project/acerola-jam0/vendors/eigen -I/home/ginko/jems-project/acerola-jam0/includes -I/home/ginko/jems-project/acerola-jam0/vendors/LDtkLoader/include -I/home/ginko/jems-project/acerola-jam0/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
+  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/vendors/toml++/include -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
   OBJECT_DIR = CMakeFiles/game.dir
   OBJECT_FILE_DIR = CMakeFiles/game.dir/includes/managers
 
-build CMakeFiles/game.dir/includes/managers/audioManager.cpp.obj: CXX_COMPILER__game_unscanned_Release /home/ginko/jems-project/acerola-jam0/includes/managers/audioManager.cpp || cmake_object_order_depends_target_game
+build CMakeFiles/game.dir/includes/managers/audioManager.cpp.obj: CXX_COMPILER__game_unscanned_Release /home/ginko/jems-project/aptomodo/includes/managers/audioManager.cpp || cmake_object_order_depends_target_game
   DEFINES = -DASSETS_PATH=\"assets/current/\"
   DEP_FILE = CMakeFiles/game.dir/includes/managers/audioManager.cpp.obj.d
   FLAGS = -O3 -DNDEBUG -std=gnu++20 -fdiagnostics-color=always
-  INCLUDES = -I/home/ginko/jems-project/acerola-jam0/vendors/boost -I/home/ginko/jems-project/acerola-jam0/vendors/rlImGui -I/home/ginko/jems-project/acerola-jam0/vendors/imgui -I/home/ginko/jems-project/acerola-jam0/vendors/entt/src -I/home/ginko/jems-project/acerola-jam0/vendors/eigen -I/home/ginko/jems-project/acerola-jam0/includes -I/home/ginko/jems-project/acerola-jam0/vendors/LDtkLoader/include -I/home/ginko/jems-project/acerola-jam0/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
+  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/vendors/toml++/include -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
   OBJECT_DIR = CMakeFiles/game.dir
   OBJECT_FILE_DIR = CMakeFiles/game.dir/includes/managers
 
-build CMakeFiles/game.dir/includes/managers/levelManager.cpp.obj: CXX_COMPILER__game_unscanned_Release /home/ginko/jems-project/acerola-jam0/includes/managers/levelManager.cpp || cmake_object_order_depends_target_game
+build CMakeFiles/game.dir/includes/managers/levelManager.cpp.obj: CXX_COMPILER__game_unscanned_Release /home/ginko/jems-project/aptomodo/includes/managers/levelManager.cpp || cmake_object_order_depends_target_game
   DEFINES = -DASSETS_PATH=\"assets/current/\"
   DEP_FILE = CMakeFiles/game.dir/includes/managers/levelManager.cpp.obj.d
   FLAGS = -O3 -DNDEBUG -std=gnu++20 -fdiagnostics-color=always
-  INCLUDES = -I/home/ginko/jems-project/acerola-jam0/vendors/boost -I/home/ginko/jems-project/acerola-jam0/vendors/rlImGui -I/home/ginko/jems-project/acerola-jam0/vendors/imgui -I/home/ginko/jems-project/acerola-jam0/vendors/entt/src -I/home/ginko/jems-project/acerola-jam0/vendors/eigen -I/home/ginko/jems-project/acerola-jam0/includes -I/home/ginko/jems-project/acerola-jam0/vendors/LDtkLoader/include -I/home/ginko/jems-project/acerola-jam0/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
+  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/vendors/toml++/include -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
   OBJECT_DIR = CMakeFiles/game.dir
   OBJECT_FILE_DIR = CMakeFiles/game.dir/includes/managers
 
-build CMakeFiles/game.dir/includes/managers/renderingManager.cpp.obj: CXX_COMPILER__game_unscanned_Release /home/ginko/jems-project/acerola-jam0/includes/managers/renderingManager.cpp || cmake_object_order_depends_target_game
+build CMakeFiles/game.dir/includes/managers/renderingManager.cpp.obj: CXX_COMPILER__game_unscanned_Release /home/ginko/jems-project/aptomodo/includes/managers/renderingManager.cpp || cmake_object_order_depends_target_game
   DEFINES = -DASSETS_PATH=\"assets/current/\"
   DEP_FILE = CMakeFiles/game.dir/includes/managers/renderingManager.cpp.obj.d
   FLAGS = -O3 -DNDEBUG -std=gnu++20 -fdiagnostics-color=always
-  INCLUDES = -I/home/ginko/jems-project/acerola-jam0/vendors/boost -I/home/ginko/jems-project/acerola-jam0/vendors/rlImGui -I/home/ginko/jems-project/acerola-jam0/vendors/imgui -I/home/ginko/jems-project/acerola-jam0/vendors/entt/src -I/home/ginko/jems-project/acerola-jam0/vendors/eigen -I/home/ginko/jems-project/acerola-jam0/includes -I/home/ginko/jems-project/acerola-jam0/vendors/LDtkLoader/include -I/home/ginko/jems-project/acerola-jam0/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
+  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/vendors/toml++/include -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
   OBJECT_DIR = CMakeFiles/game.dir
   OBJECT_FILE_DIR = CMakeFiles/game.dir/includes/managers
 
-build CMakeFiles/game.dir/includes/npc.cpp.obj: CXX_COMPILER__game_unscanned_Release /home/ginko/jems-project/acerola-jam0/includes/npc.cpp || cmake_object_order_depends_target_game
+build CMakeFiles/game.dir/includes/npc.cpp.obj: CXX_COMPILER__game_unscanned_Release /home/ginko/jems-project/aptomodo/includes/npc.cpp || cmake_object_order_depends_target_game
   DEFINES = -DASSETS_PATH=\"assets/current/\"
   DEP_FILE = CMakeFiles/game.dir/includes/npc.cpp.obj.d
   FLAGS = -O3 -DNDEBUG -std=gnu++20 -fdiagnostics-color=always
-  INCLUDES = -I/home/ginko/jems-project/acerola-jam0/vendors/boost -I/home/ginko/jems-project/acerola-jam0/vendors/rlImGui -I/home/ginko/jems-project/acerola-jam0/vendors/imgui -I/home/ginko/jems-project/acerola-jam0/vendors/entt/src -I/home/ginko/jems-project/acerola-jam0/vendors/eigen -I/home/ginko/jems-project/acerola-jam0/includes -I/home/ginko/jems-project/acerola-jam0/vendors/LDtkLoader/include -I/home/ginko/jems-project/acerola-jam0/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
+  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/vendors/toml++/include -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
   OBJECT_DIR = CMakeFiles/game.dir
   OBJECT_FILE_DIR = CMakeFiles/game.dir/includes
 
-build CMakeFiles/game.dir/includes/rendering.cpp.obj: CXX_COMPILER__game_unscanned_Release /home/ginko/jems-project/acerola-jam0/includes/rendering.cpp || cmake_object_order_depends_target_game
+build CMakeFiles/game.dir/includes/rendering.cpp.obj: CXX_COMPILER__game_unscanned_Release /home/ginko/jems-project/aptomodo/includes/rendering.cpp || cmake_object_order_depends_target_game
   DEFINES = -DASSETS_PATH=\"assets/current/\"
   DEP_FILE = CMakeFiles/game.dir/includes/rendering.cpp.obj.d
   FLAGS = -O3 -DNDEBUG -std=gnu++20 -fdiagnostics-color=always
-  INCLUDES = -I/home/ginko/jems-project/acerola-jam0/vendors/boost -I/home/ginko/jems-project/acerola-jam0/vendors/rlImGui -I/home/ginko/jems-project/acerola-jam0/vendors/imgui -I/home/ginko/jems-project/acerola-jam0/vendors/entt/src -I/home/ginko/jems-project/acerola-jam0/vendors/eigen -I/home/ginko/jems-project/acerola-jam0/includes -I/home/ginko/jems-project/acerola-jam0/vendors/LDtkLoader/include -I/home/ginko/jems-project/acerola-jam0/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
+  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/vendors/toml++/include -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
   OBJECT_DIR = CMakeFiles/game.dir
   OBJECT_FILE_DIR = CMakeFiles/game.dir/includes
 
@@ -217,11 +225,11 @@ build CMakeFiles/game.dir/includes/rendering.cpp.obj: CXX_COMPILER__game_unscann
 #############################################
 # Link the executable game.exe
 
-build game.exe: CXX_EXECUTABLE_LINKER__game_Release CMakeFiles/game.dir/main.cpp.obj CMakeFiles/game.dir/vendors/imgui/imgui.cpp.obj CMakeFiles/game.dir/vendors/imgui/imgui_demo.cpp.obj CMakeFiles/game.dir/vendors/imgui/imgui_draw.cpp.obj CMakeFiles/game.dir/vendors/imgui/imgui_tables.cpp.obj CMakeFiles/game.dir/vendors/imgui/imgui_widgets.cpp.obj CMakeFiles/game.dir/vendors/rlImGui/rlImGui.cpp.obj CMakeFiles/game.dir/includes/astar.cpp.obj CMakeFiles/game.dir/includes/collisions.cpp.obj CMakeFiles/game.dir/includes/config.cpp.obj CMakeFiles/game.dir/includes/controls.cpp.obj CMakeFiles/game.dir/includes/factories.cpp.obj CMakeFiles/game.dir/includes/gui.cpp.obj CMakeFiles/game.dir/includes/items.cpp.obj CMakeFiles/game.dir/includes/managers/animationManager.cpp.obj CMakeFiles/game.dir/includes/managers/audioManager.cpp.obj CMakeFiles/game.dir/includes/managers/levelManager.cpp.obj CMakeFiles/game.dir/includes/managers/renderingManager.cpp.obj CMakeFiles/game.dir/includes/npc.cpp.obj CMakeFiles/game.dir/includes/rendering.cpp.obj | /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/lib/raylib.dll vendors/LDtkLoader/lib/libLDtkLoader.a || vendors/LDtkLoader/lib/libLDtkLoader.a
+build game.exe: CXX_EXECUTABLE_LINKER__game_Release CMakeFiles/game.dir/main.cpp.obj CMakeFiles/game.dir/vendors/imgui/imgui.cpp.obj CMakeFiles/game.dir/vendors/imgui/imgui_demo.cpp.obj CMakeFiles/game.dir/vendors/imgui/imgui_draw.cpp.obj CMakeFiles/game.dir/vendors/imgui/imgui_tables.cpp.obj CMakeFiles/game.dir/vendors/imgui/imgui_widgets.cpp.obj CMakeFiles/game.dir/vendors/rlImGui/rlImGui.cpp.obj CMakeFiles/game.dir/includes/astar.cpp.obj CMakeFiles/game.dir/includes/collisions.cpp.obj CMakeFiles/game.dir/includes/config.cpp.obj CMakeFiles/game.dir/includes/configuration.cpp.obj CMakeFiles/game.dir/includes/controls.cpp.obj CMakeFiles/game.dir/includes/factories.cpp.obj CMakeFiles/game.dir/includes/gui.cpp.obj CMakeFiles/game.dir/includes/items.cpp.obj CMakeFiles/game.dir/includes/managers/animationManager.cpp.obj CMakeFiles/game.dir/includes/managers/audioManager.cpp.obj CMakeFiles/game.dir/includes/managers/levelManager.cpp.obj CMakeFiles/game.dir/includes/managers/renderingManager.cpp.obj CMakeFiles/game.dir/includes/npc.cpp.obj CMakeFiles/game.dir/includes/rendering.cpp.obj | /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/lib/raylib.dll vendors/LDtkLoader/lib/libLDtkLoader.a || vendors/LDtkLoader/lib/libLDtkLoader.a
   FLAGS = -O3 -DNDEBUG
   LINK_LIBRARIES = /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/lib/raylib.dll  vendors/LDtkLoader/lib/libLDtkLoader.a  -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles/game.dir
-  POST_BUILD = cd /home/ginko/jems-project/acerola-jam0/cmake-build-windows && /opt/clion/bin/cmake/linux/x64/bin/cmake -E copy_directory /home/ginko/jems-project/acerola-jam0/assets /home/ginko/jems-project/acerola-jam0/cmake-build-windows/assets && cd /home/ginko/jems-project/acerola-jam0/cmake-build-windows && /opt/clion/bin/cmake/linux/x64/bin/cmake -E copy_if_different /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/lib/raylib.dll /home/ginko/jems-project/acerola-jam0/cmake-build-windows
+  POST_BUILD = :
   PRE_LINK = :
   TARGET_FILE = game.exe
   TARGET_IMPLIB = libgame.dll.a
@@ -232,7 +240,7 @@ build game.exe: CXX_EXECUTABLE_LINKER__game_Release CMakeFiles/game.dir/main.cpp
 # Utility command for edit_cache
 
 build CMakeFiles/edit_cache.util: CUSTOM_COMMAND
-  COMMAND = cd /home/ginko/jems-project/acerola-jam0/cmake-build-windows && /opt/clion/bin/cmake/linux/x64/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
+  COMMAND = cd /home/ginko/jems-project/aptomodo/cmake-build-windows && /opt/clion/bin/cmake/linux/x64/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
   DESC = No interactive CMake dialog available...
   restat = 1
 
@@ -243,7 +251,7 @@ build edit_cache: phony CMakeFiles/edit_cache.util
 # Utility command for rebuild_cache
 
 build CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
-  COMMAND = cd /home/ginko/jems-project/acerola-jam0/cmake-build-windows && /opt/clion/bin/cmake/linux/x64/bin/cmake --regenerate-during-build -S/home/ginko/jems-project/acerola-jam0 -B/home/ginko/jems-project/acerola-jam0/cmake-build-windows
+  COMMAND = cd /home/ginko/jems-project/aptomodo/cmake-build-windows && /opt/clion/bin/cmake/linux/x64/bin/cmake --regenerate-during-build -S/home/ginko/jems-project/aptomodo -B/home/ginko/jems-project/aptomodo/cmake-build-windows
   DESC = Running CMake to regenerate build system...
   pool = console
   restat = 1
@@ -261,7 +269,7 @@ build list_install_components: phony
 # Utility command for install
 
 build CMakeFiles/install.util: CUSTOM_COMMAND all
-  COMMAND = cd /home/ginko/jems-project/acerola-jam0/cmake-build-windows && /opt/clion/bin/cmake/linux/x64/bin/cmake -P cmake_install.cmake
+  COMMAND = cd /home/ginko/jems-project/aptomodo/cmake-build-windows && /opt/clion/bin/cmake/linux/x64/bin/cmake -P cmake_install.cmake
   DESC = Install the project...
   pool = console
   restat = 1
@@ -273,7 +281,7 @@ build install: phony CMakeFiles/install.util
 # Utility command for install/local
 
 build CMakeFiles/install/local.util: CUSTOM_COMMAND all
-  COMMAND = cd /home/ginko/jems-project/acerola-jam0/cmake-build-windows && /opt/clion/bin/cmake/linux/x64/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
+  COMMAND = cd /home/ginko/jems-project/aptomodo/cmake-build-windows && /opt/clion/bin/cmake/linux/x64/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
   DESC = Installing only the local directory...
   pool = console
   restat = 1
@@ -285,7 +293,7 @@ build install/local: phony CMakeFiles/install/local.util
 # Utility command for install/strip
 
 build CMakeFiles/install/strip.util: CUSTOM_COMMAND all
-  COMMAND = cd /home/ginko/jems-project/acerola-jam0/cmake-build-windows && /opt/clion/bin/cmake/linux/x64/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
+  COMMAND = cd /home/ginko/jems-project/aptomodo/cmake-build-windows && /opt/clion/bin/cmake/linux/x64/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
   DESC = Installing the project stripped...
   pool = console
   restat = 1
@@ -294,7 +302,7 @@ build install/strip: phony CMakeFiles/install/strip.util
 
 # =============================================================================
 # Write statements declared in CMakeLists.txt:
-# /home/ginko/jems-project/acerola-jam0/CMakeLists.txt
+# /home/ginko/jems-project/aptomodo/CMakeLists.txt
 # =============================================================================
 
 # =============================================================================
@@ -306,101 +314,101 @@ build install/strip: phony CMakeFiles/install/strip.util
 
 build cmake_object_order_depends_target_LDtkLoader: phony || vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir
 
-build vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir/src/DataTypes.cpp.obj: CXX_COMPILER__LDtkLoader_unscanned_Release /home/ginko/jems-project/acerola-jam0/vendors/LDtkLoader/src/DataTypes.cpp || cmake_object_order_depends_target_LDtkLoader
+build vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir/src/DataTypes.cpp.obj: CXX_COMPILER__LDtkLoader_unscanned_Release /home/ginko/jems-project/aptomodo/vendors/LDtkLoader/src/DataTypes.cpp || cmake_object_order_depends_target_LDtkLoader
   DEP_FILE = vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir/src/DataTypes.cpp.obj.d
   FLAGS = -O3 -DNDEBUG -std=gnu++11 -fdiagnostics-color=always
-  INCLUDES = -I/home/ginko/jems-project/acerola-jam0/vendors/boost -I/home/ginko/jems-project/acerola-jam0/vendors/rlImGui -I/home/ginko/jems-project/acerola-jam0/vendors/imgui -I/home/ginko/jems-project/acerola-jam0/vendors/entt/src -I/home/ginko/jems-project/acerola-jam0/vendors/eigen -I/home/ginko/jems-project/acerola-jam0/includes -I/home/ginko/jems-project/acerola-jam0/vendors/LDtkLoader/include -I/home/ginko/jems-project/acerola-jam0/cmake-build-windows/include
+  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/vendors/toml++/include -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include
   OBJECT_DIR = vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir
   OBJECT_FILE_DIR = vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir/src
 
-build vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir/src/Entity.cpp.obj: CXX_COMPILER__LDtkLoader_unscanned_Release /home/ginko/jems-project/acerola-jam0/vendors/LDtkLoader/src/Entity.cpp || cmake_object_order_depends_target_LDtkLoader
+build vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir/src/Entity.cpp.obj: CXX_COMPILER__LDtkLoader_unscanned_Release /home/ginko/jems-project/aptomodo/vendors/LDtkLoader/src/Entity.cpp || cmake_object_order_depends_target_LDtkLoader
   DEP_FILE = vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir/src/Entity.cpp.obj.d
   FLAGS = -O3 -DNDEBUG -std=gnu++11 -fdiagnostics-color=always
-  INCLUDES = -I/home/ginko/jems-project/acerola-jam0/vendors/boost -I/home/ginko/jems-project/acerola-jam0/vendors/rlImGui -I/home/ginko/jems-project/acerola-jam0/vendors/imgui -I/home/ginko/jems-project/acerola-jam0/vendors/entt/src -I/home/ginko/jems-project/acerola-jam0/vendors/eigen -I/home/ginko/jems-project/acerola-jam0/includes -I/home/ginko/jems-project/acerola-jam0/vendors/LDtkLoader/include -I/home/ginko/jems-project/acerola-jam0/cmake-build-windows/include
+  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/vendors/toml++/include -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include
   OBJECT_DIR = vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir
   OBJECT_FILE_DIR = vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir/src
 
-build vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir/src/EntityDef.cpp.obj: CXX_COMPILER__LDtkLoader_unscanned_Release /home/ginko/jems-project/acerola-jam0/vendors/LDtkLoader/src/EntityDef.cpp || cmake_object_order_depends_target_LDtkLoader
+build vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir/src/EntityDef.cpp.obj: CXX_COMPILER__LDtkLoader_unscanned_Release /home/ginko/jems-project/aptomodo/vendors/LDtkLoader/src/EntityDef.cpp || cmake_object_order_depends_target_LDtkLoader
   DEP_FILE = vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir/src/EntityDef.cpp.obj.d
   FLAGS = -O3 -DNDEBUG -std=gnu++11 -fdiagnostics-color=always
-  INCLUDES = -I/home/ginko/jems-project/acerola-jam0/vendors/boost -I/home/ginko/jems-project/acerola-jam0/vendors/rlImGui -I/home/ginko/jems-project/acerola-jam0/vendors/imgui -I/home/ginko/jems-project/acerola-jam0/vendors/entt/src -I/home/ginko/jems-project/acerola-jam0/vendors/eigen -I/home/ginko/jems-project/acerola-jam0/includes -I/home/ginko/jems-project/acerola-jam0/vendors/LDtkLoader/include -I/home/ginko/jems-project/acerola-jam0/cmake-build-windows/include
+  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/vendors/toml++/include -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include
   OBJECT_DIR = vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir
   OBJECT_FILE_DIR = vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir/src
 
-build vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir/src/Enum.cpp.obj: CXX_COMPILER__LDtkLoader_unscanned_Release /home/ginko/jems-project/acerola-jam0/vendors/LDtkLoader/src/Enum.cpp || cmake_object_order_depends_target_LDtkLoader
+build vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir/src/Enum.cpp.obj: CXX_COMPILER__LDtkLoader_unscanned_Release /home/ginko/jems-project/aptomodo/vendors/LDtkLoader/src/Enum.cpp || cmake_object_order_depends_target_LDtkLoader
   DEP_FILE = vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir/src/Enum.cpp.obj.d
   FLAGS = -O3 -DNDEBUG -std=gnu++11 -fdiagnostics-color=always
-  INCLUDES = -I/home/ginko/jems-project/acerola-jam0/vendors/boost -I/home/ginko/jems-project/acerola-jam0/vendors/rlImGui -I/home/ginko/jems-project/acerola-jam0/vendors/imgui -I/home/ginko/jems-project/acerola-jam0/vendors/entt/src -I/home/ginko/jems-project/acerola-jam0/vendors/eigen -I/home/ginko/jems-project/acerola-jam0/includes -I/home/ginko/jems-project/acerola-jam0/vendors/LDtkLoader/include -I/home/ginko/jems-project/acerola-jam0/cmake-build-windows/include
+  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/vendors/toml++/include -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include
   OBJECT_DIR = vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir
   OBJECT_FILE_DIR = vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir/src
 
-build vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir/src/FieldsContainer.cpp.obj: CXX_COMPILER__LDtkLoader_unscanned_Release /home/ginko/jems-project/acerola-jam0/vendors/LDtkLoader/src/FieldsContainer.cpp || cmake_object_order_depends_target_LDtkLoader
+build vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir/src/FieldsContainer.cpp.obj: CXX_COMPILER__LDtkLoader_unscanned_Release /home/ginko/jems-project/aptomodo/vendors/LDtkLoader/src/FieldsContainer.cpp || cmake_object_order_depends_target_LDtkLoader
   DEP_FILE = vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir/src/FieldsContainer.cpp.obj.d
   FLAGS = -O3 -DNDEBUG -std=gnu++11 -fdiagnostics-color=always
-  INCLUDES = -I/home/ginko/jems-project/acerola-jam0/vendors/boost -I/home/ginko/jems-project/acerola-jam0/vendors/rlImGui -I/home/ginko/jems-project/acerola-jam0/vendors/imgui -I/home/ginko/jems-project/acerola-jam0/vendors/entt/src -I/home/ginko/jems-project/acerola-jam0/vendors/eigen -I/home/ginko/jems-project/acerola-jam0/includes -I/home/ginko/jems-project/acerola-jam0/vendors/LDtkLoader/include -I/home/ginko/jems-project/acerola-jam0/cmake-build-windows/include
+  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/vendors/toml++/include -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include
   OBJECT_DIR = vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir
   OBJECT_FILE_DIR = vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir/src
 
-build vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir/src/Layer.cpp.obj: CXX_COMPILER__LDtkLoader_unscanned_Release /home/ginko/jems-project/acerola-jam0/vendors/LDtkLoader/src/Layer.cpp || cmake_object_order_depends_target_LDtkLoader
+build vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir/src/Layer.cpp.obj: CXX_COMPILER__LDtkLoader_unscanned_Release /home/ginko/jems-project/aptomodo/vendors/LDtkLoader/src/Layer.cpp || cmake_object_order_depends_target_LDtkLoader
   DEP_FILE = vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir/src/Layer.cpp.obj.d
   FLAGS = -O3 -DNDEBUG -std=gnu++11 -fdiagnostics-color=always
-  INCLUDES = -I/home/ginko/jems-project/acerola-jam0/vendors/boost -I/home/ginko/jems-project/acerola-jam0/vendors/rlImGui -I/home/ginko/jems-project/acerola-jam0/vendors/imgui -I/home/ginko/jems-project/acerola-jam0/vendors/entt/src -I/home/ginko/jems-project/acerola-jam0/vendors/eigen -I/home/ginko/jems-project/acerola-jam0/includes -I/home/ginko/jems-project/acerola-jam0/vendors/LDtkLoader/include -I/home/ginko/jems-project/acerola-jam0/cmake-build-windows/include
+  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/vendors/toml++/include -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include
   OBJECT_DIR = vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir
   OBJECT_FILE_DIR = vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir/src
 
-build vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir/src/LayerDef.cpp.obj: CXX_COMPILER__LDtkLoader_unscanned_Release /home/ginko/jems-project/acerola-jam0/vendors/LDtkLoader/src/LayerDef.cpp || cmake_object_order_depends_target_LDtkLoader
+build vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir/src/LayerDef.cpp.obj: CXX_COMPILER__LDtkLoader_unscanned_Release /home/ginko/jems-project/aptomodo/vendors/LDtkLoader/src/LayerDef.cpp || cmake_object_order_depends_target_LDtkLoader
   DEP_FILE = vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir/src/LayerDef.cpp.obj.d
   FLAGS = -O3 -DNDEBUG -std=gnu++11 -fdiagnostics-color=always
-  INCLUDES = -I/home/ginko/jems-project/acerola-jam0/vendors/boost -I/home/ginko/jems-project/acerola-jam0/vendors/rlImGui -I/home/ginko/jems-project/acerola-jam0/vendors/imgui -I/home/ginko/jems-project/acerola-jam0/vendors/entt/src -I/home/ginko/jems-project/acerola-jam0/vendors/eigen -I/home/ginko/jems-project/acerola-jam0/includes -I/home/ginko/jems-project/acerola-jam0/vendors/LDtkLoader/include -I/home/ginko/jems-project/acerola-jam0/cmake-build-windows/include
+  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/vendors/toml++/include -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include
   OBJECT_DIR = vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir
   OBJECT_FILE_DIR = vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir/src
 
-build vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir/src/Level.cpp.obj: CXX_COMPILER__LDtkLoader_unscanned_Release /home/ginko/jems-project/acerola-jam0/vendors/LDtkLoader/src/Level.cpp || cmake_object_order_depends_target_LDtkLoader
+build vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir/src/Level.cpp.obj: CXX_COMPILER__LDtkLoader_unscanned_Release /home/ginko/jems-project/aptomodo/vendors/LDtkLoader/src/Level.cpp || cmake_object_order_depends_target_LDtkLoader
   DEP_FILE = vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir/src/Level.cpp.obj.d
   FLAGS = -O3 -DNDEBUG -std=gnu++11 -fdiagnostics-color=always
-  INCLUDES = -I/home/ginko/jems-project/acerola-jam0/vendors/boost -I/home/ginko/jems-project/acerola-jam0/vendors/rlImGui -I/home/ginko/jems-project/acerola-jam0/vendors/imgui -I/home/ginko/jems-project/acerola-jam0/vendors/entt/src -I/home/ginko/jems-project/acerola-jam0/vendors/eigen -I/home/ginko/jems-project/acerola-jam0/includes -I/home/ginko/jems-project/acerola-jam0/vendors/LDtkLoader/include -I/home/ginko/jems-project/acerola-jam0/cmake-build-windows/include
+  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/vendors/toml++/include -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include
   OBJECT_DIR = vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir
   OBJECT_FILE_DIR = vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir/src
 
-build vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir/src/Project.cpp.obj: CXX_COMPILER__LDtkLoader_unscanned_Release /home/ginko/jems-project/acerola-jam0/vendors/LDtkLoader/src/Project.cpp || cmake_object_order_depends_target_LDtkLoader
+build vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir/src/Project.cpp.obj: CXX_COMPILER__LDtkLoader_unscanned_Release /home/ginko/jems-project/aptomodo/vendors/LDtkLoader/src/Project.cpp || cmake_object_order_depends_target_LDtkLoader
   DEP_FILE = vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir/src/Project.cpp.obj.d
   FLAGS = -O3 -DNDEBUG -std=gnu++11 -fdiagnostics-color=always
-  INCLUDES = -I/home/ginko/jems-project/acerola-jam0/vendors/boost -I/home/ginko/jems-project/acerola-jam0/vendors/rlImGui -I/home/ginko/jems-project/acerola-jam0/vendors/imgui -I/home/ginko/jems-project/acerola-jam0/vendors/entt/src -I/home/ginko/jems-project/acerola-jam0/vendors/eigen -I/home/ginko/jems-project/acerola-jam0/includes -I/home/ginko/jems-project/acerola-jam0/vendors/LDtkLoader/include -I/home/ginko/jems-project/acerola-jam0/cmake-build-windows/include
+  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/vendors/toml++/include -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include
   OBJECT_DIR = vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir
   OBJECT_FILE_DIR = vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir/src
 
-build vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir/src/TagsContainer.cpp.obj: CXX_COMPILER__LDtkLoader_unscanned_Release /home/ginko/jems-project/acerola-jam0/vendors/LDtkLoader/src/TagsContainer.cpp || cmake_object_order_depends_target_LDtkLoader
+build vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir/src/TagsContainer.cpp.obj: CXX_COMPILER__LDtkLoader_unscanned_Release /home/ginko/jems-project/aptomodo/vendors/LDtkLoader/src/TagsContainer.cpp || cmake_object_order_depends_target_LDtkLoader
   DEP_FILE = vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir/src/TagsContainer.cpp.obj.d
   FLAGS = -O3 -DNDEBUG -std=gnu++11 -fdiagnostics-color=always
-  INCLUDES = -I/home/ginko/jems-project/acerola-jam0/vendors/boost -I/home/ginko/jems-project/acerola-jam0/vendors/rlImGui -I/home/ginko/jems-project/acerola-jam0/vendors/imgui -I/home/ginko/jems-project/acerola-jam0/vendors/entt/src -I/home/ginko/jems-project/acerola-jam0/vendors/eigen -I/home/ginko/jems-project/acerola-jam0/includes -I/home/ginko/jems-project/acerola-jam0/vendors/LDtkLoader/include -I/home/ginko/jems-project/acerola-jam0/cmake-build-windows/include
+  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/vendors/toml++/include -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include
   OBJECT_DIR = vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir
   OBJECT_FILE_DIR = vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir/src
 
-build vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir/src/Tile.cpp.obj: CXX_COMPILER__LDtkLoader_unscanned_Release /home/ginko/jems-project/acerola-jam0/vendors/LDtkLoader/src/Tile.cpp || cmake_object_order_depends_target_LDtkLoader
+build vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir/src/Tile.cpp.obj: CXX_COMPILER__LDtkLoader_unscanned_Release /home/ginko/jems-project/aptomodo/vendors/LDtkLoader/src/Tile.cpp || cmake_object_order_depends_target_LDtkLoader
   DEP_FILE = vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir/src/Tile.cpp.obj.d
   FLAGS = -O3 -DNDEBUG -std=gnu++11 -fdiagnostics-color=always
-  INCLUDES = -I/home/ginko/jems-project/acerola-jam0/vendors/boost -I/home/ginko/jems-project/acerola-jam0/vendors/rlImGui -I/home/ginko/jems-project/acerola-jam0/vendors/imgui -I/home/ginko/jems-project/acerola-jam0/vendors/entt/src -I/home/ginko/jems-project/acerola-jam0/vendors/eigen -I/home/ginko/jems-project/acerola-jam0/includes -I/home/ginko/jems-project/acerola-jam0/vendors/LDtkLoader/include -I/home/ginko/jems-project/acerola-jam0/cmake-build-windows/include
+  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/vendors/toml++/include -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include
   OBJECT_DIR = vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir
   OBJECT_FILE_DIR = vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir/src
 
-build vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir/src/Tileset.cpp.obj: CXX_COMPILER__LDtkLoader_unscanned_Release /home/ginko/jems-project/acerola-jam0/vendors/LDtkLoader/src/Tileset.cpp || cmake_object_order_depends_target_LDtkLoader
+build vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir/src/Tileset.cpp.obj: CXX_COMPILER__LDtkLoader_unscanned_Release /home/ginko/jems-project/aptomodo/vendors/LDtkLoader/src/Tileset.cpp || cmake_object_order_depends_target_LDtkLoader
   DEP_FILE = vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir/src/Tileset.cpp.obj.d
   FLAGS = -O3 -DNDEBUG -std=gnu++11 -fdiagnostics-color=always
-  INCLUDES = -I/home/ginko/jems-project/acerola-jam0/vendors/boost -I/home/ginko/jems-project/acerola-jam0/vendors/rlImGui -I/home/ginko/jems-project/acerola-jam0/vendors/imgui -I/home/ginko/jems-project/acerola-jam0/vendors/entt/src -I/home/ginko/jems-project/acerola-jam0/vendors/eigen -I/home/ginko/jems-project/acerola-jam0/includes -I/home/ginko/jems-project/acerola-jam0/vendors/LDtkLoader/include -I/home/ginko/jems-project/acerola-jam0/cmake-build-windows/include
+  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/vendors/toml++/include -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include
   OBJECT_DIR = vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir
   OBJECT_FILE_DIR = vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir/src
 
-build vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir/src/Utils.cpp.obj: CXX_COMPILER__LDtkLoader_unscanned_Release /home/ginko/jems-project/acerola-jam0/vendors/LDtkLoader/src/Utils.cpp || cmake_object_order_depends_target_LDtkLoader
+build vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir/src/Utils.cpp.obj: CXX_COMPILER__LDtkLoader_unscanned_Release /home/ginko/jems-project/aptomodo/vendors/LDtkLoader/src/Utils.cpp || cmake_object_order_depends_target_LDtkLoader
   DEP_FILE = vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir/src/Utils.cpp.obj.d
   FLAGS = -O3 -DNDEBUG -std=gnu++11 -fdiagnostics-color=always
-  INCLUDES = -I/home/ginko/jems-project/acerola-jam0/vendors/boost -I/home/ginko/jems-project/acerola-jam0/vendors/rlImGui -I/home/ginko/jems-project/acerola-jam0/vendors/imgui -I/home/ginko/jems-project/acerola-jam0/vendors/entt/src -I/home/ginko/jems-project/acerola-jam0/vendors/eigen -I/home/ginko/jems-project/acerola-jam0/includes -I/home/ginko/jems-project/acerola-jam0/vendors/LDtkLoader/include -I/home/ginko/jems-project/acerola-jam0/cmake-build-windows/include
+  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/vendors/toml++/include -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include
   OBJECT_DIR = vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir
   OBJECT_FILE_DIR = vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir/src
 
-build vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir/src/World.cpp.obj: CXX_COMPILER__LDtkLoader_unscanned_Release /home/ginko/jems-project/acerola-jam0/vendors/LDtkLoader/src/World.cpp || cmake_object_order_depends_target_LDtkLoader
+build vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir/src/World.cpp.obj: CXX_COMPILER__LDtkLoader_unscanned_Release /home/ginko/jems-project/aptomodo/vendors/LDtkLoader/src/World.cpp || cmake_object_order_depends_target_LDtkLoader
   DEP_FILE = vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir/src/World.cpp.obj.d
   FLAGS = -O3 -DNDEBUG -std=gnu++11 -fdiagnostics-color=always
-  INCLUDES = -I/home/ginko/jems-project/acerola-jam0/vendors/boost -I/home/ginko/jems-project/acerola-jam0/vendors/rlImGui -I/home/ginko/jems-project/acerola-jam0/vendors/imgui -I/home/ginko/jems-project/acerola-jam0/vendors/entt/src -I/home/ginko/jems-project/acerola-jam0/vendors/eigen -I/home/ginko/jems-project/acerola-jam0/includes -I/home/ginko/jems-project/acerola-jam0/vendors/LDtkLoader/include -I/home/ginko/jems-project/acerola-jam0/cmake-build-windows/include
+  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/vendors/toml++/include -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include
   OBJECT_DIR = vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir
   OBJECT_FILE_DIR = vendors/LDtkLoader/CMakeFiles/LDtkLoader.dir/src
 
@@ -425,7 +433,7 @@ build vendors/LDtkLoader/lib/libLDtkLoader.a: CXX_STATIC_LIBRARY_LINKER__LDtkLoa
 # Utility command for edit_cache
 
 build vendors/LDtkLoader/CMakeFiles/edit_cache.util: CUSTOM_COMMAND
-  COMMAND = cd /home/ginko/jems-project/acerola-jam0/cmake-build-windows/vendors/LDtkLoader && /opt/clion/bin/cmake/linux/x64/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
+  COMMAND = cd /home/ginko/jems-project/aptomodo/cmake-build-windows/vendors/LDtkLoader && /opt/clion/bin/cmake/linux/x64/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
   DESC = No interactive CMake dialog available...
   restat = 1
 
@@ -436,7 +444,7 @@ build vendors/LDtkLoader/edit_cache: phony vendors/LDtkLoader/CMakeFiles/edit_ca
 # Utility command for rebuild_cache
 
 build vendors/LDtkLoader/CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
-  COMMAND = cd /home/ginko/jems-project/acerola-jam0/cmake-build-windows/vendors/LDtkLoader && /opt/clion/bin/cmake/linux/x64/bin/cmake --regenerate-during-build -S/home/ginko/jems-project/acerola-jam0 -B/home/ginko/jems-project/acerola-jam0/cmake-build-windows
+  COMMAND = cd /home/ginko/jems-project/aptomodo/cmake-build-windows/vendors/LDtkLoader && /opt/clion/bin/cmake/linux/x64/bin/cmake --regenerate-during-build -S/home/ginko/jems-project/aptomodo -B/home/ginko/jems-project/aptomodo/cmake-build-windows
   DESC = Running CMake to regenerate build system...
   pool = console
   restat = 1
@@ -454,7 +462,7 @@ build vendors/LDtkLoader/list_install_components: phony
 # Utility command for install
 
 build vendors/LDtkLoader/CMakeFiles/install.util: CUSTOM_COMMAND vendors/LDtkLoader/all
-  COMMAND = cd /home/ginko/jems-project/acerola-jam0/cmake-build-windows/vendors/LDtkLoader && /opt/clion/bin/cmake/linux/x64/bin/cmake -P cmake_install.cmake
+  COMMAND = cd /home/ginko/jems-project/aptomodo/cmake-build-windows/vendors/LDtkLoader && /opt/clion/bin/cmake/linux/x64/bin/cmake -P cmake_install.cmake
   DESC = Install the project...
   pool = console
   restat = 1
@@ -466,7 +474,7 @@ build vendors/LDtkLoader/install: phony vendors/LDtkLoader/CMakeFiles/install.ut
 # Utility command for install/local
 
 build vendors/LDtkLoader/CMakeFiles/install/local.util: CUSTOM_COMMAND vendors/LDtkLoader/all
-  COMMAND = cd /home/ginko/jems-project/acerola-jam0/cmake-build-windows/vendors/LDtkLoader && /opt/clion/bin/cmake/linux/x64/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
+  COMMAND = cd /home/ginko/jems-project/aptomodo/cmake-build-windows/vendors/LDtkLoader && /opt/clion/bin/cmake/linux/x64/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
   DESC = Installing only the local directory...
   pool = console
   restat = 1
@@ -478,7 +486,7 @@ build vendors/LDtkLoader/install/local: phony vendors/LDtkLoader/CMakeFiles/inst
 # Utility command for install/strip
 
 build vendors/LDtkLoader/CMakeFiles/install/strip.util: CUSTOM_COMMAND vendors/LDtkLoader/all
-  COMMAND = cd /home/ginko/jems-project/acerola-jam0/cmake-build-windows/vendors/LDtkLoader && /opt/clion/bin/cmake/linux/x64/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
+  COMMAND = cd /home/ginko/jems-project/aptomodo/cmake-build-windows/vendors/LDtkLoader && /opt/clion/bin/cmake/linux/x64/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
   DESC = Installing the project stripped...
   pool = console
   restat = 1
@@ -500,14 +508,14 @@ build libLDtkLoader.a: phony vendors/LDtkLoader/lib/libLDtkLoader.a
 # =============================================================================
 
 #############################################
-# Folder: /home/ginko/jems-project/acerola-jam0/cmake-build-windows
+# Folder: /home/ginko/jems-project/aptomodo/cmake-build-windows
 
 build all: phony game.exe vendors/LDtkLoader/all
 
 # =============================================================================
 
 #############################################
-# Folder: /home/ginko/jems-project/acerola-jam0/cmake-build-windows/vendors/LDtkLoader
+# Folder: /home/ginko/jems-project/aptomodo/cmake-build-windows/vendors/LDtkLoader
 
 build vendors/LDtkLoader/all: phony vendors/LDtkLoader/lib/libLDtkLoader.a
 
@@ -518,14 +526,14 @@ build vendors/LDtkLoader/all: phony vendors/LDtkLoader/lib/libLDtkLoader.a
 #############################################
 # Re-run CMake if any of its inputs changed.
 
-build build.ninja: RERUN_CMAKE | /home/ginko/jems-project/acerola-jam0/CMakeLists.txt /home/ginko/jems-project/acerola-jam0/vendors/LDtkLoader/CMakeLists.txt /home/ginko/jems-project/acerola-jam0/vendors/LDtkLoader/cmake/LDtkLoaderConfig.cmake.in /home/ginko/jems-project/acerola-jam0/vendors/LDtkLoader/src/Version.hpp.in /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/BasicConfigVersion-SameMinorVersion.cmake.in /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/CMakeCInformation.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/CMakeCXXInformation.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/CMakeCommonLanguageInclude.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/CMakeGenericSystem.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/CMakeInitializeConfigs.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/CMakeLanguageInformation.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/CMakePackageConfigHelpers.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/CMakeRCInformation.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/CMakeSystemSpecificInformation.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/CMakeSystemSpecificInitialize.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/Compiler/CMakeCommonCompilerMacros.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/Compiler/GNU-C.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/Compiler/GNU-CXX.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/Compiler/GNU.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/FindPackageHandleStandardArgs.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/FindPackageMessage.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/FindPkgConfig.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/GNUInstallDirs.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/Platform/Windows-GNU-C-ABI.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/Platform/Windows-GNU-C.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/Platform/Windows-GNU-CXX-ABI.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/Platform/Windows-GNU-CXX.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/Platform/Windows-GNU.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/Platform/Windows-Initialize.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/Platform/Windows-windres.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/Platform/Windows.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/Platform/WindowsPaths.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/WriteBasicConfigVersionFile.cmake /usr/local/lib/cmake/raylib/raylib-config-version.cmake /usr/local/lib/cmake/raylib/raylib-config.cmake CMakeCache.txt CMakeFiles/3.28.1/CMakeCCompiler.cmake CMakeFiles/3.28.1/CMakeCXXCompiler.cmake CMakeFiles/3.28.1/CMakeRCCompiler.cmake CMakeFiles/3.28.1/CMakeSystem.cmake toolchain-mingw.cmake
+build build.ninja: RERUN_CMAKE | /home/ginko/jems-project/aptomodo/CMakeLists.txt /home/ginko/jems-project/aptomodo/vendors/LDtkLoader/CMakeLists.txt /home/ginko/jems-project/aptomodo/vendors/LDtkLoader/cmake/LDtkLoaderConfig.cmake.in /home/ginko/jems-project/aptomodo/vendors/LDtkLoader/src/Version.hpp.in /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/BasicConfigVersion-SameMinorVersion.cmake.in /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/CMakeCInformation.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/CMakeCXXInformation.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/CMakeCommonLanguageInclude.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/CMakeGenericSystem.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/CMakeInitializeConfigs.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/CMakeLanguageInformation.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/CMakePackageConfigHelpers.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/CMakeRCInformation.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/CMakeSystemSpecificInformation.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/CMakeSystemSpecificInitialize.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/Compiler/CMakeCommonCompilerMacros.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/Compiler/GNU-C.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/Compiler/GNU-CXX.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/Compiler/GNU.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/FindPackageHandleStandardArgs.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/FindPackageMessage.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/FindPkgConfig.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/GNUInstallDirs.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/Platform/Windows-GNU-C-ABI.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/Platform/Windows-GNU-C.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/Platform/Windows-GNU-CXX-ABI.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/Platform/Windows-GNU-CXX.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/Platform/Windows-GNU.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/Platform/Windows-Initialize.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/Platform/Windows-windres.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/Platform/Windows.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/Platform/WindowsPaths.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/WriteBasicConfigVersionFile.cmake /usr/local/lib/cmake/raylib/raylib-config-version.cmake /usr/local/lib/cmake/raylib/raylib-config.cmake CMakeCache.txt CMakeFiles/3.28.1/CMakeCCompiler.cmake CMakeFiles/3.28.1/CMakeCXXCompiler.cmake CMakeFiles/3.28.1/CMakeRCCompiler.cmake CMakeFiles/3.28.1/CMakeSystem.cmake toolchain-mingw.cmake
   pool = console
 
 
 #############################################
 # A missing CMake input file is not an error.
 
-build /home/ginko/jems-project/acerola-jam0/CMakeLists.txt /home/ginko/jems-project/acerola-jam0/vendors/LDtkLoader/CMakeLists.txt /home/ginko/jems-project/acerola-jam0/vendors/LDtkLoader/cmake/LDtkLoaderConfig.cmake.in /home/ginko/jems-project/acerola-jam0/vendors/LDtkLoader/src/Version.hpp.in /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/BasicConfigVersion-SameMinorVersion.cmake.in /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/CMakeCInformation.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/CMakeCXXInformation.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/CMakeCommonLanguageInclude.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/CMakeGenericSystem.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/CMakeInitializeConfigs.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/CMakeLanguageInformation.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/CMakePackageConfigHelpers.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/CMakeRCInformation.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/CMakeSystemSpecificInformation.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/CMakeSystemSpecificInitialize.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/Compiler/CMakeCommonCompilerMacros.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/Compiler/GNU-C.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/Compiler/GNU-CXX.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/Compiler/GNU.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/FindPackageHandleStandardArgs.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/FindPackageMessage.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/FindPkgConfig.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/GNUInstallDirs.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/Platform/Windows-GNU-C-ABI.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/Platform/Windows-GNU-C.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/Platform/Windows-GNU-CXX-ABI.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/Platform/Windows-GNU-CXX.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/Platform/Windows-GNU.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/Platform/Windows-Initialize.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/Platform/Windows-windres.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/Platform/Windows.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/Platform/WindowsPaths.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/WriteBasicConfigVersionFile.cmake /usr/local/lib/cmake/raylib/raylib-config-version.cmake /usr/local/lib/cmake/raylib/raylib-config.cmake CMakeCache.txt CMakeFiles/3.28.1/CMakeCCompiler.cmake CMakeFiles/3.28.1/CMakeCXXCompiler.cmake CMakeFiles/3.28.1/CMakeRCCompiler.cmake CMakeFiles/3.28.1/CMakeSystem.cmake toolchain-mingw.cmake: phony
+build /home/ginko/jems-project/aptomodo/CMakeLists.txt /home/ginko/jems-project/aptomodo/vendors/LDtkLoader/CMakeLists.txt /home/ginko/jems-project/aptomodo/vendors/LDtkLoader/cmake/LDtkLoaderConfig.cmake.in /home/ginko/jems-project/aptomodo/vendors/LDtkLoader/src/Version.hpp.in /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/BasicConfigVersion-SameMinorVersion.cmake.in /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/CMakeCInformation.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/CMakeCXXInformation.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/CMakeCommonLanguageInclude.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/CMakeGenericSystem.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/CMakeInitializeConfigs.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/CMakeLanguageInformation.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/CMakePackageConfigHelpers.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/CMakeRCInformation.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/CMakeSystemSpecificInformation.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/CMakeSystemSpecificInitialize.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/Compiler/CMakeCommonCompilerMacros.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/Compiler/GNU-C.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/Compiler/GNU-CXX.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/Compiler/GNU.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/FindPackageHandleStandardArgs.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/FindPackageMessage.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/FindPkgConfig.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/GNUInstallDirs.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/Platform/Windows-GNU-C-ABI.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/Platform/Windows-GNU-C.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/Platform/Windows-GNU-CXX-ABI.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/Platform/Windows-GNU-CXX.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/Platform/Windows-GNU.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/Platform/Windows-Initialize.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/Platform/Windows-windres.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/Platform/Windows.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/Platform/WindowsPaths.cmake /opt/clion/bin/cmake/linux/x64/share/cmake-3.28/Modules/WriteBasicConfigVersionFile.cmake /usr/local/lib/cmake/raylib/raylib-config-version.cmake /usr/local/lib/cmake/raylib/raylib-config.cmake CMakeCache.txt CMakeFiles/3.28.1/CMakeCCompiler.cmake CMakeFiles/3.28.1/CMakeCXXCompiler.cmake CMakeFiles/3.28.1/CMakeRCCompiler.cmake CMakeFiles/3.28.1/CMakeSystem.cmake toolchain-mingw.cmake: phony
 
 
 #############################################

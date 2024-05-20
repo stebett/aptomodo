@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.27)
-project(acerola_jam0)
+project(aptomodo)
 set(CMAKE_CXX_STANDARD 20)
 
 find_package(raylib REQUIRED)
@@ -11,6 +11,7 @@ set(imgui_ROOT "vendors/imgui")
 set(entt_ROOT "vendors/entt/src/")
 set(eigen_ROOT "vendors/eigen/")
 set(LDTKLOADER_ROOT "vendors/LDtkLoader")
+set(TOML++_ROOT "vendors/toml++/include")
 
 set(INCLUDE "includes/")
 
@@ -19,6 +20,7 @@ include_directories(${rlImGui_ROOT})
 include_directories(${imgui_ROOT})
 include_directories(${entt_ROOT})
 include_directories(${eigen_ROOT})
+include_directories(${TOML++_ROOT})
 include_directories(${INCLUDE})
 
 add_subdirectory(${LDTKLOADER_ROOT})
@@ -46,12 +48,13 @@ target_compile_definitions(${EXEC} PUBLIC ASSETS_PATH="assets/current/")
 # Post-build step to copy raylib.dll to the build directory
 
 # Post-build step to copy assets to the build directory
-add_custom_command(TARGET ${EXEC} POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_directory
-        ${CMAKE_SOURCE_DIR}/assets
-        $<TARGET_FILE_DIR:${EXEC}>/assets)
-
-add_custom_command(TARGET ${EXEC} POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        ${raylib_LIBRARY}
-        $<TARGET_FILE_DIR:${EXEC}>)
+#add_custom_command(TARGET ${EXEC} POST_BUILD
+#        COMMAND ${CMAKE_COMMAND} -E copy_directory
+#        ${CMAKE_SOURCE_DIR}/assets
+#        $<TARGET_FILE_DIR:${EXEC}>/assets)
+#
+#add_custom_command(TARGET ${EXEC} POST_BUILD
+#        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+#        ${raylib_LIBRARY}
+#        $<TARGET_FILE_DIR:${EXEC}>)
+#

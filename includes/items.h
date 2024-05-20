@@ -2,8 +2,8 @@
 // Created by ginko on 07/05/24.
 //
 
-#ifndef ACEROLA_JAM0_ITEMS_H
-#define ACEROLA_JAM0_ITEMS_H
+#ifndef APTOMODO_ITEMS_H
+#define APTOMODO_ITEMS_H
 
 #include <map>
 #include <string>
@@ -39,4 +39,4 @@ struct Name {
 //
 
 
-#endif //ACEROLA_JAM0_ITEMS_H
+#endif //APTOMODO_ITEMS_H

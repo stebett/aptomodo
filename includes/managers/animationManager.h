@@ -2,8 +2,8 @@
 // Created by ginko on 19/04/24.
 //
 
-#ifndef ACEROLA_JAM0_ANIMATIONMANAGER_H
-#define ACEROLA_JAM0_ANIMATIONMANAGER_H
+#ifndef APTOMODO_ANIMATIONMANAGER_H
+#define APTOMODO_ANIMATIONMANAGER_H
 
 #include <raylib.h>
 #include <vector>
@@ -56,4 +56,4 @@ public:
 };
 
 
-#endif //ACEROLA_JAM0_ANIMATIONMANAGER_H
+#endif //APTOMODO_ANIMATIONMANAGER_H

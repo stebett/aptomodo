@@ -1,4 +1,4 @@
-# Install script for directory: /home/ginko/jems-project/acerola-jam0/vendors/LDtkLoader
+# Install script for directory: /home/ginko/jems-project/aptomodo/vendors/LDtkLoader
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -39,24 +39,24 @@ endif()
 
 if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/doc/LDtkLoader" TYPE FILE FILES
-    "/home/ginko/jems-project/acerola-jam0/vendors/LDtkLoader/LICENSE.md"
-    "/home/ginko/jems-project/acerola-jam0/vendors/LDtkLoader/README.md"
+    "/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/LICENSE.md"
+    "/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/README.md"
     )
 endif()
 
 if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include" TYPE DIRECTORY FILES "/home/ginko/jems-project/acerola-jam0/vendors/LDtkLoader/include/LDtkLoader")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include" TYPE DIRECTORY FILES "/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include/LDtkLoader")
 endif()
 
 if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" TYPE STATIC_LIBRARY FILES "/home/ginko/jems-project/acerola-jam0/cmake-build-windows/vendors/LDtkLoader/lib/libLDtkLoader.a")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" TYPE STATIC_LIBRARY FILES "/home/ginko/jems-project/aptomodo/cmake-build-windows/vendors/LDtkLoader/lib/libLDtkLoader.a")
 endif()
 
 if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
   if(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/cmake/LDtkLoader/LDtkLoaderTargets.cmake")
     file(DIFFERENT _cmake_export_file_changed FILES
          "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/cmake/LDtkLoader/LDtkLoaderTargets.cmake"
-         "/home/ginko/jems-project/acerola-jam0/cmake-build-windows/vendors/LDtkLoader/CMakeFiles/Export/f9647eb62aabc71d50658ff864394ae9/LDtkLoaderTargets.cmake")
+         "/home/ginko/jems-project/aptomodo/cmake-build-windows/vendors/LDtkLoader/CMakeFiles/Export/f9647eb62aabc71d50658ff864394ae9/LDtkLoaderTargets.cmake")
     if(_cmake_export_file_changed)
       file(GLOB _cmake_old_config_files "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/cmake/LDtkLoader/LDtkLoaderTargets-*.cmake")
       if(_cmake_old_config_files)
@@ -69,17 +69,17 @@ if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT
     endif()
     unset(_cmake_export_file_changed)
   endif()
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/cmake/LDtkLoader" TYPE FILE FILES "/home/ginko/jems-project/acerola-jam0/cmake-build-windows/vendors/LDtkLoader/CMakeFiles/Export/f9647eb62aabc71d50658ff864394ae9/LDtkLoaderTargets.cmake")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/cmake/LDtkLoader" TYPE FILE FILES "/home/ginko/jems-project/aptomodo/cmake-build-windows/vendors/LDtkLoader/CMakeFiles/Export/f9647eb62aabc71d50658ff864394ae9/LDtkLoaderTargets.cmake")
   if(CMAKE_INSTALL_CONFIG_NAME MATCHES "^([Rr][Ee][Ll][Ee][Aa][Ss][Ee])$")
-    file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/cmake/LDtkLoader" TYPE FILE FILES "/home/ginko/jems-project/acerola-jam0/cmake-build-windows/vendors/LDtkLoader/CMakeFiles/Export/f9647eb62aabc71d50658ff864394ae9/LDtkLoaderTargets-release.cmake")
+    file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/cmake/LDtkLoader" TYPE FILE FILES "/home/ginko/jems-project/aptomodo/cmake-build-windows/vendors/LDtkLoader/CMakeFiles/Export/f9647eb62aabc71d50658ff864394ae9/LDtkLoaderTargets-release.cmake")
   endif()
 endif()
 
 if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/cmake/LDtkLoader" TYPE FILE FILES "/home/ginko/jems-project/acerola-jam0/cmake-build-windows/vendors/LDtkLoader/LDtkLoaderConfig.cmake")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/cmake/LDtkLoader" TYPE FILE FILES "/home/ginko/jems-project/aptomodo/cmake-build-windows/vendors/LDtkLoader/LDtkLoaderConfig.cmake")
 endif()
 
 if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/cmake/LDtkLoader" TYPE FILE FILES "/home/ginko/jems-project/acerola-jam0/cmake-build-windows/vendors/LDtkLoader/LDtkLoaderConfigVersion.cmake")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/cmake/LDtkLoader" TYPE FILE FILES "/home/ginko/jems-project/aptomodo/cmake-build-windows/vendors/LDtkLoader/LDtkLoaderConfigVersion.cmake")
 endif()
 

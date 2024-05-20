@@ -2,8 +2,8 @@
 // Created by ginko on 04/05/24.
 //
 
-#ifndef ACEROLA_JAM0_ATTRIBUTES_H
-#define ACEROLA_JAM0_ATTRIBUTES_H
+#ifndef APTOMODO_ATTRIBUTES_H
+#define APTOMODO_ATTRIBUTES_H
 
 #include <array>
 #include <unordered_map>
@@ -25,9 +25,9 @@ namespace AttributeConstants {
         MUL
     };
 
-    constexpr std::array<char const *, 2> operatorString {
-        "ADD",
-        "MUL"
+    constexpr std::array<char const *, 2> operatorString{
+            "ADD",
+            "MUL"
     };
 
     enum SubAttributeName {
@@ -78,15 +78,15 @@ namespace AttributeConstants {
             spread, range, dodgeRange,
             visualRange, critChance, critMultiplier
     };
-    constexpr static auto subAttrByAttr = []{
-            std::array<std::array<SubAttributeName, 3>, 6> subAttrByAttr;
-            subAttrByAttr[strength] = { damagePhysical, health, resistancePhysical };
-            subAttrByAttr[intelligence] = { damageMagical, mana, resistanceMagical };
-            subAttrByAttr[agility] = { speed, attackSpeed, spellSpeed };
-            subAttrByAttr[willpower] = { regenerationMana, regenerationStamina, resistanceStatus };
-            subAttrByAttr[coordination] = { spread, range, dodgeRange };
-            subAttrByAttr[perception] = { visualRange, critChance, critMultiplier };
-            return subAttrByAttr;
+    constexpr static auto subAttrByAttr = [] {
+        std::array<std::array<SubAttributeName, 3>, 6> subAttrByAttr;
+        subAttrByAttr[strength] = {damagePhysical, health, resistancePhysical};
+        subAttrByAttr[intelligence] = {damageMagical, mana, resistanceMagical};
+        subAttrByAttr[agility] = {speed, attackSpeed, spellSpeed};
+        subAttrByAttr[willpower] = {regenerationMana, regenerationStamina, resistanceStatus};
+        subAttrByAttr[coordination] = {spread, range, dodgeRange};
+        subAttrByAttr[perception] = {visualRange, critChance, critMultiplier};
+        return subAttrByAttr;
 
     }();
     constexpr static auto attrBySubAttr = [] {
@@ -97,30 +97,49 @@ namespace AttributeConstants {
         return attrBySubAttr;
     }();
     constexpr static std::array<char const *, 6> attributeString = {"strength",
-                                                       "intelligence",
-                                                       "agility",
-                                                       "willpower",
-                                                       "coordination",
-                                                       "perception",
+                                                                    "intelligence",
+                                                                    "agility",
+                                                                    "willpower",
+                                                                    "coordination",
+                                                                    "perception",
     };
     constexpr static std::array<char const *, 18> subAttributeString = {"damagePhysical",
-                                                                            "health",
-                                                                            "resistancePhysical",
-                                                                            "damageMagical",
-                                                                            "mana",
-                                                                            "resistanceMagical",
-                                                                            "speed",
-                                                                            "attackSpeed",
-                                                                            "spellSpeed",
-                                                                            "regenerationMana",
-                                                                            "regenerationStamina",
-                                                                            "resistanceStatus",
-                                                                            "spread",
-                                                                            "range",
-                                                                            "dodgeRange",
-                                                                            "visualRange",
-                                                                            "critChance",
-                                                                            "critMultiplier"};
+                                                                        "health",
+                                                                        "resistancePhysical",
+                                                                        "damageMagical",
+                                                                        "mana",
+                                                                        "resistanceMagical",
+                                                                        "speed",
+                                                                        "attackSpeed",
+                                                                        "spellSpeed",
+                                                                        "regenerationMana",
+                                                                        "regenerationStamina",
+                                                                        "resistanceStatus",
+                                                                        "spread",
+                                                                        "range",
+                                                                        "dodgeRange",
+                                                                        "visualRange",
+                                                                        "critChance",
+                                                                        "critMultiplier"};
+    constexpr static std::array<int, 18> subAttrAtStart = {100,
+                                                           100,
+                                                           100,
+                                                           100,
+                                                           100,
+                                                           100,
+                                                           100,
+                                                           100,
+                                                           100,
+                                                           100,
+                                                           100,
+                                                           100,
+                                                           100,
+                                                           100,
+                                                           100,
+                                                           100,
+                                                           100,
+                                                           100,
+    };
 
 }
 using namespace AttributeConstants;
@@ -128,7 +147,6 @@ using namespace AttributeConstants;
 
 class Attributes {
 public:
-
 
 
 private:
@@ -287,4 +305,4 @@ public:
 };
 
 
-#endif //ACEROLA_JAM0_ATTRIBUTES_H
+#endif //APTOMODO_ATTRIBUTES_H

@@ -2,8 +2,8 @@
 // Created by ginko on 02/03/24.
 //
 
-#ifndef ACEROLA_JAM0_CONTROLS_H
-#define ACEROLA_JAM0_CONTROLS_H
+#ifndef APTOMODO_CONTROLS_H
+#define APTOMODO_CONTROLS_H
 
 
 #include "components.h"
@@ -20,4 +20,4 @@ void parseInput(entt::registry &registry, entt::entity &player, Position &positi
 void updatePlayer(entt::registry &registry, entt::entity &player, Position &position, Camera2D &camera);
 
 
-#endif //ACEROLA_JAM0_CONTROLS_H
+#endif //APTOMODO_CONTROLS_H

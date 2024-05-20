@@ -2,8 +2,8 @@
 // Created by ginko on 01/03/24.
 //
 
-#ifndef ACEROLA_JAM0_COMPONENTS_H
-#define ACEROLA_JAM0_COMPONENTS_H
+#ifndef APTOMODO_COMPONENTS_H
+#define APTOMODO_COMPONENTS_H
 
 #include <raylib.h>
 #include <raymath.h>
@@ -214,4 +214,4 @@ struct Projectile {
     float damage;
 };
 
-#endif //ACEROLA_JAM0_COMPONENTS_H
+#endif //APTOMODO_COMPONENTS_H

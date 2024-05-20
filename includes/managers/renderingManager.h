@@ -2,8 +2,8 @@
 // Created by ginko on 17/04/24.
 //
 
-#ifndef ACEROLA_JAM0_RENDERINGMANAGER_H
-#define ACEROLA_JAM0_RENDERINGMANAGER_H
+#ifndef APTOMODO_RENDERINGMANAGER_H
+#define APTOMODO_RENDERINGMANAGER_H
 
 #include <raylib.h>
 #include <entt/entity/registry.hpp>
@@ -32,4 +32,4 @@ public:
 
 
 
-#endif // ACEROLA_JAM0_RENDERINGMANAGER_H
+#endif // APTOMODO_RENDERINGMANAGER_H

@@ -2,8 +2,8 @@
 // Created by ginko on 17/04/24.
 //
 
-#ifndef ACEROLA_JAM0_LEVELMANAGER_H
-#define ACEROLA_JAM0_LEVELMANAGER_H
+#ifndef APTOMODO_LEVELMANAGER_H
+#define APTOMODO_LEVELMANAGER_H
 
 #include <raylib.h>
 #include <unordered_map>
@@ -47,7 +47,7 @@ public:
 };
 
 
-#endif //ACEROLA_JAM0_LEVELMANAGER_H
+#endif //APTOMODO_LEVELMANAGER_H
 
 
 
