@@ -68,9 +68,9 @@ void imguiItems(entt::registry &registry) {
 void imguiAttributesMultipliers() {
     ImGui::Begin("Attribute multipliers");
     int n = {0};
-    for (auto subattr: Attributes::subAttributeVec) {
+    for (auto subattr: AttributeConstants::subAttributeVec) {
         ImGui::PushID(n);
-        ImGui::SliderFloat(Attributes::subAttributeString[subattr], &config::attrMultipliers[subattr], 0, 30,
+        ImGui::SliderFloat(AttributeConstants::subAttributeString[subattr], &config::attrMultipliers[subattr], 0, 30,
                            "%.3f",
                            0);
         ImGui::PopID();
@@ -94,7 +94,7 @@ void imguiAttributes(entt::registry &registry) {
         ImGui::Text("Exp %d", experience);
 
         ImGui::SeparatorText(std::format("Attributes - free points: {}", attributes.freeAttrPoints()).c_str());
-        for (auto attr: Attributes::attributeVec) {
+        for (auto attr: AttributeConstants::attributeVec) {
             ImGui::PushID(n);
             disableUp = attributes.outOfAttrPoints();
             disableDown = attributes.atMinAttrPoints(attr);
@@ -108,11 +108,11 @@ void imguiAttributes(entt::registry &registry) {
             ImGui::SameLine();
             ImGui::Text("%d", attributes.get(attr));
             ImGui::SameLine();
-            ImGui::Text("%s", attributes.attributeString[attr]);
+            ImGui::Text("%s", AttributeConstants::attributeString[attr]);
             ImGui::SeparatorText(
                     std::format("Sub-Attributes - free points: {}", attributes.freeSubAttrPoints(attr)).c_str());
 
-            for (auto subattr: attributes.subAttrByAttr[attr]) {
+            for (auto subattr: AttributeConstants::subAttrByAttr[attr]) {
                 ImGui::PushID(m);
                 disableUp = attributes.outOfSubAttrPoints(subattr);
                 disableDown = attributes.atMinSubAttrPoints(subattr);
@@ -128,7 +128,7 @@ void imguiAttributes(entt::registry &registry) {
                 ImGui::SameLine();
                 ImGui::Text("%d", attributes.get(subattr));
                 ImGui::SameLine();
-                ImGui::Text("%s: ", attributes.subAttributeString[subattr]);
+                ImGui::Text("%s: ", AttributeConstants::subAttributeString[subattr]);
                 ImGui::SameLine();
                 ImGui::Text("%.1f", attributes.getMultiplied(subattr));
                 ImGui::PopID();

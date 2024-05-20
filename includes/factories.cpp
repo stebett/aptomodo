@@ -40,7 +40,7 @@ entt::entity spawnEnemy(entt::registry &registry, Vector2 position) {
     registry.emplace<ID>(e, id++);
     auto attr = Attributes();
     registry.emplace<Attributes>(e, attr);
-    registry.emplace<Health>(e, attr.getMultiplied(Attributes::health), attr.getPointerMultiplied(Attributes::health));
+    registry.emplace<Health>(e, attr.getMultiplied(AttributeConstants::health), attr.getPointerMultiplied(AttributeConstants::health));
     registry.emplace<Experience>(e, 50);
     return e;
 }
@@ -58,7 +58,7 @@ entt::entity spawnPlayer(entt::registry &registry, Vector2 position) {
     registry.emplace<ColorBB>(e, BLUE);
     auto attr = Attributes();
     registry.emplace<Attributes>(e, attr);
-    registry.emplace<Health>(e, attr.getMultiplied(Attributes::health), attr.getPointerMultiplied(Attributes::health));
+    registry.emplace<Health>(e, attr.getMultiplied(AttributeConstants::health), attr.getPointerMultiplied(AttributeConstants::health));
     registry.emplace<Experience>(e, 0);
     return e;
 }
@@ -92,12 +92,12 @@ void spawnAmulet(entt::registry& registry)
     for (const auto& [label, pos]: LevelManager::GetEntitiesPositions()) {
         if (label == "Amulet") position = pos;
     }
-    Attributes::Modifier modifier = {Attributes::strength, 2, ModifierOperator::ADD};
+    AttributeConstants::Modifier modifier = {AttributeConstants::strength, 2, AttributeConstants::ModifierOperator::ADD};
 
     entt::entity e = registry.create();
     registry.emplace<Item>(e);
     registry.emplace<Position>(e, position);
-    registry.emplace<Attributes::Modifier>(e, modifier);
+    registry.emplace<AttributeConstants::Modifier>(e, modifier);
     registry.emplace<Name>(e, "Amuleto de sto'cazzo");
 }
 
@@ -108,12 +108,12 @@ void spawnAmulet2(entt::registry& registry)
     for (const auto& [label, pos]: LevelManager::GetEntitiesPositions()) {
         if (label == "Amulet2") position = pos;
     }
-    Attributes::Modifier modifier = {Attributes::strength, 2, ModifierOperator::MUL};
+    AttributeConstants::Modifier modifier = {AttributeConstants::strength, 2, AttributeConstants::ModifierOperator::MUL};
 
     entt::entity e = registry.create();
     registry.emplace<Item>(e);
     registry.emplace<Position>(e, position);
-    registry.emplace<Attributes::Modifier>(e, modifier);
+    registry.emplace<AttributeConstants::Modifier>(e, modifier);
     registry.emplace<Name>(e, "Amuleto della mia minchia");
 }
 

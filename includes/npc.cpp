@@ -96,13 +96,13 @@ void enemyAttackDistance(entt::registry &registry, const entt::entity enemy, ent
     // TODO add actual distance range, attack speed and damage
     Attributes &attributes = registry.get<Attributes>(enemy);
     auto &attackTimer = registry.get<AttackTimer>(enemy).timer;
-    if (attackTimer.Elapsed() < attributes.getMultiplied(Attributes::attackSpeed) * 2)return;
+    if (attackTimer.Elapsed() < attributes.getMultiplied(AttributeConstants::attackSpeed) * 2)return;
     attackTimer.Reset();
 
     auto &playerPosition = registry.get<Position>(player);
     auto radius = registry.get<Radius>(player);
-    auto attackRange = attributes.getMultiplied(Attributes::range) * 2;
-    auto damage = attributes.getMultiplied(Attributes::damagePhysical) / 2;
+    auto attackRange = attributes.getMultiplied(AttributeConstants::range) * 2;
+    auto damage = attributes.getMultiplied(AttributeConstants::damagePhysical) / 2;
 //    float pushback = registry.get<Pushback>(enemy);
     Vector2 target = Vector2Add(position,
                                 Vector2Scale(Vector2Normalize(Vector2Subtract(playerPosition, position)), attackRange));
@@ -228,7 +228,7 @@ namespace Strategy {
                   Position &playerPosition, const float playerRadius, LookAngle &lookAngle, Speed &speed,
                   const ID &id, const Radius radius) {
         Attributes &attributes = registry.get<Attributes>(enemy);
-        auto attackRange = attributes.getMultiplied(Attributes::range) * 2;
+        auto attackRange = attributes.getMultiplied(AttributeConstants::range) * 2;
 
         bool playerInRange = CheckCollisionCircles(position, attackRange, playerPosition, playerRadius);
         bool playerTooClose = CheckCollisionCircles(position, attackRange / 2, playerPosition, playerRadius);
@@ -248,7 +248,7 @@ namespace Strategy {
                   Position &playerPosition, const float playerRadius, LookAngle &lookAngle, Speed &speed,
                   const ID &id, const Radius radius) {
         Attributes &attributes = registry.get<Attributes>(enemy);
-        auto attackRange = attributes.getMultiplied(Attributes::range) * 2;
+        auto attackRange = attributes.getMultiplied(AttributeConstants::range) * 2;
         if (CheckCollisionCircles(position, attackRange, playerPosition, playerRadius)) {
             faceTarget(position, playerPosition, lookAngle);
             enemyAttackDistance(registry, enemy, player, position);

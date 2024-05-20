@@ -13,30 +13,17 @@
 #include <vector>
 #include "items.h"
 
-//struct Attribute {
-//    int value;
-//    std::map<AttributeName, int> subattributes;
-//
-//    static int pointsAtStart() { return 1; }
-//
-//    [[nodiscard]] int pointsByLevel() const { return value * 2; }
-//
-//    [[nodiscard]] bool maxed() const {
-//        return std::accumulate(subattributes.begin(), subattributes.end(), pointsAtStart(),
-//                               [](const std::size_t previous, const auto &element) {
-//                                   return previous + element.second;
-//                               }) >= pointsByLevel();
-//    }
-//};
+namespace AttributeConstants {
 
-enum class ModifierOperator {
-    ADD,
-    MUL
-};
+    static constexpr int expByLevel{100};
+    static constexpr int pointsByLevel{3};
+    static constexpr int pointsByAttr{3};
+    static constexpr int pointsAtStart{10};
 
-
-class Attributes {
-public:
+    enum class ModifierOperator {
+        ADD,
+        MUL
+    };
     enum SubAttributeName {
         damagePhysical,
         health,
@@ -62,7 +49,6 @@ public:
         critChance,
         critMultiplier,
     };
-
     enum AttributeName {
         strength,
         intelligence,
@@ -71,8 +57,6 @@ public:
         coordination,
         perception,
     };
-
-
     struct Modifier {
         AttributeName name;
         float value;
@@ -80,8 +64,7 @@ public:
     };
     constexpr static std::array<AttributeName, 6> attributeVec{strength, intelligence, agility, willpower, coordination,
                                                                perception,};
-
-    constexpr static std::array<SubAttributeName, 18> subAttributeVec{
+    constexpr static std::array<AttributeConstants::SubAttributeName, 18> subAttributeVec{
             damagePhysical, health, resistancePhysical,
             damageMagical, mana, resistanceMagical,
             speed, attackSpeed, spellSpeed,
@@ -89,36 +72,63 @@ public:
             spread, range, dodgeRange,
             visualRange, critChance, critMultiplier
     };
+    constexpr static auto subAttrByAttr = []{
+            std::array<std::array<SubAttributeName, 3>, 6> subAttrByAttr;
+            subAttrByAttr[strength] = { damagePhysical, health, resistancePhysical };
+            subAttrByAttr[intelligence] = { damageMagical, mana, resistanceMagical };
+            subAttrByAttr[agility] = { speed, attackSpeed, spellSpeed };
+            subAttrByAttr[willpower] = { regenerationMana, regenerationStamina, resistanceStatus };
+            subAttrByAttr[coordination] = { spread, range, dodgeRange };
+            subAttrByAttr[perception] = { visualRange, critChance, critMultiplier };
+            return subAttrByAttr;
 
-    std::unordered_map<AttributeName, std::array<SubAttributeName, 3>> subAttrByAttr;  // TODO make constexpr static
-    std::unordered_map<SubAttributeName, AttributeName> attrBySubAttr;
-    std::unordered_map<AttributeName, char const *> attributeString;
+    }();
+    constexpr static auto attrBySubAttr = [] {
+        std::array<AttributeName, 18> attrBySubAttr;
+        for (auto attr: attributeVec)
+            for (auto subattr: subAttrByAttr[attr])
+                attrBySubAttr[subattr] = attr;
+        return attrBySubAttr;
+    }();
+    constexpr static std::array<char const *, 6> attributeString = {"strength",
+                                                       "intelligence",
+                                                       "agility",
+                                                       "willpower",
+                                                       "coordination",
+                                                       "perception",
+    };
     constexpr static std::array<char const *, 18> subAttributeString = {"damagePhysical",
-                                                                        "health",
-                                                                        "resistancePhysical",
-                                                                        "damageMagical",
-                                                                        "mana",
-                                                                        "resistanceMagical",
-                                                                        "speed",
-                                                                        "attackSpeed",
-                                                                        "spellSpeed",
-                                                                        "regenerationMana",
-                                                                        "regenerationStamina",
-                                                                        "resistanceStatus",
-                                                                        "spread",
-                                                                        "range",
-                                                                        "dodgeRange",
-                                                                        "visualRange",
-                                                                        "critChance",
-                                                                        "critMultiplier"};
+                                                                            "health",
+                                                                            "resistancePhysical",
+                                                                            "damageMagical",
+                                                                            "mana",
+                                                                            "resistanceMagical",
+                                                                            "speed",
+                                                                            "attackSpeed",
+                                                                            "spellSpeed",
+                                                                            "regenerationMana",
+                                                                            "regenerationStamina",
+                                                                            "resistanceStatus",
+                                                                            "spread",
+                                                                            "range",
+                                                                            "dodgeRange",
+                                                                            "visualRange",
+                                                                            "critChance",
+                                                                            "critMultiplier"};
+
+}
+using namespace AttributeConstants;
+
+
+class Attributes {
+public:
+
+
 
 private:
 
     int level{1};
-    static constexpr int expByLevel{100};
-    static constexpr int pointsByLevel{3};
-    static constexpr int pointsByAttr{3};
-    static constexpr int pointsAtStart{10};
+
 
     std::array<int, 6> values{};
     std::array<int, 18> subValues{};
@@ -126,15 +136,7 @@ private:
     std::vector<Modifier> attributeModifiers{};
 
     void Initialize() {
-        subAttrByAttr[strength] = {damagePhysical, health, resistancePhysical};
-        subAttrByAttr[intelligence] = {damageMagical, mana, resistanceMagical};
-        subAttrByAttr[agility] = {speed, attackSpeed, spellSpeed};
-        subAttrByAttr[willpower] = {regenerationMana, regenerationStamina, resistanceStatus};
-        subAttrByAttr[coordination] = {spread, range, dodgeRange};
-        subAttrByAttr[perception] = {visualRange, critChance, critMultiplier};
-        for (auto attr: attributeVec)
-            for (auto subattr: subAttrByAttr[attr])
-                attrBySubAttr[subattr] = attr;
+
     }
 
 public:
@@ -147,13 +149,6 @@ public:
         values[willpower] = wi;
         values[coordination] = co;
         values[perception] = pe;
-
-        attributeString[strength] = "strength";
-        attributeString[intelligence] = "intelligence";
-        attributeString[agility] = "agility";
-        attributeString[willpower] = "willpower";
-        attributeString[coordination] = "coordination";
-        attributeString[perception] = "perception";
 
 
         for (auto attr: attributeVec)

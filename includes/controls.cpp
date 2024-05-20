@@ -18,13 +18,13 @@
 
 void playerAttack(entt::registry &registry, entt::entity &player, Attributes &attributes, Vector2 clickPosition) {
     auto &attackTimer = registry.get<AttackTimer>(player).timer;
-    if (attackTimer.Elapsed() < attributes.getMultiplied(Attributes::attackSpeed)) return;
+    if (attackTimer.Elapsed() < attributes.getMultiplied(AttributeConstants::attackSpeed)) return;
     attackTimer.Reset();
     Position &playerPosition = registry.get<Position>(player);
 
-    float attackRange = attributes.getMultiplied(Attributes::range);
-    float attackSpread = attributes.getMultiplied(Attributes::spread);
-    float damage = attributes.getMultiplied(Attributes::damagePhysical);
+    float attackRange = attributes.getMultiplied(AttributeConstants::range);
+    float attackSpread = attributes.getMultiplied(AttributeConstants::spread);
+    float damage = attributes.getMultiplied(AttributeConstants::damagePhysical);
 //    float pushback = registry.get<Pushback>(player);
 
     float clickAngle = atan2(clickPosition.y - playerPosition.y, clickPosition.x - playerPosition.x) * radToDeg;
@@ -118,7 +118,7 @@ void parseInput(entt::registry &registry, entt::entity &player, Position &positi
         futurePos.y = position.y;
     }
     Vector2 direction = Vector2Subtract(futurePos, position);
-    Vector2 movement = Vector2Scale(Vector2Normalize(direction), attributes.getMultiplied(Attributes::speed));
+    Vector2 movement = Vector2Scale(Vector2Normalize(direction), attributes.getMultiplied(AttributeConstants::speed));
     futurePos = Vector2Add(position, movement);
     solveCircleRecCollision(futurePos, radius);
     position = futurePos;
@@ -126,8 +126,8 @@ void parseInput(entt::registry &registry, entt::entity &player, Position &positi
 }
 
 void updateAttributes(const entt::registry &registry, Attributes &attributes) {
-    std::vector<Attributes::Modifier> modifiers{};
-    auto modifiersView = registry.view<OnPlayer, Attributes::Modifier>();
+    std::vector<AttributeConstants::Modifier> modifiers{};
+    auto modifiersView = registry.view<OnPlayer, AttributeConstants::Modifier>();
     for (auto [entity, modifier]: modifiersView.each()) {
         modifiers.emplace_back(modifier);
     }
