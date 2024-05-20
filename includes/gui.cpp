@@ -12,7 +12,7 @@
 
 void imguiInstructions() {
 
-    ImGui::Begin("Main");
+    ImGui::Begin("Instructions");
     ImGui::SeparatorText("Hotkeys");
 
     ImGui::Text("Q per chiudere");
@@ -20,40 +20,32 @@ void imguiInstructions() {
     ImGui::Text("P per pausare");
     ImGui::Text("I per togglare inventario");
     ImGui::Text("O per togglare attributi");
-
+    ImGui::Text("LClick per attaccare");
+    ImGui::Text("RClick per selezionare");
     ImGui::End();
 }
 
-void imguiEnemyAttr(entt::registry &registry) { //TODO: make this work on selected enemy
-    auto view = registry.view<Enemy, Path, ID, ColorBB, Spread, Speed, Health, Radius, PhysicalResistance, MagicalResistance, Stamina, AttackTimer, AttackSpeed, Damage, AttackRange, Pushback, Position>();
+void imguiEnemyAttr(entt::registry &registry) {
+    ImGui::Begin("Selected Enemy attributes");
+
+    auto view = registry.view<Enemy, Selected, Path, ID, ColorBB, Spread, Speed, Health, Radius, PhysicalResistance, MagicalResistance, Stamina, AttackTimer, AttackSpeed, Damage, AttackRange, Pushback, Position>();
     for (auto [entity, path, id, colorbb, spread, speed, health, radius, physicalresistance, magicalresistance, stamina, timelastattack, attackspeed, damage, attackrange, pushback, position
         ]: view.each()) {
-        // Only plot this for one enemy
-        static int enemyID = id;
-        if (id != enemyID) break;
-        ImGui::SliderFloat("spread", &spread.value, 0, 360, "%.3f", 0);
-        ImGui::SliderFloat("speed.value", &speed.value, 0, 15, "%.3f", 0);
-        ImGui::SliderFloat("speed.actual", &speed.actual, 0, 15, "%.3f", 0);
-        ImGui::SliderFloat("speed.max", &speed.max, 0, 15, "%.3f", 0);
+//        // Only plot this for one enemy
+//        static int enemyID = id;
+//        if (id != enemyID) break;
         ImGui::SliderFloat("health", &health.value, 0, 200, "%.3f", 0);
         ImGui::SliderFloat("radius", &radius.value, 0, 50, "%.3f", 0);
-        ImGui::SliderFloat("physicalresistance", &physicalresistance.value, 0, 30, "%.3f", 0);
-        ImGui::SliderFloat("magicalresistance", &magicalresistance.value, 0, 30, "%.3f", 0);
-        ImGui::SliderFloat("stamina", &stamina.value, 0, 30, "%.3f", 0);
-        ImGui::SliderFloat("attackspeed", &attackspeed.value, 0, 5, "%.3f", 0);
-        ImGui::SliderFloat("damage", &damage.value, 0, 200, "%.3f", 0);
-        ImGui::SliderFloat("attackrange", &attackrange.value, 1, 150, "%.3f", 0);
-        ImGui::SliderFloat("pushback", &pushback.value, 0, 150, "%.3f", 0);
         ImGui::SliderFloat("position x", &position.x, 0, mapWidth, "%.3f", 0);
         ImGui::SliderFloat("position y ", &position.y, 0, mapHeight, "%.3f", 0);
-        Vector2 currentPath = path.getCurrent();
-        ImGui::SliderFloat("Target x", &currentPath.x, 0, mapWidth, "%.3f", 0);
-        ImGui::SliderFloat("Target y ", &currentPath.y, 0, mapHeight, "%.3f", 0);
     }
+    ImGui::End();
 }
 
 
 void imguiPlayerAttr(entt::registry &registry) {
+    ImGui::Begin("Player values");
+
     auto view = registry.view<Player, ColorBB, Spread, Speed, Health, Radius, PhysicalResistance, MagicalResistance, Stamina, AttackTimer, AttackSpeed, Damage, AttackRange, Pushback, Position>();
     for (auto [entity, colorbb, spread, speed, health, radius, physicalresistance, magicalresistance, stamina, timelastattack, attackspeed, damage, attackrange, pushback, position
         ]: view.each()) {
@@ -63,6 +55,8 @@ void imguiPlayerAttr(entt::registry &registry) {
         ImGui::SliderFloat("position y ", &position.y, 0, mapHeight, "%.3f", 0);
 
     }
+    ImGui::End();
+
 }
 
 
@@ -164,6 +158,7 @@ void imguiInventory(entt::registry &registry) {
         ImGui::Text("Modifier: %s", AttributeConstants::attributeString[modifier.name]);
         ImGui::Text("Operation: %s", AttributeConstants::operatorString[static_cast<int>(modifier.operation)]);
         ImGui::Text("Value: %f", modifier.value);
+        ImGui::Separator();
     }
 
     ImGui::End();
@@ -188,6 +183,7 @@ void imguiWindowMain(entt::registry &registry, ImGuiIO io) {
     static bool show_player_window = false;
     static bool show_config_window = false;
     static bool show_enemy_window = false;
+    static bool show_instructions_window = false;
 
     ImGui::Begin("Main");
 
@@ -215,6 +211,10 @@ void imguiWindowMain(entt::registry &registry, ImGuiIO io) {
     ImGui::Checkbox("Inventory Window", &config::show_inv_window);
     if (config::show_inv_window)
         imguiInventory(registry);
+
+    ImGui::Checkbox("Instructions", &show_instructions_window);
+    if (show_instructions_window)
+        imguiInstructions();
 
 
 //    ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);

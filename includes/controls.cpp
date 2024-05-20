@@ -86,6 +86,16 @@ void PickUpItem(entt::registry &registry, const entt::entity player) {
     }
 }
 
+void selectEnemy(entt::registry &registry, Vector2 worldPosition) {
+    auto enemyView = registry.view<Enemy, Living, Radius, Position>();
+    registry.clear<Selected>();
+    for (auto [enemy, radius, position]: enemyView.each()) {
+        if (CheckCollisionPointCircle(worldPosition, position, radius)) {
+            registry.emplace_or_replace<Selected>(enemy);
+        }
+    }
+}
+
 void parseInput(entt::registry &registry, entt::entity &player, Position &position, Camera2D &camera) {
     Radius radius = registry.get<Radius>(player); // This could be static, or a static ref
     Attributes &attributes = registry.get<Attributes>(player);
@@ -95,11 +105,13 @@ void parseInput(entt::registry &registry, entt::entity &player, Position &positi
     }
 
     if (IsMouseButtonPressed(MOUSE_RIGHT_BUTTON)) {
-        playerSecondaryAttack(registry, player);
+//        playerSecondaryAttack(registry, player);
+        selectEnemy(registry, GetScreenToWorld2D(GetMousePosition(), camera));
     }
 
     if (IsKeyPressed(KEY_O)) config::show_attr_window = !config::show_attr_window;
     if (IsKeyPressed(KEY_I)) config::show_inv_window = !config::show_inv_window;
+
 
     if (IsKeyPressed(KEY_F)) {
         PickUpItem(registry, player);

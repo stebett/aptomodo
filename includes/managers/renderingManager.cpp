@@ -18,7 +18,7 @@ RenderingManager &RenderingManager::Instance() {
 }
 
 
-RenderingManager::RenderingManager(entt::registry &registry)  {
+RenderingManager::RenderingManager(entt::registry &registry) {
     m_registry = &registry;
 }
 
@@ -58,6 +58,7 @@ void drawItems(const entt::registry &registry) {
         DrawRectangleV(position, {16, 16}, GOLD);
     }
 }
+
 /*
  * If player is close enough -> Pop message
  */
@@ -75,14 +76,22 @@ void drawTooltips(const entt::registry &registry) {
 void drawProjectiles(const entt::registry &registry) {
     auto projectileView = registry.view<Projectile>();
     for (auto [entity, projectile]: projectileView.each()) {
-        DrawCircleV(projectile.position, projectile.radius, BLUE);
+        DrawCircleV(projectile.position, projectile.radius, DARKPURPLE);
 //        DrawCircleV(projectile.target, 5, RED);
+    }
+}
+
+void drawSelected(const entt::registry &registry) {
+    auto selectedView = registry.view<Selected, Position, Radius>();
+    for (auto [entity, position, radius]: selectedView.each()) {
+        DrawCircleLinesV(position, radius, PURPLE);
     }
 }
 
 void RenderingManager::Draw(const Camera2D &camera, unsigned int frame) {
     drawItems(*m_registry);
     if (config::show_bounding_box) drawLivingBB(*m_registry);
+    drawSelected(*m_registry);
     if (config::show_enemy_texture) drawEnemyTexture(*m_registry, frame / config::enemy_walking_animation_fps);
     if (config::show_attacks) drawAttacks(*m_registry);
     drawProjectiles(*m_registry);
