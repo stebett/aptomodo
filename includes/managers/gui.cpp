@@ -4,11 +4,17 @@
 
 #include "gui.h"
 #include <imgui_impl_raylib.h>
+#include "attributes.h"
+#include "parameters.h"
+#include <format>
 #include "components.h"
 #include "constants.h"
 #include <entt/entity/registry.hpp>
 #include "config.h"
-#include "attributes.h"
+#include "items.h"
+
+ImGuiIO *Gui::m_io;
+entt::registry *Gui::m_registry;
 
 void imguiInstructions() {
 
@@ -62,22 +68,27 @@ void imguiPlayerAttr(entt::registry &registry) {
 
 void imguiAttributesMultipliers() {
     ImGui::Begin("Attribute multipliers");
+    if (ImGui::Button("Save")) { Params::SaveAttributeParameters(); };
     int n = {0};
     for (auto subattr: AttributeConstants::subAttributeVec) {
         ImGui::PushID(n);
-        ImGui::SliderFloat(AttributeConstants::subAttributeString[subattr], &config::attrMultipliers[subattr], 0, 30,
-                           "%.3f",
-                           0);
+        bool disableR = Params::attributes.subAttrMultipliers[subattr] ==
+                        Params::attributesOriginal.subAttrMultipliers[subattr];
+        if (disableR) ImGui::BeginDisabled(true);
+        if (ImGui::Button("R")) {
+            Params::attributes.subAttrMultipliers[subattr] = Params::attributesOriginal.subAttrMultipliers[subattr];
+        };
+        if (disableR) ImGui::EndDisabled();
+        ImGui::SameLine();
+        ImGui::DragFloat(AttributeConstants::subAttributeString[subattr],
+                         &Params::attributes.subAttrMultipliers[subattr],
+                         0.1f, 0, 30);
         ImGui::PopID();
+        n++;
     }
+
     ImGui::End();
 }
-
-//void imguiSubAttributesStartValues() {
-//    ImGui::Begin("Start values for SubAttributes");
-//    config::loadAttributes();
-//}
-
 
 void imguiAttributes(entt::registry &registry) {
     ImGui::Begin("Attributes");
@@ -139,13 +150,8 @@ void imguiAttributes(entt::registry &registry) {
             n++;
         }
     }
-    static bool show_multipliers = false;
-    ImGui::Checkbox("show_multipliers", &show_multipliers);
-    if (show_multipliers)
-        imguiAttributesMultipliers();
-
-
     ImGui::End();
+
 }
 
 void imguiInventory(entt::registry &registry) {
@@ -184,13 +190,40 @@ void imguiConfig() {
     ImGui::End();
 }
 
+
+
+void imguiSubAttributesStartValues() {
+    ImGui::Begin("Attribute startValues");
+    if (ImGui::Button("Save")) { Params::SaveAttributeParameters(); };
+    int n = {0};
+    for (auto subattr: AttributeConstants::subAttributeVec) {
+        ImGui::PushID(n);
+        bool disableR = Params::attributes.subAttrAtStart[subattr] ==
+                        Params::attributesOriginal.subAttrAtStart[subattr];
+        if (disableR) ImGui::BeginDisabled(true);
+        if (ImGui::Button("R")) {
+            Params::attributes.subAttrAtStart[subattr] = Params::attributesOriginal.subAttrAtStart[subattr];
+        };
+        if (disableR) ImGui::EndDisabled();
+        ImGui::SameLine();
+        ImGui::DragFloat(AttributeConstants::subAttributeString[subattr],
+                         &Params::attributes.subAttrAtStart[subattr],
+                         0.1f, 0, 30);
+        ImGui::PopID();
+        n++;
+    }
+
+    ImGui::End();
+}
+
 void imguiWindowMain(entt::registry &registry, ImGuiIO io) {
     static bool show_demo_window = false;
     static bool show_player_window = false;
     static bool show_config_window = false;
     static bool show_enemy_window = false;
     static bool show_instructions_window = false;
-
+    static bool show_multipliers = true;
+    static bool show_start_values = true;
     ImGui::Begin("Main");
 
 
@@ -222,47 +255,52 @@ void imguiWindowMain(entt::registry &registry, ImGuiIO io) {
     if (show_instructions_window)
         imguiInstructions();
 
+    ImGui::Checkbox("show_multipliers", &show_multipliers);
+    if (show_multipliers)
+        imguiAttributesMultipliers();
 
-//    ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
+    ImGui::Checkbox("show_start_values", &show_start_values);
+    if (show_start_values)
+        imguiSubAttributesStartValues();
+
+//    ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / m_io.Framerate, m_io.Framerate);
     ImGui::End();
 }
 
 
-ImGuiIO InitGui() {
+void Gui::Instantiate(entt::registry &registry) {
+    m_registry = &registry;
     ImGui::CreateContext();
-    ImGuiIO &io = ImGui::GetIO();
-    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
-    io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+    m_io = &ImGui::GetIO();
+    m_io->ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
+    m_io->ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
 
     ImGui::StyleColorsDark();
     ImGui_ImplRaylib_Init();
 
-    io.Fonts->AddFontDefault();
+    m_io->Fonts->AddFontDefault();
     Imgui_ImplRaylib_BuildFontAtlas();
-
-    return io;
 }
 
-
-void UpdateGui(entt::registry &registry, ImGuiIO &io) {
+void Gui::Update() {
     ImGui_ImplRaylib_ProcessEvents();
 
 // Start the Dear ImGui frame
     ImGui_ImplRaylib_NewFrame();
     ImGui::NewFrame();
 
-    imguiWindowMain(registry, io);
+    imguiWindowMain(*m_registry, *m_io);
 
 // Rendering
     ImGui::Render();
 }
 
-void DrawGui() {
+void Gui::Draw() {
     ImGui_ImplRaylib_RenderDrawData(ImGui::GetDrawData());
-
 }
 
-void CloseGui() {
+Gui::~Gui() {
     ImGui_ImplRaylib_Shutdown();
     ImGui::DestroyContext();
+
 }

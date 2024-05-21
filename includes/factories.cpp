@@ -40,7 +40,7 @@ entt::entity spawnEnemy(entt::registry &registry, Vector2 position) {
     registry.emplace<ID>(e, id++);
     auto attr = Attributes();
     registry.emplace<Attributes>(e, attr);
-    registry.emplace<Health>(e, attr.getMultiplied(AttributeConstants::health), attr.getPointerMultiplied(AttributeConstants::health));
+    registry.emplace<Health>(e, attr.getMultiplied(AttributeConstants::health), attr.getMultiplied(AttributeConstants::health));
     registry.emplace<Experience>(e, 50);
     return e;
 }
@@ -58,7 +58,7 @@ entt::entity spawnPlayer(entt::registry &registry, Vector2 position) {
     registry.emplace<ColorBB>(e, BLUE);
     auto attr = Attributes();
     registry.emplace<Attributes>(e, attr);
-    registry.emplace<Health>(e, attr.getMultiplied(AttributeConstants::health), attr.getPointerMultiplied(AttributeConstants::health));
+    registry.emplace<Health>(e, attr.getMultiplied(AttributeConstants::health), attr.getMultiplied(AttributeConstants::health));
     registry.emplace<Experience>(e, 0);
     return e;
 }
@@ -82,7 +82,7 @@ Camera2D spawnCamera() {
     camera.target = {mapWidth / 2, mapHeight / 2};
     camera.offset = {screenWidth / 2, screenHeight / 2};
     camera.rotation = 0.0f;
-    camera.zoom = 3.0f;
+    camera.zoom = 4.0f;
     return camera;
 }
 

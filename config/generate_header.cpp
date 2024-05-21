@@ -55,6 +55,12 @@ int main() {
         output << *v.as_floating_point() << "f,\n";
     }
     output << "};\n";
+    
+    output << "int expByLevel = " << config["expByLevel"] <<  ";\n";
+    output << "int pointsByLevel = " << config["pointsByLevel"] <<  ";\n";
+    output << "int pointsByAttr = " << config["pointsByAttr"] <<  ";\n";
+    output << "int pointsAtStart = " << config["pointsAtStart"] <<  ";\n";
+
     output << "};\n";
     output << "\n";
 

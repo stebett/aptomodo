@@ -73,7 +73,7 @@ struct Path {
         return index >= indexMax;
     }
 
-    Path() : index(7), indexMax(7), path({0}) { std::cout << "INFO: path being created" << "\n"; };
+    Path() : index(7), indexMax(7), path({0}) { std::cout << "INFO: ASTAR: creating path" << "\n"; };
 };
 
 struct Radius {
@@ -131,7 +131,7 @@ struct Speed {
 
 struct Health {
     float value;
-    const float *const max;
+    const float max;
 
 
     operator float() const noexcept { return value; }
@@ -141,7 +141,7 @@ struct Health {
     void operator-=(const float x) noexcept { value -= x; }
 //    Health(float x) :value(x), max(x) {}
 
-    Health(float value, const float *const max) : value(value), max(max) {};
+    Health(float value, const float max) : value(value), max(max) {};
 
 };
 

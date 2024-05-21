@@ -13,7 +13,7 @@
 class AudioManager {
     static std::unordered_map<size_t, Sound> resources;
     static std::hash<std::string> hasher;
-    static AudioManager instance;
+    static AudioManager *instance;
 
 public:
     Sound &operator[](std::string &key) const;
@@ -23,7 +23,7 @@ public:
     static AudioManager &Instance();
 
     static void Instantiate() {
-        instance = *new AudioManager();
+        instance = new AudioManager();
         InitAudioDevice();      // Initialize audio device
         LoadFromFile("player_shot");
         LoadFromFile("enemy_shot");

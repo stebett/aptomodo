@@ -13,13 +13,14 @@ set(imgui_ROOT "vendors/imgui")
 set(entt_ROOT "vendors/entt/src/")
 set(eigen_ROOT "vendors/eigen/")
 set(LDTKLOADER_ROOT "vendors/LDtkLoader")
-
+set(TOML_ROOT "vendors/toml++/include")
 set(INCLUDE "includes/")
 
 include_directories(${Boost_ROOT})
 include_directories(${rlImGui_ROOT})
 include_directories(${imgui_ROOT})
 include_directories(${entt_ROOT})
+include_directories(${TOML_ROOT})
 include_directories(${eigen_ROOT})
 include_directories(${INCLUDE})
 
@@ -35,10 +36,12 @@ set(SOURCES
         ${rlImGui_SOURCES}
         ${INCLUDE_SOURCES}
         vendors/raygui.h
+        includes/managers/parameters.cpp
+        includes/managers/gui.cpp
 )
 
 
-add_executable(${EXEC} main.cpp ${SOURCES} ${CMAKE_SOURCE_DIR}/config/attributes.h)
+add_executable(${EXEC} main.cpp ${SOURCES})
 
 target_link_libraries(${EXEC} PRIVATE raylib)
 target_link_libraries(${EXEC} PRIVATE LDtkLoader)
@@ -62,12 +65,12 @@ target_compile_definitions(${EXEC} PUBLIC ASSETS_PATH="assets/current/")
 #
 
 ## Pre-build
-add_executable(generate config/generate_header.cpp)
-set(TOML_ROOT "vendors/toml++/include")
-target_include_directories(generate PUBLIC ${TOML_ROOT})
-
-add_custom_command(
-        OUTPUT ${CMAKE_SOURCE_DIR}/config/attributes.h
-        COMMAND generate
-        DEPENDS generate ${CMAKE_SOURCE_DIR}/config/attributes.toml
-)
+#add_executable(generate config/generate_header.cpp)
+#set(TOML_ROOT "vendors/toml++/include")
+#target_include_directories(generate PUBLIC ${TOML_ROOT})
+#
+#add_custom_command(
+#        OUTPUT ${CMAKE_SOURCE_DIR}/config/attributes.h
+#        COMMAND generate
+#        DEPENDS generate ${CMAKE_SOURCE_DIR}/config/attributes.toml
+#)

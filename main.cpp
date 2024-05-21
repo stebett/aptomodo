@@ -4,7 +4,6 @@
 #include "includes/components.h"
 #include "includes/constants.h"
 #include "includes/controls.h"
-#include "includes/gui.h"
 #include "includes/factories.h"
 #include "includes/npc.h"
 #include "includes/config.h"
@@ -14,6 +13,8 @@
 #include "includes/managers/animationManager.h"
 #include "includes/managers/renderingManager.h"
 #include "includes/managers/levelManager.h"
+#include "includes/managers/parameters.h"
+#include "includes/managers/gui.h"
 #include "managers/framerateManager.h"
 
 enum class LevelOutcome {
@@ -28,7 +29,7 @@ LevelOutcome PlayLevel() {
     LevelOutcome outcome = LevelOutcome::NONE;
     entt::registry registry;
     RenderingManager::Instantiate(registry);
-
+    Gui::Instantiate(registry);
 
     auto camera = spawnCamera();
     auto player = spawnPlayer(registry);
@@ -38,14 +39,12 @@ LevelOutcome PlayLevel() {
     auto &position = registry.get<Position>(player);
     auto &health = registry.get<Health>(player);
 
-    auto io = InitGui();
-
     FramerateManager framerateManager;
 
     bool windowsShouldClose = false;
     bool paused = false;
     while (!windowsShouldClose) {
-        UpdateGui(registry, io);
+        Gui::Update();
         updateCamera(camera, position);
         BeginDrawing();
         BeginMode2D(camera); // TODO add option to activate second debug camera
@@ -57,7 +56,7 @@ LevelOutcome PlayLevel() {
         }
         RenderingManager::Draw(camera, framerateManager.framesCounter); // This has to stay after updatePlayer
         EndMode2D();
-        DrawGui();
+        Gui::Draw();
         DrawFPS(10, 10);
 
         DrawText(std::format("Health: {}", health.value).c_str(), 10, screenHeight - 40, 30, WHITE);
@@ -79,8 +78,7 @@ LevelOutcome PlayLevel() {
         if (IsKeyPressed(KEY_P)) { paused = !paused; }
     }
 
-    return
-            outcome;
+    return outcome;
 }
 
 void GameLoop() {
@@ -92,13 +90,13 @@ void GameLoop() {
 
 int main() {
     InitWindow(screenWidth, screenHeight, "Apto Modo");
-
+    ToggleFullscreen();
     AudioManager::Instantiate();
     AnimationManager::Instantiate();
     LevelManager::Instantiate();
+    Params::Instantiate();
 
     GameLoop();
-    CloseGui();
     CloseWindow();
     return 0;
 }

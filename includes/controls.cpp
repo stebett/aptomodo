@@ -153,7 +153,7 @@ void updatePlayer(entt::registry &registry, entt::entity &player, Position &posi
     Health health = registry.get<Health>(player);
     Experience exp = registry.get<Experience>(player);
 
-    if (*health.max < health.value) health.value = *health.max;
+    if (health.max < health.value) health.value = health.max; // TODO fix this
     if (exp >= attributes.expToNextLevel()) attributes.levelUp();
     updateAttributes(registry, attributes);
 }

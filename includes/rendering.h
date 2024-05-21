@@ -11,7 +11,7 @@
 #include <raylib.h>
 #include <entt/entity/registry.hpp>
 #include "components.h"
-#include "gui.h"
+#include "../config/gui.h"
 #include "constants.h"
 
 void updateCamera(Camera2D &camera, Position &playerPosition);

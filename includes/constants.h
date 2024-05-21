@@ -9,8 +9,8 @@
 #include <random>
 #include <Eigen/Dense>
 
-const int screenWidth = 1000;
-const int screenHeight = 800;
+const int screenWidth = 1920;
+const int screenHeight = 1080;
 const int mapWidth = 568;
 const int mapHeight = 784;
 const int tileSize = 16;
