@@ -68,6 +68,7 @@ entt::entity spawnPlayer(entt::registry &registry) {
     for (const auto& [label, position]: entitiesPositions) {
         if (label == "Player") return spawnPlayer(registry, position);
     }
+    return {};
 }
 
 void spawnEnemies(entt::registry &registry) {

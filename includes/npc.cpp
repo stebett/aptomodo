@@ -14,6 +14,7 @@
 #include "managers/audioManager.h"
 #include "managers/animationManager.h"
 #include "attributes.h"
+#include "managers/levelManager.h"
 
 void solveCollisionEnemy(const entt::registry &registry, const int id, Vector2 &futurePos, const float radius) {
     static Vector2 distance;
@@ -155,10 +156,21 @@ void updatePath(entt::registry &registry, entt::entity &enemy, Position &positio
 
 // TODO make it choose directly from the grid, and only from walkable points of the grid
 Position getRandomPos(Position &position) {
-    Vector2 target = Vector2Scale({rng::uniform_neg500_500(rng::seed) / 500.0f,
-                                   rng::uniform_neg500_500(rng::seed) / 500.0f}, 100);
+    Vector2 futurePos = Vector2Add(position, {100, 100});
+    Vector2 upperBoundary = {std::max(0.0f, floor(position.x / tileSize)),
+                             std::max(0.0f, floor(position.y / tileSize))};
+    Vector2 lowerBoundary = {std::min(float(LevelManager::grid.rows()), ceil(futurePos.x / tileSize)),
+                             std::min(float(LevelManager::grid.cols()), ceil(futurePos.y / tileSize))};
 
-    return Vector2Add(position, target);
+    Vector2 target = position;
+    for (int x = upperBoundary.x; x < lowerBoundary.x; x ++) {
+        for (int y = upperBoundary.y; y < lowerBoundary.y; y ++) {
+            if (LevelManager::grid(x, y) == -1) {
+                target = {static_cast<float>(x * tileSize), static_cast<float>(y * tileSize)};
+            }
+        }
+    }
+    return target;
 }
 
 bool pathCurrentReached(const Vector2 &position, const Vector2 &currentTarget, const float speed) {
@@ -212,8 +224,8 @@ bool playerInRange(const Vector2 &position, const Vector2 &playerPosition, const
 namespace Strategy {
 
     void melee(entt::registry &registry, entt::entity &player, entt::entity &enemy, Position &position,
-                Position &playerPosition, const float playerRadius, LookAngle &lookAngle, Speed &speed,
-                const ID &id, const Radius radius) {
+               Position &playerPosition, const float playerRadius, LookAngle &lookAngle, Speed &speed,
+               const ID &id, const Radius radius) {
         if (playerInRange(position, playerPosition, playerRadius)) {
             faceTarget(position, playerPosition, lookAngle);
             enemyAttack(registry, enemy, player, position);
@@ -225,8 +237,8 @@ namespace Strategy {
     }
 
     void ranged(entt::registry &registry, entt::entity &player, entt::entity &enemy, Position &position,
-                  Position &playerPosition, const float playerRadius, LookAngle &lookAngle, Speed &speed,
-                  const ID &id, const Radius radius) {
+                Position &playerPosition, const float playerRadius, LookAngle &lookAngle, Speed &speed,
+                const ID &id, const Radius radius) {
         Attributes &attributes = registry.get<Attributes>(enemy);
         auto attackRange = attributes.getMultiplied(AttributeConstants::range) * 2;
 
@@ -238,15 +250,16 @@ namespace Strategy {
             speed.actual = 0;
         } else {
             Position target = Vector2Add(playerPosition,
-                                        Vector2Scale(Vector2Normalize(Vector2Subtract(position, playerPosition)), attackRange));
+                                         Vector2Scale(Vector2Normalize(Vector2Subtract(position, playerPosition)),
+                                                      attackRange));
             updatePath(registry, enemy, position, target);
             updatePosition(registry, enemy, id, radius, speed, position, lookAngle);
         }
     }
 
     void provoke(entt::registry &registry, entt::entity &player, entt::entity &enemy, Position &position,
-                  Position &playerPosition, const float playerRadius, LookAngle &lookAngle, Speed &speed,
-                  const ID &id, const Radius radius) {
+                 Position &playerPosition, const float playerRadius, LookAngle &lookAngle, Speed &speed,
+                 const ID &id, const Radius radius) {
         Attributes &attributes = registry.get<Attributes>(enemy);
         auto attackRange = attributes.getMultiplied(AttributeConstants::range) * 2;
         if (CheckCollisionCircles(position, attackRange, playerPosition, playerRadius)) {
@@ -289,10 +302,12 @@ void updateEnemy(entt::registry &registry, entt::entity &player) {
 
         switch (config::strategy) {
             case 0:
-                Strategy::melee(registry, player, enemy, position, playerPosition, playerRadius, lookAngle, speed, id, radius);
+                Strategy::melee(registry, player, enemy, position, playerPosition, playerRadius, lookAngle, speed, id,
+                                radius);
                 break;
             case 1:
-                Strategy::ranged(registry, player, enemy, position, playerPosition, playerRadius, lookAngle, speed, id, radius);
+                Strategy::ranged(registry, player, enemy, position, playerPosition, playerRadius, lookAngle, speed, id,
+                                 radius);
                 break;
             default:
                 break;

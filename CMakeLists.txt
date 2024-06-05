@@ -36,8 +36,6 @@ set(SOURCES
         ${rlImGui_SOURCES}
         ${INCLUDE_SOURCES}
         vendors/raygui.h
-        includes/managers/parameters.cpp
-        includes/managers/gui.cpp
 )
 
 

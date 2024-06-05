@@ -105,6 +105,30 @@ build CMakeFiles/game.dir/vendors/rlImGui/rlImGui.cpp.obj: CXX_COMPILER__game_un
   OBJECT_DIR = CMakeFiles/game.dir
   OBJECT_FILE_DIR = CMakeFiles/game.dir/vendors/rlImGui
 
+build CMakeFiles/game.dir/includes/ai/behaviorTree.cpp.obj: CXX_COMPILER__game_unscanned_Release /home/ginko/jems-project/aptomodo/includes/ai/behaviorTree.cpp || cmake_object_order_depends_target_game
+  DEFINES = -DASSETS_PATH=\"assets/current/\"
+  DEP_FILE = CMakeFiles/game.dir/includes/ai/behaviorTree.cpp.obj.d
+  FLAGS = -O3 -DNDEBUG -std=gnu++20 -fdiagnostics-color=always
+  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/toml++/include -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
+  OBJECT_DIR = CMakeFiles/game.dir
+  OBJECT_FILE_DIR = CMakeFiles/game.dir/includes/ai
+
+build CMakeFiles/game.dir/includes/ai/behaviors.cpp.obj: CXX_COMPILER__game_unscanned_Release /home/ginko/jems-project/aptomodo/includes/ai/behaviors.cpp || cmake_object_order_depends_target_game
+  DEFINES = -DASSETS_PATH=\"assets/current/\"
+  DEP_FILE = CMakeFiles/game.dir/includes/ai/behaviors.cpp.obj.d
+  FLAGS = -O3 -DNDEBUG -std=gnu++20 -fdiagnostics-color=always
+  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/toml++/include -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
+  OBJECT_DIR = CMakeFiles/game.dir
+  OBJECT_FILE_DIR = CMakeFiles/game.dir/includes/ai
+
+build CMakeFiles/game.dir/includes/ai/loop.cpp.obj: CXX_COMPILER__game_unscanned_Release /home/ginko/jems-project/aptomodo/includes/ai/loop.cpp || cmake_object_order_depends_target_game
+  DEFINES = -DASSETS_PATH=\"assets/current/\"
+  DEP_FILE = CMakeFiles/game.dir/includes/ai/loop.cpp.obj.d
+  FLAGS = -O3 -DNDEBUG -std=gnu++20 -fdiagnostics-color=always
+  INCLUDES = -I/home/ginko/jems-project/aptomodo/vendors/boost -I/home/ginko/jems-project/aptomodo/vendors/rlImGui -I/home/ginko/jems-project/aptomodo/vendors/imgui -I/home/ginko/jems-project/aptomodo/vendors/entt/src -I/home/ginko/jems-project/aptomodo/vendors/toml++/include -I/home/ginko/jems-project/aptomodo/vendors/eigen -I/home/ginko/jems-project/aptomodo/includes -I/home/ginko/jems-project/aptomodo/vendors/LDtkLoader/include -I/home/ginko/jems-project/aptomodo/cmake-build-windows/include -isystem /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/include
+  OBJECT_DIR = CMakeFiles/game.dir
+  OBJECT_FILE_DIR = CMakeFiles/game.dir/includes/ai
+
 build CMakeFiles/game.dir/includes/astar.cpp.obj: CXX_COMPILER__game_unscanned_Release /home/ginko/jems-project/aptomodo/includes/astar.cpp || cmake_object_order_depends_target_game
   DEFINES = -DASSETS_PATH=\"assets/current/\"
   DEP_FILE = CMakeFiles/game.dir/includes/astar.cpp.obj.d
@@ -233,7 +257,7 @@ build CMakeFiles/game.dir/includes/rendering.cpp.obj: CXX_COMPILER__game_unscann
 #############################################
 # Link the executable game.exe
 
-build game.exe: CXX_EXECUTABLE_LINKER__game_Release CMakeFiles/game.dir/main.cpp.obj CMakeFiles/game.dir/vendors/imgui/imgui.cpp.obj CMakeFiles/game.dir/vendors/imgui/imgui_demo.cpp.obj CMakeFiles/game.dir/vendors/imgui/imgui_draw.cpp.obj CMakeFiles/game.dir/vendors/imgui/imgui_tables.cpp.obj CMakeFiles/game.dir/vendors/imgui/imgui_widgets.cpp.obj CMakeFiles/game.dir/vendors/rlImGui/rlImGui.cpp.obj CMakeFiles/game.dir/includes/astar.cpp.obj CMakeFiles/game.dir/includes/attributes.cpp.obj CMakeFiles/game.dir/includes/collisions.cpp.obj CMakeFiles/game.dir/includes/config.cpp.obj CMakeFiles/game.dir/includes/controls.cpp.obj CMakeFiles/game.dir/includes/factories.cpp.obj CMakeFiles/game.dir/includes/items.cpp.obj CMakeFiles/game.dir/includes/managers/animationManager.cpp.obj CMakeFiles/game.dir/includes/managers/audioManager.cpp.obj CMakeFiles/game.dir/includes/managers/gui.cpp.obj CMakeFiles/game.dir/includes/managers/levelManager.cpp.obj CMakeFiles/game.dir/includes/managers/parameters.cpp.obj CMakeFiles/game.dir/includes/managers/renderingManager.cpp.obj CMakeFiles/game.dir/includes/npc.cpp.obj CMakeFiles/game.dir/includes/rendering.cpp.obj | /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/lib/raylib.dll vendors/LDtkLoader/lib/libLDtkLoader.a || vendors/LDtkLoader/lib/libLDtkLoader.a
+build game.exe: CXX_EXECUTABLE_LINKER__game_Release CMakeFiles/game.dir/main.cpp.obj CMakeFiles/game.dir/vendors/imgui/imgui.cpp.obj CMakeFiles/game.dir/vendors/imgui/imgui_demo.cpp.obj CMakeFiles/game.dir/vendors/imgui/imgui_draw.cpp.obj CMakeFiles/game.dir/vendors/imgui/imgui_tables.cpp.obj CMakeFiles/game.dir/vendors/imgui/imgui_widgets.cpp.obj CMakeFiles/game.dir/vendors/rlImGui/rlImGui.cpp.obj CMakeFiles/game.dir/includes/ai/behaviorTree.cpp.obj CMakeFiles/game.dir/includes/ai/behaviors.cpp.obj CMakeFiles/game.dir/includes/ai/loop.cpp.obj CMakeFiles/game.dir/includes/astar.cpp.obj CMakeFiles/game.dir/includes/attributes.cpp.obj CMakeFiles/game.dir/includes/collisions.cpp.obj CMakeFiles/game.dir/includes/config.cpp.obj CMakeFiles/game.dir/includes/controls.cpp.obj CMakeFiles/game.dir/includes/factories.cpp.obj CMakeFiles/game.dir/includes/items.cpp.obj CMakeFiles/game.dir/includes/managers/animationManager.cpp.obj CMakeFiles/game.dir/includes/managers/audioManager.cpp.obj CMakeFiles/game.dir/includes/managers/gui.cpp.obj CMakeFiles/game.dir/includes/managers/levelManager.cpp.obj CMakeFiles/game.dir/includes/managers/parameters.cpp.obj CMakeFiles/game.dir/includes/managers/renderingManager.cpp.obj CMakeFiles/game.dir/includes/npc.cpp.obj CMakeFiles/game.dir/includes/rendering.cpp.obj | /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/lib/raylib.dll vendors/LDtkLoader/lib/libLDtkLoader.a || vendors/LDtkLoader/lib/libLDtkLoader.a
   FLAGS = -O3 -DNDEBUG
   LINK_LIBRARIES = /home/ginko/.local/src/raylib-5.0_win64_mingw-w64/lib/raylib.dll  vendors/LDtkLoader/lib/libLDtkLoader.a  -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles/game.dir

@@ -59,11 +59,11 @@ void solveCircleRecCollision(Vector2 &futurePos, float radius) {
 //    DrawRectangleV(upperBoundary, Vector2Subtract(lowerBoundary, upperBoundary), ColorAlpha(RED, 0.2));
 
 
-    float clampedX;
-    float clampedY;
-    float distanceX;
-    float distanceY;
-    float overlap;
+    static float clampedX;
+    static float clampedY;
+    static float distanceX;
+    static float distanceY;
+    static float overlap;
 
     for (float x = upperBoundary.x; x <= lowerBoundary.x; x+=tileSize) {
         for (float y = upperBoundary.y; y <= lowerBoundary.y; y+=tileSize) {
