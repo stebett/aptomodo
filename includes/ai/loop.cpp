@@ -10,6 +10,7 @@ namespace AI {
         /*
          * For each enemy
          *      Get behavior tree
+         *      Tick
          */
     }
 }
