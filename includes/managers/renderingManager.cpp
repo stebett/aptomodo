@@ -79,16 +79,16 @@ void drawProjectiles(const entt::registry &registry) {
     auto projectileView = registry.view<Projectile>();
     for (auto [entity, projectile]: projectileView.each()) {
         DrawCircleV(projectile.position, projectile.radius, DARKPURPLE);
-//        DrawCircleV(projectile.target, 5, RED);
+        //        DrawCircleV(projectile.target, 5, RED);
     }
 }
 
 void drawLevel(const Camera2D &camera) {
     // TODO update so that it draws only stuff onscreen, probably this should be in rendering Manager
+
     DrawTextureRec(LevelManager::renderedLevelTexture,
                    {0, 0, (float) LevelManager::renderedLevelTexture.width, (float) -LevelManager::renderedLevelTexture.height},
                    {0, 0}, WHITE);
-
 }
 
 

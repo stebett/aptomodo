@@ -13,7 +13,7 @@ namespace config {
     bool show_attacks = true;
     bool show_attr_window = true;
     bool show_inv_window = false;
-    bool free_camera = false;
+    bool free_camera = true;
 
     int fps = 60;
     int enemy_walking_animation_fps = 8;

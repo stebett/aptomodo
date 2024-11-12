@@ -219,7 +219,7 @@ void imguiSubAttributesStartValues() {
 void imguiWindowMain(entt::registry &registry, ImGuiIO io) {
     static bool show_demo_window = false;
     static bool show_player_window = false;
-    static bool show_config_window = false;
+    static bool show_config_window = true;
     static bool show_enemy_window = false;
     static bool show_instructions_window = false;
     static bool show_multipliers = true;
