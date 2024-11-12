@@ -229,7 +229,8 @@ void imguiWindowMain(entt::registry &registry, ImGuiIO io) {
 
     ImGui::Checkbox("Demo Window", &show_demo_window);
     if (show_demo_window)
-        ImGui::ShowDemoWindow(&show_demo_window);
+        ;
+        // ImGui::ShowDemoWindow(&show_demo_window);
 
     ImGui::Checkbox("Player Window", &show_player_window);
     if (show_player_window)
@@ -279,7 +280,7 @@ void Gui::Instantiate(entt::registry &registry) {
     ImGui_ImplRaylib_Init();
 
     m_io->Fonts->AddFontDefault();
-    Imgui_ImplRaylib_BuildFontAtlas();
+    ImGui_ImplRaylib_BuildFontAtlas();
 }
 
 void Gui::Update() {

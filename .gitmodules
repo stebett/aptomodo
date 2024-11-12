@@ -1,0 +1,24 @@
+[submodule "vendors/raylib"]
+	path = vendors/raylib
+	url = https://github.com/raysan5/raylib/
+[submodule "vendors/boost"]
+	path = vendors/boost
+	url = https://github.com/boostorg/boost.git
+[submodule "vendors/LDtkLoader"]
+	path = vendors/LDtkLoader
+	url = https://github.com/Madour/LDtkLoader
+[submodule "vendors/entt"]
+	path = vendors/entt
+	url = https://github.com/skypjack/entt
+[submodule "vendors/rlImGui"]
+	path = vendors/rlImGui
+	url = https://github.com/raylib-extras/rlImGui
+[submodule "vendors/imgui"]
+	path = vendors/imgui
+	url = https://github.com/ocornut/imgui
+[submodule "vendors/tomlplusplus"]
+	path = vendors/tomlplusplus
+	url = https://github.com/marzer/tomlplusplus
+[submodule "vendors/eigen"]
+	path = vendors/eigen
+	url = https://gitlab.com/libeigen/eigen.git
