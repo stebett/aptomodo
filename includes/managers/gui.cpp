@@ -17,7 +17,6 @@ ImGuiIO *Gui::m_io;
 entt::registry *Gui::m_registry;
 
 void imguiInstructions() {
-
     ImGui::Begin("Instructions");
     ImGui::SeparatorText("Hotkeys");
 
@@ -34,12 +33,14 @@ void imguiInstructions() {
 void imguiEnemyAttr(entt::registry &registry) {
     ImGui::Begin("Selected Enemy attributes");
 
-    auto view = registry.view<Enemy, Selected, Path, ID, ColorBB, Spread, Speed, Health, Radius, PhysicalResistance, MagicalResistance, Stamina, AttackTimer, AttackSpeed, Damage, AttackRange, Pushback, Position>();
-    for (auto [entity, path, id, colorbb, spread, speed, health, radius, physicalresistance, magicalresistance, stamina, timelastattack, attackspeed, damage, attackrange, pushback, position
-        ]: view.each()) {
-//        // Only plot this for one enemy
-//        static int enemyID = id;
-//        if (id != enemyID) break;
+    auto view = registry.view<Enemy, Selected, Path, ID, ColorBB, Spread, Speed, Health, Radius, PhysicalResistance,
+        MagicalResistance, Stamina, AttackTimer, AttackSpeed, Damage, AttackRange, Pushback, Position>();
+    for (auto [entity, path, id, colorbb, spread, speed, health, radius, physicalresistance, magicalresistance, stamina,
+             timelastattack, attackspeed, damage, attackrange, pushback, position
+         ]: view.each()) {
+        //        // Only plot this for one enemy
+        //        static int enemyID = id;
+        //        if (id != enemyID) break;
         ImGui::SliderFloat("health", &health.value, 0, 200, "%.3f", 0);
         ImGui::SliderFloat("radius", &radius.value, 0, 50, "%.3f", 0);
         ImGui::SliderFloat("position x", &position.x, 0, mapWidth, "%.3f", 0);
@@ -52,17 +53,17 @@ void imguiEnemyAttr(entt::registry &registry) {
 void imguiPlayerAttr(entt::registry &registry) {
     ImGui::Begin("Player values");
 
-    auto view = registry.view<Player, ColorBB, Spread, Speed, Health, Radius, PhysicalResistance, MagicalResistance, Stamina, AttackTimer, AttackSpeed, Damage, AttackRange, Pushback, Position>();
-    for (auto [entity, colorbb, spread, speed, health, radius, physicalresistance, magicalresistance, stamina, timelastattack, attackspeed, damage, attackrange, pushback, position
-        ]: view.each()) {
+    auto view = registry.view<Player, ColorBB, Spread, Speed, Health, Radius, PhysicalResistance, MagicalResistance,
+        Stamina, AttackTimer, AttackSpeed, Damage, AttackRange, Pushback, Position>();
+    for (auto [entity, colorbb, spread, speed, health, radius, physicalresistance, magicalresistance, stamina,
+             timelastattack, attackspeed, damage, attackrange, pushback, position
+         ]: view.each()) {
         ImGui::SliderFloat("health", &health.value, 0, 200, "%.3f", 0);
         ImGui::SliderFloat("radius", &radius.value, 0, 50, "%.3f", 0);
         ImGui::SliderFloat("position x", &position.x, 0, mapWidth, "%.3f", 0);
         ImGui::SliderFloat("position y ", &position.y, 0, mapHeight, "%.3f", 0);
-
     }
     ImGui::End();
-
 }
 
 
@@ -122,7 +123,7 @@ void imguiAttributes(entt::registry &registry) {
             ImGui::SameLine();
             ImGui::Text("%s", AttributeConstants::attributeString[attr]);
             ImGui::SeparatorText(
-                    std::format("Sub-Attributes - free points: {}", attributes.freeSubAttrPoints(attr)).c_str());
+                std::format("Sub-Attributes - free points: {}", attributes.freeSubAttrPoints(attr)).c_str());
 
             for (auto subattr: AttributeConstants::subAttrByAttr[attr]) {
                 ImGui::PushID(m);
@@ -151,7 +152,6 @@ void imguiAttributes(entt::registry &registry) {
         }
     }
     ImGui::End();
-
 }
 
 void imguiInventory(entt::registry &registry) {
@@ -184,12 +184,12 @@ void imguiConfig() {
     ImGui::Checkbox("show_bounding_box", &config::show_bounding_box);
     ImGui::Checkbox("show_enemy_texture", &config::show_enemy_texture);
     ImGui::Checkbox("show_attacks", &config::show_attacks);
+    ImGui::Checkbox("free_camera", &config::free_camera);
     ImGui::SliderInt("FPS", &config::fps, 0, 120);
     ImGui::SliderInt("enemy_walking_animation_fps", &config::enemy_walking_animation_fps, 1, 120);
     ImGui::SliderInt("strategy", &config::strategy, 0, 2);
     ImGui::End();
 }
-
 
 
 void imguiSubAttributesStartValues() {
@@ -228,9 +228,8 @@ void imguiWindowMain(entt::registry &registry, ImGuiIO io) {
 
 
     ImGui::Checkbox("Demo Window", &show_demo_window);
-    if (show_demo_window)
-        ;
-        // ImGui::ShowDemoWindow(&show_demo_window);
+    if (show_demo_window);
+    // ImGui::ShowDemoWindow(&show_demo_window);
 
     ImGui::Checkbox("Player Window", &show_player_window);
     if (show_player_window)
@@ -264,7 +263,7 @@ void imguiWindowMain(entt::registry &registry, ImGuiIO io) {
     if (show_start_values)
         imguiSubAttributesStartValues();
 
-//    ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / m_io.Framerate, m_io.Framerate);
+    //    ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / m_io.Framerate, m_io.Framerate);
     ImGui::End();
 }
 
@@ -273,8 +272,8 @@ void Gui::Instantiate(entt::registry &registry) {
     m_registry = &registry;
     ImGui::CreateContext();
     m_io = &ImGui::GetIO();
-    m_io->ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
-    m_io->ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+    m_io->ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard; // Enable Keyboard Controls
+    m_io->ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad; // Enable Gamepad Controls
 
     ImGui::StyleColorsDark();
     ImGui_ImplRaylib_Init();
@@ -286,13 +285,13 @@ void Gui::Instantiate(entt::registry &registry) {
 void Gui::Update() {
     ImGui_ImplRaylib_ProcessEvents();
 
-// Start the Dear ImGui frame
+    // Start the Dear ImGui frame
     ImGui_ImplRaylib_NewFrame();
     ImGui::NewFrame();
 
     imguiWindowMain(*m_registry, *m_io);
 
-// Rendering
+    // Rendering
     ImGui::Render();
 }
 
@@ -303,5 +302,4 @@ void Gui::Draw() {
 Gui::~Gui() {
     ImGui_ImplRaylib_Shutdown();
     ImGui::DestroyContext();
-
 }

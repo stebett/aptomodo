@@ -15,7 +15,7 @@
 #include "constants.h"
 
 void updateCamera(Camera2D &camera, Position &playerPosition);
-
+void switchCamera(Camera2D &camera, Position &playerPosition);
 //
 //class GameScene {
 //

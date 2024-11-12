@@ -6,6 +6,7 @@
 #include "renderingManager.h"
 #include "../components.h"
 #include "animationManager.h"
+#include "levelManager.h"
 #include "../config.h"
 #include "../items.h"
 
@@ -82,8 +83,17 @@ void drawProjectiles(const entt::registry &registry) {
     }
 }
 
+void drawLevel(const Camera2D &camera) {
+    // TODO update so that it draws only stuff onscreen, probably this should be in rendering Manager
+    DrawTextureRec(LevelManager::renderedLevelTexture,
+                   {0, 0, (float) LevelManager::renderedLevelTexture.width, (float) -LevelManager::renderedLevelTexture.height},
+                   {0, 0}, WHITE);
+
+}
+
 
 void RenderingManager::Draw(const Camera2D &camera, unsigned int frame) {
+    drawLevel(camera);
     drawItems(*m_registry);
     if (config::show_bounding_box) drawLivingBB(*m_registry);
     if (config::show_enemy_texture) drawEnemyTexture(*m_registry, frame / config::enemy_walking_animation_fps);

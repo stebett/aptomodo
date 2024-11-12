@@ -30,6 +30,10 @@ void updateCamera(Camera2D &camera, Position &playerPosition) {
     camera.target = Vector2Lerp(camera.target, {target_x, target_y}, 0.1);
 }
 
+void switchCamera(Camera2D &camera, Position &playerPosition) {
+    camera.target = playerPosition;
+}
+
 //
 //
 //void drawAttacks(entt::registry &registry) {

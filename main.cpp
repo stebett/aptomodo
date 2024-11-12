@@ -32,6 +32,7 @@ LevelOutcome PlayLevel() {
     Gui::Instantiate(registry);
 
     auto camera = spawnCamera();
+    auto camera2 = spawnCamera();
     auto player = spawnPlayer(registry);
     spawnEnemies(registry);
     spawnItems(registry);
@@ -45,11 +46,12 @@ LevelOutcome PlayLevel() {
     bool paused = false;
     while (!windowsShouldClose) {
         Gui::Update();
-        updateCamera(camera, position);
+        if (!config::free_camera)
+            updateCamera(camera, position);
         BeginDrawing();
         BeginMode2D(camera); // TODO add option to activate second debug camera
         ClearBackground(WHITE);
-        LevelManager::Draw(camera);
+        // LevelManager::Draw(camera);
         if (!paused) {
             updateEnemy(registry, player); // TODO This should be before drawing
             updatePlayer(registry, player, position, camera);

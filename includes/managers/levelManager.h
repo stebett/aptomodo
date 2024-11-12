@@ -24,7 +24,6 @@ class LevelManager {
     static const ldtk::Level *currentLdtkLevel;
 
     static Texture2D currentTilesetTexture;
-    static Texture2D renderedLevelTexture;
 
     static std::vector<std::pair<std::string, Vector2>> entitiesPositions;
     static std::hash<std::string> hasher;
@@ -32,6 +31,8 @@ class LevelManager {
 
 public:
     static Map grid;
+    static Texture2D renderedLevelTexture;
+
 
     ~LevelManager();
     // TODO add an update function which keeps tracks of all living positions and ranges and updates the grid based on it
