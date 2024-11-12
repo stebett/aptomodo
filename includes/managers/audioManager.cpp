@@ -18,7 +18,11 @@ void AudioManager::LoadFromFile(const std::string &filename) {
 
 // TODO make a copy for each sound?
 void AudioManager::Play(const std::string &key) const {
-    PlaySound(resources.at(hasher(key)));
+    auto sound = resources.at(hasher(key));
+    if (IsSoundPlaying(sound))
+        PlaySound(LoadSoundAlias(sound)); // TODO this should probably be preloaded or at least limited (there could be infinite sounds)
+    else
+        PlaySound(sound);
 }
 
 AudioManager &AudioManager::Instance() { return *instance; }
