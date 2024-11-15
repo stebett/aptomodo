@@ -11,9 +11,10 @@ namespace config {
     bool show_bounding_box = true;
     bool show_enemy_texture = false;
     bool show_attacks = true;
-    bool show_attr_window = true;
+    bool show_attr_window = false;
     bool show_inv_window = false;
     bool free_camera = false;
+    bool draw_level_collisions = false;
 
     int fps = 60;
     int enemy_walking_animation_fps = 8;

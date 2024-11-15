@@ -88,7 +88,10 @@ void drawLevel(const Camera2D &camera) {
     Vector2 cameraZero = GetScreenToWorld2D({0, 0}, camera);
 
     DrawTextureRec(LevelManager::renderedLevelTexture,
-                   {cameraZero.x, -cameraZero.y-screenHeight/camera.zoom, screenWidth/camera.zoom, -screenHeight/camera.zoom},
+                   {
+                       cameraZero.x, -cameraZero.y - screenHeight / camera.zoom, screenWidth / camera.zoom,
+                       -screenHeight / camera.zoom
+                   },
                    cameraZero, WHITE);
 
     // DrawTextureRec(LevelManager::renderedLevelTexture,
@@ -106,12 +109,10 @@ void drawLevelCollisions() {
                 color = {255, 0, 0, 50};
             if (LevelManager::grid(row, col) == 3)
                 color = {255, 255, 0, 50};
-            DrawRectangle(row*tileSize, col*tileSize, tileSize, tileSize, color);
+            DrawRectangle(row * tileSize, col * tileSize, tileSize, tileSize, color);
         }
     }
-
 }
-
 
 
 void RenderingManager::Draw(const Camera2D &camera, unsigned int frame) {
@@ -120,7 +121,8 @@ void RenderingManager::Draw(const Camera2D &camera, unsigned int frame) {
     if (config::show_bounding_box) drawLivingBB(*m_registry);
     if (config::show_enemy_texture) drawEnemyTexture(*m_registry, frame / config::enemy_walking_animation_fps);
     if (config::show_attacks) drawAttacks(*m_registry);
+    if (config::draw_level_collisions) drawLevelCollisions();
+
     drawProjectiles(*m_registry);
     drawTooltips(*m_registry);
-    drawLevelCollisions();
 }

@@ -120,6 +120,7 @@ void LevelManager::SetLevel(int level) {
 
     EndTextureMode();
     renderedLevelTexture = renderTexture.texture;
+    // SetTextureWrap(renderedLevelTexture, TEXTURE_WRAP_MIRROR_CLAMP);
 }
 
 std::vector<std::pair<std::string, Vector2> > &LevelManager::GetEntitiesPositions() {

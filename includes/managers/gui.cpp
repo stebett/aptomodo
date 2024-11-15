@@ -195,6 +195,7 @@ void imguiConfig() {
     ImGui::Checkbox("show_enemy_texture", &config::show_enemy_texture);
     ImGui::Checkbox("show_attacks", &config::show_attacks);
     ImGui::Checkbox("free_camera", &config::free_camera);
+    ImGui::Checkbox("draw_level_collisions", &config::draw_level_collisions);
     ImGui::SliderInt("FPS", &config::fps, 0, 120);
     ImGui::SliderInt("enemy_walking_animation_fps", &config::enemy_walking_animation_fps, 1, 120);
     ImGui::SliderInt("strategy", &config::strategy, 0, 2);
@@ -229,22 +230,28 @@ void imguiSubAttributesStartValues() {
 void imguiWindowMain(entt::registry &registry, ImGuiIO io, const Camera2D& camera) {
     static bool show_demo_window = false;
     static bool show_player_window = false;
-    static bool show_config_window = true;
+    static bool show_config_window = false;
     static bool show_enemy_window = false;
     static bool show_instructions_window = false;
-    static bool show_multipliers = true;
-    static bool show_start_values = true;
+    static bool show_multipliers = false;
+    static bool show_start_values = false;
+    static bool show_cursor_window = false;
     ImGui::Begin("Main");
 
 
     ImGui::Checkbox("Demo Window", &show_demo_window);
     if (show_demo_window);
     // ImGui::ShowDemoWindow(&show_demo_window);
-    imguiCursor(camera);
+
 
     ImGui::Checkbox("Player Window", &show_player_window);
     if (show_player_window)
         imguiPlayerAttr(registry);
+
+    ImGui::Checkbox("Player Window", &show_cursor_window);
+    if (show_cursor_window)
+        imguiCursor(camera);
+
 
     ImGui::Checkbox("Enemy Window", &show_enemy_window);
     if (show_enemy_window)
