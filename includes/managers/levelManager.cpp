@@ -4,6 +4,8 @@
 
 #include "levelManager.h"
 
+#include <format>
+
 std::vector<std::pair<std::string, Vector2>> LevelManager::entitiesPositions;
 LevelManager *LevelManager::instance;
 int LevelManager::current_level;
@@ -93,6 +95,7 @@ void LevelManager::SetLevel(int level) {
                 };
 
                 DrawTextureRec(currentTilesetTexture, source_rect, target_pos, WHITE);
+                // DrawText(std::format("{}", target_pos.y).c_str(), target_pos.x, target_pos.y, 2, BLACK);
             }
         }
 

@@ -30,6 +30,16 @@ void imguiInstructions() {
     ImGui::End();
 }
 
+void imguiCursor(const Camera2D& camera) {
+    ImGui::Begin("Cursor");
+    ImGui::Text("Screen Position: %f, %f", GetMousePosition().x, GetMousePosition().y);
+    ImGui::Text("World Position: %f, %f", GetScreenToWorld2D(GetMousePosition(), camera).x, GetScreenToWorld2D(GetMousePosition(), camera).y);
+    ImGui::Text("Camera Zoom: %f", camera.zoom);
+    ImGui::Text("Camera target: %f, %f", camera.target.x, camera.target.y);
+    ImGui::Text("Camera offset: %f, %f", camera.offset.x, camera.offset.y);
+    ImGui::End();
+}
+
 void imguiEnemyAttr(entt::registry &registry) {
     ImGui::Begin("Selected Enemy attributes");
 
@@ -216,7 +226,7 @@ void imguiSubAttributesStartValues() {
     ImGui::End();
 }
 
-void imguiWindowMain(entt::registry &registry, ImGuiIO io) {
+void imguiWindowMain(entt::registry &registry, ImGuiIO io, const Camera2D& camera) {
     static bool show_demo_window = false;
     static bool show_player_window = false;
     static bool show_config_window = true;
@@ -230,6 +240,7 @@ void imguiWindowMain(entt::registry &registry, ImGuiIO io) {
     ImGui::Checkbox("Demo Window", &show_demo_window);
     if (show_demo_window);
     // ImGui::ShowDemoWindow(&show_demo_window);
+    imguiCursor(camera);
 
     ImGui::Checkbox("Player Window", &show_player_window);
     if (show_player_window)
@@ -282,14 +293,14 @@ void Gui::Instantiate(entt::registry &registry) {
     ImGui_ImplRaylib_BuildFontAtlas();
 }
 
-void Gui::Update() {
+void Gui::Update(const Camera2D& camera) {
     ImGui_ImplRaylib_ProcessEvents();
 
     // Start the Dear ImGui frame
     ImGui_ImplRaylib_NewFrame();
     ImGui::NewFrame();
 
-    imguiWindowMain(*m_registry, *m_io);
+    imguiWindowMain(*m_registry, *m_io, camera);
 
     // Rendering
     ImGui::Render();

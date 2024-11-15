@@ -25,6 +25,7 @@ public:
     static void Instantiate() {
         instance = new AudioManager();
         InitAudioDevice();      // Initialize audio device
+        SetMasterVolume(0);
         LoadFromFile("player_shot");
         LoadFromFile("enemy_shot");
         LoadFromFile("enemy_explosion");

@@ -46,10 +46,11 @@ LevelOutcome PlayLevel() {
     bool windowsShouldClose = false;
     bool paused = false;
     while (!windowsShouldClose) {
-        Gui::Update();
+        Gui::Update(playerCamera);
         if (!config::free_camera) {
             // camera = playerCamera;
             updateCamera(playerCamera, position);
+            freeCamera = playerCamera;
         }
         BeginDrawing();
         if (!config::free_camera)

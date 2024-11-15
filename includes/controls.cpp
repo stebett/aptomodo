@@ -115,6 +115,7 @@ void parseInput(entt::registry &registry, entt::entity &player, Position &positi
     }
 
     if (IsKeyPressed(KEY_O)) config::show_attr_window = !config::show_attr_window;
+    if (IsKeyPressed(KEY_M)) GetMasterVolume() == 0 ? SetMasterVolume(100) : SetMasterVolume(0);
     if (IsKeyPressed(KEY_I)) config::show_inv_window = !config::show_inv_window;
 
 
