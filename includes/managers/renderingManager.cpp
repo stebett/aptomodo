@@ -96,10 +96,19 @@ void drawLevel(const Camera2D &camera) {
     //                    {0, 0}, WHITE);
 }
 
-// void drawLevelCollisions() {
-//     for LevelManager::grid.
-//
-// }
+void drawLevelCollisions() {
+    for (auto row = 0; row < LevelManager::grid.rows(); row++) {
+        for (auto col = 0; col < LevelManager::grid.cols(); col++) {
+            Color color = {255, 255, 255, 0};
+            if (LevelManager::grid(row, col) == 1)
+                color = {255, 0, 0, 125};
+            if (LevelManager::grid(row, col) == 2)
+                color = {255, 0, 0, 50};
+            DrawRectangle(row*tileSize, col*tileSize, tileSize, tileSize, color);
+        }
+    }
+
+}
 
 
 
@@ -111,4 +120,5 @@ void RenderingManager::Draw(const Camera2D &camera, unsigned int frame) {
     if (config::show_attacks) drawAttacks(*m_registry);
     drawProjectiles(*m_registry);
     drawTooltips(*m_registry);
+    drawLevelCollisions();
 }
