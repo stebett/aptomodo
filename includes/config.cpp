@@ -8,6 +8,7 @@
 namespace config {
     bool show_astar_path = false;
     bool show_enemy_fov = false;
+    bool show_enemy_window = false;
     bool show_bounding_box = true;
     bool show_enemy_texture = false;
     bool show_attacks = true;

@@ -228,10 +228,8 @@ void imguiSubAttributesStartValues() {
 }
 
 void imguiWindowMain(entt::registry &registry, ImGuiIO io, const Camera2D& camera) {
-    static bool show_demo_window = false;
-    static bool show_player_window = false;
     static bool show_config_window = false;
-    static bool show_enemy_window = false;
+    static bool show_player_window = false;
     static bool show_instructions_window = false;
     static bool show_multipliers = false;
     static bool show_start_values = false;
@@ -239,22 +237,19 @@ void imguiWindowMain(entt::registry &registry, ImGuiIO io, const Camera2D& camer
     ImGui::Begin("Main");
 
 
-    ImGui::Checkbox("Demo Window", &show_demo_window);
-    if (show_demo_window);
-    // ImGui::ShowDemoWindow(&show_demo_window);
-
 
     ImGui::Checkbox("Player Window", &show_player_window);
     if (show_player_window)
         imguiPlayerAttr(registry);
 
-    ImGui::Checkbox("Player Window", &show_cursor_window);
+    ImGui::Checkbox("Cursor Window", &show_cursor_window);
     if (show_cursor_window)
         imguiCursor(camera);
 
 
-    ImGui::Checkbox("Enemy Window", &show_enemy_window);
-    if (show_enemy_window)
+    ImGui::Checkbox("Enemy Window", &config::show_enemy_window);
+    if (config::show_enemy_window)
+        // todo auto open when enemy selected
         imguiEnemyAttr(registry);
 
     ImGui::Checkbox("Config Window", &show_config_window);

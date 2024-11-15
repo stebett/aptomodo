@@ -18,5 +18,6 @@ namespace config {
     extern bool show_inv_window;
     extern bool free_camera;
     extern bool draw_level_collisions;
+    extern bool show_enemy_window;
     extern std::array<float, 18> attrMultipliers;
 }

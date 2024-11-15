@@ -97,6 +97,7 @@ void selectEnemy(entt::registry &registry, Vector2 worldPosition) {
     for (auto [enemy, radius, position]: enemyView.each()) {
         if (CheckCollisionPointCircle(worldPosition, position, radius)) {
             registry.emplace<Selected>(enemy);
+            config::show_enemy_window = true;
         }
     }
 }
