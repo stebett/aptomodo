@@ -104,6 +104,8 @@ void drawLevelCollisions() {
                 color = {255, 0, 0, 125};
             if (LevelManager::grid(row, col) == 2)
                 color = {255, 0, 0, 50};
+            if (LevelManager::grid(row, col) == 3)
+                color = {255, 255, 0, 50};
             DrawRectangle(row*tileSize, col*tileSize, tileSize, tileSize, color);
         }
     }

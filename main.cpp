@@ -47,6 +47,7 @@ LevelOutcome PlayLevel() {
     bool paused = false;
     while (!windowsShouldClose) {
         Gui::Update(playerCamera);
+        LevelManager::Update(registry);
         if (!config::free_camera) {
             // camera = playerCamera;
             updateCamera(playerCamera, position);

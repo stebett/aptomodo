@@ -40,6 +40,8 @@ public:
     static std::vector<std::pair<std::string, Vector2>> & GetEntitiesPositions();
     static void Draw(Camera2D &camera);
 
+    static void Update(const entt::registry &registry);
+
     static void SetLevel(int level);
 
     static LevelManager &Instance();

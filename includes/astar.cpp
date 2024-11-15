@@ -43,6 +43,7 @@ std::vector<Node> neighbors(const Node node) {
             if (neighbor_x < 0 || neighbor_x > mapWidth / tileSize) continue;
             if (neighbor_y < 0 || neighbor_y > mapHeight / tileSize) continue;
             if (LevelManager::grid(neighbor_x, neighbor_y) == 1) continue;
+            if (LevelManager::grid(neighbor_x, neighbor_y) == 3) continue;
             neighbors.emplace_back(neighbor_x, neighbor_y);
         }
     return neighbors;
@@ -102,6 +103,7 @@ void Search::step() {
         if (!came_from.contains(neighbor)) {
             if (neighbor == start | neighbor == came_from[current]) continue;
             float terrainPenalty = 3.0f * static_cast<float>(LevelManager::grid(neighbor.x, neighbor.y) == 2);
+            terrainPenalty += static_cast<float>(LevelManager::grid(neighbor.x, neighbor.y) == 3) * 1.5;
             open.emplace(neighbor, manhattan(neighbor, end) + terrainPenalty);
             came_from[neighbor] = current;
             closed[neighbor] = closed[current] + manhattan(neighbor, current) + terrainPenalty;

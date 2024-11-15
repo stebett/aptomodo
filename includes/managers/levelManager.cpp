@@ -4,9 +4,10 @@
 
 #include "levelManager.h"
 
+#include <components.h>
 #include <format>
 
-std::vector<std::pair<std::string, Vector2>> LevelManager::entitiesPositions;
+std::vector<std::pair<std::string, Vector2> > LevelManager::entitiesPositions;
 LevelManager *LevelManager::instance;
 int LevelManager::current_level;
 ldtk::Project *LevelManager::ldtkProject;
@@ -59,19 +60,19 @@ void LevelManager::SetLevel(int level) {
 
     BeginTextureMode(renderTexture);
 
-//    if (currentLdtkLevel->hasBgImage()) {
-//        auto backgroundPath = currentLdtkLevel->getBgImage();
-//        auto backgroundTexture = LoadTexture(getAssetPath(backgroundPath.path.c_str()).c_str());
-//        SetTextureFilter(backgroundTexture, TEXTURE_FILTER_POINT);
-//
-//        // tile background texture to cover the whole frame buffer
-//        for (int i = 0; i <= (mapWidth / backgroundTexture.width); i++) {
-//            for (int j = 0; j <= (mapHeight / backgroundTexture.height); j++) {
-//                DrawTextureV(backgroundTexture,
-//                             {float(i * backgroundTexture.width), float(j * backgroundTexture.height)}, WHITE);
-//            }
-//        }
-//    }
+    //    if (currentLdtkLevel->hasBgImage()) {
+    //        auto backgroundPath = currentLdtkLevel->getBgImage();
+    //        auto backgroundTexture = LoadTexture(getAssetPath(backgroundPath.path.c_str()).c_str());
+    //        SetTextureFilter(backgroundTexture, TEXTURE_FILTER_POINT);
+    //
+    //        // tile background texture to cover the whole frame buffer
+    //        for (int i = 0; i <= (mapWidth / backgroundTexture.width); i++) {
+    //            for (int j = 0; j <= (mapHeight / backgroundTexture.height); j++) {
+    //                DrawTextureV(backgroundTexture,
+    //                             {float(i * backgroundTexture.width), float(j * backgroundTexture.height)}, WHITE);
+    //            }
+    //        }
+    //    }
 
     // draw all tileset layers
     for (auto &&layer: currentLdtkLevel->allLayers()) {
@@ -83,15 +84,15 @@ void LevelManager::SetLevel(int level) {
                 auto tile_size = float(layer.getTileset().tile_size);
 
                 Rectangle source_rect = {
-                        .x = float(source_pos.x),
-                        .y = float(source_pos.y),
-                        .width = tile.flipX ? -tile_size : tile_size,
-                        .height = tile.flipY ? -tile_size : tile_size,
+                    .x = float(source_pos.x),
+                    .y = float(source_pos.y),
+                    .width = tile.flipX ? -tile_size : tile_size,
+                    .height = tile.flipY ? -tile_size : tile_size,
                 };
 
                 Vector2 target_pos = {
-                        (float) tile.getPosition().x,
-                        (float) tile.getPosition().y,
+                    (float) tile.getPosition().x,
+                    (float) tile.getPosition().y,
                 };
 
                 DrawTextureRec(currentTilesetTexture, source_rect, target_pos, WHITE);
@@ -101,8 +102,8 @@ void LevelManager::SetLevel(int level) {
 
         if (ldtk::LayerType::IntGrid == layer.getType()) {
             const auto gridSize = layer.getGridSize();
-//            std::cout << gridSize.x << " " << gridSize.y << "\n";
-//            std::cout << grid.rows() << " " << grid.cols() << "\n";
+            //            std::cout << gridSize.x << " " << gridSize.y << "\n";
+            //            std::cout << grid.rows() << " " << grid.cols() << "\n";
             for (int x = 0; x <= mapWidth / tileSize; x++) {
                 for (int y = 0; y <= mapHeight / tileSize; y++) {
                     grid(x, y) = layer.getIntGridVal(x, y).value;
@@ -119,10 +120,9 @@ void LevelManager::SetLevel(int level) {
 
     EndTextureMode();
     renderedLevelTexture = renderTexture.texture;
-
 }
 
-std::vector<std::pair<std::string, Vector2>> & LevelManager::GetEntitiesPositions() {
+std::vector<std::pair<std::string, Vector2> > &LevelManager::GetEntitiesPositions() {
     return entitiesPositions;
 }
 
@@ -131,9 +131,23 @@ void LevelManager::Draw(Camera2D &camera) {
     DrawTextureRec(renderedLevelTexture,
                    {0, 0, (float) renderedLevelTexture.width, (float) -renderedLevelTexture.height},
                    {0, 0}, WHITE);
-
 }
 
+void LevelManager::Update(const entt::registry &registry) {
+    auto enemyView = registry.view<Living, Radius, Position, Enemy>();
+    for (int row = 0; row < LevelManager::grid.rows(); row++) {
+        for (int col = 0; col < LevelManager::grid.cols(); col++) {
+            if (grid(row, col) == 3) grid(row, col) = -1;
+            Rectangle rec = {float(tileSize * row), float(tileSize * col), tileSize, tileSize};
+            for (auto [enemy, radius, position]: enemyView.each()) {
+                // if (grid(row, col) == -1 && CheckCollisionCircleRec(position, radius, rec))
+                    // LevelManager::grid(row, col) = 3;
+                LevelManager::grid(int(position.x/tileSize), int(position.y/tileSize)) = 3;
+
+            }
+        }
+    }
+}
 
 //std::string GameScene::getTexturePath(const std::string &tileset) {
 //    return getAssetPath(ldtkWorld->getTileset(tileset).path);
