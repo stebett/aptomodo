@@ -83,9 +83,9 @@ void drawProjectiles(const entt::registry &registry) {
     }
 }
 
-void drawLevel(const Camera2D &camera) {
+void RenderingManager::DrawLevel(const Camera2D &camera) {
     // Don't really get why but it works
-    Vector2 cameraZero = GetScreenToWorld2D({0, 0}, camera);
+    const Vector2 cameraZero = GetScreenToWorld2D({0, 0}, camera);
 
     DrawTextureRec(LevelManager::renderedLevelTexture,
                    {
@@ -116,7 +116,6 @@ void drawLevelCollisions() {
 
 
 void RenderingManager::Draw(const Camera2D &camera, unsigned int frame) {
-    drawLevel(camera);
     drawItems(*m_registry);
     if (config::show_bounding_box) drawLivingBB(*m_registry);
     if (config::show_enemy_texture) drawEnemyTexture(*m_registry, frame / config::enemy_walking_animation_fps);

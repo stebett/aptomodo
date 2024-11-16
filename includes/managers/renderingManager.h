@@ -22,6 +22,8 @@ public:
         instance = new RenderingManager(registry);
     }
 
+    static void DrawLevel(const Camera2D &camera);
+
     static void Draw(const Camera2D &camera, unsigned int frame);
 
     ~RenderingManager() {

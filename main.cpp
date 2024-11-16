@@ -49,17 +49,18 @@ LevelOutcome PlayLevel() {
         Gui::Update(playerCamera);
         LevelManager::Update(registry);
         if (!config::free_camera) {
-            // camera = playerCamera;
             updateCamera(playerCamera, position);
             freeCamera = playerCamera;
         }
         BeginDrawing();
         if (!config::free_camera)
-            BeginMode2D(playerCamera); // TODO add option to activate second debug camera
+            BeginMode2D(playerCamera);
         else
-            BeginMode2D(freeCamera); // TODO add option to activate second debug camera
+            BeginMode2D(freeCamera);
 
         ClearBackground(WHITE);
+        RenderingManager::DrawLevel(playerCamera);
+
         if (!paused) {
             updateEnemy(registry, player); // TODO This should be before drawing
             if (!config::free_camera)
