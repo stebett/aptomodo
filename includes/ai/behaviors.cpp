@@ -5,8 +5,12 @@
 #include "pch.h"
 #include "behaviors.h"
 
+#include <collisions.h>
 #include <components.h>
 #include <config.h>
+#include <constants.h>
+#include <managers/animationManager.h>
+#include <managers/audioManager.h>
 
 
 Status PlayerInView::update(entt::registry &registry, entt::entity self, entt::entity player) {
@@ -45,6 +49,13 @@ Status Patrol::update(entt::registry &registry, entt::entity self, entt::entity 
 
 Status PlayerInMeleeRange::update(entt::registry &registry, entt::entity self, entt::entity player) {
     std::cout << "PlayerInMeleeRange" << "\n";
+    const auto position = registry.get<Position>(self);
+    const auto attackRange = registry.get<AttackRange>(self);
+    const auto playerPosition = registry.get<Position>(player);
+    const auto playerRadius = registry.get<Radius>(player);
+
+    if (CheckCollisionCircles(position, attackRange, playerPosition, playerRadius))
+        return SUCCESS;
     return FAILURE;
 }
 
@@ -53,7 +64,41 @@ Status Chase::update(entt::registry &registry, entt::entity self, entt::entity p
     return FAILURE;
 }
 
+Triangle TriangleAngles(const Vector2 v1, const float range, const float angle1deg, const float angle2deg) {
+    return {v1,
+            {v1.x + range * cos(angle1deg * DEG2RAD),
+             v1.y + range * sin(angle1deg * DEG2RAD)},
+            {v1.x + range * cos(angle2deg * DEG2RAD),
+             v1.y + range * sin(angle2deg * DEG2RAD)}};
+}
+
 Status AttackMelee::update(entt::registry &registry, entt::entity self, entt::entity player) {
     std::cout << "AttackMelee" << "\n";
-    return FAILURE;
+    static Triangle triangle;
+    const auto position = registry.get<Position>(self);
+
+    auto &attackTimer = registry.get<AttackTimer>(self).timer;
+    if (attackTimer.Elapsed() < registry.get<AttackSpeed>(self)) return RUNNING;
+    attackTimer.Reset();
+
+    auto &playerPosition = registry.get<Position>(player);
+    auto &health = registry.get<Health>(player);
+    auto radius = registry.get<Radius>(player);
+    auto attackRange = registry.get<AttackRange>(self);
+    auto attackSpread = registry.get<Spread>(self);
+    auto damage = registry.get<Damage>(self);
+    //    float pushback = registry.get<Pushback>(enemy);
+
+    float clickAngle = atan2(playerPosition.y - position.y, playerPosition.x - position.x) * radToDeg;
+    registry.emplace<AttackEffect>(registry.create(), 100, position, attackRange, clickAngle - attackSpread,
+                                   clickAngle + attackSpread, BROWN);
+    AudioManager::Instance().Play("enemy_shot");
+
+
+    triangle = TriangleAngles(position, attackRange, clickAngle - attackSpread, clickAngle + attackSpread);
+    if (CheckCollisionCircleTriangle(playerPosition, radius, triangle.v1, triangle.v2, triangle.v3,
+                                     attackRange)) {
+        health -= damage;
+                                     }
+    return SUCCESS;
 }
