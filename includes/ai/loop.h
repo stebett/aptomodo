@@ -8,7 +8,7 @@
 #include "entt/entity/registry.hpp"
 
 namespace AI {
-    void update(entt::registry &registry, entt::entity &player) ;
+    void Update(entt::registry &registry, entt::entity &player) ;
 
 }
 

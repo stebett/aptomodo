@@ -3,14 +3,14 @@
 //
 
 #include "loop.h"
+#include <components.h>
+#include "strategies.h"
 
 namespace AI {
-
-    void update(entt::registry &registry, entt::entity &player) {
-        /*
-         * For each enemy
-         *      Get behavior tree
-         *      Tick
-         */
+    void Update(entt::registry &registry, entt::entity &player) {
+        auto enemyView = registry.view<Living, Enemy, Strategy::Strategy>();
+        for (auto [enemy, strategy]: enemyView.each()) {
+            strategy.behavior->tick();
+        }
     }
 }

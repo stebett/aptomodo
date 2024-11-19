@@ -20,7 +20,9 @@ file(GLOB_RECURSE SOURCES ${INCLUDE}/*.cpp)
 
 
 
-add_executable(${EXEC} main.cpp ${SOURCES})
+add_executable(${EXEC} main.cpp ${SOURCES}
+        includes/math/decay.cpp
+        includes/math/decay.h)
 target_link_libraries(${EXEC} PRIVATE raylib)
 target_link_libraries(${EXEC} PRIVATE LDtkLoader)
 target_link_libraries(${EXEC} PRIVATE EnTT::EnTT)

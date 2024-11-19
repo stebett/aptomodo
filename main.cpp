@@ -8,6 +8,8 @@
 #include "includes/npc.h"
 #include "includes/config.h"
 #include <format>
+#include <ai/loop.h>
+
 #include "includes/managers/audioManager.h"
 #include "includes/managers/animationManager.h"
 #include "includes/managers/renderingManager.h"
@@ -60,7 +62,8 @@ LevelOutcome PlayLevel() {
         RenderingManager::DrawLevel(playerCamera);
 
         if (!paused) {
-            updateEnemy(registry, player); // TODO This should be before drawing
+            AI::Update(registry, player);
+            // updateEnemy(registry, player); // TODO This should be before drawing
             if (!config::free_camera)
                 updatePlayer(registry, player, position, playerCamera);
             else

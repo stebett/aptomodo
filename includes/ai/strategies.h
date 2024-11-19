@@ -12,7 +12,7 @@ namespace Strategy {
 
     class Melee : public BehaviorTree {
     private:
-        Fallback root = {};
+        Sequence root = {};
         Fallback fallback1 = {};
         Fallback fallback2 = {};
 
@@ -37,7 +37,9 @@ namespace Strategy {
         }
 
     };
-
+    struct Strategy {
+        BehaviorTree* behavior;
+    };
 }
 
 #endif //APTOMODO_STRATEGIES_H

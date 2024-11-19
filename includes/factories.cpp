@@ -8,10 +8,12 @@
 #include "managers/levelManager.h"
 #include "attributes.h"
 #include "items.h"
+#include "ai/strategies.h"
+
 // TODO Make a common factory, and define components used here in factories.h
 
 entt::entity spawnLiving(entt::registry &registry) {
-    entt::entity e = registry.create();
+    const entt::entity e = registry.create();
     registry.emplace<Living>(e);
     registry.emplace<Radius>(e, 10.0f);
     registry.emplace<Speed>(e, 3.0f);
@@ -41,6 +43,7 @@ entt::entity spawnEnemy(entt::registry &registry, Vector2 position) {
     registry.emplace<Attributes>(e, attr);
     registry.emplace<Health>(e, attr.getMultiplied(AttributeConstants::health), attr.getMultiplied(AttributeConstants::health));
     registry.emplace<Experience>(e, 50);
+    registry.emplace<Strategy::Strategy>(e, new Strategy::Melee());
     return e;
 }
 
