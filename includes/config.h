@@ -20,4 +20,8 @@ namespace config {
     extern bool draw_level_collisions;
     extern bool show_enemy_window;
     extern std::array<float, 18> attrMultipliers;
+    extern float enemySightRange;
+    extern float enemySightRangeChasing;
+    extern float enemyHearRange;
+    extern float enemyHearRangeChasing;
 }

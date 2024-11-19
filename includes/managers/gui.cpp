@@ -28,10 +28,11 @@ void imguiInstructions() {
     ImGui::End();
 }
 
-void imguiCursor(const Camera2D& camera) {
+void imguiCursor(const Camera2D &camera) {
     ImGui::Begin("Cursor");
     ImGui::Text("Screen Position: %f, %f", GetMousePosition().x, GetMousePosition().y);
-    ImGui::Text("World Position: %f, %f", GetScreenToWorld2D(GetMousePosition(), camera).x, GetScreenToWorld2D(GetMousePosition(), camera).y);
+    ImGui::Text("World Position: %f, %f", GetScreenToWorld2D(GetMousePosition(), camera).x,
+                GetScreenToWorld2D(GetMousePosition(), camera).y);
     ImGui::Text("Camera Zoom: %f", camera.zoom);
     ImGui::Text("Camera target: %f, %f", camera.target.x, camera.target.y);
     ImGui::Text("Camera offset: %f, %f", camera.offset.x, camera.offset.y);
@@ -53,6 +54,10 @@ void imguiEnemyAttr(entt::registry &registry) {
         ImGui::SliderFloat("radius", &radius.value, 0, 50, "%.3f", 0);
         ImGui::SliderFloat("position x", &position.x, 0, mapWidth, "%.3f", 0);
         ImGui::SliderFloat("position y ", &position.y, 0, mapHeight, "%.3f", 0);
+        ImGui::SliderFloat("enemySightRange", &config::enemySightRange, 0, 800, "%.3f", 0);
+        ImGui::SliderFloat("enemySightRangeChasing", &config::enemySightRangeChasing, 0, 800, "%.3f", 0);
+        ImGui::SliderFloat("enemyHearRange", &config::enemyHearRange, 0, 800, "%.3f", 0);
+        ImGui::SliderFloat("enemyHearRangeChasing", &config::enemyHearRangeChasing, 0, 800, "%.3f", 0);
     }
     ImGui::End();
 }
@@ -187,16 +192,16 @@ void imguiInventory(entt::registry &registry) {
 
 void imguiConfig() {
     ImGui::Begin("Config");
-    ImGui::Checkbox("show_astar_path", &config::show_astar_path);
-    ImGui::Checkbox("show_enemy_fov", &config::show_enemy_fov);
     ImGui::Checkbox("show_bounding_box", &config::show_bounding_box);
-    ImGui::Checkbox("show_enemy_texture", &config::show_enemy_texture);
     ImGui::Checkbox("show_attacks", &config::show_attacks);
     ImGui::Checkbox("free_camera", &config::free_camera);
     ImGui::Checkbox("draw_level_collisions", &config::draw_level_collisions);
     ImGui::SliderInt("FPS", &config::fps, 0, 120);
-    ImGui::SliderInt("enemy_walking_animation_fps", &config::enemy_walking_animation_fps, 1, 120);
     ImGui::SliderInt("strategy", &config::strategy, 0, 2);
+    ImGui::Checkbox("show_astar_path", &config::show_astar_path);
+    ImGui::Checkbox("show_enemy_fov", &config::show_enemy_fov);
+    ImGui::Checkbox("show_enemy_texture", &config::show_enemy_texture);
+    ImGui::SliderInt("enemy_walking_animation_fps", &config::enemy_walking_animation_fps, 1, 120);
     ImGui::End();
 }
 
@@ -225,7 +230,7 @@ void imguiSubAttributesStartValues() {
     ImGui::End();
 }
 
-void imguiWindowMain(entt::registry &registry, ImGuiIO io, const Camera2D& camera) {
+void imguiWindowMain(entt::registry &registry, ImGuiIO io, const Camera2D &camera) {
     static bool show_config_window = false;
     static bool show_player_window = false;
     static bool show_instructions_window = false;
@@ -233,7 +238,6 @@ void imguiWindowMain(entt::registry &registry, ImGuiIO io, const Camera2D& camer
     static bool show_start_values = false;
     static bool show_cursor_window = false;
     ImGui::Begin("Main");
-
 
 
     ImGui::Checkbox("Player Window", &show_player_window);
@@ -293,7 +297,7 @@ void Gui::Instantiate(entt::registry &registry) {
     ImGui_ImplRaylib_BuildFontAtlas();
 }
 
-void Gui::Update(const Camera2D& camera) {
+void Gui::Update(const Camera2D &camera) {
     ImGui_ImplRaylib_ProcessEvents();
 
     // Start the Dear ImGui frame
