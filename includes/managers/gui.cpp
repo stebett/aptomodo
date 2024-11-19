@@ -4,6 +4,9 @@
 
 #include "pch.h"
 #include "gui.h"
+
+#include <ai/strategies.h>
+
 #include "attributes.h"
 #include "parameters.h"
 #include "components.h"
@@ -40,16 +43,19 @@ void imguiCursor(const Camera2D &camera) {
 }
 
 void imguiEnemyAttr(entt::registry &registry) {
-    ImGui::Begin("Selected Enemy attributes");
+    ImGui::Begin("Enemy attributes");
+    ImGui::SliderInt("strategy", &config::strategy, 0, 2);
+    ImGui::Checkbox("show_astar_path", &config::show_astar_path);
+    ImGui::Checkbox("show_enemy_fov", &config::show_enemy_fov);
+    ImGui::Checkbox("show_enemy_texture", &config::show_enemy_texture);
+    ImGui::SeparatorText("Selected Enemy attributes");
 
+    ImGui::SliderInt("enemy_walking_animation_fps", &config::enemy_walking_animation_fps, 1, 120);
     auto view = registry.view<Enemy, Selected, Path, ID, ColorBB, Spread, Speed, Health, Radius, PhysicalResistance,
-        MagicalResistance, Stamina, AttackTimer, AttackSpeed, Damage, AttackRange, Pushback, Position>();
+        MagicalResistance, Stamina, AttackTimer, AttackSpeed, Damage, AttackRange, Pushback, Position,
+        Strategy::Strategy>();
     for (auto [entity, path, id, colorbb, spread, speed, health, radius, physicalresistance, magicalresistance, stamina,
-             timelastattack, attackspeed, damage, attackrange, pushback, position
-         ]: view.each()) {
-        //        // Only plot this for one enemy
-        //        static int enemyID = id;
-        //        if (id != enemyID) break;
+             timelastattack, attackspeed, damage, attackrange, pushback, position, strategy]: view.each()) {
         ImGui::SliderFloat("health", &health.value, 0, 200, "%.3f", 0);
         ImGui::SliderFloat("radius", &radius.value, 0, 50, "%.3f", 0);
         ImGui::SliderFloat("position x", &position.x, 0, mapWidth, "%.3f", 0);
@@ -58,6 +64,19 @@ void imguiEnemyAttr(entt::registry &registry) {
         ImGui::SliderFloat("enemySightRangeChasing", &config::enemySightRangeChasing, 0, 800, "%.3f", 0);
         ImGui::SliderFloat("enemyHearRange", &config::enemyHearRange, 0, 800, "%.3f", 0);
         ImGui::SliderFloat("enemyHearRangeChasing", &config::enemyHearRangeChasing, 0, 800, "%.3f", 0);
+
+        ImGui::SeparatorText("Behavior Tree");
+        std::vector<std::pair<const char *, Status> > result;
+        collectNodeStatus(strategy.behavior->getRoot(), result);
+
+        int n = 0;
+        for (auto [name, status]: result) {
+            ImGui::PushID(n);
+            ImVec4 color = (status == SUCCESS) ? ImVec4(0, 255, 0, 255) : ImVec4(255, 0, 0, 255);
+            ImGui::TextColored(color, name);
+            ImGui::PopID();
+            n++;
+        }
     }
     ImGui::End();
 }
@@ -197,11 +216,6 @@ void imguiConfig() {
     ImGui::Checkbox("free_camera", &config::free_camera);
     ImGui::Checkbox("draw_level_collisions", &config::draw_level_collisions);
     ImGui::SliderInt("FPS", &config::fps, 0, 120);
-    ImGui::SliderInt("strategy", &config::strategy, 0, 2);
-    ImGui::Checkbox("show_astar_path", &config::show_astar_path);
-    ImGui::Checkbox("show_enemy_fov", &config::show_enemy_fov);
-    ImGui::Checkbox("show_enemy_texture", &config::show_enemy_texture);
-    ImGui::SliderInt("enemy_walking_animation_fps", &config::enemy_walking_animation_fps, 1, 120);
     ImGui::End();
 }
 

@@ -9,22 +9,47 @@
 
 class PlayerInView : public Behavior {
     Status update(entt::registry &registry, entt::entity self, entt::entity player) override;
+
+    [[nodiscard]] const char *getName() const override { return name; }
+
+public:
+    const char *name = "PlayerInView";
 };
 
 class Patrol : public Behavior {
     Status update(entt::registry &registry, entt::entity self, entt::entity player) override;
+
+    [[nodiscard]] const char *getName() const override { return name; }
+
+public:
+    const char *name = "Patrol";
 };
 
 class PlayerInMeleeRange : public Behavior {
     Status update(entt::registry &registry, entt::entity self, entt::entity player) override;
+
+    [[nodiscard]] const char *getName() const override { return name; }
+
+public:
+    const char *name = "PlayerInMeleeRange";
 };
 
 class Chase : public Behavior {
     Status update(entt::registry &registry, entt::entity self, entt::entity player) override;
+
+    [[nodiscard]] const char *getName() const override { return name; }
+
+public:
+    const char *name = "Chase";
 };
 
 class AttackMelee : public Behavior {
     Status update(entt::registry &registry, entt::entity self, entt::entity player) override;
+
+    [[nodiscard]] const char *getName() const override { return name; }
+
+public:
+    const char *name = "AttackMelee";
 };
 
 #endif //APTOMODO_BEHAVIORS_H

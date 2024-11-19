@@ -4,6 +4,18 @@
 
 #include "behaviorTree.h"
 
+const char * Behavior::getName() const {
+    return name;
+}
+
+Status Behavior::getStatus() const {
+    return status;
+}
+
+std::vector<Behavior *> Behavior::getChildren() const {
+    return {};
+}
+
 Status Behavior::tick(entt::registry& registry, entt::entity self, entt::entity player) {
     if (status != RUNNING) onInit();
     status = update(registry, self, player);
@@ -14,6 +26,14 @@ Status Behavior::tick(entt::registry& registry, entt::entity self, entt::entity 
 
 void Composite::addChild(Behavior * behavior) {
     children.emplace_back(behavior);
+}
+
+std::vector<Behavior *> Sequence::getChildren() const {
+    return children;
+};
+
+std::vector<Behavior *> Fallback::getChildren() const {
+    return children;
 };
 
 //void Composite::removeChild(Behavior *) {};
@@ -32,8 +52,7 @@ Status Sequence::update(entt::registry& registry, entt::entity self, entt::entit
             return s;
         }
 
-        currentChild++;
-        if (currentChild == children.end()) {
+        if (++currentChild == children.end()) {
             return SUCCESS;
         }
     }
@@ -50,10 +69,9 @@ Status Fallback::update(entt::registry& registry, entt::entity self, entt::entit
         if (s != FAILURE) {
             return s;
         }
-        if (currentChild == children.end()) {
+        if (++currentChild == children.end()) {
             return FAILURE;
         }
-        currentChild++;
     }
     return INVALID;
 }
@@ -61,3 +79,17 @@ Status Fallback::update(entt::registry& registry, entt::entity self, entt::entit
 void BehaviorTree::tick(entt::registry& registry, entt::entity self, entt::entity player) {
     root -> tick(registry, self, player);
 }
+
+Behavior * BehaviorTree::getRoot() {
+    return root;
+}
+
+void collectNodeStatus(Behavior* root, std::vector<std::pair<const char*, Status>> &result) {
+    result.emplace_back(root->getName(), root->getStatus());
+
+    // If the node has children, traverse them
+    for (const auto& child : root->getChildren()) {
+        collectNodeStatus(child, result);
+    }
+}
+
