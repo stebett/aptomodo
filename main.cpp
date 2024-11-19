@@ -25,7 +25,7 @@ enum class LevelOutcome {
 };
 
 LevelOutcome PlayLevel() {
-    LevelOutcome outcome = LevelOutcome::NONE;
+    auto outcome = LevelOutcome::NONE;
     entt::registry registry;
     RenderingManager::Instantiate(registry);
     Gui::Instantiate(registry);
@@ -47,13 +47,12 @@ LevelOutcome PlayLevel() {
     while (!windowsShouldClose) {
         Gui::Update(playerCamera);
         LevelManager::Update(registry);
+        RenderingManager::UpdateCamera(playerCamera, position);
+        BeginDrawing();
         if (!config::free_camera) {
-            RenderingManager::UpdateCamera(playerCamera, position);
+            BeginMode2D(playerCamera);
             freeCamera = playerCamera;
         }
-        BeginDrawing();
-        if (!config::free_camera)
-            BeginMode2D(playerCamera);
         else
             BeginMode2D(freeCamera);
 
@@ -96,7 +95,7 @@ LevelOutcome PlayLevel() {
 }
 
 void GameLoop() {
-    LevelOutcome outcome = LevelOutcome::NONE;
+    auto outcome = LevelOutcome::NONE;
     do {
         outcome = PlayLevel();
     } while (outcome != LevelOutcome::QUIT);
