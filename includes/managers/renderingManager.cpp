@@ -23,6 +23,27 @@ RenderingManager::RenderingManager(entt::registry &registry) {
     m_registry = &registry;
 }
 
+void RenderingManager::UpdateCamera(Camera2D &camera, const Position &playerPosition) {
+    float target_x = playerPosition.x;
+    float target_y = playerPosition.y;
+
+    // Don't show map end
+    if (playerPosition.x < screenWidth / (2 * camera.zoom)) {
+        target_x = screenWidth / (2 * camera.zoom);
+    }
+    if (playerPosition.x > mapWidth - screenWidth / (2 * camera.zoom)) {
+        target_x = mapWidth - screenWidth / (2 * camera.zoom);
+    }
+    if (playerPosition.y < screenHeight / (2 * camera.zoom)) {
+        target_y = screenHeight / (2 * camera.zoom);
+    }
+    if (playerPosition.y > mapHeight - screenHeight / (2 * camera.zoom)) {
+        target_y = mapHeight - screenHeight / (2 * camera.zoom);
+    }
+
+    camera.target = Vector2Lerp(camera.target, {target_x, target_y}, 0.1);
+}
+
 
 void drawAttacks(entt::registry &registry) {
     auto effectView = registry.view<AttackEffect>();

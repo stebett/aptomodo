@@ -7,7 +7,6 @@
 #include "includes/factories.h"
 #include "includes/npc.h"
 #include "includes/config.h"
-#include "includes/rendering.h"
 #include <format>
 #include "includes/managers/audioManager.h"
 #include "includes/managers/animationManager.h"
@@ -49,7 +48,7 @@ LevelOutcome PlayLevel() {
         Gui::Update(playerCamera);
         LevelManager::Update(registry);
         if (!config::free_camera) {
-            updateCamera(playerCamera, position);
+            RenderingManager::UpdateCamera(playerCamera, position);
             freeCamera = playerCamera;
         }
         BeginDrawing();
