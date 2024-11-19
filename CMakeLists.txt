@@ -34,4 +34,4 @@ target_include_directories(${EXEC} PRIVATE vendors/boost/libs/mp11/include)
 target_include_directories(${EXEC} PRIVATE vendors/eigen)
 
 target_compile_definitions(${EXEC} PUBLIC ASSETS_PATH="assets/current/")
-
+target_precompile_headers(${EXEC} PRIVATE includes/pch.h)

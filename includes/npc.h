@@ -5,8 +5,6 @@
 #ifndef APTOMODO_NPC_H
 #define APTOMODO_NPC_H
 
-#include "components.h"
-#include "constants.h"
 
 void updateEnemy(entt::registry &registry, entt::entity &player);
 

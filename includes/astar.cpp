@@ -5,7 +5,7 @@
 #include "astar.h"
 #include "managers/levelManager.h"
 
-#include <iostream>
+#include "pch.h"
 
 // NODE
 bool Node::operator==(const Node &otherNode) const {

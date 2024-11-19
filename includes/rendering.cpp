@@ -2,12 +2,10 @@
 // Created by ginko on 02/03/24.
 //
 
+#include "pch.h"
 #include "rendering.h"
 #include "constants.h"
 #include "factories.h"
-#include <raymath.h>
-#include "managers/animationManager.h"
-#include "config.h"
 
 void updateCamera(Camera2D &camera, Position &playerPosition) {
     float target_x = playerPosition.x;

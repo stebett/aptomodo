@@ -2,11 +2,9 @@
 // Created by ginko on 02/03/24.
 //
 
-#include <raylib.h>
-#include <valarray>
+#include "pch.h"
 #include "collisions.h"
 #include "managers/levelManager.h"
-#include <raymath.h>
 
 
 

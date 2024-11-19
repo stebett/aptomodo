@@ -2,19 +2,16 @@
 // Created by ginko on 02/03/24.
 //
 
-#include <entt/entity/registry.hpp>
-#include <valarray>
-#include <raylib.h>
+#include "pch.h"
 #include "npc.h"
 #include "constants.h"
-#include <raymath.h>
 #include "astar.h"
 #include "collisions.h"
 #include "config.h"
 #include "managers/audioManager.h"
 #include "managers/animationManager.h"
-#include "attributes.h"
 #include "managers/levelManager.h"
+#include "attributes.h"
 
 void solveCollisionEnemy(const entt::registry &registry, const int id, Vector2 &futurePos, const float radius) {
     static Vector2 distance;

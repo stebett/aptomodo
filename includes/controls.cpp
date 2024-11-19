@@ -2,10 +2,7 @@
 // Created by ginko on 02/03/24.
 //
 
-#include <entt/entity/registry.hpp>
-#include <raylib.h>
-#include <raymath.h>
-#include <iostream>
+#include "pch.h"
 #include "controls.h"
 #include "collisions.h"
 #include "constants.h"

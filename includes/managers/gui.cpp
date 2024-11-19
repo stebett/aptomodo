@@ -2,14 +2,12 @@
 // Created by ginko on 04/03/24.
 //
 
+#include "pch.h"
 #include "gui.h"
-#include <imgui_impl_raylib.h>
 #include "attributes.h"
 #include "parameters.h"
-#include <format>
 #include "components.h"
 #include "constants.h"
-#include <entt/entity/registry.hpp>
 #include "config.h"
 #include "items.h"
 

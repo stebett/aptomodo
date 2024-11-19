@@ -5,9 +5,7 @@
 #ifndef APTOMODO_FACTORIES_H
 #define APTOMODO_FACTORIES_H
 
-#include <LDtkLoader/Entity.hpp>
 #include "components.h"
-#include <numeric>
 
 entt::entity spawnRandomEnemy(entt::registry &registry);
 

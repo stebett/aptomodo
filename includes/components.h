@@ -6,9 +6,6 @@
 #define APTOMODO_COMPONENTS_H
 
 #include <raylib.h>
-#include <raymath.h>
-#include <unordered_map>
-#include <vector>
 #include "timer.h"
 #include <iostream>
 

@@ -1,9 +1,7 @@
 // Created by ginko on 20/05/24.
 //
-#include <fstream>
-#include <iostream>
-#include <string>
-#include <array>
+
+#include "pch.h"
 #include "parameters.h"
 
 

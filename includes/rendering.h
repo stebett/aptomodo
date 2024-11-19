@@ -6,13 +6,10 @@
 #ifndef APTOMODO_RENDERING_H
 #define APTOMODO_RENDERING_H
 
-#include <LDtkLoader/Project.hpp>
-#include <LDtkLoader/World.hpp>
+
 #include <raylib.h>
-#include <entt/entity/registry.hpp>
 #include "components.h"
-#include "../config/gui.h"
-#include "constants.h"
+
 
 void updateCamera(Camera2D &camera, Position &playerPosition);
 void switchCamera(Camera2D &camera, Position &playerPosition);

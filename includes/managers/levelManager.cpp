@@ -2,10 +2,9 @@
 // Created by ginko on 17/04/24.
 //
 
+#include "pch.h"
 #include "levelManager.h"
-
 #include <components.h>
-#include <format>
 
 std::vector<std::pair<std::string, Vector2> > LevelManager::entitiesPositions;
 LevelManager *LevelManager::instance;

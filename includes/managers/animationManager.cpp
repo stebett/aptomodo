@@ -2,9 +2,8 @@
 // Created by ginko on 19/04/24.
 //
 
+#include "pch.h"
 #include "animationManager.h"
-#include <filesystem>
-#include <set>
 #include "../constants.h"
 
 namespace fs = std::filesystem;
