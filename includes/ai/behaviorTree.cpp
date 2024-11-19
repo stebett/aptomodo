@@ -4,9 +4,9 @@
 
 #include "behaviorTree.h"
 
-Status Behavior::tick() {
+Status Behavior::tick(entt::registry& registry, entt::entity self, entt::entity player) {
     if (status != RUNNING) onInit();
-    status = update();
+    status = update(registry, self, player);
     if (status != RUNNING) onTerminate(status);
     return status;
 }
@@ -25,9 +25,9 @@ void Sequence::onInit() {
     currentChild = children.begin();
 }
 
-Status Sequence::update() {
+Status Sequence::update(entt::registry& registry, entt::entity self, entt::entity player) {
     while (true) {
-        Status s = (*currentChild)->tick();
+        Status s = (*currentChild)->tick(registry, self, player);
         if (s != SUCCESS) {
             return s;
         }
@@ -44,9 +44,9 @@ void Fallback::onInit() {
     currentChild = children.begin();
 }
 
-Status Fallback::update() {
+Status Fallback::update(entt::registry& registry, entt::entity self, entt::entity player) {
     while (true) {
-        Status s = (*currentChild)->tick();
+        Status s = (*currentChild)->tick(registry, self, player);
         if (s != FAILURE) {
             return s;
         }
@@ -58,6 +58,6 @@ Status Fallback::update() {
     return INVALID;
 }
 
-void BehaviorTree::tick() {
-    root -> tick();
+void BehaviorTree::tick(entt::registry& registry, entt::entity self, entt::entity player) {
+    root -> tick(registry, self, player);
 }

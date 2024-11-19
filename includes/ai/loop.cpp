@@ -10,7 +10,7 @@ namespace AI {
     void Update(entt::registry &registry, entt::entity &player) {
         auto enemyView = registry.view<Living, Enemy, Strategy::Strategy>();
         for (auto [enemy, strategy]: enemyView.each()) {
-            strategy.behavior->tick();
+            strategy.behavior->tick(registry, enemy, player);
         }
     }
 }

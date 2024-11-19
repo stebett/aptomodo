@@ -23,7 +23,7 @@ namespace Strategy {
         AttackMelee attackMelee = {};
 
     public:
-        Melee() : BehaviorTree(&root) {
+        Melee(entt::registry& registry, entt::entity self) : BehaviorTree(&root, registry, self) {
             fallback1.addChild(&playerInView);
             fallback1.addChild(&patrol);
 
