@@ -18,8 +18,9 @@ namespace config {
     bool draw_level_collisions = false;
     float enemySightRange = 120.0f;
     float enemySightRangeChasing = 250.0f;
-    float enemyHearRange = 120.0f;
-    float enemyHearRangeChasing = 70.0f;
+    float enemyHearRange = 70.0f;
+    float enemyHearRangeChasing = 120.0f;
+    int enemyPatrolDistance = 3;
 
     int fps = 60;
     int enemy_walking_animation_fps = 8;

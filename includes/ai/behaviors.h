@@ -52,4 +52,23 @@ public:
     const char *name = "AttackMelee";
 };
 
+class GetRandomTarget : public Behavior {
+    Status update(entt::registry &registry, entt::entity self, entt::entity player) override;
+
+    [[nodiscard]] const char *getName() const override { return name; }
+
+public:
+    const char *name = "GetRandomPosition";
+};
+
+class MoveTowardsTarget : public Behavior {
+    Status update(entt::registry &registry, entt::entity self, entt::entity player) override;
+
+    [[nodiscard]] const char *getName() const override { return name; }
+
+public:
+    const char *name = "MoveTowardsTarget";
+};
+
+
 #endif //APTOMODO_BEHAVIORS_H

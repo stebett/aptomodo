@@ -24,4 +24,5 @@ namespace config {
     extern float enemySightRangeChasing;
     extern float enemyHearRange;
     extern float enemyHearRangeChasing;
+    extern int enemyPatrolDistance;
 }

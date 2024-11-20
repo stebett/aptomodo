@@ -15,9 +15,11 @@ namespace Strategy {
         Sequence root = {};
         Fallback fallback1 = {};
         Fallback fallback2 = {};
+        Sequence patrol = {};
 
         PlayerInView playerInView = {};
-        Patrol patrol = {};
+        GetRandomTarget getRandomTarget = {};
+        MoveTowardsTarget moveTowardsTarget = {};
         PlayerInMeleeRange playerInMeleeRange = {};
         Chase chase = {};
         AttackMelee attackMelee = {};
@@ -26,6 +28,8 @@ namespace Strategy {
         Melee(entt::registry& registry, entt::entity self) : BehaviorTree(&root, registry, self) {
             fallback1.addChild(&playerInView);
             fallback1.addChild(&patrol);
+            patrol.addChild(&getRandomTarget);
+            patrol.addChild(&moveTowardsTarget);
 
             fallback2.addChild(&playerInMeleeRange);
             fallback2.addChild(&chase);

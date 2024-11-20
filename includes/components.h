@@ -203,6 +203,12 @@ struct Experience {
     void operator+=(const int x) noexcept { value += x; }
 };
 
+struct Target {
+    Vector2 value;
+
+    operator Vector2() const noexcept { return value; }
+};
+
 struct Projectile {
     Vector2 position;
     Vector2 target;
