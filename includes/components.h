@@ -207,6 +207,14 @@ struct Target {
     Vector2 value;
 
     operator Vector2() const noexcept { return value; }
+
+    // Comparison operator
+    bool operator<(const Target& other) const noexcept {
+        if (value.x != other.value.x) {
+            return value.x < other.value.x;
+        }
+        return value.y < other.value.y;
+    }
 };
 
 struct Projectile {

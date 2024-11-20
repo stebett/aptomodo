@@ -124,11 +124,11 @@ void drawLevelCollisions() {
     for (auto row = 0; row < LevelManager::grid.rows(); row++) {
         for (auto col = 0; col < LevelManager::grid.cols(); col++) {
             Color color = {255, 255, 255, 0};
-            if (LevelManager::grid(row, col) == 1)
+            if (LevelManager::grid(row, col) == IntValue::OBSTACLE)
                 color = {255, 0, 0, 125};
-            if (LevelManager::grid(row, col) == 2)
+            if (LevelManager::grid(row, col) == IntValue::NEAR_OBSTACLE)
                 color = {255, 0, 0, 50};
-            if (LevelManager::grid(row, col) == 3)
+            if (LevelManager::grid(row, col) == IntValue::NPC)
                 color = {255, 255, 0, 50};
             DrawRectangle(row * tileSize, col * tileSize, tileSize, tileSize, color);
         }
@@ -136,7 +136,7 @@ void drawLevelCollisions() {
 }
 
 
-void RenderingManager::Draw(const Camera2D &camera, unsigned int frame) {
+void RenderingManager::Draw(const Camera2D &camera, const unsigned int frame) {
     drawItems(*m_registry);
     if (config::show_bounding_box) drawLivingBB(*m_registry);
     if (config::show_enemy_texture) drawEnemyTexture(*m_registry, frame / config::enemy_walking_animation_fps);

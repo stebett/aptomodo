@@ -162,7 +162,7 @@ Position getRandomPos(Position &position) {
     Vector2 target = position;
     for (int x = upperBoundary.x; x < lowerBoundary.x; x ++) {
         for (int y = upperBoundary.y; y < lowerBoundary.y; y ++) {
-            if (LevelManager::grid(x, y) == -1) {
+            if (LevelManager::grid(x, y) == IntValue::EMPTY) {
                 target = {static_cast<float>(x * tileSize), static_cast<float>(y * tileSize)};
             }
         }

@@ -12,7 +12,7 @@ int LevelManager::current_level;
 ldtk::Project *LevelManager::ldtkProject;
 const ldtk::World *LevelManager::ldtkWorld;
 const ldtk::Level *LevelManager::currentLdtkLevel;
-Map LevelManager::grid;
+IntGrid<mapWidth / tileSize + 1, mapHeight / tileSize + 1> LevelManager::grid;
 Texture2D LevelManager::currentTilesetTexture;
 Texture2D LevelManager::renderedLevelTexture;
 
@@ -105,7 +105,22 @@ void LevelManager::SetLevel(int level) {
             //            std::cout << grid.rows() << " " << grid.cols() << "\n";
             for (int x = 0; x <= mapWidth / tileSize; x++) {
                 for (int y = 0; y <= mapHeight / tileSize; y++) {
-                    grid(x, y) = layer.getIntGridVal(x, y).value;
+                    switch (layer.getIntGridVal(x, y).value) {
+                        case -1: {
+                            grid(x, y) = IntValue::EMPTY;
+                            break;
+                        }
+                        case 1: {
+                            grid(x, y) = IntValue::OBSTACLE;
+                            break;
+                        }
+                        case 2: {
+                            grid(x, y) = IntValue::NEAR_OBSTACLE;
+                            break;
+                        }
+                        default:
+                            grid(x, y) = IntValue::INVALID;
+                    }
                 }
             }
         }
@@ -137,17 +152,18 @@ void LevelManager::Update(const entt::registry &registry) {
     auto enemyView = registry.view<Living, Radius, Position, Enemy>();
     for (int row = 0; row < LevelManager::grid.rows(); row++) {
         for (int col = 0; col < LevelManager::grid.cols(); col++) {
-            if (grid(row, col) == 3) grid(row, col) = -1;
+            if (grid(row, col) == IntValue::NPC) grid(row, col) = IntValue::EMPTY;
+
             Rectangle rec = {float(tileSize * row), float(tileSize * col), tileSize, tileSize};
             for (auto [enemy, radius, position]: enemyView.each()) {
                 // if (grid(row, col) == -1 && CheckCollisionCircleRec(position, radius, rec))
-                    // LevelManager::grid(row, col) = 3;
-                LevelManager::grid(int(position.x/tileSize), int(position.y/tileSize)) = 3;
-
+                // LevelManager::grid(row, col) = 3;
+                LevelManager::grid.fromWorld(position) = IntValue::NPC;
             }
         }
     }
 }
+
 
 //std::string GameScene::getTexturePath(const std::string &tileset) {
 //    return getAssetPath(ldtkWorld->getTileset(tileset).path);

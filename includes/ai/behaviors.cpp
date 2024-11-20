@@ -110,36 +110,40 @@ Status AttackMelee::update(entt::registry &registry, entt::entity self, entt::en
     return SUCCESS;
 }
 
+
+
 bool emplaceRandomTarget(entt::registry &registry, entt::entity self) {
     const auto position = registry.get<Position>(self);
-    Vector2 maxPos = Vector2AddValue(position, config::enemyPatrolDistance);
-    Vector2 minPos = Vector2SubtractValue(position, config::enemyPatrolDistance);
-    Vector2 upperBoundary = {std::max(0.0f, floor(minPos.x / tileSize)),
-                             std::max(0.0f, floor(minPos.y / tileSize))};
-    Vector2 lowerBoundary = {std::min(float(LevelManager::grid.rows()), ceil(maxPos.x / tileSize)),
-                             std::min(float(LevelManager::grid.cols()), ceil(maxPos.y / tileSize))};
+    constexpr int num_points = 20;
+    std::set<Target> uniquePoints;
+    std::vector<Target> sampledPoints;
 
-    for (int x = upperBoundary.x; x < lowerBoundary.x; x ++) {
-        for (int y = upperBoundary.y; y < lowerBoundary.y; y ++) {
-            if (LevelManager::grid(x, y) == -1) {
-                Target target = {static_cast<float>(x * tileSize), static_cast<float>(y * tileSize)};
-                registry.emplace_or_replace<Target>(self, target);
-                return true;
-            }
+    for (int i = 0; i < num_points; ++i) {
+        const auto theta = static_cast<float>(2.0 * M_PI * i / num_points); // Angle in radians
+        const float x = round(position.x + config::enemyPatrolDistance * cos(theta));
+        const float y = round(position.y + config::enemyPatrolDistance * sin(theta));
+        if (LevelManager::grid.fromWorld(x, y) == IntValue::EMPTY) {
+            uniquePoints.insert(Target{x, y});
         }
     }
-    return false;
+    std::ranges::sample(uniquePoints, std::back_inserter(sampledPoints),
+                        1, std::mt19937{std::random_device{}()});
+
+    if (sampledPoints.empty()) return false;
+    registry.emplace_or_replace<Target>(self, sampledPoints[0]);
+    return true;
 }
 
-bool reachedCurrentTarget(const Vector2 &position, const Vector2 &currentTarget, const float speed) {
-    return Vector2Length(Vector2Subtract(position, currentTarget)) < speed;
+bool reachedTile(const Vector2 &position, const Vector2 &target) {
+    return LevelManager::grid.fromWorld(position) == LevelManager::grid.fromWorld(target) ||
+        Vector2Length(Vector2Subtract(position, target)) < 1.0f;
+;
 }
 
 Status GetRandomTarget::update(entt::registry &registry, entt::entity self, entt::entity player) {
     const auto position = registry.get<Position>(self);
-    auto speed = registry.get<Speed>(self);
 
-    if (!registry.all_of<Target>(self) || reachedCurrentTarget(position, registry.get<Target>(self), speed)) {
+    if (!registry.all_of<Target>(self) || reachedTile(position, registry.get<Target>(self))) {
         if (emplaceRandomTarget(registry, self)) {
             return SUCCESS;
         }
@@ -154,7 +158,7 @@ Status GetRandomTarget::update(entt::registry &registry, entt::entity self, entt
 }
 
 Status MoveTowardsTarget::update(entt::registry &registry, entt::entity self, entt::entity player) {
-    Search search;
+    static Search search;
     auto &position = registry.get<Position>(self);
     const auto target = registry.get<Target>(self);
     const auto radius = registry.get<Radius>(self);
@@ -169,8 +173,8 @@ Status MoveTowardsTarget::update(entt::registry &registry, entt::entity self, en
     search.exportPath(path);
     const auto currentTarget = path.getCurrent();
     auto speed = registry.get<Speed>(self);
-    Vector2 nextPath = reachedCurrentTarget(position, currentTarget, speed) ? path.getNext() : currentTarget;
-    Vector2 direction = Vector2Subtract(target, position);
+    Vector2 nextPath = reachedTile(position, currentTarget) ? path.getNext() : currentTarget;
+    Vector2 direction = Vector2Subtract(nextPath, position);
     Vector2 movement = Vector2Scale(Vector2Normalize(direction), speed);
     Vector2 futurePos = Vector2Add(position, movement);
     // solveCollisionEnemy(registry, id, futurePos, radius);
