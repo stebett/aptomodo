@@ -141,13 +141,6 @@ std::vector<std::pair<std::string, Vector2> > &LevelManager::GetEntitiesPosition
     return entitiesPositions;
 }
 
-void LevelManager::Draw(Camera2D &camera) {
-    // TODO update so that it draws only stuff onscreen, probably this should be in rendering Manager
-    DrawTextureRec(renderedLevelTexture,
-                   {0, 0, (float) renderedLevelTexture.width, (float) -renderedLevelTexture.height},
-                   {0, 0}, WHITE);
-}
-
 void LevelManager::Update(const entt::registry &registry) {
     auto enemyView = registry.view<Living, Radius, Position, Enemy>();
     for (int row = 0; row < LevelManager::grid.rows(); row++) {
@@ -158,7 +151,7 @@ void LevelManager::Update(const entt::registry &registry) {
             for (auto [enemy, radius, position]: enemyView.each()) {
                 // if (grid(row, col) == -1 && CheckCollisionCircleRec(position, radius, rec))
                 // LevelManager::grid(row, col) = 3;
-                LevelManager::grid.fromWorld(position) = IntValue::NPC;
+                if (grid.fromWorld(position) == IntValue::EMPTY) grid.fromWorld(position) = IntValue::NPC;
             }
         }
     }

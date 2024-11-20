@@ -43,7 +43,7 @@ std::vector<Node> neighbors(const Node node) {
             if (neighbor_x < 0 || neighbor_x > mapWidth / tileSize) continue;
             if (neighbor_y < 0 || neighbor_y > mapHeight / tileSize) continue;
             if (LevelManager::grid(neighbor_x, neighbor_y) == IntValue::OBSTACLE) continue;
-            if (LevelManager::grid(neighbor_x, neighbor_y) == IntValue::NPC) continue;
+            // if (LevelManager::grid(neighbor_x, neighbor_y) == IntValue::NPC) continue;
             neighbors.emplace_back(neighbor_x, neighbor_y);
         }
     return neighbors;
@@ -154,6 +154,7 @@ void Search::exportPath(Path &pathToUpdate) {
     int size = std::min(path.size() - 1, pathToUpdate.path.max_size());
     if (path.empty()) {
         return; }
+
     for (int i = 0; i < size; i++) {
         pathToUpdate.path[i] = {static_cast<float>(path[i + 1].x) * tileSize + static_cast<float>(tileSize) / 2,
                                 static_cast<float>(path[i + 1].y) * tileSize + static_cast<float>(tileSize) / 2};

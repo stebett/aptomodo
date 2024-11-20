@@ -111,7 +111,6 @@ Status AttackMelee::update(entt::registry &registry, entt::entity self, entt::en
 }
 
 
-
 bool emplaceRandomTarget(entt::registry &registry, entt::entity self) {
     const auto position = registry.get<Position>(self);
     constexpr int num_points = 20;
@@ -119,10 +118,11 @@ bool emplaceRandomTarget(entt::registry &registry, entt::entity self) {
     std::vector<Target> sampledPoints;
 
     for (int i = 0; i < num_points; ++i) {
-        const auto theta = static_cast<float>(2.0 * M_PI * i / num_points); // Angle in radians
+        const auto theta = static_cast<float>(2.0 * M_PI * i / num_points);
         const float x = round(position.x + config::enemyPatrolDistance * cos(theta));
         const float y = round(position.y + config::enemyPatrolDistance * sin(theta));
-        if (LevelManager::grid.fromWorld(x, y) == IntValue::EMPTY) {
+        if (LevelManager::grid.inWorldBounds(x, y) &&
+            LevelManager::grid.fromWorld(x, y) == IntValue::EMPTY) {
             uniquePoints.insert(Target{x, y});
         }
     }
@@ -136,8 +136,7 @@ bool emplaceRandomTarget(entt::registry &registry, entt::entity self) {
 
 bool reachedTile(const Vector2 &position, const Vector2 &target) {
     return LevelManager::grid.fromWorld(position) == LevelManager::grid.fromWorld(target) ||
-        Vector2Length(Vector2Subtract(position, target)) < 1.0f;
-;
+           Vector2Length(Vector2Subtract(position, target)) < 10.0f;;
 }
 
 Status GetRandomTarget::update(entt::registry &registry, entt::entity self, entt::entity player) {
@@ -158,30 +157,36 @@ Status GetRandomTarget::update(entt::registry &registry, entt::entity self, entt
 }
 
 Status MoveTowardsTarget::update(entt::registry &registry, entt::entity self, entt::entity player) {
-    static Search search;
-    auto &position = registry.get<Position>(self);
-    const auto target = registry.get<Target>(self);
-    const auto radius = registry.get<Radius>(self);
-
-    const Node start = getTile(position);
-    const Node end = getTile(target);
-    search.init(start, end);
-    while (!search.completed) { search.step(); }
-    if (search.path.empty()) { return FAILURE; }
-    if (config::show_astar_path) { search.draw(); }
     Path &path = registry.get<Path>(self);
-    search.exportPath(path);
-    const auto currentTarget = path.getCurrent();
+    auto &position = registry.get<Position>(self);
+
+    if (path.isFinished()) {
+        Search search;
+        const auto target = registry.get<Target>(self);
+        const Node start = getTile(position);
+        const Node end = getTile(target);
+        search.init(start, end);
+        while (!search.completed) { search.step(); }
+        if (search.path.empty()) { return FAILURE; }
+        if (config::show_astar_path) { search.draw(); }
+        search.exportPath(path);
+        if (path.indexMax == 0) registry.remove<Target>(self);
+        return FAILURE;
+    }
+    if (path.indexMax == 0) {
+        registry.remove<Target>(self);
+        return FAILURE;
+    }
+    const Vector2 nextTarget = reachedTile(position, path.getCurrent()) ? path.getNext() : path.getCurrent();
+    const auto radius = registry.get<Radius>(self);
     auto speed = registry.get<Speed>(self);
-    Vector2 nextPath = reachedTile(position, currentTarget) ? path.getNext() : currentTarget;
-    Vector2 direction = Vector2Subtract(nextPath, position);
-    Vector2 movement = Vector2Scale(Vector2Normalize(direction), speed);
+    const Vector2 direction = Vector2Subtract(nextTarget, position);
+    const Vector2 movement = Vector2Scale(Vector2Normalize(direction), speed);
     Vector2 futurePos = Vector2Add(position, movement);
     // solveCollisionEnemy(registry, id, futurePos, radius);
     solveCircleRecCollision(futurePos, radius);
     // faceTarget(position, futurePos, lookAngle);
     speed.actual = Vector2Distance(position, futurePos);
     position = futurePos;
-
     return SUCCESS;
 }

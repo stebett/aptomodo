@@ -30,7 +30,7 @@ private:
     }
 
     static size_t worldToGrid(const float coord, const size_t maxIndex) {
-        const int index = static_cast<int>(std::round(coord / tileSize));
+        const int index = static_cast<int>(std::floor(coord / tileSize));
         return clamp(index, 0, maxIndex);
     }
 
@@ -86,6 +86,10 @@ public:
         return grid[worldToGrid(position.x, Rows - 1)][worldToGrid(position.y, Cols - 1)];
     }
 
+    [[nodiscard]] static bool inWorldBounds(const float x, const float y) {
+        return (x > 0) && (y > 0) && (x < Rows*tileSize) && (y < Cols*tileSize);
+    }
+
 
     void display() const {
         for (const auto &row: grid) {
@@ -123,8 +127,6 @@ public:
     // TODO add an update function which keeps tracks of all living positions and ranges and updates the grid based on it
 
     static std::vector<std::pair<std::string, Vector2> > &GetEntitiesPositions();
-
-    static void Draw(Camera2D &camera);
 
     static void Update(const entt::registry &registry);
 

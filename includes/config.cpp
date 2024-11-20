@@ -20,7 +20,7 @@ namespace config {
     float enemySightRangeChasing = 250.0f;
     float enemyHearRange = 70.0f;
     float enemyHearRangeChasing = 120.0f;
-    float enemyPatrolDistance = 50;
+    float enemyPatrolDistance = 90;
 
     int fps = 60;
     int enemy_walking_animation_fps = 8;
