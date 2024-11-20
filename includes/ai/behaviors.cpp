@@ -156,6 +156,31 @@ Status GetRandomTarget::update(entt::registry &registry, entt::entity self, entt
     return SUCCESS;
 }
 
+void faceDirection(const Vector2 &position, const Vector2 &target, LookAngle &lookAngle) {
+
+    //    lookAngle = Lerp(lookAngle, atan2(target.y - position.y, target.x - position.x) * RAD2DEG, turningRate);
+    lookAngle = atan2(target.y - position.y, target.x - position.x) * RAD2DEG;
+}
+
+void solveCollisionEnemyEnemy(const entt::registry &registry, const int id, Vector2 &futurePos, const float radius) {
+    static Vector2 distance;
+    static Vector2 enemyPos;
+    static float overlap;
+    auto enemyView = registry.view<Living, Radius, Position, ID>();
+    for (auto [enemy, enemyRadius, enemyPosition, enemyID]: enemyView.each()) {
+        if (enemyID == id) continue;
+        enemyPos = {enemyPosition.x, enemyPosition.y};
+        if (CheckCollisionCircles(futurePos, radius, enemyPos, enemyRadius)) {
+            distance = Vector2Subtract(enemyPos, futurePos);
+            overlap = radius + enemyRadius - Vector2Length(distance);
+            if (overlap > 0) {
+                futurePos = Vector2Subtract(futurePos, Vector2Scale(Vector2Normalize(distance), overlap));
+                solveCircleRecCollision(futurePos, radius);
+            }
+        }
+    }
+}
+
 Status MoveTowardsTarget::update(entt::registry &registry, entt::entity self, entt::entity player) {
     Path &path = registry.get<Path>(self);
     auto &position = registry.get<Position>(self);
@@ -179,13 +204,15 @@ Status MoveTowardsTarget::update(entt::registry &registry, entt::entity self, en
     }
     const Vector2 nextTarget = reachedTile(position, path.getCurrent()) ? path.getNext() : path.getCurrent();
     const auto radius = registry.get<Radius>(self);
+    const auto id = registry.get<ID>(self);
+    auto &lookAngle = registry.get<LookAngle>(self);
     auto speed = registry.get<Speed>(self);
     const Vector2 direction = Vector2Subtract(nextTarget, position);
     const Vector2 movement = Vector2Scale(Vector2Normalize(direction), speed);
     Vector2 futurePos = Vector2Add(position, movement);
-    // solveCollisionEnemy(registry, id, futurePos, radius);
+    solveCollisionEnemyEnemy(registry, id, futurePos, radius);
     solveCircleRecCollision(futurePos, radius);
-    // faceTarget(position, futurePos, lookAngle);
+    faceDirection(position, futurePos, lookAngle);
     speed.actual = Vector2Distance(position, futurePos);
     position = futurePos;
     return SUCCESS;
