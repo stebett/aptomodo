@@ -43,7 +43,7 @@ entt::entity spawnEnemy(entt::registry &registry, Vector2 position) {
     registry.emplace<Attributes>(e, attr);
     registry.emplace<Health>(e, attr.getMultiplied(AttributeConstants::health), attr.getMultiplied(AttributeConstants::health));
     registry.emplace<Experience>(e, 50);
-    registry.emplace<Strategy::Strategy>(e, new Strategy::Melee(registry, e));
+    registry.emplace<Strategy::Strategy>(e, std::make_unique<Strategy::Melee>(registry, e)); //TODO need to delete this somewhere
     return e;
 }
 

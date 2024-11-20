@@ -38,7 +38,7 @@ namespace Strategy {
 
     };
     struct Strategy {
-        BehaviorTree* behavior;
+        std::unique_ptr<BehaviorTree> behavior;
     };
 }
 
