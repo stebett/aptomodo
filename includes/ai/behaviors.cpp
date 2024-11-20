@@ -5,6 +5,7 @@
 #include "pch.h"
 #include "behaviors.h"
 
+#include <astar.h>
 #include <collisions.h>
 #include <components.h>
 #include <config.h>
@@ -111,22 +112,34 @@ Status AttackMelee::update(entt::registry &registry, entt::entity self, entt::en
 
 bool emplaceRandomTarget(entt::registry &registry, entt::entity self) {
     const auto position = registry.get<Position>(self);
-    for (int x = 0, y = config::enemyPatrolDistance; x <= config::enemyPatrolDistance; x++, y--) {
-        if (LevelManager::grid(static_cast<int>(floor(position.x / tileSize)) + x,
-                               static_cast<int>(floor(position.y / tileSize)) + y) == -1) {
-            Target target = {
-                position.x + static_cast<float>(x * tileSize),
-                position.y + static_cast<float>(y * tileSize)
-            };
-            registry.emplace<Target>(self, target);
-            return true;
+    Vector2 maxPos = Vector2AddValue(position, config::enemyPatrolDistance);
+    Vector2 minPos = Vector2SubtractValue(position, config::enemyPatrolDistance);
+    Vector2 upperBoundary = {std::max(0.0f, floor(minPos.x / tileSize)),
+                             std::max(0.0f, floor(minPos.y / tileSize))};
+    Vector2 lowerBoundary = {std::min(float(LevelManager::grid.rows()), ceil(maxPos.x / tileSize)),
+                             std::min(float(LevelManager::grid.cols()), ceil(maxPos.y / tileSize))};
+
+    for (int x = upperBoundary.x; x < lowerBoundary.x; x ++) {
+        for (int y = upperBoundary.y; y < lowerBoundary.y; y ++) {
+            if (LevelManager::grid(x, y) == -1) {
+                Target target = {static_cast<float>(x * tileSize), static_cast<float>(y * tileSize)};
+                registry.emplace_or_replace<Target>(self, target);
+                return true;
+            }
         }
     }
     return false;
 }
 
+bool reachedCurrentTarget(const Vector2 &position, const Vector2 &currentTarget, const float speed) {
+    return Vector2Length(Vector2Subtract(position, currentTarget)) < speed;
+}
+
 Status GetRandomTarget::update(entt::registry &registry, entt::entity self, entt::entity player) {
-    if (!registry.all_of<Target>(self)) {
+    const auto position = registry.get<Position>(self);
+    auto speed = registry.get<Speed>(self);
+
+    if (!registry.all_of<Target>(self) || reachedCurrentTarget(position, registry.get<Target>(self), speed)) {
         if (emplaceRandomTarget(registry, self)) {
             return SUCCESS;
         }
@@ -141,7 +154,30 @@ Status GetRandomTarget::update(entt::registry &registry, entt::entity self, entt
 }
 
 Status MoveTowardsTarget::update(entt::registry &registry, entt::entity self, entt::entity player) {
-    auto &path = registry.get<Path>(self);
+    Search search;
+    auto &position = registry.get<Position>(self);
+    const auto target = registry.get<Target>(self);
+    const auto radius = registry.get<Radius>(self);
 
-    return FAILURE;
+    const Node start = getTile(position);
+    const Node end = getTile(target);
+    search.init(start, end);
+    while (!search.completed) { search.step(); }
+    if (search.path.empty()) { return FAILURE; }
+    if (config::show_astar_path) { search.draw(); }
+    Path &path = registry.get<Path>(self);
+    search.exportPath(path);
+    const auto currentTarget = path.getCurrent();
+    auto speed = registry.get<Speed>(self);
+    Vector2 nextPath = reachedCurrentTarget(position, currentTarget, speed) ? path.getNext() : currentTarget;
+    Vector2 direction = Vector2Subtract(target, position);
+    Vector2 movement = Vector2Scale(Vector2Normalize(direction), speed);
+    Vector2 futurePos = Vector2Add(position, movement);
+    // solveCollisionEnemy(registry, id, futurePos, radius);
+    solveCircleRecCollision(futurePos, radius);
+    // faceTarget(position, futurePos, lookAngle);
+    speed.actual = Vector2Distance(position, futurePos);
+    position = futurePos;
+
+    return SUCCESS;
 }
