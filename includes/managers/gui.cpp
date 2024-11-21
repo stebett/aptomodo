@@ -72,7 +72,23 @@ void imguiEnemyAttr(entt::registry &registry) {
         int n = 0;
         for (auto [name, status]: result) {
             ImGui::PushID(n);
-            ImVec4 color = (status == SUCCESS) ? ImVec4(0, 255, 0, 255) : ImVec4(255, 0, 0, 255);
+            ImVec4 color = {};
+            switch (status) {
+                case SUCCESS: {
+                    color = ImVec4(0, 255, 0, 255);
+                    break;
+                }
+                case FAILURE: {
+                    color = ImVec4(255, 0, 0, 255);
+                    break;
+                }
+                case INVALID: {
+                    color = ImVec4(0, 40, 200, 255);
+                    break;
+                }
+                default:
+                    color = ImVec4(255, 255, 255, 255);
+            }
             ImGui::TextColored(color, name);
             ImGui::PopID();
             n++;

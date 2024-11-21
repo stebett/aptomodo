@@ -29,7 +29,6 @@ Status PlayerInView::update(entt::registry &registry, entt::entity self, entt::e
     const bool inView = (facePlayer && inViewRange) || inHearRange;
 
     if (config::show_enemy_fov) {
-        DrawLineV(position, Vector2Add(position, Vector2Scale(lookVector, 20.0f)), PURPLE);
         DrawCircleSector(position, config::enemySightRange, lookingAngleDeg - 91.0f, lookingAngleDeg + 91.0f, 2,
                          ColorAlpha(WHITE, 0.1));
         DrawCircleV(position, config::enemyHearRange, ColorAlpha(WHITE, 0.1));
@@ -156,8 +155,35 @@ Status GetRandomTarget::update(entt::registry &registry, entt::entity self, entt
     return SUCCESS;
 }
 
-void faceDirection(const Vector2 &position, const Vector2 &target, LookAngle &lookAngle) {
+void adjustLookAngle(const Vector2 &position, const Vector2 &target, LookAngle &lookAngle, float step = 8.0f) {
+    // Compute the target angle in degrees
+    float targetAngle = atan2(target.y - position.y, target.x - position.x) * RAD2DEG;
 
+    // Normalize angles to the range [0, 360)
+    lookAngle = fmod(lookAngle + 360.0f, 360.0f);
+    targetAngle = fmod(targetAngle + 360.0f, 360.0f);
+
+    // Compute the shortest direction to move (clockwise or counterclockwise)
+    float delta = targetAngle - lookAngle;
+    if (delta > 180.0f) delta -= 360.0f; // Shortest path counterclockwise
+    if (delta < -180.0f) delta += 360.0f; // Shortest path clockwise
+
+    // Clamp the adjustment to the step size
+    if (std::abs(delta) <= step) {
+        lookAngle = targetAngle; // Close enough, snap to the target
+    } else {
+        lookAngle = lookAngle + (delta > 0 ? step : -step); // Move 5 degrees in the correct direction
+    }
+
+    // Normalize the result to [0, 360)
+    lookAngle = fmod(lookAngle + 360.0f, 360.0f);
+}
+
+bool facesTargetDirection(const Vector2 &position, const Vector2 &target, const LookAngle &lookAngle) {
+    return abs(lookAngle - fmod(atan2(target.y - position.y, target.x - position.x) * RAD2DEG + 360.0f, 360.0f)) < 0.1;
+}
+
+void faceDirection(const Vector2 &position, const Vector2 &target, LookAngle &lookAngle) {
     //    lookAngle = Lerp(lookAngle, atan2(target.y - position.y, target.x - position.x) * RAD2DEG, turningRate);
     lookAngle = atan2(target.y - position.y, target.x - position.x) * RAD2DEG;
 }
@@ -212,7 +238,11 @@ Status MoveTowardsTarget::update(entt::registry &registry, entt::entity self, en
     Vector2 futurePos = Vector2Add(position, movement);
     solveCollisionEnemyEnemy(registry, id, futurePos, radius);
     solveCircleRecCollision(futurePos, radius);
-    faceDirection(position, futurePos, lookAngle);
+    if (!facesTargetDirection(position, futurePos, lookAngle)) {
+        adjustLookAngle(position, futurePos, lookAngle);
+        futurePos = position;
+    }
+
     speed.actual = Vector2Distance(position, futurePos);
     position = futurePos;
     return SUCCESS;

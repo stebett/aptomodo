@@ -69,10 +69,11 @@ void drawEnemyTexture(const entt::registry &registry, unsigned int frame) {
 }
 
 void drawLivingBB(const entt::registry &registry) {
-    auto livingView = registry.view<Living, Radius, Position, ColorBB>();
-    for (auto [entity, radius, position, color]: livingView.each()) {
+    auto livingView = registry.view<Living, Radius, Position, LookAngle, ColorBB>();
+    for (auto [entity, radius, position, lookAngle, color]: livingView.each()) {
         if (registry.all_of<Selected>(entity)) { DrawCircleV(position, radius + 2, PURPLE); }
         DrawCircleV(position, radius, color);
+        DrawLineV(position, Vector2Add(position, Vector2Scale(Vector2{cos(lookAngle * DEG2RAD), sin(lookAngle * DEG2RAD)}, 20.0f)), BLACK);
     }
 }
 

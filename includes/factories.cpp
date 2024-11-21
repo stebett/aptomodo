@@ -16,7 +16,7 @@ entt::entity spawnLiving(entt::registry &registry) {
     const entt::entity e = registry.create();
     registry.emplace<Living>(e);
     registry.emplace<Radius>(e, 10.0f);
-    registry.emplace<Speed>(e, 5.2f);
+    registry.emplace<Speed>(e, 1.2f);
     registry.emplace<PhysicalResistance>(e, 0.0f);
     registry.emplace<MagicalResistance>(e, 0.0f);
     registry.emplace<Stamina>(e, 0.0f);
@@ -26,6 +26,8 @@ entt::entity spawnLiving(entt::registry &registry) {
     registry.emplace<AttackRange>(e, 3 * tileSize);
     registry.emplace<Pushback>(e, 1.0f);
     registry.emplace<Spread>(e, 10.0f);
+    registry.emplace<LookAngle>(e, 0.0f);
+
     return e;
 }
 
@@ -34,7 +36,6 @@ entt::entity spawnEnemy(entt::registry &registry, Vector2 position) {
     entt::entity e = spawnLiving(registry);
 //    if (id > 0) { return enemy; }
     registry.emplace<Path>(e);
-    registry.emplace<LookAngle>(e, 0.0f);
     registry.emplace<Position>(e, position);
     registry.emplace<ColorBB>(e, RED);
     registry.emplace<Enemy>(e);

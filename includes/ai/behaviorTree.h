@@ -22,7 +22,7 @@ public:
 
     [[nodiscard]] virtual const char *getName() const;
 
-    [[nodiscard]] virtual Status getStatus() const;
+    [[nodiscard]] virtual Status getStatus();
 
     [[nodiscard]] virtual std::vector<Behavior *> getChildren() const;
 

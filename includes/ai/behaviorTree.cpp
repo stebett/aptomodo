@@ -8,8 +8,10 @@ const char * Behavior::getName() const {
     return name;
 }
 
-Status Behavior::getStatus() const {
-    return status;
+Status Behavior::getStatus()  {
+    const Status s = status;
+    status = INVALID; // TODO this will cause bugs 100%
+    return s;
 }
 
 std::vector<Behavior *> Behavior::getChildren() const {
