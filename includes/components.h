@@ -12,12 +12,23 @@
 // Tags
 struct Player {
 };
+
 struct Enemy {
 };
+
 struct Living {
 };
+
 struct Chasing {
+    Timer timer;
+    float duration;
+
+    explicit Chasing(const float p_duration=3.0f) : timer(Timer()), duration(p_duration) {
+    };
+
+    [[nodiscard]] bool isChasing() const {return timer.ElapsedSeconds() < duration;}
 };
+
 struct Selected {
 };
 
@@ -34,9 +45,11 @@ struct Position {
 
     operator Vector2() const noexcept { return Vector2{x, y}; }
 
-    Position(Vector2 v) : x(v.x), y(v.y) {};
+    Position(Vector2 v) : x(v.x), y(v.y) {
+    };
 
-    Position(float x, float y) : x(x), y(y) {};
+    Position(float x, float y) : x(x), y(y) {
+    };
 };
 
 struct Triangle {
@@ -49,7 +62,7 @@ struct Path {
     int index = 3;
     int indexMax = 3;
     bool valid = false;
-    std::array<Vector2, 7> path{0};
+    std::array<Vector2, 15> path{0};
 
     Vector2 getNext() {
         index = std::min(index, indexMax);
@@ -94,8 +107,8 @@ struct LookAngle {
 
     operator float() const noexcept { return value; }
 
-    LookAngle(float d) : value(d) {};
-
+    LookAngle(float d) : value(d) {
+    };
 };
 
 
@@ -133,7 +146,8 @@ struct Speed {
 
     operator float() const noexcept { return value; }
 
-    Speed(float x) : value(x), max(x) {};
+    Speed(float x) : value(x), max(x) {
+    };
 };
 
 struct Health {
@@ -146,10 +160,10 @@ struct Health {
     float operator-(const float x) const noexcept { return value - x; }
 
     void operator-=(const float x) noexcept { value -= x; }
-//    Health(float x) :value(x), max(x) {}
+    //    Health(float x) :value(x), max(x) {}
 
-    Health(float value, const float max) : value(value), max(max) {};
-
+    Health(float value, const float max) : value(value), max(max) {
+    };
 };
 
 struct PhysicalResistance {
@@ -219,7 +233,7 @@ struct Target {
     operator Vector2() const noexcept { return value; }
 
     // Comparison operator
-    bool operator<(const Target& other) const noexcept {
+    bool operator<(const Target &other) const noexcept {
         if (value.x != other.value.x) {
             return value.x < other.value.x;
         }

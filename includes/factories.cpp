@@ -39,6 +39,8 @@ entt::entity spawnEnemy(entt::registry &registry, Vector2 position) {
     registry.emplace<Position>(e, position);
     registry.emplace<ColorBB>(e, RED);
     registry.emplace<Enemy>(e);
+    registry.emplace<Chasing>(e);
+    registry.get<Chasing>(e).timer.StartBehind(10);;
     registry.emplace<ID>(e, id++);
     auto attr = Attributes();
     registry.emplace<Attributes>(e, attr);

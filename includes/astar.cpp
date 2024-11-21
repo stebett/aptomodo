@@ -23,7 +23,8 @@ void Node::draw(Color color) const {
 
 Node::Node() = default;
 
-Node::Node(int x, int y) : x(x), y(y) {}
+Node::Node(int x, int y) : x(x), y(y) {
+}
 
 
 Node getTile(const Vector2 &position) {
@@ -76,38 +77,39 @@ void Search::reset() {
 
 void Search::step() {
     stepNumber++;
-//    if (stepNumber > stepLimit) completed = true;
+    //    if (stepNumber > stepLimit) completed = true;
     if (completed) {
-//        std::cout << "Search is already complete" << '\n';
+        //        std::cout << "Search is already complete" << '\n';
         return;
     }
 
-//    std::cout << "Stepping..." << '\n';
+    //    std::cout << "Stepping..." << '\n';
     if (open.empty()) {
-//        std::cout << "Open list is empty" << '\n';
+        //        std::cout << "Open list is empty" << '\n';
         completed = true;
         return;
     }
     current = open.top().first;
     if (current == end) {
-//        std::cout << "End found" << '\n';
+        //        std::cout << "End found" << '\n';
         completed = true;
         getPath();
         return;
     }
     open.pop();
-//    std::cout << "Current \nx: " << current.x << "\ny: " << current.y << '\n';
+    //    std::cout << "Current \nx: " << current.x << "\ny: " << current.y << '\n';
 
 
     for (auto neighbor: neighbors(current)) {
         if (!came_from.contains(neighbor)) {
             if (neighbor == start | neighbor == came_from[current]) continue;
-            float terrainPenalty = 3.0f * static_cast<float>(LevelManager::grid(neighbor.x, neighbor.y) == IntValue::NEAR_OBSTACLE);
+            float terrainPenalty = 3.0f * static_cast<float>(
+                                       LevelManager::grid(neighbor.x, neighbor.y) == IntValue::NEAR_OBSTACLE);
             terrainPenalty += static_cast<float>(LevelManager::grid(neighbor.x, neighbor.y) == IntValue::NPC) * 1.5f;
             open.emplace(neighbor, manhattan(neighbor, end) + terrainPenalty);
             came_from[neighbor] = current;
             closed[neighbor] = closed[current] + manhattan(neighbor, current) + terrainPenalty;
-//            std::cout << "Node added ->   x: " << neighbor.x << "  y: " << neighbor.y << '\n';
+            //            std::cout << "Node added ->   x: " << neighbor.x << "  y: " << neighbor.y << '\n';
         }
     }
 }
@@ -137,7 +139,6 @@ void Search::drawNeighbors() {
             neighbor.draw({0, 250, 250, 120});
         }
     }
-
 }
 
 void Search::drawClosed() { for (auto [node, parent]: came_from) node.draw(ColorAlpha(RED, 0.15)); }
@@ -153,11 +154,14 @@ void Search::drawPath() {
 void Search::exportPath(Path &pathToUpdate) {
     const int size = std::min(path.size() - 1, pathToUpdate.path.max_size());
     if (path.empty()) {
-        return; }
+        return;
+    }
 
     for (int i = 0; i < size; i++) {
-        pathToUpdate.path[i] = {static_cast<float>(path[i + 1].x) * tileSize + static_cast<float>(tileSize) / 2,
-                                static_cast<float>(path[i + 1].y) * tileSize + static_cast<float>(tileSize) / 2};
+        pathToUpdate.path[i] = {
+            static_cast<float>(path[i + 1].x) * tileSize + static_cast<float>(tileSize) / 2,
+            static_cast<float>(path[i + 1].y) * tileSize + static_cast<float>(tileSize) / 2
+        };
     }
     pathToUpdate.index = 0;
     pathToUpdate.indexMax = size;
@@ -166,13 +170,10 @@ void Search::exportPath(Path &pathToUpdate) {
 
 
 void Search::draw() {
-//        drawOpen();
+    //        drawOpen();
     drawClosed();
     drawStart();
     drawEnd();
-//    drawNeighbors();
+    //    drawNeighbors();
     if (completed) { drawPath(); }
 }
-
-
-

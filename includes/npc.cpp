@@ -66,7 +66,7 @@ void enemyAttack(entt::registry &registry, const entt::entity enemy, entt::entit
     static Triangle triangle;
 
     auto &attackTimer = registry.get<AttackTimer>(enemy).timer;
-    if (attackTimer.Elapsed() < registry.get<AttackSpeed>(enemy)) return;
+    if (attackTimer.ElapsedSeconds() < registry.get<AttackSpeed>(enemy)) return;
     attackTimer.Reset();
 
     auto &playerPosition = registry.get<Position>(player);
@@ -94,7 +94,7 @@ void enemyAttackDistance(entt::registry &registry, const entt::entity enemy, ent
     // TODO add actual distance range, attack speed and damage
     Attributes &attributes = registry.get<Attributes>(enemy);
     auto &attackTimer = registry.get<AttackTimer>(enemy).timer;
-    if (attackTimer.Elapsed() < attributes.getMultiplied(AttributeConstants::attackSpeed) * 2)return;
+    if (attackTimer.ElapsedSeconds() < attributes.getMultiplied(AttributeConstants::attackSpeed) * 2)return;
     attackTimer.Reset();
 
     auto &playerPosition = registry.get<Position>(player);

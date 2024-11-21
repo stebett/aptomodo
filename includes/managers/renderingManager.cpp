@@ -138,27 +138,30 @@ void drawLevelCollisions() {
 }
 
 void drawEnemyExtra(const entt::registry &registry) {
-    auto selectedView = registry.view<Living, Selected, Radius, Position, LookAngle, ColorBB, Path, Target>();
-    for (auto [entity, radius, position, lookAngle, color, path, target]: selectedView.each()) {
+    auto selectedView = registry.view<Living, Selected, Radius, Position, LookAngle, ColorBB, Path, Target, Chasing>();
+    for (auto [entity, radius, position, lookAngle, color, path, target, chasing]: selectedView.each()) {
         DrawCircleV(position, radius + 2, PURPLE);
 
         if (config::show_enemy_fov) {
-            DrawCircleSector(position, config::enemySightRange, lookAngle - 91.0f, lookAngle + 91.0f, 2,
-                             ColorAlpha(WHITE, 0.1));
-            DrawCircleV(position, config::enemyHearRange, ColorAlpha(WHITE, 0.1));
+            const auto isChasing = chasing.isChasing();
+            const auto hearRange = isChasing ? config::enemyHearRangeChasing : config::enemyHearRange;
+            const auto sightRange = isChasing ? config::enemySightRangeChasing : config::enemySightRange;
+            const auto colorRange = isChasing ? ColorAlpha(RED, 0.1) : ColorAlpha(WHITE, 0.1);
+            DrawCircleSector(position, sightRange, lookAngle - 91.0f, lookAngle + 91.0f, 2, colorRange);
+            DrawCircleV(position, hearRange, colorRange);
         }
 
         if (config::show_astar_path) {
             // Draw lines connecting points
             auto points = path.path;
-            for (size_t i = 0; i < path.indexMax-1; ++i) {
-                Vector2 p1 = { points[i].x, points[i].y };
-                Vector2 p2 = { points[i + 1].x, points[i + 1].y };
+            for (size_t i = 0; i < path.indexMax - 1; ++i) {
+                Vector2 p1 = {points[i].x, points[i].y};
+                Vector2 p2 = {points[i + 1].x, points[i + 1].y};
                 DrawLineV(p1, p2, BLACK);
             }
 
             for (size_t i = 0; i < path.indexMax; ++i) {
-                DrawCircleV({ points[i].x, points[i].y }, 2, YELLOW);
+                DrawCircleV({points[i].x, points[i].y}, 2, YELLOW);
             }
             DrawCircleV(target, 2, ORANGE);
         }

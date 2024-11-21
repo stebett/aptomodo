@@ -22,14 +22,20 @@ Status PlayerInView::update(entt::registry &registry, entt::entity self, entt::e
     const auto playerPosition = registry.get<Position>(player);
     const auto playerRadius = registry.get<Radius>(player);
     const auto lookVector = Vector2{cos(lookingAngleDeg * DEG2RAD), sin(lookingAngleDeg * DEG2RAD)};
+    const auto chasing = registry.get<Chasing>(self);
 
     const bool facePlayer = Vector2DotProduct(lookVector, Vector2Subtract(playerPosition, position)) > 0;
     const bool inViewRange = CheckCollisionCircles(playerPosition, playerRadius, position, config::enemySightRange);
     const bool inHearRange = CheckCollisionCircles(playerPosition, playerRadius, position, config::enemyHearRange);
+    const bool inViewChasingRange = CheckCollisionCircles(playerPosition, playerRadius, position,
+                                                          config::enemySightRangeChasing);
+    const bool inHearChasingRange = CheckCollisionCircles(playerPosition, playerRadius, position,
+                                                          config::enemyHearRangeChasing);
     const bool inView = (facePlayer && inViewRange) || inHearRange;
+    const bool inChasingView = (facePlayer && inViewChasingRange) || inHearChasingRange;
+    const bool result = chasing.isChasing() ? inChasingView : inView;
 
-
-    if (inView)
+    if (result)
         return SUCCESS;
 
     return FAILURE;
@@ -116,6 +122,7 @@ Status GetRandomTarget::update(entt::registry &registry, entt::entity self, entt
 Status GetPlayerTarget::update(entt::registry &registry, entt::entity self, entt::entity player) {
     const auto playerPosition = registry.get<Position>(player);
     registry.emplace_or_replace<Target>(self, playerPosition);
+    registry.get<Chasing>(self).timer.Reset();
     registry.get<Path>(self).invalidate();;
 
 
@@ -224,7 +231,7 @@ Status AttackMelee::update(entt::registry &registry, entt::entity self, entt::en
         return FAILURE;
     }
     auto &attackTimer = registry.get<AttackTimer>(self).timer;
-    if (attackTimer.Elapsed() < registry.get<AttackSpeed>(self)) return RUNNING;
+    if (attackTimer.ElapsedSeconds() < registry.get<AttackSpeed>(self)) return RUNNING;
     attackTimer.Reset();
 
 

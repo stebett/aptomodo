@@ -18,7 +18,7 @@
 
 void playerAttack(entt::registry &registry, entt::entity &player, Attributes &attributes, Vector2 clickPosition) {
     auto &attackTimer = registry.get<AttackTimer>(player).timer;
-    if (attackTimer.Elapsed() < attributes.getMultiplied(AttributeConstants::attackSpeed)) return;
+    if (attackTimer.ElapsedSeconds() < attributes.getMultiplied(AttributeConstants::attackSpeed)) return;
     attackTimer.Reset();
     Position &playerPosition = registry.get<Position>(player);
 
