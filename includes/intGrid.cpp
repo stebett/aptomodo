@@ -11,7 +11,7 @@
     return std::max(min, std::min(value, max));
 }
 
-size_t worldToGrid(const float coord, const size_t maxIndex) {
+size_t IntGrid::worldToGrid(const float coord, const size_t maxIndex) {
     const int index = static_cast<int>(std::floor(coord / tileSize));
     return clamp(index, 0, maxIndex);
 }
@@ -58,8 +58,17 @@ const IntValue &IntGrid::operator()(const size_t row, const size_t col) const {
 }
 
 void IntGrid::setVisible(const size_t row, const size_t col) {
-    grid[row][col] = IntValue::VISIBLE;
+    DrawRectangle(row*tileSize, col*tileSize, tileSize, tileSize, ColorAlpha(YELLOW, 0.2));
+    // grid[row][col] = IntValue::VISIBLE;
 }
+
+// void IntGrid::reset() {
+//     for (size_t row=0; row < rows(); ++row) {
+//         for (size_t col=0; col < cols(); ++col) {
+//             if (grid[row][col] == IntValue::VISIBLE) grid[row][col] = ?
+//         }
+//     }
+// }
 
 
 void IntGrid::initialize(const ldtk::Layer &layer) {

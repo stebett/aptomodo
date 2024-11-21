@@ -5,8 +5,6 @@
 
 #include "shadowCast.h"
 
-#include <managers/levelManager.h>
-
 
 void shadowCast(IntGrid &map, uint startX, uint startY, uint radius, const int row,
                 float startSlope, const float endSlope, uint xx, uint xy, uint yx, uint yy) {
@@ -61,7 +59,7 @@ static constexpr int multipliers[4][8] = {
     {1, 0, 0, 1, -1, 0, 0, -1}
 };
 
-void do_fov(IntGrid &map, uint startX, uint startY, uint radius) {
+void do_fov(IntGrid &map, const uint startX, const uint startY, const uint radius) {
     for (uint i = 0; i < 8; i++) {
         shadowCast(map, startX, startY, radius, 1, 1.0, 0.0,
                    multipliers[0][i], multipliers[1][i], multipliers[2][i], multipliers[3][i]);

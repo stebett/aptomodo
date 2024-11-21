@@ -45,6 +45,8 @@ public:
 
     [[nodiscard]] bool isOpaque(size_t row, size_t col) const;
 
+    static size_t worldToGrid(float coord, size_t maxIndex);
+
     void setVisible(size_t row, size_t col);
 
 };
