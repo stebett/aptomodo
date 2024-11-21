@@ -28,12 +28,6 @@ Status PlayerInView::update(entt::registry &registry, entt::entity self, entt::e
     const bool inHearRange = CheckCollisionCircles(playerPosition, playerRadius, position, config::enemyHearRange);
     const bool inView = (facePlayer && inViewRange) || inHearRange;
 
-    if (config::show_enemy_fov) {
-        DrawCircleSector(position, config::enemySightRange, lookingAngleDeg - 91.0f, lookingAngleDeg + 91.0f, 2,
-                         ColorAlpha(WHITE, 0.1));
-        DrawCircleV(position, config::enemyHearRange, ColorAlpha(WHITE, 0.1));
-        if (inView) { DrawCircle(static_cast<int>(position.x) + 15, static_cast<int>(position.y) + 15, 2, RED); }
-    }
 
     if (inView)
         return SUCCESS;
@@ -116,17 +110,13 @@ Status GetRandomTarget::update(entt::registry &registry, entt::entity self, entt
         }
         return FAILURE;
     }
-    if (config::show_astar_path) {
-        Vector2 target = registry.get<Target>(self);
-        DrawCircleV(target, 2, YELLOW);
-    }
-
     return SUCCESS;
 }
 
 Status GetPlayerTarget::update(entt::registry &registry, entt::entity self, entt::entity player) {
     const auto playerPosition = registry.get<Position>(player);
     registry.emplace_or_replace<Target>(self, playerPosition);
+    registry.get<Path>(self).invalidate();;
 
 
     return SUCCESS;
@@ -188,7 +178,7 @@ Status MoveTowardsTarget::update(entt::registry &registry, entt::entity self, en
     Path &path = registry.get<Path>(self);
     auto &position = registry.get<Position>(self);
 
-    if (path.isFinished()) {
+    if (!path.isValid()) {
         Search search;
         const auto target = registry.get<Target>(self);
         const Node start = getTile(position);
@@ -196,10 +186,7 @@ Status MoveTowardsTarget::update(entt::registry &registry, entt::entity self, en
         search.init(start, end);
         while (!search.completed) { search.step(); }
         if (search.path.empty()) { return FAILURE; }
-        if (config::show_astar_path) { search.draw(); }
         search.exportPath(path);
-        if (path.indexMax == 0) registry.remove<Target>(self);
-        return FAILURE;
     }
     if (path.indexMax == 0) {
         registry.remove<Target>(self);
@@ -249,12 +236,10 @@ Status AttackMelee::update(entt::registry &registry, entt::entity self, entt::en
     //    float pushback = registry.get<Pushback>(enemy);
 
 
-
     const float clickAngle = atan2(playerPosition.y - position.y, playerPosition.x - position.x) * radToDeg;
     registry.emplace<AttackEffect>(registry.create(), 100, position, attackRange, clickAngle - attackSpread,
                                    clickAngle + attackSpread, BROWN);
     AudioManager::Instance().Play("enemy_shot");
-
 
 
     triangle = TriangleAngles(position, attackRange, clickAngle - attackSpread, clickAngle + attackSpread);

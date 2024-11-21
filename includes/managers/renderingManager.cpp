@@ -71,9 +71,10 @@ void drawEnemyTexture(const entt::registry &registry, unsigned int frame) {
 void drawLivingBB(const entt::registry &registry) {
     auto livingView = registry.view<Living, Radius, Position, LookAngle, ColorBB>();
     for (auto [entity, radius, position, lookAngle, color]: livingView.each()) {
-        if (registry.all_of<Selected>(entity)) { DrawCircleV(position, radius + 2, PURPLE); }
         DrawCircleV(position, radius, color);
-        DrawLineV(position, Vector2Add(position, Vector2Scale(Vector2{cos(lookAngle * DEG2RAD), sin(lookAngle * DEG2RAD)}, 20.0f)), BLACK);
+        DrawLineV(position, Vector2Add(
+                      position, Vector2Scale(Vector2{cos(lookAngle * DEG2RAD), sin(lookAngle * DEG2RAD)}, 20.0f)),
+                  BLACK);
     }
 }
 
@@ -136,9 +137,38 @@ void drawLevelCollisions() {
     }
 }
 
+void drawEnemyExtra(const entt::registry &registry) {
+    auto selectedView = registry.view<Living, Selected, Radius, Position, LookAngle, ColorBB, Path, Target>();
+    for (auto [entity, radius, position, lookAngle, color, path, target]: selectedView.each()) {
+        DrawCircleV(position, radius + 2, PURPLE);
+
+        if (config::show_enemy_fov) {
+            DrawCircleSector(position, config::enemySightRange, lookAngle - 91.0f, lookAngle + 91.0f, 2,
+                             ColorAlpha(WHITE, 0.1));
+            DrawCircleV(position, config::enemyHearRange, ColorAlpha(WHITE, 0.1));
+        }
+
+        if (config::show_astar_path) {
+            // Draw lines connecting points
+            auto points = path.path;
+            for (size_t i = 0; i < path.indexMax-1; ++i) {
+                Vector2 p1 = { points[i].x, points[i].y };
+                Vector2 p2 = { points[i + 1].x, points[i + 1].y };
+                DrawLineV(p1, p2, BLACK);
+            }
+
+            for (size_t i = 0; i < path.indexMax; ++i) {
+                DrawCircleV({ points[i].x, points[i].y }, 2, YELLOW);
+            }
+            DrawCircleV(target, 2, ORANGE);
+        }
+    }
+}
+
 
 void RenderingManager::Draw(const Camera2D &camera, const unsigned int frame) {
     drawItems(*m_registry);
+    drawEnemyExtra(*m_registry);
     if (config::show_bounding_box) drawLivingBB(*m_registry);
     if (config::show_enemy_texture) drawEnemyTexture(*m_registry, frame / config::enemy_walking_animation_fps);
     if (config::show_attacks) drawAttacks(*m_registry);

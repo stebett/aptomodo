@@ -130,7 +130,7 @@ void updatePath(entt::registry &registry, entt::entity &enemy, Position &positio
     search.reset();
 
     Path &path = registry.get<Path>(enemy);
-    if (!path.isFinished())
+    if (!path.isValid())
         if (!registry.all_of<Chasing>(enemy))
             return;
 
@@ -182,7 +182,7 @@ Vector2 getPathNext(entt::registry &registry, entt::entity &enemy) {
     const float speed = registry.get<Speed>(enemy);
     Vector2 nextPath = pathCurrentReached(position, currentTarget, speed) ? path.getNext() : currentTarget;
 //    if (path.isFinished() || Vector2Equals(nextPath, Vector2Zero())) { return position; }
-    if (path.isFinished()) { return position; }
+    if (path.isValid()) { return position; }
 
     if (config::show_astar_path) {
         DrawCircleV(nextPath, 2, DARKGREEN);

@@ -151,7 +151,7 @@ void Search::drawPath() {
 }
 
 void Search::exportPath(Path &pathToUpdate) {
-    int size = std::min(path.size() - 1, pathToUpdate.path.max_size());
+    const int size = std::min(path.size() - 1, pathToUpdate.path.max_size());
     if (path.empty()) {
         return; }
 
@@ -161,6 +161,7 @@ void Search::exportPath(Path &pathToUpdate) {
     }
     pathToUpdate.index = 0;
     pathToUpdate.indexMax = size;
+    pathToUpdate.validate();
 }
 
 

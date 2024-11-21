@@ -48,12 +48,14 @@ struct Triangle {
 struct Path {
     int index = 3;
     int indexMax = 3;
+    bool valid = false;
     std::array<Vector2, 7> path{0};
 
     Vector2 getNext() {
         index = std::min(index, indexMax);
         Vector2 result = path[index];
         index++;
+        if (index >= indexMax) valid = false;
         return result;
     }
 
@@ -65,9 +67,17 @@ struct Path {
         return path[std::min(index, indexMax)];
     }
 
+    [[nodiscard]] bool isValid() const {
+        return valid;
+    }
 
-    [[nodiscard]] bool isFinished() const {
-        return index >= indexMax;
+    void invalidate() {
+        valid = false;
+    }
+
+
+    void validate() {
+        valid = true;
     }
 
     Path() : index(7), indexMax(7), path({0}) { std::cout << "INFO: ASTAR: creating path" << "\n"; };
