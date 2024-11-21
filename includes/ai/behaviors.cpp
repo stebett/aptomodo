@@ -16,7 +16,6 @@
 
 
 Status PlayerInView::update(entt::registry &registry, entt::entity self, entt::entity player) {
-    std::cout << "PlayerInView" << "\n";
     const auto position = registry.get<Position>(self);
     const auto lookingAngleDeg = registry.get<LookAngle>(self);
     const auto playerPosition = registry.get<Position>(player);
@@ -41,14 +40,8 @@ Status PlayerInView::update(entt::registry &registry, entt::entity self, entt::e
     return FAILURE;
 }
 
-Status Patrol::update(entt::registry &registry, entt::entity self, entt::entity player) {
-    std::cout << "Patrol" << "\n";
-
-    return FAILURE;
-}
 
 Status PlayerInMeleeRange::update(entt::registry &registry, entt::entity self, entt::entity player) {
-    std::cout << "PlayerInMeleeRange" << "\n";
     const auto position = registry.get<Position>(self);
     const auto attackRange = registry.get<AttackRange>(self);
     const auto playerPosition = registry.get<Position>(player);
@@ -56,11 +49,6 @@ Status PlayerInMeleeRange::update(entt::registry &registry, entt::entity self, e
 
     if (CheckCollisionCircles(position, attackRange, playerPosition, playerRadius))
         return SUCCESS;
-    return FAILURE;
-}
-
-Status Chase::update(entt::registry &registry, entt::entity self, entt::entity player) {
-    std::cout << "Chase" << "\n";
     return FAILURE;
 }
 
@@ -221,7 +209,6 @@ Status MoveTowardsTarget::update(entt::registry &registry, entt::entity self, en
 }
 
 Status AttackMelee::update(entt::registry &registry, entt::entity self, entt::entity player) {
-    std::cout << "AttackMelee" << "\n";
     static Triangle triangle;
     const auto position = registry.get<Position>(self);
     const auto &playerPosition = registry.get<Position>(player);

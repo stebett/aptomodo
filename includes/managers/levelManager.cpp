@@ -6,13 +6,15 @@
 #include "levelManager.h"
 #include <components.h>
 
+#include "intGrid.h"
+
 std::vector<std::pair<std::string, Vector2> > LevelManager::entitiesPositions;
 LevelManager *LevelManager::instance;
 int LevelManager::current_level;
 ldtk::Project *LevelManager::ldtkProject;
 const ldtk::World *LevelManager::ldtkWorld;
 const ldtk::Level *LevelManager::currentLdtkLevel;
-IntGrid<mapWidth / tileSize + 1, mapHeight / tileSize + 1> LevelManager::grid;
+IntGrid LevelManager::grid;
 Texture2D LevelManager::currentTilesetTexture;
 Texture2D LevelManager::renderedLevelTexture;
 
@@ -46,7 +48,7 @@ LevelManager::~LevelManager() {
     UnloadTexture(currentTilesetTexture);
 }
 
-void LevelManager::SetLevel(int level) {
+void LevelManager::SetLevel(const int level) {
     // unload current tileset texture if necessary
     if (current_level >= 0) {
         UnloadTexture(currentTilesetTexture);
@@ -59,71 +61,30 @@ void LevelManager::SetLevel(int level) {
 
     BeginTextureMode(renderTexture);
 
-    //    if (currentLdtkLevel->hasBgImage()) {
-    //        auto backgroundPath = currentLdtkLevel->getBgImage();
-    //        auto backgroundTexture = LoadTexture(getAssetPath(backgroundPath.path.c_str()).c_str());
-    //        SetTextureFilter(backgroundTexture, TEXTURE_FILTER_POINT);
-    //
-    //        // tile background texture to cover the whole frame buffer
-    //        for (int i = 0; i <= (mapWidth / backgroundTexture.width); i++) {
-    //            for (int j = 0; j <= (mapHeight / backgroundTexture.height); j++) {
-    //                DrawTextureV(backgroundTexture,
-    //                             {float(i * backgroundTexture.width), float(j * backgroundTexture.height)}, WHITE);
-    //            }
-    //        }
-    //    }
-
-    // draw all tileset layers
     for (auto &&layer: currentLdtkLevel->allLayers()) {
         if (layer.hasTileset()) {
             currentTilesetTexture = LoadTexture((getAssetPath(layer.getTileset().path)).c_str());
             // if it is a tile layer then draw every tile to the frame buffer
             for (auto &&tile: layer.allTiles()) {
-                auto source_pos = tile.getTextureRect();
-                auto tile_size = float(layer.getTileset().tile_size);
+                const auto source_pos = tile.getTextureRect();
+                const auto tile_size = static_cast<float>(layer.getTileset().tile_size);
 
-                Rectangle source_rect = {
-                    .x = float(source_pos.x),
-                    .y = float(source_pos.y),
+                const Rectangle source_rect = {
+                    .x = static_cast<float>(source_pos.x),
+                    .y = static_cast<float>(source_pos.y),
                     .width = tile.flipX ? -tile_size : tile_size,
                     .height = tile.flipY ? -tile_size : tile_size,
                 };
 
-                Vector2 target_pos = {
-                    (float) tile.getPosition().x,
-                    (float) tile.getPosition().y,
+                const Vector2 target_pos = {
+                    static_cast<float>(tile.getPosition().x),
+                    static_cast<float>(tile.getPosition().y),
                 };
 
                 DrawTextureRec(currentTilesetTexture, source_rect, target_pos, WHITE);
-                // DrawText(std::format("{}", target_pos.y).c_str(), target_pos.x, target_pos.y, 2, BLACK);
             }
         }
-
-        if (ldtk::LayerType::IntGrid == layer.getType()) {
-            const auto gridSize = layer.getGridSize();
-            //            std::cout << gridSize.x << " " << gridSize.y << "\n";
-            //            std::cout << grid.rows() << " " << grid.cols() << "\n";
-            for (int x = 0; x <= mapWidth / tileSize; x++) {
-                for (int y = 0; y <= mapHeight / tileSize; y++) {
-                    switch (layer.getIntGridVal(x, y).value) {
-                        case -1: {
-                            grid(x, y) = IntValue::EMPTY;
-                            break;
-                        }
-                        case 1: {
-                            grid(x, y) = IntValue::OBSTACLE;
-                            break;
-                        }
-                        case 2: {
-                            grid(x, y) = IntValue::NEAR_OBSTACLE;
-                            break;
-                        }
-                        default:
-                            grid(x, y) = IntValue::INVALID;
-                    }
-                }
-            }
-        }
+        if (ldtk::LayerType::IntGrid == layer.getType()) { grid.initialize(layer); }
     }
 
     for (auto &&entity: currentLdtkLevel->getLayer("Entities").allEntities()) {

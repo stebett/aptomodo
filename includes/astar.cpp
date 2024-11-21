@@ -41,8 +41,8 @@ std::vector<Node> neighbors(const Node node) {
             int neighbor_y = node.y - y;
 
             if (x == 0 && y == 0) continue;
-            if (neighbor_x < 0 || neighbor_x > mapWidth / tileSize) continue;
-            if (neighbor_y < 0 || neighbor_y > mapHeight / tileSize) continue;
+            if (neighbor_x < 0 || neighbor_x >= IntGrid::rows()) continue;
+            if (neighbor_y < 0 || neighbor_y >= IntGrid::cols()) continue;
             if (LevelManager::grid(neighbor_x, neighbor_y) == IntValue::OBSTACLE) continue;
             // if (LevelManager::grid(neighbor_x, neighbor_y) == IntValue::NPC) continue;
             neighbors.emplace_back(neighbor_x, neighbor_y);

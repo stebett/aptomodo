@@ -31,7 +31,6 @@ inline std::string getAssetPath(const std::string& assetName)
     return ASSETS_PATH "" + assetName;
 }
 
-using Map = Eigen::Matrix<int, mapWidth / tileSize + 1, mapHeight / tileSize + 1>;
 
 
 #endif //APTOMODO_CONSTANTS_H
