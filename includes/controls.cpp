@@ -4,6 +4,9 @@
 
 #include "pch.h"
 #include "controls.h"
+
+#include <external/miniaudio.h>
+
 #include "collisions.h"
 #include "constants.h"
 #include "managers/audioManager.h"
@@ -159,12 +162,19 @@ void updateAttributes(const entt::registry &registry, Attributes &attributes) {
     attributes.updateModifiers(modifiers);
 }
 
+void faceMouse(const Vector2 &position, LookAngle &lookAngle, const Camera2D &camera) {
+    const auto [mouseX, mouseY] = GetScreenToWorld2D(GetMousePosition(), camera);
+    lookAngle = atan2(mouseY - position.y, mouseX - position.x) * RAD2DEG;
+}
+
 void updatePlayer(entt::registry &registry, entt::entity &player, Position &position, Camera2D &camera) {
     parseInput(registry, player, position, camera);
-    Attributes &attributes = registry.get<Attributes>(player);
-    Health health = registry.get<Health>(player);
-    Experience exp = registry.get<Experience>(player);
+    auto &lookAngle = registry.get<LookAngle>(player);
+    auto &attributes = registry.get<Attributes>(player);
+    auto health = registry.get<Health>(player);
+    const auto exp = registry.get<Experience>(player);
 
+    faceMouse(position, lookAngle, camera);
     if (health.max < health.value) health.value = health.max; // TODO fix this
     if (exp >= attributes.expToNextLevel()) attributes.levelUp();
     updateAttributes(registry, attributes);
