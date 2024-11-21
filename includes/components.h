@@ -68,7 +68,6 @@ struct Path {
         index = std::min(index, indexMax);
         Vector2 result = path[index];
         index++;
-        if (index >= indexMax) valid = false;
         return result;
     }
 
@@ -81,7 +80,7 @@ struct Path {
     }
 
     [[nodiscard]] bool isValid() const {
-        return valid;
+        return valid && (index < indexMax);
     }
 
     void invalidate() {

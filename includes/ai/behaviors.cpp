@@ -103,8 +103,7 @@ bool emplaceRandomTarget(entt::registry &registry, entt::entity self) {
 }
 
 bool reachedTile(const Vector2 &position, const Vector2 &target) {
-    return LevelManager::grid.fromWorld(position) == LevelManager::grid.fromWorld(target) ||
-           Vector2Length(Vector2Subtract(position, target)) < 10.0f;;
+    return Vector2Length(Vector2Subtract(position, target)) < 5.0f;;
 }
 
 Status GetRandomTarget::update(entt::registry &registry, entt::entity self, entt::entity player) {
@@ -203,7 +202,9 @@ Status MoveTowardsTarget::update(entt::registry &registry, entt::entity self, en
     const auto radius = registry.get<Radius>(self);
     const auto id = registry.get<ID>(self);
     auto &lookAngle = registry.get<LookAngle>(self);
-    auto speed = registry.get<Speed>(self);
+    const float speedDivider = registry.get<Chasing>(self).isChasing() ? 1.0f : 3.0f;
+    auto &speed = registry.get<Speed>(self);
+    speed.value = speed.max / speedDivider;
     const Vector2 direction = Vector2Subtract(nextTarget, position);
     const Vector2 movement = Vector2Scale(Vector2Normalize(direction), speed);
     Vector2 futurePos = Vector2Add(position, movement);

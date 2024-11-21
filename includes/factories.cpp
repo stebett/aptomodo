@@ -16,7 +16,7 @@ entt::entity spawnLiving(entt::registry &registry) {
     const entt::entity e = registry.create();
     registry.emplace<Living>(e);
     registry.emplace<Radius>(e, 10.0f);
-    registry.emplace<Speed>(e, 1.2f);
+    registry.emplace<Speed>(e, 3.0f);
     registry.emplace<PhysicalResistance>(e, 0.0f);
     registry.emplace<MagicalResistance>(e, 0.0f);
     registry.emplace<Stamina>(e, 0.0f);
@@ -40,7 +40,8 @@ entt::entity spawnEnemy(entt::registry &registry, Vector2 position) {
     registry.emplace<ColorBB>(e, RED);
     registry.emplace<Enemy>(e);
     registry.emplace<Chasing>(e);
-    registry.get<Chasing>(e).timer.StartBehind(10);;
+    auto &chasing = registry.get<Chasing>(e);
+    chasing.timer.StartBehind(100);;
     registry.emplace<ID>(e, id++);
     auto attr = Attributes();
     registry.emplace<Attributes>(e, attr);

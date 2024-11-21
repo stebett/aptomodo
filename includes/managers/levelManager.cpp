@@ -142,19 +142,19 @@ std::vector<std::pair<std::string, Vector2> > &LevelManager::GetEntitiesPosition
 }
 
 void LevelManager::Update(const entt::registry &registry) {
-    auto enemyView = registry.view<Living, Radius, Position, Enemy>();
-    for (int row = 0; row < LevelManager::grid.rows(); row++) {
-        for (int col = 0; col < LevelManager::grid.cols(); col++) {
-            if (grid(row, col) == IntValue::NPC) grid(row, col) = IntValue::EMPTY;
-
-            Rectangle rec = {float(tileSize * row), float(tileSize * col), tileSize, tileSize};
-            for (auto [enemy, radius, position]: enemyView.each()) {
-                // if (grid(row, col) == -1 && CheckCollisionCircleRec(position, radius, rec))
-                // LevelManager::grid(row, col) = 3;
-                if (grid.fromWorld(position) == IntValue::EMPTY) grid.fromWorld(position) = IntValue::NPC;
-            }
-        }
-    }
+    // auto enemyView = registry.view<Living, Radius, Position, Enemy>();
+    // for (int row = 0; row < LevelManager::grid.rows(); row++) {
+    //     for (int col = 0; col < LevelManager::grid.cols(); col++) {
+    //         if (grid(row, col) == IntValue::NPC) grid(row, col) = IntValue::EMPTY;
+    //
+    //         Rectangle rec = {float(tileSize * row), float(tileSize * col), tileSize, tileSize};
+    //         for (auto [enemy, radius, position]: enemyView.each()) {
+    //             // if (grid(row, col) == -1 && CheckCollisionCircleRec(position, radius, rec))
+    //             // LevelManager::grid(row, col) = 3;
+    //             // if (grid.fromWorld(position) == IntValue::EMPTY) grid.fromWorld(position) = IntValue::NPC;
+    //         }
+    //     }
+    // }
 }
 
 

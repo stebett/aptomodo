@@ -19,7 +19,7 @@ public:
     }
 
     void StartBehind(int seconds) {
-        m_Start = std::chrono::high_resolution_clock::now()-std::chrono::microseconds(seconds);
+        m_Start = std::chrono::high_resolution_clock::now()-std::chrono::seconds(seconds);
     }
 
     [[nodiscard]] float ElapsedSeconds() const  {
