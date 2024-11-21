@@ -70,5 +70,14 @@ public:
     const char *name = "MoveTowardsTarget";
 };
 
+class GetPlayerTarget : public Behavior {
+    Status update(entt::registry &registry, entt::entity self, entt::entity player) override;
+
+    [[nodiscard]] const char *getName() const override { return name; }
+
+public:
+    const char *name = "GetPlayerTarget";
+};
+
 
 #endif //APTOMODO_BEHAVIORS_H

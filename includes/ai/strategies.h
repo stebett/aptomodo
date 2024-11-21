@@ -16,12 +16,16 @@ namespace Strategy {
         Fallback fallback1 = {};
         Fallback fallback2 = {};
         Sequence patrol = {};
+        Sequence chase = {};
 
         PlayerInView playerInView = {};
+        PlayerInView playerInView2 = {};
         GetRandomTarget getRandomTarget = {};
         MoveTowardsTarget moveTowardsTarget = {};
+        MoveTowardsTarget moveTowardsPlayer = {};
         PlayerInMeleeRange playerInMeleeRange = {};
-        Chase chase = {};
+        PlayerInMeleeRange playerInMeleeRange2 = {};
+        GetPlayerTarget getPlayerTarget = {};
         AttackMelee attackMelee = {};
 
     public:
@@ -30,9 +34,14 @@ namespace Strategy {
             fallback1.addChild(&patrol);
             patrol.addChild(&getRandomTarget);
             patrol.addChild(&moveTowardsTarget);
+            patrol.addChild(&playerInView2);
 
             fallback2.addChild(&playerInMeleeRange);
             fallback2.addChild(&chase);
+            chase.addChild(&getPlayerTarget);
+            chase.addChild(&moveTowardsPlayer);
+            chase.addChild(&playerInMeleeRange2);
+
 
             root.addChild(&fallback1);
             root.addChild(&fallback2);
