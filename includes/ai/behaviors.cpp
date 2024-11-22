@@ -21,7 +21,7 @@ Status PlayerInView::update(entt::registry &registry, entt::entity self, entt::e
     const auto playerPosition = registry.get<Position>(player);
     const auto playerRadius = registry.get<Radius>(player);
     const auto lookVector = Vector2{cos(lookingAngleDeg * DEG2RAD), sin(lookingAngleDeg * DEG2RAD)};
-    const auto chasing = registry.get<Chasing>(self);
+    auto &chasing = registry.get<Chasing>(self);
 
     const bool facePlayer = Vector2DotProduct(lookVector, Vector2Subtract(playerPosition, position)) > 0;
     const bool inViewRange = CheckCollisionCircles(playerPosition, playerRadius, position, config::enemySightRange);
@@ -34,8 +34,10 @@ Status PlayerInView::update(entt::registry &registry, entt::entity self, entt::e
     const bool inChasingView = (facePlayer && inViewChasingRange) || inHearChasingRange;
     const bool result = chasing.isChasing() ? inChasingView : inView;
 
-    if (result)
+    if (result) {
+        chasing.timer.Reset();
         return SUCCESS;
+    }
 
     return FAILURE;
 }
@@ -109,7 +111,6 @@ Status GetRandomTarget::update(entt::registry &registry, entt::entity self, entt
 Status GetPlayerTarget::update(entt::registry &registry, entt::entity self, entt::entity player) {
     const auto playerPosition = registry.get<Position>(player);
     registry.emplace_or_replace<Target>(self, playerPosition);
-    registry.get<Chasing>(self).timer.Reset();
     registry.get<Path>(self).invalidate();;
 
 
