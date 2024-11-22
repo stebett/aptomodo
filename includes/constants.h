@@ -7,7 +7,6 @@
 
 
 #include <random>
-#include <Eigen/Dense>
 
 const int screenWidth = 1920;
 const int screenHeight = 1080;
