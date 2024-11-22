@@ -87,10 +87,12 @@ void LevelManager::SetLevel(const int level) {
         if (ldtk::LayerType::IntGrid == layer.getType()) { grid.initialize(layer); }
     }
 
-    for (auto &&entity: currentLdtkLevel->getLayer("Entities").allEntities()) {
+    for (const auto &entity: currentLdtkLevel->getLayer("Entities").allEntities()) {
         Vector2 position = {static_cast<float>(entity.getPosition().x), static_cast<float>(entity.getPosition().y)};
         entitiesPositions.emplace_back(entity.getName(), position);
+        std::cout << entity.getName() << ", {" << position.x << ", " << position.y << "}\n";
     }
+
 
 
     EndTextureMode();

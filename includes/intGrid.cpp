@@ -73,8 +73,8 @@ void IntGrid::setVisible(const size_t row, const size_t col) {
 
 void IntGrid::initialize(const ldtk::Layer &layer) {
     // const auto gridSize = layer.getGridSize();
-    for (int x = 0; x <= IntGrid::rows(); x++) {
-        for (int y = 0; y <= IntGrid::cols(); y++) {
+    for (int x = 0; x <= IntGrid::rows() -1; x++) {
+        for (int y = 0; y <= IntGrid::cols()-1; y++) {
             switch (layer.getIntGridVal(x, y).value) {
                 case -1: {
                     grid[x][y] = IntValue::EMPTY;

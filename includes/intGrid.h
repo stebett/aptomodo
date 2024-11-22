@@ -16,7 +16,7 @@ enum class IntValue {
     VISIBLE = 10,
 };
 
-using Map = std::array<std::array<IntValue, mapHeight / tileSize + 1>, mapWidth / tileSize + 1>;
+using Map = std::array<std::array<IntValue, IntGridHeight>, IntGridWidth>;
 
 class IntGrid {
 private:
