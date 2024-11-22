@@ -68,7 +68,6 @@ void LevelManager::SetLevel(const int level) {
             for (auto &&tile: layer.allTiles()) {
                 const auto source_pos = tile.getTextureRect();
                 const auto tile_size = static_cast<float>(layer.getTileset().tile_size);
-
                 const Rectangle source_rect = {
                     .x = static_cast<float>(source_pos.x),
                     .y = static_cast<float>(source_pos.y),
