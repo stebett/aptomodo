@@ -5,9 +5,39 @@
 
 #include "shadowCast.h"
 
+float calculateAngle(int dx, int dy) {
+    return std::atan2(dy, dx) * 180 / M_PI;
+}
 
-void shadowCast(IntGrid &map, uint startX, uint startY, uint radius, const int row,
-                float startSlope, const float endSlope, uint xx, uint xy, uint yx, uint yy) {
+
+// Normalize an angle to [0, 360)
+float normalizeAngle(float angle) {
+    while (angle < 0) angle += 360;
+    while (angle >= 360) angle -= 360;
+    return angle;
+}
+
+// Check if `testAngle` is touched when moving `startAngle` to `endAngle` clockwise
+bool isAngleTouched(float startAngle, float endAngle, float testAngle) {
+    // Normalize all angles to [0, 360)
+    startAngle = normalizeAngle(startAngle);
+    endAngle = normalizeAngle(endAngle);
+    testAngle = normalizeAngle(testAngle);
+
+    // Case 1: Arc does not cross 0 degrees
+    if (startAngle >= endAngle) {
+        return testAngle <= startAngle && testAngle >= endAngle;
+    }
+    // Case 2: Arc crosses 0 degrees
+    else {
+        return testAngle <= startAngle || testAngle >= endAngle;
+    }
+}
+
+
+void shadowCast(IntGrid &map, uint startX, uint startY, const uint radius, const int row,
+                float startSlope, const float endSlope, uint xx, uint xy, uint yx, uint yy,
+                float sectorStartAngle, float sectorEndAngle) {
     if (startSlope < endSlope) return;
     float nextStartSlope = startSlope;
     for (int i = row; i <= radius; i++) {
@@ -29,8 +59,11 @@ void shadowCast(IntGrid &map, uint startX, uint startY, uint radius, const int r
             if (ax >= map.rows() || ay >= map.cols()) continue;
 
             const uint radius2 = radius * radius;
-            if ((uint) (dx * dx + dy * dy) < radius2) {
-                map.setVisible(ax, ay); // Should check here if player is visible
+            if ((uint)(dx * dx + dy * dy) < radius2) {
+                // Calculate angle for sector filtering
+                float angle = calculateAngle(sax, say);
+                if (isAngleTouched(sectorStartAngle, sectorEndAngle, angle)) continue;
+                map.setVisible(ax, ay); // Mark cell as visible
             }
 
             if (blocked) {
@@ -43,7 +76,8 @@ void shadowCast(IntGrid &map, uint startX, uint startY, uint radius, const int r
             } else if (map.isOpaque(ax, ay)) {
                 blocked = true;
                 nextStartSlope = rightSlope;
-                shadowCast(map, startX, startY, radius, i + 1, startSlope, leftSlope, xx, xy, yx, yy);
+                shadowCast(map, startX, startY, radius, i + 1, startSlope, leftSlope, xx, xy, yx, yy,
+                           sectorStartAngle, sectorEndAngle);
             }
         }
         if (blocked) {
@@ -52,6 +86,8 @@ void shadowCast(IntGrid &map, uint startX, uint startY, uint radius, const int r
     }
 }
 
+
+
 static constexpr int multipliers[4][8] = {
     {1, 0, 0, -1, -1, 0, 0, 1},
     {0, 1, -1, 0, 0, -1, 1, 0},
@@ -59,9 +95,17 @@ static constexpr int multipliers[4][8] = {
     {1, 0, 0, 1, -1, 0, 0, -1}
 };
 
-void do_fov(IntGrid &map, const uint startX, const uint startY, const uint radius) {
+void do_fov(IntGrid &map, const float startX, const float startY, const float radius,
+            const float sectorStartAngle, const float sectorEndAngle) {
+    float a1 = sectorStartAngle < 0 ? sectorStartAngle + 360.0f : sectorStartAngle;
+    float a2 = sectorEndAngle < 0 ? sectorEndAngle + 360.0f : sectorEndAngle;
+
+    const uint correctedX = IntGrid::worldToGrid(startX, IntGrid::rows());
+    const uint correctedY = IntGrid::worldToGrid(startY, IntGrid::cols());
+    const uint correctedRadius = IntGrid::worldToGrid(radius, IntGrid::rows());
     for (uint i = 0; i < 8; i++) {
-        shadowCast(map, startX, startY, radius, 1, 1.0, 0.0,
-                   multipliers[0][i], multipliers[1][i], multipliers[2][i], multipliers[3][i]);
+        shadowCast(map, correctedX, correctedY, correctedRadius, 1, 1.0, 0.0,
+                   multipliers[0][i], multipliers[1][i], multipliers[2][i], multipliers[3][i],
+                   sectorStartAngle, sectorEndAngle);
     }
 }

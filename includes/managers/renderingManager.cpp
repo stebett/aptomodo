@@ -150,10 +150,7 @@ void drawEnemyExtra(const entt::registry &registry) {
             const auto colorRange = isChasing ? ColorAlpha(RED, 0.1) : ColorAlpha(WHITE, 0.1);
             DrawCircleSector(position, sightRange, lookAngle - 91.0f, lookAngle + 91.0f, 2, colorRange);
             DrawCircleV(position, hearRange, colorRange);
-            do_fov(LevelManager::grid,
-                   IntGrid::worldToGrid(position.x, IntGrid::rows()),
-                   IntGrid::worldToGrid(position.y, IntGrid::cols()),
-                   IntGrid::worldToGrid(sightRange, IntGrid::rows()));
+            do_fov(LevelManager::grid, position.x, position.y, sightRange, lookAngle - 91.0f, lookAngle + 91.0f);
         }
 
         if (config::show_astar_path) {

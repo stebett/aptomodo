@@ -52,12 +52,13 @@ void imguiEnemyAttr(entt::registry &registry) {
 
     ImGui::SliderInt("enemy_walking_animation_fps", &config::enemy_walking_animation_fps, 1, 120);
     auto view = registry.view<Enemy, Selected, Path, ID, ColorBB, Spread, Speed, Health, Radius, PhysicalResistance,
-        MagicalResistance, Stamina, AttackTimer, AttackSpeed, Damage, AttackRange, Pushback, Position,
+        MagicalResistance, Stamina, AttackTimer, AttackSpeed, Damage, AttackRange, Pushback, Position, LookAngle,
         Strategy::Strategy>();
     for (auto [entity, path, id, colorbb, spread, speed, health, radius, physicalresistance, magicalresistance, stamina,
-             timelastattack, attackspeed, damage, attackrange, pushback, position, strategy]: view.each()) {
+             timelastattack, attackspeed, damage, attackrange, pushback, position, lookAngle, strategy]: view.each()) {
         ImGui::SliderFloat("health", &health.value, 0, 200, "%.3f", 0);
         ImGui::SliderFloat("radius", &radius.value, 0, 50, "%.3f", 0);
+        ImGui::SliderFloat("lookAngle", &lookAngle.value, -360, 360, "%.3f", 0);
         ImGui::SliderFloat("position x", &position.x, 0, mapWidth, "%.3f", 0);
         ImGui::SliderFloat("position y ", &position.y, 0, mapHeight, "%.3f", 0);
         ImGui::SliderFloat("enemySightRange", &config::enemySightRange, 0, 800, "%.3f", 0);
