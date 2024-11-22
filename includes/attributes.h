@@ -38,7 +38,7 @@ public:
 
     [[nodiscard]] int get(SubAttributeName subattr) const;
 
-    [[nodiscard]] float getMultiplied(SubAttributeName subattr);
+    [[nodiscard]] float getMultiplied(SubAttributeName subattr) const;
 
     [[nodiscard]] int freeAttrPoints() const;
 

@@ -102,9 +102,48 @@ void selectEnemy(entt::registry &registry, Vector2 worldPosition) {
     }
 }
 
+Vector2 processMoveCommand(const Vector2 &position) {
+    Vector2 futurePos = position;
+
+    futurePos.y -= 4.0f * static_cast<float>(IsKeyPressed(KEY_W) || IsKeyDown(KEY_W));
+    futurePos.y += 4.0f * static_cast<float>(IsKeyPressed(KEY_S) || IsKeyDown(KEY_S));
+    futurePos.x -= 4.0f * static_cast<float>(IsKeyPressed(KEY_A) || IsKeyDown(KEY_A));
+    futurePos.x += 4.0f * static_cast<float>(IsKeyPressed(KEY_D) || IsKeyDown(KEY_D));
+    return futurePos;
+}
+
+void processDashCommand(Position &position, const LookAngle lookAngle, const Radius radius) {
+    constexpr float dashDist = 60.0f;
+    Vector2 futurePos = Vector2Add(position,
+                                         Vector2Scale(Vector2Normalize(Vector2{
+                                                          cos(lookAngle * DEG2RAD),
+                                                          sin(lookAngle * DEG2RAD)
+                                                      }),
+                                                      dashDist));
+
+    // check any obstacle in front, and clamp future pos to the intersection
+    solveCircleRecCollision(futurePos, radius);
+    position = futurePos;
+}
+
+
+void movePlayer(Position &position, Vector2 &futurePos, const float radius, const Attributes &attributes) {
+    if (futurePos.x - radius < 0 || futurePos.x + radius > mapWidth) futurePos.x = position.x;
+    if (futurePos.y - radius < 0 || futurePos.y + radius > mapHeight) futurePos.y = position.y;
+
+    const Vector2 direction = Vector2Subtract(futurePos, position);
+    const Vector2 movement = Vector2Scale(Vector2Normalize(direction),
+                                          attributes.getMultiplied(AttributeConstants::speed));
+    futurePos = Vector2Add(position, movement);
+    solveCircleRecCollision(futurePos, radius);
+    position = futurePos;
+}
+
+
 void parseInput(entt::registry &registry, entt::entity &player, Position &position, Camera2D &camera) {
-    Radius radius = registry.get<Radius>(player); // This could be static, or a static ref
-    Attributes &attributes = registry.get<Attributes>(player);
+    auto &attributes = registry.get<Attributes>(player);
+    const auto radius = registry.get<Radius>(player);
+    const auto lookAngle = registry.get<LookAngle>(player);
 
     if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) || IsMouseButtonDown(MOUSE_LEFT_BUTTON)) {
         playerAttack(registry, player, attributes, GetScreenToWorld2D(GetMousePosition(), camera));
@@ -125,7 +164,6 @@ void parseInput(entt::registry &registry, entt::entity &player, Position &positi
     }
     camera.zoom += GetMouseWheelMove() / 10;
 
-    static Vector2 futurePos = position;
 
     if (config::free_camera) {
         camera.target.y -= 4.0f * static_cast<float>(IsKeyPressed(KEY_W) || IsKeyDown(KEY_W));
@@ -133,25 +171,12 @@ void parseInput(entt::registry &registry, entt::entity &player, Position &positi
         camera.target.x -= 4.0f * static_cast<float>(IsKeyPressed(KEY_A) || IsKeyDown(KEY_A));
         camera.target.x += 4.0f * static_cast<float>(IsKeyPressed(KEY_D) || IsKeyDown(KEY_D));
     } else {
-        futurePos.y -= 4.0f * static_cast<float>(IsKeyPressed(KEY_W) || IsKeyDown(KEY_W));
-        futurePos.y += 4.0f * static_cast<float>(IsKeyPressed(KEY_S) || IsKeyDown(KEY_S));
-        futurePos.x -= 4.0f * static_cast<float>(IsKeyPressed(KEY_A) || IsKeyDown(KEY_A));
-        futurePos.x += 4.0f * static_cast<float>(IsKeyPressed(KEY_D) || IsKeyDown(KEY_D));
-        if (futurePos.x - radius < 0 || futurePos.x + radius > mapWidth) {
-            futurePos.x = position.x;
-        }
-        if (futurePos.y - radius < 0 || futurePos.y + radius > mapHeight) {
-            futurePos.y = position.y;
-        }
-
-        Vector2 direction = Vector2Subtract(futurePos, position);
-        Vector2 movement = Vector2Scale(Vector2Normalize(direction),
-                                        attributes.getMultiplied(AttributeConstants::speed));
-        futurePos = Vector2Add(position, movement);
-        solveCircleRecCollision(futurePos, radius);
-        position = futurePos;
+        Vector2 futurePos = processMoveCommand(position);
+        if (IsKeyPressed(KEY_LEFT_SHIFT)) processDashCommand(position, lookAngle, radius);
+        movePlayer(position, futurePos, radius, attributes);
     }
 }
+
 
 void updateAttributes(const entt::registry &registry, Attributes &attributes) {
     std::vector<AttributeConstants::Modifier> modifiers{};

@@ -52,7 +52,7 @@ void Attributes::updateModifiers(const std::vector<Modifier> &modifiers) {
 
 [[nodiscard]] int Attributes::get(const SubAttributeName subattr) const { return subValues[subattr]; }
 
-[[nodiscard]] float Attributes::getMultiplied(const SubAttributeName subattr) {
+[[nodiscard]] float Attributes::getMultiplied(const SubAttributeName subattr) const {
     //TODO add a check that the attr is not too small to support the subattrs
 //        return subValuesMultiplied[subattr]; ?
     return Params::attributes.subAttrAtStart[subattr] + static_cast<float>(subValues[subattr]) * Params::attributes.subAttrMultipliers[subattr];

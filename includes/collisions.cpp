@@ -49,7 +49,6 @@ bool CheckCollisionCircleTriangle(Vector2 center, float radius, Vector2 v1, Vect
 
 
 void solveCircleRecCollision(Vector2 &futurePos, float radius) {
-
     Vector2 upperBoundary = {std::max(0.0f, floor(futurePos.x / tileSize) * tileSize - 2 * tileSize),
                              std::max(0.0f, floor(futurePos.y / tileSize) * tileSize - 2 * tileSize)};
     Vector2 lowerBoundary = {std::min(float(mapWidth), ceil(futurePos.x / tileSize) * tileSize + 2 * tileSize),
