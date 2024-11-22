@@ -6,8 +6,12 @@
 #define SHADOW_CASTING_H
 #include "intGrid.h"
 
-void do_fov(IntGrid &map, float startX, float startY, float radius,
+void visualizeFOV(IntGrid &map, float startX, float startY, float radius,
             float sectorStartAngle, float sectorEndAngle);
+
+bool isTargetInFOV(IntGrid &map, float startX, float startY, float targetX, float targetY,
+    float radius,float sectorStartAngle, float sectorEndAngle);
+
 
 
 #endif //SHADOW_CASTING_H

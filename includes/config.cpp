@@ -16,10 +16,10 @@ namespace config {
     bool show_inv_window = false;
     bool free_camera = false;
     bool draw_level_collisions = false;
-    float enemySightRange = 120.0f;
+    float enemySightRange = 130.0f;
     float enemySightRangeChasing = 250.0f;
     float enemyHearRange = 70.0f;
-    float enemyHearRangeChasing = 120.0f;
+    float enemyHearRangeChasing = 100.0f;
     float enemyPatrolDistance = 90;
 
     int fps = 60;

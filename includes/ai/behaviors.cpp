@@ -14,6 +14,8 @@
 #include <managers/audioManager.h>
 #include <managers/levelManager.h>
 
+#include "shadowCast.h"
+
 
 Status PlayerInView::update(entt::registry &registry, entt::entity self, entt::entity player) {
     const auto position = registry.get<Position>(self);
@@ -22,19 +24,24 @@ Status PlayerInView::update(entt::registry &registry, entt::entity self, entt::e
     const auto playerRadius = registry.get<Radius>(player);
     const auto lookVector = Vector2{cos(lookingAngleDeg * DEG2RAD), sin(lookingAngleDeg * DEG2RAD)};
     auto &chasing = registry.get<Chasing>(self);
+    const bool isChasing = chasing.isChasing();
 
-    const bool facePlayer = Vector2DotProduct(lookVector, Vector2Subtract(playerPosition, position)) > 0;
-    const bool inViewRange = CheckCollisionCircles(playerPosition, playerRadius, position, config::enemySightRange);
-    const bool inHearRange = CheckCollisionCircles(playerPosition, playerRadius, position, config::enemyHearRange);
-    const bool inViewChasingRange = CheckCollisionCircles(playerPosition, playerRadius, position,
-                                                          config::enemySightRangeChasing);
-    const bool inHearChasingRange = CheckCollisionCircles(playerPosition, playerRadius, position,
-                                                          config::enemyHearRangeChasing);
-    const bool inView = (facePlayer && inViewRange) || inHearRange;
-    const bool inChasingView = (facePlayer && inViewChasingRange) || inHearChasingRange;
-    const bool result = chasing.isChasing() ? inChasingView : inView;
-
-    if (result) {
+    const auto hearRange = isChasing ? config::enemyHearRangeChasing : config::enemyHearRange;
+    const auto sightRange = isChasing ? config::enemySightRangeChasing : config::enemySightRange;
+    assert(hearRange < sightRange && "Sight range must be bigger then hear range, or you have to change this logic");
+    if (const bool inHearRange = CheckCollisionCircles(playerPosition, playerRadius, position, hearRange)) {
+        chasing.timer.Reset();
+        return SUCCESS;
+    }
+    if (const bool notFacePlayer = Vector2DotProduct(lookVector, Vector2Subtract(playerPosition, position)) < 0) {
+        return FAILURE;
+    }
+    if (const bool outSightRange = !CheckCollisionCircles(playerPosition, playerRadius, position, sightRange)) {
+        return FAILURE;
+    }
+    if (const bool inFOV = isTargetInFOV(LevelManager::grid, position.x, position.y, playerPosition.x,
+                                         playerPosition.y, sightRange, lookingAngleDeg - 90.0f,
+                                         lookingAngleDeg + 90.0f)) {
         chasing.timer.Reset();
         return SUCCESS;
     }

@@ -58,7 +58,7 @@ const IntValue &IntGrid::operator()(const size_t row, const size_t col) const {
 }
 
 void IntGrid::setVisible(const size_t row, const size_t col) {
-    DrawRectangle(row*tileSize, col*tileSize, tileSize, tileSize, ColorAlpha(YELLOW, 0.2));
+    DrawRectangle(row*tileSize, col*tileSize, tileSize, tileSize, ColorAlpha(YELLOW, 0.1));
     // grid[row][col] = IntValue::VISIBLE;
 }
 
