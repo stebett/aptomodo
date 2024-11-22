@@ -5,7 +5,7 @@
 
 #include "shadowCast.h"
 
-float calculateAngle(int dx, int dy) {
+float calculateAngle(const int dx, const int dy) {
     return std::atan2(dy, dx) * 180 / M_PI;
 }
 
@@ -62,7 +62,7 @@ void computeFOV2Visualize(IntGrid &map, uint startX, uint startY, const uint rad
             if (ax >= map.rows() || ay >= map.cols()) continue;
 
             const uint radius2 = radius * radius;
-            if ((uint)(dx * dx + dy * dy) < radius2) {
+            if (static_cast<uint>(dx * dx + dy * dy) < radius2) {
 
                 map.setVisible(ax, ay);
             }
@@ -87,9 +87,9 @@ void computeFOV2Visualize(IntGrid &map, uint startX, uint startY, const uint rad
     }
 }
 
-bool computeFOV(IntGrid &map, uint startX, uint startY, uint targetX, uint targetY, const uint radius, const int row,
-                float startSlope, const float endSlope, uint xx, uint xy, uint yx, uint yy,
-                float sectorStartAngle, float sectorEndAngle) {
+bool computeFOV(IntGrid &map, uint startX, uint startY, const uint targetX, const uint targetY, const uint radius, const int row,
+                float startSlope, const float endSlope, const uint xx, const uint xy, const uint yx, const uint yy,
+                const float sectorStartAngle, const float sectorEndAngle) {
     if (startSlope < endSlope) return false;
     float nextStartSlope = startSlope;
     for (int i = row; i <= radius; i++) {
@@ -106,15 +106,14 @@ bool computeFOV(IntGrid &map, uint startX, uint startY, uint targetX, uint targe
                 (say < 0 && static_cast<uint>(std::abs(say)) > startY)) {
                 continue;
             }
-            float angle = calculateAngle(sax, say);
-            if (isAngleTouched(sectorStartAngle, sectorEndAngle, angle)) continue;
+            if (isAngleTouched(sectorStartAngle, sectorEndAngle, calculateAngle(sax, say))) continue;
 
-            uint ax = startX + sax;
-            uint ay = startY + say;
-            if (ax >= map.rows() || ay >= map.cols()) continue;
+            const uint ax = startX + sax;
+            const uint ay = startY + say;
+            if (ax >= IntGrid::rows() || ay >= IntGrid::cols()) continue;
 
             const uint radius2 = radius * radius;
-            if ((uint)(dx * dx + dy * dy) < radius2) {
+            if (static_cast<uint>(dx * dx + dy * dy) < radius2) {
                 if (ax == targetX && ay == targetY) return true;
             }
 
@@ -128,8 +127,8 @@ bool computeFOV(IntGrid &map, uint startX, uint startY, uint targetX, uint targe
             } else if (map.isOpaque(ax, ay)) {
                 blocked = true;
                 nextStartSlope = rightSlope;
-                bool res = computeFOV(map, startX, startY, targetX, targetY, radius, i + 1, startSlope, leftSlope, xx, xy, yx, yy,
-                           sectorStartAngle, sectorEndAngle);
+                const bool res = computeFOV(map, startX, startY, targetX, targetY, radius, i + 1, startSlope, leftSlope, xx, xy, yx, yy,
+                                            sectorStartAngle, sectorEndAngle);
                 if (res) {return true;}
             }
         }
