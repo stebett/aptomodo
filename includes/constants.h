@@ -8,17 +8,17 @@
 
 #include <random>
 
-const int screenWidth = 1920;
-const int screenHeight = 1080;
-const int mapWidth = 1528;
-const int mapHeight = 1136;
-const int IntGridHeight = 71;
-const int IntGridWidth = 96;
-const int tileSize = 16;
-const float radToDeg = (180.0 / 3.141592653589793238463);
-const float degToRad = (3.141592653589793238463 / 180.0);
-const int updateRate { 10 };
-const int playerUpdateRate { 10 };
+constexpr int screenWidth = 1920;
+constexpr int screenHeight = 1080;
+constexpr int mapWidth = 1528;
+constexpr int mapHeight = 1136;
+constexpr int IntGridHeight = 71;
+constexpr int IntGridWidth = 96;
+constexpr int tileSize = 16;
+constexpr float radToDeg = (180.0 / 3.141592653589793238463);
+constexpr float degToRad = (3.141592653589793238463 / 180.0);
+constexpr int updateRate { 10 };
+constexpr int playerUpdateRate { 10 };
 
 namespace rng {
     static std::random_device randomDevice;
@@ -32,6 +32,29 @@ inline std::string getAssetPath(const std::string& assetName)
     return ASSETS_PATH "" + assetName;
 }
 
+const std::unordered_map<std::string, Color> colorMap = {
+    {"lightgray", LIGHTGRAY},
+    {"gray", GRAY},
+    {"darkgray", DARKGRAY},
+    {"yellow", YELLOW},
+    {"gold", GOLD},
+    {"orange", ORANGE},
+    {"pink", PINK},
+    {"red", RED},
+    {"maroon", MAROON},
+    {"green", GREEN},
+    {"lime", LIME},
+    {"darkgreen", DARKGREEN},
+    {"skyblue", SKYBLUE},
+    {"blue", BLUE},
+    {"darkblue", DARKBLUE},
+    {"purple", PURPLE},
+    {"violet", VIOLET},
+    {"darkpurple", DARKPURPLE},
+    {"beige", BEIGE},
+    {"brown", BROWN},
+    {"darkbrown", DARKBROWN}
+};
 
 
 #endif //APTOMODO_CONSTANTS_H

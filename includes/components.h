@@ -80,6 +80,13 @@ struct Radius {
     operator float() const noexcept;
 };
 
+struct Grade {
+    int value;
+
+    operator int() const noexcept;
+};
+
+
 struct LookAngle {
     float value;
 
@@ -102,23 +109,23 @@ struct Speed {
 
     operator float() const noexcept;
 
-    Speed(float x);;
+    Speed(float x);
+
+    Speed();;
 };
 
 struct Health {
     float value;
-    const float max;
-
-
+    float max;
     operator float() const noexcept;
 
     float operator-(const float x) const noexcept;
 
     void operator-=(const float x) noexcept;
 
-    //    Health(float x) :value(x), max(x) {}
+    Health(float max);
 
-    Health(const float max);;
+    Health();
 };
 
 struct AttackTimer {

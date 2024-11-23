@@ -24,6 +24,9 @@ Speed::operator float() const noexcept { return value; }
 Speed::Speed(float x): value(x), max(x) {
 }
 
+Speed::Speed() {
+}
+
 Health::operator float() const noexcept { return value; }
 
 float Health::operator-(const float x) const noexcept { return value - x; }
@@ -31,6 +34,9 @@ float Health::operator-(const float x) const noexcept { return value - x; }
 void Health::operator-=(const float x) noexcept { value -= x; }
 
 Health::Health(const float max): value(max), max(max) {
+}
+
+Health::Health() {
 }
 
 
@@ -89,6 +95,8 @@ Path::Path(): index(7), indexMax(7), path({0}) {
 
 Radius::operator float() const noexcept { return value; }
 
+Grade::operator int() const noexcept { return value; }
+
 LookAngle::operator float() const noexcept { return value; }
 
 LookAngle::LookAngle(float d): value(d) {
@@ -98,11 +106,11 @@ Spread::operator float() const noexcept { return value; }
 
 AttackEffect::AttackEffect(float mDuration, Vector2 mCenter, const float &mRadius,
                            float mStartAngle, float mEndangle, const Color &mColor) : m_duration(mDuration),
-                                                                                      m_center(mCenter),
-                                                                                      m_radius(mRadius),
-                                                                                      m_color(mColor),
-                                                                                      m_startAngle(mStartAngle),
-                                                                                      m_endAngle(mEndangle) {
+    m_center(mCenter),
+    m_radius(mRadius),
+    m_color(mColor),
+    m_startAngle(mStartAngle),
+    m_endAngle(mEndangle) {
     m_timer.Reset();
 }
 

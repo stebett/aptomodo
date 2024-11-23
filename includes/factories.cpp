@@ -2,7 +2,6 @@
 // Created by ginko on 02/03/24.
 //
 
-#include "pch.h"
 #include "factories.h"
 #include "constants.h"
 #include "managers/levelManager.h"
@@ -46,9 +45,123 @@ entt::entity spawnEnemy(entt::registry &registry, Vector2 position) {
     return e;
 }
 
-entt::entity spawnEnemyFromFile(entt::registry &registry) {
-    const entt::entity e = registry.create();
+struct EnemyStats {
+    Name name;
+    Grade grade;
+    Radius radius;
+    Speed speed;
+    AttackSpeed attackSpeed;
+    Damage damage;
+    AttackRange attackRange;
+    Spread attackSpread;
+    ColorBB color;
+    Health health;
+    Experience experience;
+    std::string attributesPath;
+    std::string texturePath;
 
+};
+
+struct EnemyDataFile {
+    std::string path {"../config/enemies.csv"};
+    std::vector<std::string> headers;
+    std::vector<EnemyStats> enemyStats;
+
+    bool loadCSV(const std::string &filename);
+};
+
+bool EnemyDataFile::loadCSV(const std::string& filename) {
+    std::ifstream file(filename);
+    if (!file.is_open()) {
+        std::cerr << "Error: Could not open file " << filename << "\n";
+        return false;
+    }
+
+    std::string line;
+    if (std::getline(file, line)) {
+        std::stringstream ss(line);
+        std::string header;
+        while (std::getline(ss, header, ',')) {
+            headers.push_back(header);
+        }
+    }
+
+    // Read the data rows
+    while (std::getline(file, line)) {
+        std::stringstream ss(line);
+        std::string cell;
+        EnemyStats stats {};
+
+        for (size_t i = 0; i < headers.size(); ++i) {
+            std::getline(ss, cell, ',');
+
+            // Assign data based on header
+            if (headers[i] == "Name") {
+                stats.name.value = cell;
+            } else if (headers[i] == "Grade") {
+                stats.grade.value = std::stoi(cell);
+            } else if (headers[i] == "Radius") {
+                stats.radius.value = std::stof(cell);
+            } else if (headers[i] == "Speed") {
+                stats.speed = std::stof(cell);
+            } else if (headers[i] == "AttackSpeed") {
+                stats.attackSpeed.value = std::stof(cell);
+            } else if (headers[i] == "Damage") {
+                stats.damage.value = std::stof(cell);
+            } else if (headers[i] == "AttackRange") {
+                stats.attackRange.value = std::stof(cell);
+            } else if (headers[i] == "AttackSpread") {
+                stats.attackSpread.value = std::stof(cell);
+            } else if (headers[i] == "ColorBB") {
+                stats.color.color = colorMap.at(cell);
+            } else if (headers[i] == "Health") {
+                stats.health = Health(std::stof(cell));
+            } else if (headers[i] == "ExperienceGiven") {
+                stats.experience.value = std::stoi(cell);
+            // } else if (headers[i] == "Strategy") {
+            } else if (headers[i] == "AttributesPath") {
+                stats.attributesPath = cell;
+            } else if (headers[i] == "TexturePath") {
+                stats.texturePath = cell;
+            }
+        }
+        enemyStats.push_back(stats);
+    }
+
+    file.close();
+    return true;
+}
+
+
+entt::entity spawnEnemyFromFile(entt::registry &registry, Position position) {
+    static int id = 0;
+    const entt::entity e = registry.create();
+    EnemyDataFile data {};
+    data.loadCSV(data.path);
+    for (const auto &stats: data.enemyStats) {
+        registry.emplace<Name>(e,stats.name);
+        registry.emplace<Grade>(e,stats.grade);
+        registry.emplace<Radius>(e,stats.radius);
+        registry.emplace<Speed>(e,stats.speed);
+        registry.emplace<AttackSpeed>(e,stats.attackSpeed);
+        registry.emplace<Damage>(e,stats.damage);
+        registry.emplace<AttackRange>(e,stats.attackRange);
+        registry.emplace<Spread>(e,stats.attackSpread);
+        registry.emplace<ColorBB>(e,stats.color);
+        registry.emplace<Health>(e,stats.health);
+        registry.emplace<Experience>(e,stats.experience);
+    }
+    registry.emplace<Path>(e);
+    registry.emplace<Position>(e, position);
+    registry.emplace<Enemy>(e);
+    registry.emplace<Chasing>(e);
+    auto &chasing = registry.get<Chasing>(e);
+    chasing.timer.StartBehind(100);;
+    registry.emplace<ID>(e, id++);
+    registry.emplace<Strategy::Strategy>(e, std::make_unique<Strategy::Melee>(registry, e)); //TODO need to be sure that this gets deleted
+    registry.emplace<Living>(e);
+    registry.emplace<AttackTimer>(e);
+    registry.emplace<LookAngle>(e, 0.0f);
     return e;
 };
 
