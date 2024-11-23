@@ -118,7 +118,7 @@ struct Health {
 
     //    Health(float x) :value(x), max(x) {}
 
-    Health(float value, const float max);;
+    Health(const float max);;
 };
 
 struct AttackTimer {

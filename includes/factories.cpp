@@ -40,9 +40,7 @@ entt::entity spawnEnemy(entt::registry &registry, Vector2 position) {
     auto &chasing = registry.get<Chasing>(e);
     chasing.timer.StartBehind(100);;
     registry.emplace<ID>(e, id++);
-    auto attr = Attributes();
-    registry.emplace<Attributes>(e, attr);
-    registry.emplace<Health>(e, attr.getMultiplied(AttributeConstants::health), attr.getMultiplied(AttributeConstants::health));
+    registry.emplace<Health>(e, 50);
     registry.emplace<Experience>(e, 50);
     registry.emplace<Strategy::Strategy>(e, std::make_unique<Strategy::Melee>(registry, e)); //TODO need to be sure that this gets deleted
     return e;
@@ -61,7 +59,7 @@ entt::entity spawnPlayer(entt::registry &registry, Vector2 position) {
     registry.emplace<ColorBB>(e, BLUE);
     auto attr = Attributes();
     registry.emplace<Attributes>(e, attr);
-    registry.emplace<Health>(e, attr.getMultiplied(AttributeConstants::health), attr.getMultiplied(AttributeConstants::health));
+    registry.emplace<Health>(e, attr.getMultiplied(AttributeConstants::health));
     registry.emplace<Experience>(e, 0);
     return e;
 }

@@ -30,7 +30,7 @@ float Health::operator-(const float x) const noexcept { return value - x; }
 
 void Health::operator-=(const float x) noexcept { value -= x; }
 
-Health::Health(float value, const float max): value(value), max(max) {
+Health::Health(const float max): value(max), max(max) {
 }
 
 
