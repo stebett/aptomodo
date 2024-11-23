@@ -5,9 +5,7 @@
 #ifndef APTOMODO_COMPONENTS_H
 #define APTOMODO_COMPONENTS_H
 
-#include <raylib.h>
 #include "timer.h"
-#include <iostream>
 
 // Tags
 struct Player {
@@ -23,10 +21,9 @@ struct Chasing {
     Timer timer;
     float duration;
 
-    explicit Chasing(const float p_duration=3.0f) : timer(Timer()), duration(p_duration) {
-    };
+    explicit Chasing(float p_duration = 3.0f);
 
-    [[nodiscard]] bool isChasing() const {return timer.ElapsedSeconds() < duration;}
+    [[nodiscard]] bool isChasing() const;
 };
 
 struct Selected {
@@ -35,7 +32,7 @@ struct Selected {
 struct ColorBB {
     Color color;
 
-    operator Color() const noexcept { return color; }
+    operator Color() const noexcept;
 };
 
 // Components
@@ -43,13 +40,11 @@ struct Position {
     float x;
     float y;
 
-    operator Vector2() const noexcept { return Vector2{x, y}; }
+    operator Vector2() const noexcept;
 
-    Position(Vector2 v) : x(v.x), y(v.y) {
-    };
+    Position(Vector2 v);;
 
-    Position(float x, float y) : x(x), y(y) {
-    };
+    Position(float x, float y);;
 };
 
 struct Triangle {
@@ -64,89 +59,50 @@ struct Path {
     bool valid = false;
     std::array<Vector2, 15> path{0};
 
-    Vector2 getNext() {
-        index = std::min(index, indexMax);
-        Vector2 result = path[index];
-        index++;
-        return result;
-    }
+    Vector2 getNext();
 
-    [[nodiscard]] Vector2 getCurrent() const {
-        return path[std::min(index, indexMax)];
-    }
+    [[nodiscard]] Vector2 getCurrent();
 
-    Vector2 getCurrent() {
-        return path[std::min(index, indexMax)];
-    }
+    [[nodiscard]] Vector2 getCurrent() const;
 
-    [[nodiscard]] bool isValid() const {
-        return valid && (index < indexMax);
-    }
+    [[nodiscard]] bool isValid() const;
 
-    void invalidate() {
-        valid = false;
-    }
+    void invalidate();
 
+    void validate();
 
-    void validate() {
-        valid = true;
-    }
-
-    Path() : index(7), indexMax(7), path({0}) { std::cout << "INFO: ASTAR: creating path" << "\n"; };
+    Path();
 };
 
 struct Radius {
     float value;
 
-    operator float() const noexcept { return value; }
+    operator float() const noexcept;
 };
 
 struct LookAngle {
     float value;
 
-    operator float() const noexcept { return value; }
+    operator float() const noexcept;
 
-    LookAngle(float d) : value(d) {
-    };
+    LookAngle(float d);;
 };
 
 
 struct Spread {
     float value;
 
-    operator float() const noexcept { return value; }
+    operator float() const noexcept;
 };
-
-
-/* Stats
- * John, [08/04/24 21:08]
-Le statistiche saranno roba tipo
-1)Velocità di movimento
-2)Salute massima
-3)Resistenza ai danni fisici
-4)Resistenza ai danni magici
-5)Stamina (o resistenza nel senso atletico)
-6)Velocità di attacco
-5)Danno fisico
-6)Portata fisica
-7)Mana massimo
-8)Rigenerazione mana
-9)danno magico
-10)velocità di Cast
-11)Portata magica
-12)AoE Magico
-(Anche AoE fisico, ma non ho voglia di riscrivere i numeri ahah)
-*/
 
 struct Speed {
     float value;
     float max;
     float actual{0};
 
-    operator float() const noexcept { return value; }
+    operator float() const noexcept;
 
-    Speed(float x) : value(x), max(x) {
-    };
+    Speed(float x);;
 };
 
 struct Health {
@@ -154,33 +110,33 @@ struct Health {
     const float max;
 
 
-    operator float() const noexcept { return value; }
+    operator float() const noexcept;
 
-    float operator-(const float x) const noexcept { return value - x; }
+    float operator-(const float x) const noexcept;
 
-    void operator-=(const float x) noexcept { value -= x; }
+    void operator-=(const float x) noexcept;
+
     //    Health(float x) :value(x), max(x) {}
 
-    Health(float value, const float max) : value(value), max(max) {
-    };
+    Health(float value, const float max);;
 };
 
 struct PhysicalResistance {
     float value;
 
-    operator float() const noexcept { return value; }
+    operator float() const noexcept;
 };
 
 struct MagicalResistance {
     float value;
 
-    operator float() const noexcept { return value; }
+    operator float() const noexcept;
 };
 
 struct Stamina {
     float value;
 
-    operator float() const noexcept { return value; }
+    operator float() const noexcept;
 };
 
 struct AttackTimer {
@@ -190,54 +146,49 @@ struct AttackTimer {
 struct AttackSpeed {
     float value;
 
-    operator float() const noexcept { return value; }
+    operator float() const noexcept;
 };
 
 struct Damage {
     float value;
 
-    operator float() const noexcept { return value; }
+    operator float() const noexcept;
 };
 
 struct AttackRange {
     float value;
 
-    operator float() const noexcept { return value; }
+    operator float() const noexcept;
 };
 
 struct Pushback {
     float value;
 
-    operator float() const noexcept { return value; }
+    operator float() const noexcept;
 };
 
 
 struct ID {
     int value;
 
-    operator int() const noexcept { return value; }
+    operator int() const noexcept;
 };
 
 struct Experience {
     int value;
 
-    operator int() const noexcept { return value; }
+    operator int() const noexcept;
 
-    void operator+=(const int x) noexcept { value += x; }
+    void operator+=(const int x) noexcept;
 };
 
 struct Target {
     Vector2 value;
 
-    operator Vector2() const noexcept { return value; }
+    operator Vector2() const noexcept;
 
     // Comparison operator
-    bool operator<(const Target &other) const noexcept {
-        if (value.x != other.value.x) {
-            return value.x < other.value.x;
-        }
-        return value.y < other.value.y;
-    }
+    bool operator<(const Target &other) const noexcept;
 };
 
 struct Projectile {
@@ -247,5 +198,24 @@ struct Projectile {
     float radius;
     float damage;
 };
+
+class AttackEffect {
+    Timer m_timer;
+    Vector2 m_center;
+    Color m_color;
+    float m_radius;
+    float m_duration;
+    float m_startAngle;
+    float m_endAngle;
+
+public:
+    AttackEffect(float mDuration, Vector2 mCenter, const float &mRadius,
+                 float mStartAngle, float mEndangle, const Color &mColor);
+
+    void Draw() const;
+
+    [[nodiscard]] bool Expired() const;
+};
+
 
 #endif //APTOMODO_COMPONENTS_H

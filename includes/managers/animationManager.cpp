@@ -36,20 +36,3 @@ void AnimationManager::LoadFromDirectory(const std::string &directory) {
 
 AnimationManager &AnimationManager::Instance() { return *instance; }
 
-
-AttackEffect::AttackEffect(float mDuration, Vector2 mCenter, const float &mRadius,
-                           float mStartAngle, float mEndangle, const Color &mColor) : m_duration(mDuration),
-                                                                                      m_center(mCenter),
-                                                                                      m_radius(mRadius),
-                                                                                      m_color(mColor),
-                                                                                      m_startAngle(mStartAngle),
-                                                                                      m_endAngle(mEndangle) {
-    m_timer.Reset();
-}
-
-void AttackEffect::Draw() const {
-    DrawCircleSector({m_center.x, m_center.y}, m_radius, m_startAngle, m_endAngle, 2,
-                     ColorAlpha(m_color, 1 - m_timer.ElapsedMillis() / m_duration));
-}
-
-bool AttackEffect::Expired() const { return m_timer.ElapsedMillis() > m_duration; }

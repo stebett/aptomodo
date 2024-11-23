@@ -36,24 +36,6 @@ public:
     }
 };
 
-class AttackEffect {
-    Timer m_timer;
-    Vector2 m_center;
-    Color m_color;
-    float m_radius;
-    float m_duration;
-    float m_startAngle;
-    float m_endAngle;
-
-
-public:
-    AttackEffect(float mDuration, Vector2 mCenter, const float &mRadius,
-                 float mStartAngle, float mEndangle, const Color &mColor);
-
-    void Draw() const ;
-
-    [[nodiscard]] bool Expired() const;
-};
 
 
 #endif //APTOMODO_ANIMATIONMANAGER_H
