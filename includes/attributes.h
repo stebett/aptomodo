@@ -5,12 +5,6 @@
 #ifndef APTOMODO_ATTRIBUTES_H
 #define APTOMODO_ATTRIBUTES_H
 
-#include <array>
-#include <unordered_map>
-#include <numeric>
-#include <iostream>
-#include "managers/parameters.h"
-#include <vector>
 #include "attributesConstants.h"
 
 using namespace AttributeConstants;

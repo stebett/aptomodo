@@ -28,7 +28,7 @@ namespace config {
 }
 
 
-constexpr char const *configPath{"../config.toml"};
+constexpr char const *configPath{"../config/config.toml"};
 constexpr size_t preStoredValues{20};
 
 class Config {

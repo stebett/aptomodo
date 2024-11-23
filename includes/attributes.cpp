@@ -6,6 +6,7 @@
 //
 
 #include "attributes.h"
+#include <managers/parameters.h>
 
 Attributes::Attributes(int st, int in, int ag, int wi, int co, int pe) {
     values[strength] = st;

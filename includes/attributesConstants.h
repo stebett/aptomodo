@@ -5,7 +5,6 @@
 #ifndef CONFIGURATION_ATTRIBUTESCONSTANTS_H
 #define CONFIGURATION_ATTRIBUTESCONSTANTS_H
 
-#include <array>
 
 namespace AttributeConstants {
 
