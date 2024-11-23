@@ -46,8 +46,14 @@ entt::entity spawnEnemy(entt::registry &registry, Vector2 position) {
     return e;
 }
 
+entt::entity spawnEnemyFromFile(entt::registry &registry) {
+    const entt::entity e = registry.create();
+
+    return e;
+};
+
 entt::entity spawnRandomEnemy(entt::registry &registry) {
-    Position randomPos = {static_cast<float>(rng::uniform(rng::seed)),
+    const Position randomPos = {static_cast<float>(rng::uniform(rng::seed)),
                           static_cast<float> (rng::uniform(rng::seed))};
     return spawnEnemy(registry, randomPos);
 }
@@ -73,9 +79,8 @@ entt::entity spawnPlayer(entt::registry &registry) {
 }
 
 void spawnEnemies(entt::registry &registry) {
-    auto entitiesPositions = LevelManager::GetEntitiesPositions();
-    for (const auto& [label, position]: entitiesPositions) {
-        if (label == "Enemy") spawnEnemy(registry, position);
+    for (const auto& [label, position]:  LevelManager::GetEnemiesPositions()) {
+        spawnEnemy(registry, position);
     }
 }
 

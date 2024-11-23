@@ -2,13 +2,11 @@
 // Created by ginko on 17/04/24.
 //
 
-#include "pch.h"
 #include "levelManager.h"
-#include <components.h>
-
 #include "intGrid.h"
 
 std::vector<std::pair<std::string, Vector2> > LevelManager::entitiesPositions;
+std::vector<std::pair<std::string, Vector2> > LevelManager::enemiesPositions;
 LevelManager *LevelManager::instance;
 int LevelManager::current_level;
 ldtk::Project *LevelManager::ldtkProject;
@@ -88,7 +86,11 @@ void LevelManager::SetLevel(const int level) {
 
     for (const auto &entity: currentLdtkLevel->getLayer("Entities").allEntities()) {
         Vector2 position = {static_cast<float>(entity.getPosition().x), static_cast<float>(entity.getPosition().y)};
-        entitiesPositions.emplace_back(entity.getName(), position);
+        if (entity.getName() == "Enemy") {
+            auto enemyName = entity.getField<ldtk::FieldType::String>("EnemyName").value();
+            enemiesPositions.emplace_back(enemyName, position);
+        }
+        entitiesPositions.emplace_back(entity.getName(), position); // TODO will need to specialize this so different enemies get their own position
         std::cout << entity.getName() << ", {" << position.x << ", " << position.y << "}\n";
     }
 
@@ -102,6 +104,11 @@ void LevelManager::SetLevel(const int level) {
 std::vector<std::pair<std::string, Vector2> > &LevelManager::GetEntitiesPositions() {
     return entitiesPositions;
 }
+
+std::vector<std::pair<std::string, Vector2> > &LevelManager::GetEnemiesPositions() {
+    return enemiesPositions;
+}
+
 
 void LevelManager::Update(const entt::registry &registry) {
     // auto enemyView = registry.view<Living, Radius, Position, Enemy>();

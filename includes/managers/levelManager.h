@@ -5,13 +5,7 @@
 #ifndef APTOMODO_LEVELMANAGER_H
 #define APTOMODO_LEVELMANAGER_H
 
-#include <raylib.h>
-#include <string>
-#include <entt/entity/registry.hpp>
-#include <LDtkLoader/Project.hpp>
-
 #include "intGrid.h"
-#include "../constants.h"
 
 
 
@@ -28,6 +22,7 @@ class LevelManager {
     static Texture2D currentTilesetTexture;
 
     static std::vector<std::pair<std::string, Vector2> > entitiesPositions;
+    static std::vector<std::pair<std::string, Vector2> > enemiesPositions;
     static std::hash<std::string> hasher;
 
 public:
@@ -40,6 +35,8 @@ public:
     // TODO add an update function which keeps tracks of all living positions and ranges and updates the grid based on it
 
     static std::vector<std::pair<std::string, Vector2> > &GetEntitiesPositions();
+
+    static std::vector<std::pair<std::string, Vector2>> &GetEnemiesPositions();
 
     static void Update(const entt::registry &registry);
 
