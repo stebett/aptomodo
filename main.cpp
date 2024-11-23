@@ -5,7 +5,6 @@
 #include "includes/constants.h"
 #include "includes/controls.h"
 #include "includes/factories.h"
-#include "includes/npc.h"
 #include "includes/config.h"
 #include <format>
 #include <ai/loop.h>
@@ -29,7 +28,6 @@ enum class LevelOutcome {
 LevelOutcome PlayLevel() {
     auto outcome = LevelOutcome::NONE;
     entt::registry registry;
-    RenderingManager::Instantiate(registry);
     Gui::Instantiate(registry);
 
     auto playerCamera = spawnCamera();
@@ -70,7 +68,7 @@ LevelOutcome PlayLevel() {
                 updatePlayer(registry, player, position, freeCamera);
 
         }
-        RenderingManager::Draw(playerCamera, framerateManager.framesCounter); // This has to stay after updatePlayer
+        RenderingManager::Draw(registry, playerCamera, framerateManager.framesCounter); // This has to stay after updatePlayer
         EndMode2D();
         Gui::Draw();
         DrawFPS(10, 10);
