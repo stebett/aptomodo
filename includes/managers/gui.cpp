@@ -224,14 +224,44 @@ void imguiInventory(entt::registry &registry) {
     ImGui::End();
 }
 
+//
+// void imguiConfig() {
+//     ImGui::Begin("Config");
+//     ImGui::Checkbox("show_bounding_box", Config::GetBoolPtr("show_bounding_box"));
+//     ImGui::Checkbox("show_attacks", Config::GetBoolPtr("show_attacks"));
+//     ImGui::Checkbox("free_camera", Config::GetBoolPtr("free_camera"));
+//     ImGui::Checkbox("draw_level_collisions", Config::GetBoolPtr("draw_level_collisions"));
+//     ImGui::SliderInt("FPS", Config::GetIntPtr("fps"), 0, 120);
+//     ImGui::End();
+// }
+
 
 void imguiConfig() {
     ImGui::Begin("Config");
-    ImGui::Checkbox("show_bounding_box", Config::GetBoolPtr("show_bounding_box"));
-    ImGui::Checkbox("show_attacks", Config::GetBoolPtr("show_attacks"));
-    ImGui::Checkbox("free_camera", Config::GetBoolPtr("free_camera"));
-    ImGui::Checkbox("draw_level_collisions", Config::GetBoolPtr("draw_level_collisions"));
-    ImGui::SliderInt("FPS", Config::GetIntPtr("fps"), 0, 120);
+    ImGui::SeparatorText("Bools");
+    int n{0};
+    for (const auto& [name, index]: Config::indexDictBools) {
+        ImGui::PushID(n);
+        ImGui::Checkbox(name.c_str(), Config::GetBoolPtr(name));
+        ImGui::PopID();
+        n++;
+    }
+    ImGui::SeparatorText("Ints");
+    for (const auto& [name, index]: Config::indexDictInts) {
+        ImGui::PushID(n);
+        ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x * 0.25f);
+        ImGui::InputInt(name.c_str(), Config::GetIntPtr(name));
+        ImGui::PopID();
+        n++;
+    }
+    ImGui::SeparatorText("Floats");
+    for (const auto& [name, index]: Config::indexDictFloats) {
+        ImGui::PushID(n);
+        ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x * 0.25f);
+        ImGui::InputFloat(name.c_str(), Config::GetFloatPtr(name), 0, 0, "%.1f");
+        ImGui::PopID();
+        n++;
+    }
     ImGui::End();
 }
 
@@ -326,7 +356,7 @@ void GuiManager::Instantiate() {
     ImGui_ImplRaylib_BuildFontAtlas();
 }
 
-void GuiManager::Update(entt::registry& registry, const Camera2D &camera) {
+void GuiManager::Update(entt::registry &registry, const Camera2D &camera) {
     ImGui_ImplRaylib_ProcessEvents();
 
     // Start the Dear ImGui frame

@@ -39,9 +39,11 @@ class Config {
     static int storedIntsIndex;
     static int storedFloatsIndex;
     static int storedBoolsIndex;
-    static std::unordered_map<std::string, int> indexDict;
-
 public:
+    static std::unordered_map<std::string, int> indexDictInts;
+    static std::unordered_map<std::string, int> indexDictFloats;
+    static std::unordered_map<std::string, int> indexDictBools;
+
     toml::table writeTable();
 
 
@@ -53,13 +55,19 @@ public:
 
     static int *GetIntPtr(const std::string &name);
 
+    static void addFloat(const std::string &name);
+
     static float GetFloat(const std::string &name);
 
     static float *GetFloatPtr(const std::string &name);
 
+    static void addBool(const std::string &name);
+
     static bool GetBool(const std::string &name);
 
     static bool *GetBoolPtr(const std::string &name);
+
+    static void addInt(const std::string &name);
 
 
     static void Instantiate() {

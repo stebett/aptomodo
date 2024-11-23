@@ -54,7 +54,9 @@ int Config::storedBoolsIndex{0};
 std::array<int, preStoredValues> Config::storedInts{};
 std::array<float, preStoredValues> Config::storedFloats{};
 std::array<bool, preStoredValues> Config::storedBools{};
-std::unordered_map<std::string, int> Config::indexDict{};
+std::unordered_map<std::string, int> Config::indexDictInts{};
+std::unordered_map<std::string, int> Config::indexDictFloats{};
+std::unordered_map<std::string, int> Config::indexDictBools{};
 toml::table Config::config{};
 
 void Config::SaveAttributeParameters() {
@@ -70,57 +72,54 @@ void Config::LoadAttributeParameters() {
     std::cout << "INFO: CONFIG: File loaded successfully" << "\n";
 }
 
-int Config::GetInt(const std::string &name) {
-    if (indexDict.contains(name)) {
-        return storedInts[indexDict[name]];
-    }
-    return config[name].value_or(0);
+
+void Config::addBool(const std::string &name) {
+    storedBools[storedBoolsIndex] =  config[name].value_or(false);
+    indexDictBools[name] = storedBoolsIndex;
+    storedBoolsIndex++;
+    assert(storedBoolsIndex < preStoredValues && "[CONFIG] Not enough pre-stored values");
 }
 
-int *Config::GetIntPtr(const std::string &name) {
-    if (indexDict.contains(name)) {
-        return &storedInts[indexDict[name]];
-    }
-    storedInts[storedIntsIndex] = GetInt(name);
-    indexDict[name] = storedIntsIndex;
-    storedIntsIndex++;
-    assert(storedIntsIndex < preStoredValues && "[CONFIG] Not enough pre-stored values");
-    return &storedInts[storedIntsIndex - 1];
-}
-
-float Config::GetFloat(const std::string &name) {
-    if (indexDict.contains(name)) {
-        return storedFloats[indexDict[name]];
-    }
-    return config[name].value_or(0.0f);
-}
-
-float *Config::GetFloatPtr(const std::string &name) {
-    if (indexDict.contains(name)) {
-        return &storedFloats[indexDict[name]];
-    }
-    storedFloats[storedFloatsIndex] = GetFloat(name);
-    indexDict[name] = storedFloatsIndex;
-    storedFloatsIndex++;
-    assert(storedFloatsIndex < preStoredValues && "[CONFIG] Not enough pre-stored values");
-    return &storedFloats[storedFloatsIndex - 1];
+bool Config::GetBool(const std::string &name) {
+    if (!indexDictBools.contains(name)) addBool(name);
+    return storedBools[indexDictBools[name]];
 }
 
 bool *Config::GetBoolPtr(const std::string &name) {
-    if (indexDict.contains(name)) {
-        return &storedBools[indexDict[name]];
-    }
-    storedBools[storedBoolsIndex] = GetBool(name);
-    indexDict[name] = storedBoolsIndex;
-    storedBoolsIndex++;
-    assert(storedBoolsIndex < preStoredValues && "[CONFIG] Not enough pre-stored values");
-    return &storedBools[storedBoolsIndex - 1];
+    if (!indexDictBools.contains(name)) addBool(name);
+    return &storedBools[indexDictBools[name]];
 }
 
+void Config::addInt(const std::string &name) {
+    storedInts[storedIntsIndex] = config[name].value_or(0);
+    indexDictInts[name] = storedIntsIndex;
+    storedIntsIndex++;
+    assert(storedIntsIndex < preStoredValues && "[CONFIG] Not enough pre-stored values");
+}
 
-bool Config::GetBool(const std::string &name) {
-    if (indexDict.contains(name)) {
-        return storedBools[indexDict[name]];
-    }
-    return config[name].value_or(false);
+int Config::GetInt(const std::string &name) {
+    if (!indexDictInts.contains(name)) addInt(name);
+    return storedInts[indexDictInts[name]];
+}
+
+int *Config::GetIntPtr(const std::string &name) {
+    if (!indexDictInts.contains(name)) addInt(name);
+    return &storedInts[indexDictInts[name]];
+}
+
+void Config::addFloat(const std::string &name) {
+    storedFloats[storedFloatsIndex] =  config[name].value_or(0.0f);
+    indexDictFloats[name] = storedFloatsIndex;
+    storedFloatsIndex++;
+    assert(storedFloatsIndex < preStoredValues && "[CONFIG] Not enough pre-stored values");
+}
+
+float Config::GetFloat(const std::string &name) {
+    if (!indexDictFloats.contains(name)) addFloat(name);
+    return storedFloats[indexDictFloats[name]];
+}
+
+float *Config::GetFloatPtr(const std::string &name) {
+    if (!indexDictFloats.contains(name)) addFloat(name);
+    return &storedFloats[indexDictFloats[name]];
 }
