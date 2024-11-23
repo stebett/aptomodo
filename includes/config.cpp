@@ -47,3 +47,15 @@ namespace config {
             10.0f, // critMultiplier
     };
 };
+
+int Config::GetInt(const std::string &name) {
+    return config[name].value_or(0);
+}
+
+float Config::GetFloat(const std::string &name) {
+    return config[name].value_or(0.0f);
+}
+
+bool Config::GetBool(const std::string &name) {
+    return config[name].value_or(false);
+}

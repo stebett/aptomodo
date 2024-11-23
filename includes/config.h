@@ -26,3 +26,29 @@ namespace config {
     extern float enemyHearRangeChasing;
     extern float enemyPatrolDistance;
 }
+
+
+constexpr char const * configPath{"config.toml"};
+
+class Config {
+    static toml::table config;
+
+public:
+    toml::table writeTable();
+
+
+    static void SaveAttributeParameters();
+    static void LoadAttributeParameters();
+
+    static int GetInt(const std::string& name);
+    static float GetFloat(const std::string& name);
+    static bool GetBool(const std::string& name);
+
+
+    static void Instantiate() {
+        LoadAttributeParameters();
+    }
+
+
+    //    ~Parameters destroy unloads all
+};
