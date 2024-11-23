@@ -39,7 +39,8 @@ std::size_t std::hash<Node>::operator()(const Node &k) const {
 }
 
 bool CompareNodes::operator()(const std::pair<Node, float> &a, const std::pair<Node, float> &b) const {
-    return a.second > b.second;    }
+    return a.second > b.second;
+}
 
 
 // GRID
@@ -115,7 +116,8 @@ void Search::step() {
             if (neighbor == start | neighbor == came_from[current]) continue;
             float terrainPenalty = 3.0f * static_cast<float>(
                                        LevelManager::grid.safe(neighbor.x, neighbor.y) == IntValue::NEAR_OBSTACLE);
-            terrainPenalty += static_cast<float>(LevelManager::grid.safe(neighbor.x, neighbor.y) == IntValue::NPC) * 1.5f;
+            terrainPenalty += static_cast<float>(LevelManager::grid.safe(neighbor.x, neighbor.y) == IntValue::NPC) *
+                    1.5f;
             open.emplace(neighbor, manhattan(neighbor, end) + terrainPenalty);
             came_from[neighbor] = current;
             closed[neighbor] = closed[current] + manhattan(neighbor, current) + terrainPenalty;
