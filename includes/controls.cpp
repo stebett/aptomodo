@@ -97,7 +97,7 @@ void selectEnemy(entt::registry &registry, Vector2 worldPosition) {
     for (auto [enemy, radius, position]: enemyView.each()) {
         if (CheckCollisionPointCircle(worldPosition, position, radius)) {
             registry.emplace<Selected>(enemy);
-            config::show_enemy_window = true;
+            *Config::GetBoolPtr("show_enemy_window") = true;
         }
     }
 }
@@ -154,9 +154,9 @@ void parseInput(entt::registry &registry, entt::entity &player, Position &positi
         selectEnemy(registry, GetScreenToWorld2D(GetMousePosition(), camera));
     }
 
-    if (IsKeyPressed(KEY_O)) config::show_attr_window = !config::show_attr_window;
+    if (IsKeyPressed(KEY_O)) *Config::GetBoolPtr("show_attr_window") = !Config::GetBool("show_attr_window");
     if (IsKeyPressed(KEY_M)) GetMasterVolume() == 0 ? SetMasterVolume(100) : SetMasterVolume(0);
-    if (IsKeyPressed(KEY_I)) config::show_inv_window = !config::show_inv_window;
+    if (IsKeyPressed(KEY_I)) *Config::GetBoolPtr("show_inv_window") = !Config::GetBool("show_inv_window");
 
 
     if (IsKeyPressed(KEY_F)) {
@@ -165,7 +165,7 @@ void parseInput(entt::registry &registry, entt::entity &player, Position &positi
     camera.zoom += GetMouseWheelMove() / 10;
 
 
-    if (config::free_camera) {
+    if (Config::GetBool("free_camera")) {
         camera.target.y -= 4.0f * static_cast<float>(IsKeyPressed(KEY_W) || IsKeyDown(KEY_W));
         camera.target.y += 4.0f * static_cast<float>(IsKeyPressed(KEY_S) || IsKeyDown(KEY_S));
         camera.target.x -= 4.0f * static_cast<float>(IsKeyPressed(KEY_A) || IsKeyDown(KEY_A));

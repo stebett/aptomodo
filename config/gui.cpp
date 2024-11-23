@@ -173,14 +173,14 @@ void imguiInventory(entt::registry &registry) {
 
 void imguiConfig() {
     ImGui::Begin("Config");
-    ImGui::Checkbox("show_astar_path", &config::show_astar_path);
-    ImGui::Checkbox("show_enemy_fov", &config::show_enemy_fov);
-    ImGui::Checkbox("show_bounding_box", &config::show_bounding_box);
-    ImGui::Checkbox("show_enemy_texture", &config::show_enemy_texture);
-    ImGui::Checkbox("show_attacks", &config::show_attacks);
-    ImGui::SliderInt("FPS", &config::fps, 0, 120);
-    ImGui::SliderInt("enemy_walking_animation_fps", &config::enemy_walking_animation_fps, 1, 120);
-    ImGui::SliderInt("strategy", &config::strategy, 0, 2);
+    ImGui::Checkbox("show_astar_path", &Config::GetBool("show_astar_path);
+    ImGui::Checkbox("show_enemy_fov", &Config::GetBool("show_enemy_fov);
+    ImGui::Checkbox("show_bounding_box", &Config::GetBool("show_bounding_box);
+    ImGui::Checkbox("show_enemy_texture", &Config::GetBool("show_enemy_texture);
+    ImGui::Checkbox("show_attacks", &Config::GetBool("show_attacks);
+    ImGui::SliderInt("FPS", &Config::GetInt("fps, 0, 120);
+    ImGui::SliderInt("enemy_walking_animation_fps", &Config::GetInt("enemy_walking_animation_fps, 1, 120);
+    ImGui::SliderInt("strategy", &Config::GetInt("strategy, 0, 2);
     ImGui::End();
 }
 

@@ -132,7 +132,7 @@ namespace RenderingManager {
         for (auto [entity, radius, position, lookAngle, color, path, target, chasing]: selectedView.each()) {
             DrawCircleV(position, radius + 2, PURPLE);
 
-            if (config::show_enemy_fov) {
+            if (Config::GetBool("show_enemy_fov")) {
                 const auto isChasing = chasing.isChasing();
                 const auto hearRange = isChasing ? config::enemyHearRangeChasing : config::enemyHearRange;
                 const auto sightRange = isChasing ? config::enemySightRangeChasing : config::enemySightRange;
@@ -142,7 +142,7 @@ namespace RenderingManager {
                 visualizeFOV(LevelManager::grid, position.x, position.y, sightRange, lookAngle - 91.0f, lookAngle + 91.0f);
             }
 
-            if (config::show_astar_path) {
+            if (Config::GetBool("show_astar_path")) {
                 // Draw lines connecting points
                 auto points = path.path;
                 for (size_t i = 0; i < path.indexMax - 1; ++i) {
@@ -163,10 +163,10 @@ namespace RenderingManager {
     void Draw(entt::registry& registry, const Camera2D &camera, const unsigned int frame) {
         drawItems(registry);
         drawEnemyExtra(registry);
-        if (config::show_bounding_box) drawLivingBB(registry);
-        if (config::show_enemy_texture) drawEnemyTexture(registry, frame / config::enemy_walking_animation_fps);
-        if (config::show_attacks) drawAttacks(registry);
-        if (config::draw_level_collisions) drawLevelCollisions();
+        if (Config::GetBool("show_bounding_box")) drawLivingBB(registry);
+        if (Config::GetBool("show_enemy_texture")) drawEnemyTexture(registry, frame / Config::GetInt("enemy_walking_animation_fps"));
+        if (Config::GetBool("show_attacks")) drawAttacks(registry);
+        if (Config::GetBool("draw_level_collisions")) drawLevelCollisions();
 
         drawProjectiles(registry);
         drawTooltips(registry);

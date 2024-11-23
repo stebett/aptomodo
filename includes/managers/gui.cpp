@@ -43,13 +43,13 @@ void imguiCursor(const Camera2D &camera) {
 
 void imguiEnemyAttr(entt::registry &registry) {
     ImGui::Begin("Enemy attributes");
-    ImGui::SliderInt("strategy", &config::strategy, 0, 2);
-    ImGui::Checkbox("show_astar_path", &config::show_astar_path);
-    ImGui::Checkbox("show_enemy_fov", &config::show_enemy_fov);
-    ImGui::Checkbox("show_enemy_texture", &config::show_enemy_texture);
+    ImGui::SliderInt("strategy", Config::GetIntPtr("strategy"), 0, 2);
+    ImGui::Checkbox("show_astar_path", Config::GetBoolPtr("show_astar_path"));
+    ImGui::Checkbox("show_enemy_fov", Config::GetBoolPtr("show_enemy_fov"));
+    ImGui::Checkbox("show_enemy_texture", Config::GetBoolPtr("show_enemy_texture"));
     ImGui::SeparatorText("Selected Enemy attributes");
 
-    ImGui::SliderInt("enemy_walking_animation_fps", &config::enemy_walking_animation_fps, 1, 120);
+    ImGui::SliderInt("enemy_walking_animation_fps", Config::GetIntPtr("enemy_walking_animation_fps"), 1, 120);
     auto view = registry.view<Enemy, Selected, Path, ID, ColorBB, Spread, Speed, Health, Radius, PhysicalResistance,
         MagicalResistance, Stamina, AttackTimer, AttackSpeed, Damage, AttackRange, Pushback, Position, LookAngle,
         Strategy::Strategy>();
@@ -60,10 +60,10 @@ void imguiEnemyAttr(entt::registry &registry) {
         ImGui::SliderFloat("lookAngle", &lookAngle.value, -360, 360, "%.3f", 0);
         ImGui::SliderFloat("position x", &position.x, 0, mapWidth, "%.3f", 0);
         ImGui::SliderFloat("position y ", &position.y, 0, mapHeight, "%.3f", 0);
-        ImGui::SliderFloat("enemySightRange", &config::enemySightRange, 0, 800, "%.3f", 0);
-        ImGui::SliderFloat("enemySightRangeChasing", &config::enemySightRangeChasing, 0, 800, "%.3f", 0);
-        ImGui::SliderFloat("enemyHearRange", &config::enemyHearRange, 0, 800, "%.3f", 0);
-        ImGui::SliderFloat("enemyHearRangeChasing", &config::enemyHearRangeChasing, 0, 800, "%.3f", 0);
+        ImGui::SliderFloat("enemySightRange", Config::GetFloatPtr("enemySightRange"), 0, 800, "%.3f", 0);
+        ImGui::SliderFloat("enemySightRangeChasing", Config::GetFloatPtr("enemySightRangeChasing"), 0, 800, "%.3f", 0);
+        ImGui::SliderFloat("enemyHearRange", Config::GetFloatPtr("enemyHearRange"), 0, 800, "%.3f", 0);
+        ImGui::SliderFloat("enemyHearRangeChasing", Config::GetFloatPtr("enemyHearRangeChasing"), 0, 800, "%.3f", 0);
 
         ImGui::SeparatorText("Behavior Tree");
         std::vector<std::pair<const char *, Status> > result;
@@ -227,11 +227,11 @@ void imguiInventory(entt::registry &registry) {
 
 void imguiConfig() {
     ImGui::Begin("Config");
-    ImGui::Checkbox("show_bounding_box", &config::show_bounding_box);
-    ImGui::Checkbox("show_attacks", &config::show_attacks);
-    ImGui::Checkbox("free_camera", &config::free_camera);
-    ImGui::Checkbox("draw_level_collisions", &config::draw_level_collisions);
-    ImGui::SliderInt("FPS", &config::fps, 0, 120);
+    ImGui::Checkbox("show_bounding_box", Config::GetBoolPtr("show_bounding_box"));
+    ImGui::Checkbox("show_attacks", Config::GetBoolPtr("show_attacks"));
+    ImGui::Checkbox("free_camera", Config::GetBoolPtr("free_camera"));
+    ImGui::Checkbox("draw_level_collisions", Config::GetBoolPtr("draw_level_collisions"));
+    ImGui::SliderInt("FPS", Config::GetIntPtr("fps"), 0, 120);
     ImGui::End();
 }
 
@@ -279,8 +279,8 @@ void imguiWindowMain(entt::registry &registry, ImGuiIO io, const Camera2D &camer
         imguiCursor(camera);
 
 
-    ImGui::Checkbox("Enemy Window", &config::show_enemy_window);
-    if (config::show_enemy_window)
+    ImGui::Checkbox("Enemy Window", Config::GetBoolPtr("show_enemy_window"));
+    if (Config::GetBool("show_enemy_window"))
         // todo auto open when enemy selected
         imguiEnemyAttr(registry);
 
@@ -288,12 +288,12 @@ void imguiWindowMain(entt::registry &registry, ImGuiIO io, const Camera2D &camer
     if (show_config_window)
         imguiConfig();
 
-    ImGui::Checkbox("Attributes Window", &config::show_attr_window);
-    if (config::show_attr_window)
+    ImGui::Checkbox("Attributes Window", Config::GetBoolPtr("show_attr_window"));
+    if (Config::GetBool("show_attr_window"))
         imguiAttributes(registry);
 
-    ImGui::Checkbox("Inventory Window", &config::show_inv_window);
-    if (config::show_inv_window)
+    ImGui::Checkbox("Inventory Window", Config::GetBoolPtr("show_inv_window"));
+    if (Config::GetBool("show_inv_window"))
         imguiInventory(registry);
 
     ImGui::Checkbox("Instructions", &show_instructions_window);

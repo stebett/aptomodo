@@ -26,8 +26,8 @@ Status PlayerInView::update(entt::registry &registry, entt::entity self, entt::e
     auto &chasing = registry.get<Chasing>(self);
     const bool isChasing = chasing.isChasing();
 
-    const auto hearRange = isChasing ? config::enemyHearRangeChasing : config::enemyHearRange;
-    const auto sightRange = isChasing ? config::enemySightRangeChasing : config::enemySightRange;
+    const auto hearRange = isChasing ? Config::GetFloat("enemyHearRangeChasing") : Config::GetFloat("enemyHearRange");
+    const auto sightRange = isChasing ? Config::GetFloat("enemySightRangeChasing"): Config::GetFloat("enemySightRange");
     assert(hearRange < sightRange && "Sight range must be bigger then hear range, or you have to change this logic");
     if (const bool inHearRange = CheckCollisionCircles(playerPosition, playerRadius, position, hearRange)) {
         chasing.timer.Reset();
@@ -84,8 +84,8 @@ bool emplaceRandomTarget(entt::registry &registry, entt::entity self) {
 
     for (int i = 0; i < num_points; ++i) {
         const auto theta = static_cast<float>(2.0 * M_PI * i / num_points);
-        const float x = round(position.x + config::enemyPatrolDistance * cos(theta));
-        const float y = round(position.y + config::enemyPatrolDistance * sin(theta));
+        const float x = round(position.x + Config::GetFloat("enemyPatrolDistance") * cos(theta));
+        const float y = round(position.y + Config::GetFloat("enemyPatrolDistance") * sin(theta));
         if (LevelManager::grid.inWorldBounds(x, y) &&
             LevelManager::grid.fromWorld(x, y) == IntValue::EMPTY) {
             uniquePoints.insert(Target{x, y});

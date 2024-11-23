@@ -6,7 +6,6 @@
 #include "includes/controls.h"
 #include "includes/factories.h"
 #include "includes/config.h"
-#include <format>
 #include <ai/loop.h>
 
 #include "includes/managers/audioManager.h"
@@ -49,7 +48,7 @@ LevelOutcome PlayLevel() {
         LevelManager::Update(registry);
         RenderingManager::UpdateCamera(playerCamera, position);
         BeginDrawing();
-        if (!config::free_camera) {
+        if (!Config::GetBool("free_camera")) {
             BeginMode2D(playerCamera);
             freeCamera = playerCamera;
         }
@@ -62,7 +61,7 @@ LevelOutcome PlayLevel() {
         if (!paused) {
             AI::Update(registry, player);
             // updateEnemy(registry, player); // TODO This should be before drawing
-            if (!config::free_camera)
+            if (!Config::GetBool("free_camera"))
                 updatePlayer(registry, player, position, playerCamera);
             else
                 updatePlayer(registry, player, position, freeCamera);
@@ -105,6 +104,7 @@ void GameLoop() {
 int main() {
     InitWindow(screenWidth, screenHeight, "Apto Modo");
     ToggleFullscreen();
+    Config::Instantiate();
     AudioManager::Instantiate();
     AnimationManager::Instantiate();
     LevelManager::Instantiate();

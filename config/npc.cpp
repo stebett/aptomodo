@@ -52,7 +52,7 @@ bool playerInView(const Vector2 &position, const Vector2 &playerPosition, const 
     bool inViewRange = CheckCollisionCircles(playerPosition, playerRadius, position, sightRange);
     bool inHearRange = CheckCollisionCircles(playerPosition, playerRadius, position, hearRange);
     bool inView = (facePlayer && inViewRange) || inHearRange;
-    if (config::show_enemy_fov) {
+    if (Config::GetBool("show_enemy_fov) {
         DrawLineV(position, Vector2Add(position, Vector2Scale(lookVector, 20.0f)), PURPLE);
         DrawCircleSector(position, sightRange, lookingAngleDeg - 91.0f, lookingAngleDeg + 91.0f, 2,
                          ColorAlpha(WHITE, 0.1));
@@ -147,7 +147,7 @@ void updatePath(entt::registry &registry, entt::entity &enemy, Position &positio
     while (!search.completed) { search.step(); }
 
     if (search.path.empty()) { return; }
-    if (config::show_astar_path) { search.draw(); }
+    if (Config::GetBool("show_astar_path) { search.draw(); }
     search.exportPath(path);
 }
 
@@ -156,8 +156,8 @@ Position getRandomPos(Position &position) {
     Vector2 futurePos = Vector2Add(position, {100, 100});
     Vector2 upperBoundary = {std::max(0.0f, floor(position.x / tileSize)),
                              std::max(0.0f, floor(position.y / tileSize))};
-    Vector2 lowerBoundary = {std::min(float(LevelManager::grid.rows()), ceil(futurePos.x / tileSize)),
-                             std::min(float(LevelManager::grid.cols()), ceil(futurePos.y / tileSize))};
+    Vector2 lowerBoundary = {std::min(float(IntGrid::rows()), ceil(futurePos.x / tileSize)),
+                             std::min(float(IntGrid::cols()), ceil(futurePos.y / tileSize))};
 
     Vector2 target = position;
     for (int x = upperBoundary.x; x < lowerBoundary.x; x ++) {
@@ -184,7 +184,7 @@ Vector2 getPathNext(entt::registry &registry, entt::entity &enemy) {
 //    if (path.isFinished() || Vector2Equals(nextPath, Vector2Zero())) { return position; }
     if (path.isValid()) { return position; }
 
-    if (config::show_astar_path) {
+    if (Config::GetBool("show_astar_path) {
         DrawCircleV(nextPath, 2, DARKGREEN);
         DrawLineV(position, nextPath, GREEN);
     }
@@ -297,7 +297,7 @@ void updateEnemy(entt::registry &registry, entt::entity &player) {
         registry.emplace_or_replace<Chasing>(enemy);
         speed.value = speed.max;
 
-        switch (config::strategy) {
+        switch (Config::GetInt("strategy) {
             case 0:
                 Strategy::melee(registry, player, enemy, position, playerPosition, playerRadius, lookAngle, speed, id,
                                 radius);
