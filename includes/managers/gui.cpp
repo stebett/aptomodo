@@ -14,8 +14,7 @@
 #include "config.h"
 #include "items.h"
 
-ImGuiIO *Gui::m_io;
-entt::registry *Gui::m_registry;
+ImGuiIO *GuiManager::m_io;
 
 void imguiInstructions() {
     ImGui::Begin("Instructions");
@@ -314,8 +313,7 @@ void imguiWindowMain(entt::registry &registry, ImGuiIO io, const Camera2D &camer
 }
 
 
-void Gui::Instantiate(entt::registry &registry) {
-    m_registry = &registry;
+void GuiManager::Instantiate() {
     ImGui::CreateContext();
     m_io = &ImGui::GetIO();
     m_io->ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard; // Enable Keyboard Controls
@@ -328,24 +326,24 @@ void Gui::Instantiate(entt::registry &registry) {
     ImGui_ImplRaylib_BuildFontAtlas();
 }
 
-void Gui::Update(const Camera2D &camera) {
+void GuiManager::Update(entt::registry& registry, const Camera2D &camera) {
     ImGui_ImplRaylib_ProcessEvents();
 
     // Start the Dear ImGui frame
     ImGui_ImplRaylib_NewFrame();
     ImGui::NewFrame();
 
-    imguiWindowMain(*m_registry, *m_io, camera);
+    imguiWindowMain(registry, *m_io, camera);
 
     // Rendering
     ImGui::Render();
 }
 
-void Gui::Draw() {
+void GuiManager::Draw() {
     ImGui_ImplRaylib_RenderDrawData(ImGui::GetDrawData());
 }
 
-Gui::~Gui() {
+GuiManager::~GuiManager() {
     ImGui_ImplRaylib_Shutdown();
     ImGui::DestroyContext();
 }

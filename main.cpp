@@ -28,7 +28,7 @@ enum class LevelOutcome {
 LevelOutcome PlayLevel() {
     auto outcome = LevelOutcome::NONE;
     entt::registry registry;
-    Gui::Instantiate(registry);
+    GuiManager::Instantiate();
 
     auto playerCamera = spawnCamera();
     auto freeCamera = spawnCamera();
@@ -45,7 +45,7 @@ LevelOutcome PlayLevel() {
     bool windowsShouldClose = false;
     bool paused = false;
     while (!windowsShouldClose) {
-        Gui::Update(playerCamera);
+        GuiManager::Update(registry, playerCamera);
         LevelManager::Update(registry);
         RenderingManager::UpdateCamera(playerCamera, position);
         BeginDrawing();
@@ -70,7 +70,7 @@ LevelOutcome PlayLevel() {
         }
         RenderingManager::Draw(registry, playerCamera, framerateManager.framesCounter); // This has to stay after updatePlayer
         EndMode2D();
-        Gui::Draw();
+        GuiManager::Draw();
         DrawFPS(10, 10);
 
         DrawText(std::format("Health: {}", health.value).c_str(), 10, screenHeight - 40, 30, WHITE);

@@ -8,21 +8,19 @@
 
 #include <entt/entity/registry.hpp>
 #include <imgui.h>
-
 #include "raylib.h"
 
-class Gui {
+class GuiManager {
     static ImGuiIO *m_io;
-    static entt::registry *m_registry;
 
 public:
-    static void Instantiate(entt::registry &registry);
+    static void Instantiate();
 
-    static void Update(const Camera2D &camera);
+    static void Update(entt::registry& registry, const Camera2D &camera);
 
     static void Draw();
 
-    ~Gui();
+    ~GuiManager();
 };
 
 ImGuiIO InitGui();
