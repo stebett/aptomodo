@@ -121,24 +121,6 @@ struct Health {
     Health(float value, const float max);;
 };
 
-struct PhysicalResistance {
-    float value;
-
-    operator float() const noexcept;
-};
-
-struct MagicalResistance {
-    float value;
-
-    operator float() const noexcept;
-};
-
-struct Stamina {
-    float value;
-
-    operator float() const noexcept;
-};
-
 struct AttackTimer {
     Timer timer;
 };

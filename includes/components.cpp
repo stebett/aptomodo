@@ -33,11 +33,6 @@ void Health::operator-=(const float x) noexcept { value -= x; }
 Health::Health(float value, const float max): value(value), max(max) {
 }
 
-PhysicalResistance::operator float() const noexcept { return value; }
-
-MagicalResistance::operator float() const noexcept { return value; }
-
-Stamina::operator float() const noexcept { return value; }
 
 AttackSpeed::operator float() const noexcept { return value; }
 

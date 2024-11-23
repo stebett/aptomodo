@@ -50,11 +50,12 @@ void imguiEnemyAttr(entt::registry &registry) {
     ImGui::SeparatorText("Selected Enemy attributes");
 
     ImGui::SliderInt("enemy_walking_animation_fps", Config::GetIntPtr("enemy_walking_animation_fps"), 1, 120);
-    auto view = registry.view<Enemy, Selected, Path, ID, ColorBB, Spread, Speed, Health, Radius, PhysicalResistance,
-        MagicalResistance, Stamina, AttackTimer, AttackSpeed, Damage, AttackRange, Pushback, Position, LookAngle,
+    auto view = registry.view<Enemy, Selected, Path, ID, ColorBB, Spread, Speed, Health, Radius, AttackTimer,
+        AttackSpeed, Damage, AttackRange, Pushback, Position, LookAngle,
         Strategy::Strategy>();
-    for (auto [entity, path, id, colorbb, spread, speed, health, radius, physicalresistance, magicalresistance, stamina,
-             timelastattack, attackspeed, damage, attackrange, pushback, position, lookAngle, strategy]: view.each()) {
+    for (auto [entity, path, id, colorbb, spread, speed, health, radius,
+             timelastattack, attackspeed, damage,
+             attackrange, pushback, position, lookAngle, strategy]: view.each()) {
         ImGui::SliderFloat("health", &health.value, 0, 200, "%.3f", 0);
         ImGui::SliderFloat("radius", &radius.value, 0, 50, "%.3f", 0);
         ImGui::SliderFloat("lookAngle", &lookAngle.value, -360, 360, "%.3f", 0);
@@ -101,11 +102,10 @@ void imguiEnemyAttr(entt::registry &registry) {
 void imguiPlayerAttr(entt::registry &registry) {
     ImGui::Begin("Player values");
 
-    auto view = registry.view<Player, ColorBB, Spread, Speed, Health, Radius, PhysicalResistance, MagicalResistance,
-        Stamina, AttackTimer, AttackSpeed, Damage, AttackRange, Pushback, Position>();
-    for (auto [entity, colorbb, spread, speed, health, radius, physicalresistance, magicalresistance, stamina,
-             timelastattack, attackspeed, damage, attackrange, pushback, position
-         ]: view.each()) {
+    auto view = registry.view<Player, ColorBB, Spread, Speed, Health, Radius, AttackTimer, AttackSpeed, Damage,
+        AttackRange, Pushback, Position>();
+    for (auto [entity, colorbb, spread, speed, health, radius, timelastattack,
+             attackspeed, damage, attackrange,pushback, position]: view.each()) {
         ImGui::SliderFloat("health", &health.value, 0, 200, "%.3f", 0);
         ImGui::SliderFloat("radius", &radius.value, 0, 50, "%.3f", 0);
         ImGui::SliderFloat("position x", &position.x, 0, mapWidth, "%.3f", 0);
@@ -240,14 +240,14 @@ void imguiConfig() {
     ImGui::Begin("Config");
     ImGui::SeparatorText("Bools");
     int n{0};
-    for (const auto& [name, index]: Config::indexDictBools) {
+    for (const auto &[name, index]: Config::indexDictBools) {
         ImGui::PushID(n);
         ImGui::Checkbox(name.c_str(), Config::GetBoolPtr(name));
         ImGui::PopID();
         n++;
     }
     ImGui::SeparatorText("Ints");
-    for (const auto& [name, index]: Config::indexDictInts) {
+    for (const auto &[name, index]: Config::indexDictInts) {
         ImGui::PushID(n);
         ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x * 0.25f);
         ImGui::InputInt(name.c_str(), Config::GetIntPtr(name));
@@ -255,7 +255,7 @@ void imguiConfig() {
         n++;
     }
     ImGui::SeparatorText("Floats");
-    for (const auto& [name, index]: Config::indexDictFloats) {
+    for (const auto &[name, index]: Config::indexDictFloats) {
         ImGui::PushID(n);
         ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x * 0.25f);
         ImGui::InputFloat(name.c_str(), Config::GetFloatPtr(name), 0, 0, "%.1f");

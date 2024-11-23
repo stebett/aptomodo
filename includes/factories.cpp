@@ -17,9 +17,6 @@ entt::entity spawnLiving(entt::registry &registry) {
     registry.emplace<Living>(e);
     registry.emplace<Radius>(e, 10.0f);
     registry.emplace<Speed>(e, 3.0f);
-    registry.emplace<PhysicalResistance>(e, 0.0f);
-    registry.emplace<MagicalResistance>(e, 0.0f);
-    registry.emplace<Stamina>(e, 0.0f);
     registry.emplace<AttackTimer>(e);
     registry.emplace<AttackSpeed>(e, 0.3f);
     registry.emplace<Damage>(e, 5.0f);
