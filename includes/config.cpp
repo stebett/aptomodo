@@ -65,6 +65,19 @@ void Config::SaveAttributeParameters() {
 void Config::LoadAttributeParameters() {
     try {
         config = toml::parse_file(configPath);
+        for (const auto& [key, value] : config) {
+            std::cout << "Key: " << key.data() << "\n";
+            if (value.is_integer()) {
+                std::cout << "Type: Integer\n";
+                addInt(key.data());
+            } else if (value.is_floating_point()) {
+                std::cout << "Type: Float\n";
+                addFloat(key.data());
+            } else if (value.is_boolean()) {
+                std::cout << "Type: Boolean\n";
+                addBool(key.data());
+            }
+        }
     } catch (const toml::parse_error &err) {
         std::cerr << "WARNING: CONFIG: Parsing failed:\n" << err << "\n";
         return;
@@ -81,12 +94,10 @@ void Config::addBool(const std::string &name) {
 }
 
 bool Config::GetBool(const std::string &name) {
-    if (!indexDictBools.contains(name)) addBool(name);
     return storedBools[indexDictBools[name]];
 }
 
 bool *Config::GetBoolPtr(const std::string &name) {
-    if (!indexDictBools.contains(name)) addBool(name);
     return &storedBools[indexDictBools[name]];
 }
 
@@ -98,28 +109,24 @@ void Config::addInt(const std::string &name) {
 }
 
 int Config::GetInt(const std::string &name) {
-    if (!indexDictInts.contains(name)) addInt(name);
     return storedInts[indexDictInts[name]];
 }
 
 int *Config::GetIntPtr(const std::string &name) {
-    if (!indexDictInts.contains(name)) addInt(name);
     return &storedInts[indexDictInts[name]];
 }
 
 void Config::addFloat(const std::string &name) {
-    storedFloats[storedFloatsIndex] =  config[name].value_or(0.0f);
+    storedFloats[storedFloatsIndex] = config[name].value<float>().value();
     indexDictFloats[name] = storedFloatsIndex;
     storedFloatsIndex++;
     assert(storedFloatsIndex < preStoredValues && "[CONFIG] Not enough pre-stored values");
 }
 
 float Config::GetFloat(const std::string &name) {
-    if (!indexDictFloats.contains(name)) addFloat(name);
     return storedFloats[indexDictFloats[name]];
 }
 
 float *Config::GetFloatPtr(const std::string &name) {
-    if (!indexDictFloats.contains(name)) addFloat(name);
     return &storedFloats[indexDictFloats[name]];
 }
