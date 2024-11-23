@@ -25,17 +25,17 @@ struct FramerateManager {
         currentTime = GetTime();
         updateDrawTime = currentTime - previousTime;
 
-        if (config::fps > 0)          // We want a fixed frame rate
+        if (Config::GetInt("fps") > 0)          // We want a fixed frame rate
         {
-            waitTime = (1.0f/(float)config::fps) - updateDrawTime;
+            waitTime = (1.0f/static_cast<float>(Config::GetInt("fps"))) - updateDrawTime;
             if (waitTime > 0.0)
             {
-                WaitTime((float)waitTime);
+                WaitTime(static_cast<float>(waitTime));
                 currentTime = GetTime();
-                deltaTime = (float)(currentTime - previousTime);
+                deltaTime = static_cast<float>(currentTime - previousTime);
             }
         }
-        else deltaTime = (float)updateDrawTime;    // Framerate could be variable
+        else deltaTime = static_cast<float>(updateDrawTime);    // Framerate could be variable
 
         previousTime = currentTime;
     }
