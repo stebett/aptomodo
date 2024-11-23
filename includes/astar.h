@@ -5,19 +5,11 @@
 #ifndef ASTAR_H
 #define ASTAR_H
 
-#include <unordered_map>
-#include <queue>
-#include <set>
-#include <raylib.h>
-#include <boost/container_hash/hash.hpp>
-#include "constants.h"
 #include "components.h"
-
-
 
 class Node {
 public:
-// position in the grid (NOT IN THE WORLD)
+    // position in the grid (NOT IN THE WORLD)
     int x;
     int y;
 
@@ -30,28 +22,24 @@ public:
     Node();
 
     Node(int x, int y);
-
 };
 
 Node getTile(const Vector2 &position);
 
 template<>
 struct std::hash<Node> {
-    std::size_t operator()(const Node &k) const {
-        std::size_t seed = 0;
-        boost::hash_combine(seed, k.x);
-        boost::hash_combine(seed, k.y);
-        return seed;
-    }
+    std::size_t operator()(const Node &k) const;
 };
 
 
+using EvaluatedNode = std::pair<Node, float>;
 
-using EvaluatedNode= std::pair<Node, float> ;
-static auto f = [](EvaluatedNode node1, EvaluatedNode node2) {return node1.second > node2.second;};
+struct CompareNodes {
+    bool operator()(const std::pair<Node, float>& a, const std::pair<Node, float>& b) const;
+};
+
 class Search {
-
-    std::priority_queue<EvaluatedNode, std::vector<EvaluatedNode>, decltype(f)> open;
+    std::priority_queue<EvaluatedNode, std::vector<EvaluatedNode>, CompareNodes> open;
     unsigned int frontier_idx = 0;
     std::unordered_map<Node, float> closed{};
     std::unordered_map<Node, Node> came_from;
@@ -66,7 +54,9 @@ public:
     std::vector<Node> path;
 
     void init(Node nodeStart, Node nodeEnd);
+
     void reset();
+
     void step();
 
     void getPath();
@@ -82,7 +72,6 @@ public:
     void drawPath();
 
     void draw();
-
 
     Path exportPath();
 

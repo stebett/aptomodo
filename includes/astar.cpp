@@ -31,6 +31,16 @@ Node getTile(const Vector2 &position) {
     return {static_cast<int>(floor(position.x / tileSize)), static_cast<int>(floor(position.y / tileSize))};
 }
 
+std::size_t std::hash<Node>::operator()(const Node &k) const {
+    std::size_t seed = 0;
+    boost::hash_combine(seed, k.x);
+    boost::hash_combine(seed, k.y);
+    return seed;
+}
+
+bool CompareNodes::operator()(const std::pair<Node, float> &a, const std::pair<Node, float> &b) const {
+    return a.second > b.second;    }
+
 
 // GRID
 std::vector<Node> neighbors(const Node node) {
