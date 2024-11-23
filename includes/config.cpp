@@ -3,7 +3,6 @@
 //
 
 #include "config.h"
-#include "attributes.h"
 
 namespace config {
     bool show_astar_path = false;
