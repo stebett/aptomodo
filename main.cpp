@@ -8,6 +8,7 @@
 #include "includes/config.h"
 #include <ai/loop.h>
 
+#include "commands.h"
 #include "includes/managers/audioManager.h"
 #include "includes/managers/animationManager.h"
 #include "includes/managers/renderingManager.h"
@@ -60,12 +61,14 @@ LevelOutcome PlayLevel() {
 
         if (!paused) {
             AI::Update(registry, player);
+            generateCommands(registry);
+            commandSystem(registry);
             // updateEnemy(registry, player); // TODO This should be before drawing
-            if (!Config::GetBool("free_camera"))
-                updatePlayer(registry, player, position, playerCamera);
-            else
+            if (Config::GetBool("free_camera"))
                 updatePlayer(registry, player, position, freeCamera);
-
+            else {
+                // updatePlayer(registry, player, position, playerCamera);
+            }
         }
         RenderingManager::Draw(registry, playerCamera, framerateManager.framesCounter); // This has to stay after updatePlayer
         EndMode2D();

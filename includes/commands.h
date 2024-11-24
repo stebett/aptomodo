@@ -4,6 +4,7 @@
 
 #ifndef COMMANDS_H
 #define COMMANDS_H
+#include <bitset>
 
 class Command {
 public:
@@ -16,34 +17,27 @@ struct CommandHolder {
     std::unique_ptr<Command> command;
 };
 
-enum class Direction {
+enum Direction {
+    NONE = -1,
     UP,
     DOWN,
     RIGHT,
     LEFT,
-    UPRIGHT,
-    UPLEFT,
-    DOWNRIGHT,
-    DOWNLEFT,
-    RIGHTUP,
-    RIGHTDOWN,
-    LEFTUP,
-    LEFTDOWN,
-    NONE
 };
 
-class MoveCommand final : Command {
+class MoveCommand final : public Command {
 
 
     entt::registry& registry;
     entt::entity self;
-    Direction direction;
+    std::bitset<4> bitfield;
 public:
-    MoveCommand(entt::registry &registry, entt::entity self, Direction direction);
+    MoveCommand(entt::registry &registry, entt::entity self, std::bitset<4> bitfield);
     void execute() override;
 };
 
 void generateCommands(entt::registry &registry);
+void commandSystem(entt::registry &registry);
 
 
 #endif //COMMANDS_H
