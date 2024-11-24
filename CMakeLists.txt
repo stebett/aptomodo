@@ -29,7 +29,10 @@ add_executable(${EXEC} main.cpp ${SOURCES}
         includes/intGrid.h
         includes/components.cpp
         includes/enemyType.cpp
-        includes/enemyType.h)
+        includes/enemyType.h
+        includes/commands.cpp
+        includes/commands.h
+        includes/ai/strategies.cpp)
 target_link_libraries(${EXEC} PRIVATE raylib)
 target_link_libraries(${EXEC} PRIVATE LDtkLoader)
 target_link_libraries(${EXEC} PRIVATE EnTT::EnTT)

@@ -78,7 +78,7 @@ void imguiEnemyTypesEditor() {
     }
 
     // Add a button for adding a new EnemyType
-    if (ImGui::Button("Add New Enemy")) {
+    if (ImGui::Button("Add New Enemy")) { // TODO save
         enemyList.push_back(EnemyType{
             "NewEnemy", 1, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
             Color(1.0f, 1.0f, 1.0f, 1.0f), 100.0f, 10, "", ""
@@ -124,7 +124,7 @@ void imguiEnemyAttr(entt::registry &registry) {
     ImGui::SliderInt("enemy_walking_animation_fps", Config::GetIntPtr("enemy_walking_animation_fps"), 1, 120);
     auto view = registry.view<Enemy, Selected, Path, ID, ColorBB, Spread, Speed, Health, Radius, AttackTimer,
         AttackSpeed, Damage, AttackRange, Pushback, Position, LookAngle,
-        Strategy::Strategy>();
+        BehaviorTree>();
     for (auto [entity, path, id, colorbb, spread, speed, health, radius,
              timelastattack, attackspeed, damage,
              attackrange, pushback, position, lookAngle, strategy]: view.each()) {
@@ -140,7 +140,7 @@ void imguiEnemyAttr(entt::registry &registry) {
 
         ImGui::SeparatorText("Behavior Tree");
         std::vector<std::pair<const char *, Status> > result;
-        collectNodeStatus(strategy.behavior->getRoot(), result);
+        collectNodeStatus(strategy.getRoot(), result);
 
         int n = 0;
         for (auto [name, status]: result) {
