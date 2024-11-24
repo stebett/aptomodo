@@ -6,6 +6,7 @@
 #include "constants.h"
 #include "managers/levelManager.h"
 #include "attributes.h"
+#include "enemyType.h"
 #include "items.h"
 #include "ai/strategies.h"
 
@@ -46,103 +47,6 @@ entt::entity spawnEnemy(entt::registry &registry, Vector2 position) {
     return e;
 }
 
-struct EnemyType {
-    std::string name;
-    int grade;
-    float radius;
-    float speed;
-    float attackSpeed;
-    float damage;
-    float attackRange;
-    float attackSpread;
-    Color color;
-    float health;
-    int experience;
-    std::string attributesPath;
-    std::string texturePath;
-};
-
-struct EnemyDataFile {
-    std::string path{"../config/enemies.csv"};
-    std::vector<std::string> headers;
-    std::vector<EnemyType> enemyStats;
-
-    bool loadCSV(const std::string &filename);
-    EnemyType &getType(const std::string&);
-};
-
-bool EnemyDataFile::loadCSV(const std::string &filename) {
-    std::ifstream file(filename);
-    if (!file.is_open()) {
-        std::cerr << "ERROR: ENEMIES:  Could not open type file " << filename << "\n";
-        return false;
-    }
-    std::cout << "INFO: ENEMIES: Rading type file " << filename << "\n";
-
-
-    std::string line;
-    if (std::getline(file, line)) {
-        std::stringstream ss(line);
-        std::string header;
-        while (std::getline(ss, header, ',')) {
-            headers.push_back(header);
-        }
-    }
-
-    // Read the data rows
-    while (std::getline(file, line)) {
-        std::stringstream ss(line);
-        std::string cell;
-        EnemyType stats{};
-
-        for (size_t i = 0; i < headers.size(); ++i) {
-            std::getline(ss, cell, ',');
-            if (headers[i] == "Name") {
-                stats.name = cell;
-            } else if (headers[i] == "Grade") {
-                stats.grade = std::stoi(cell);
-            } else if (headers[i] == "Radius") {
-                stats.radius = std::stof(cell);
-            } else if (headers[i] == "Speed") {
-                stats.speed = std::stof(cell);
-            } else if (headers[i] == "AttackSpeed") {
-                stats.attackSpeed = std::stof(cell);
-            } else if (headers[i] == "Damage") {
-                stats.damage = std::stof(cell);
-            } else if (headers[i] == "AttackRange") {
-                stats.attackRange = std::stof(cell);
-            } else if (headers[i] == "AttackSpread") {
-                stats.attackSpread = std::stof(cell);
-            } else if (headers[i] == "ColorBB") {
-                stats.color = colorMap.at(cell);
-            } else if (headers[i] == "Health") {
-                stats.health = Health(std::stof(cell));
-            } else if (headers[i] == "ExperienceGiven") {
-                stats.experience = std::stoi(cell);
-                // } else if (headers[i] == "Strategy") {
-            } else if (headers[i] == "AttributesPath") {
-                stats.attributesPath = cell;
-            } else if (headers[i] == "TexturePath") {
-                stats.texturePath = cell;
-            }
-        }
-        enemyStats.push_back(stats);
-    }
-
-    file.close();
-    return true;
-}
-
-EnemyType& EnemyDataFile::getType(const std::string & name) {
-    for (auto & enemyType: enemyStats) {
-        if (enemyType.name == name) {
-            return enemyType;
-        }
-    }
-    std::cerr << "WARNING: ENEMIES: did not find enemy type -> " << name  << "\n";
-
-    return enemyStats[0];
-}
 
 
 entt::entity spawnEnemyFromFile(entt::registry &registry, Position position, const EnemyType& stats) {

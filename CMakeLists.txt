@@ -27,7 +27,9 @@ add_executable(${EXEC} main.cpp ${SOURCES}
         includes/shadowCast.h
         includes/intGrid.cpp
         includes/intGrid.h
-        includes/components.cpp)
+        includes/components.cpp
+        includes/enemyType.cpp
+        includes/enemyType.h)
 target_link_libraries(${EXEC} PRIVATE raylib)
 target_link_libraries(${EXEC} PRIVATE LDtkLoader)
 target_link_libraries(${EXEC} PRIVATE EnTT::EnTT)

@@ -19,4 +19,7 @@ Camera2D spawnCamera();
 
 void spawnItems(entt::registry& registry);
 
+
+
+
 #endif //APTOMODO_FACTORIES_H

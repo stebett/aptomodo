@@ -2,19 +2,91 @@
 // Created by ginko on 04/03/24.
 //
 
-#include "pch.h"
 #include "gui.h"
-
 #include <ai/strategies.h>
-
 #include "attributes.h"
 #include "parameters.h"
 #include "components.h"
 #include "constants.h"
 #include "config.h"
+#include "enemyType.h"
 #include "items.h"
 
 ImGuiIO *GuiManager::m_io;
+
+
+
+// Function to render and interact with the table
+void imguiEnemyTypesEditor() {
+    ImGui::Begin("Enemy Types Editor");
+
+    // Define table columns
+    static const char *columnHeaders[] = {
+        "Name", "Grade", "Radius", "Speed", "Attack Speed", "Damage",
+        "Attack Range", "Attack Spread", "Color", "Health", "Experience",
+        "Attributes Path", "Texture Path"
+    };
+
+    static EnemyDataFile dataFile{};
+    if (dataFile.headers.empty())
+        dataFile.loadCSV(dataFile.path);
+    static auto enemyList = dataFile.enemyStats;
+
+    if (ImGui::BeginTable("EnemyTable", IM_ARRAYSIZE(columnHeaders),
+                          ImGuiTableFlags_Borders | ImGuiTableFlags_Resizable)) {
+        // Render table headers
+        for (const char *header: columnHeaders) {
+            ImGui::TableSetupColumn(header);
+        }
+        ImGui::TableHeadersRow();
+
+        // Render rows for each enemy in the list
+        for (size_t i = 0; i < enemyList.size(); ++i) {
+            EnemyType &enemy = enemyList[i];
+            ImGui::TableNextRow();
+
+            char * name = enemy.name.data();
+            // Editable fields for each column
+            ImGui::TableNextColumn(); ImGui::InputText(("##Name" + std::to_string(i)).c_str(), name, 80);
+            ImGui::TableNextColumn();
+            ImGui::InputInt(("##Grade" + std::to_string(i)).c_str(), &enemy.grade);
+            ImGui::TableNextColumn();
+            ImGui::InputFloat(("##Radius" + std::to_string(i)).c_str(), &enemy.radius);
+            ImGui::TableNextColumn();
+            ImGui::InputFloat(("##Speed" + std::to_string(i)).c_str(), &enemy.speed);
+            ImGui::TableNextColumn();
+            ImGui::InputFloat(("##AttackSpeed" + std::to_string(i)).c_str(), &enemy.attackSpeed);
+            ImGui::TableNextColumn();
+            ImGui::InputFloat(("##Damage" + std::to_string(i)).c_str(), &enemy.damage);
+            ImGui::TableNextColumn();
+            ImGui::InputFloat(("##AttackRange" + std::to_string(i)).c_str(), &enemy.attackRange);
+            ImGui::TableNextColumn();
+            ImGui::InputFloat(("##AttackSpread" + std::to_string(i)).c_str(), &enemy.attackSpread);
+            ImGui::TableNextColumn();
+            if (ImGui::ColorEdit4(("##Color" + std::to_string(i)).c_str(), (float *) &enemy.color)) {
+                // Color edit handler
+            }
+            ImGui::TableNextColumn();
+            ImGui::InputFloat(("##Health" + std::to_string(i)).c_str(), &enemy.health);
+            ImGui::TableNextColumn();
+            ImGui::InputInt(("##Experience" + std::to_string(i)).c_str(), &enemy.experience);
+            // ImGui::TableNextColumn(); ImGui::InputText(("##AttributesPath" + std::to_string(i)).c_str(), &enemy.attributesPath);
+            // ImGui::TableNextColumn(); ImGui::InputText(("##TexturePath" + std::to_string(i)).c_str(), &enemy.texturePath);
+        }
+
+        ImGui::EndTable();
+    }
+
+    // Add a button for adding a new EnemyType
+    if (ImGui::Button("Add New Enemy")) {
+        enemyList.push_back(EnemyType{
+            "NewEnemy", 1, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+            Color(1.0f, 1.0f, 1.0f, 1.0f), 100.0f, 10, "", ""
+        });
+    }
+    ImGui::End();
+}
+
 
 void imguiInstructions() {
     ImGui::Begin("Instructions");
@@ -291,6 +363,7 @@ void imguiWindowMain(entt::registry &registry, ImGuiIO io, const Camera2D &camer
     static bool show_multipliers = false;
     static bool show_start_values = false;
     static bool show_cursor_window = false;
+    static bool show_enemy_types_window = false;
     ImGui::Begin("Main");
 
 
@@ -305,8 +378,11 @@ void imguiWindowMain(entt::registry &registry, ImGuiIO io, const Camera2D &camer
 
     ImGui::Checkbox("Enemy Window", Config::GetBoolPtr("show_enemy_window"));
     if (Config::GetBool("show_enemy_window"))
-        // todo auto open when enemy selected
         imguiEnemyAttr(registry);
+
+    ImGui::Checkbox("Enemy Types Window", &show_enemy_types_window);
+    if (show_enemy_types_window)
+        imguiEnemyTypesEditor();
 
     ImGui::Checkbox("Config Window", &show_config_window);
     if (show_config_window)
