@@ -162,6 +162,7 @@ namespace RenderingManager {
 
     void Draw(entt::registry& registry, const Camera2D &camera, const unsigned int frame) {
         drawItems(registry);
+
         drawEnemyExtra(registry);
         if (Config::GetBool("show_bounding_box")) drawLivingBB(registry);
         if (Config::GetBool("show_enemy_texture")) drawEnemyTexture(registry, frame / Config::GetInt("enemy_walking_animation_fps"));
