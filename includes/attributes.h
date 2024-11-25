@@ -9,13 +9,16 @@
 
 using namespace AttributeConstants;
 
-
+/*
+ * This class is responsible for holding all the attributes, sub-attributes and modifiers values for a given agent
+ * It is quite heavy, so it would be better to not load it often to avoid filling the cache with crap
+ * TODO Maybe we can add a flag that gets invalidated anytime attributes change, so that it recomputes damage, speed, etc. that then are loaded singularly where they are needed
+ */
 class Attributes {
     int level{1};
 
-
     std::array<int, 6> values{};
-    std::array<int, 18> subValues{};
+    std::array<int, 18> subValues{}; // TODO store chars instead of ints and add a check that it never goes above 256
     std::vector<Modifier> attributeModifiers{};
 
 public:

@@ -5,7 +5,7 @@
 #ifndef APTOMODO_ITEMS_H
 #define APTOMODO_ITEMS_H
 
-#include <string>
+#include <string> // todo remove
 /*
     Detect items when close (maybe in the collision loop)
      show a toooltip
@@ -30,6 +30,8 @@ struct Name {
     std::string value;
     operator std::string() const noexcept { return value; }
 };
+// TODO save items in files
+// TODO add an item editor
 
 //
 //struct SubAttributeModifier {

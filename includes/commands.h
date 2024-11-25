@@ -17,27 +17,23 @@ struct CommandHolder {
     std::unique_ptr<Command> command;
 };
 
-enum Direction {
-    NONE = -1,
-    UP,
-    DOWN,
-    RIGHT,
-    LEFT,
-};
+void generateCommands(entt::registry &registry);
+
+void commandSystem(entt::registry &registry);
 
 class MoveCommand final : public Command {
-
-
-    entt::registry& registry;
+    entt::registry &registry;
     entt::entity self;
     std::bitset<4> bitfield;
+
 public:
     MoveCommand(entt::registry &registry, entt::entity self, std::bitset<4> bitfield);
+
     void execute() override;
 };
 
-void generateCommands(entt::registry &registry);
-void commandSystem(entt::registry &registry);
+
+
 
 
 #endif //COMMANDS_H

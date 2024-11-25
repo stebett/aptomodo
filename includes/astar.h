@@ -38,6 +38,8 @@ struct CompareNodes {
     bool operator()(const std::pair<Node, float>& a, const std::pair<Node, float>& b) const;
 };
 
+// TODO use this directly instead of Path
+// TODO Integrate path in a spline (you can already draw it with DrawSplineCatmullRom)
 class Search {
     std::priority_queue<EvaluatedNode, std::vector<EvaluatedNode>, CompareNodes> open;
     unsigned int frontier_idx = 0;

@@ -6,6 +6,8 @@
 #define INTGRID_H
 #include <constants.h>
 
+// Todo this file can probably be in a different directory
+
 
 enum class IntValue {
     EMPTY = -1,
@@ -16,6 +18,8 @@ enum class IntValue {
     VISIBLE = 10,
 };
 
+
+// TODO this needs to be an array of a bitfield, so that we can set the tiles to multiple values at the same time
 using Map = std::array<std::array<IntValue, IntGridHeight>, IntGridWidth>;
 
 class IntGrid {

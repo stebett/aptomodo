@@ -7,8 +7,6 @@
 
 
 namespace AttributeConstants {
-
-
     enum SubAttributeName {
         damagePhysical,
         health,
@@ -98,7 +96,7 @@ namespace AttributeConstants {
             visualRange, critChance, critMultiplier
     };
     constexpr static auto subAttrByAttr = [] {
-        std::array<std::array<SubAttributeName, 3>, 6> subAttrByAttr;
+        std::array<std::array<SubAttributeName, 3>, 6> subAttrByAttr; // TODO init
         subAttrByAttr[strength] = {damagePhysical, health, resistancePhysical};
         subAttrByAttr[intelligence] = {damageMagical, mana, resistanceMagical};
         subAttrByAttr[agility] = {speed, attackSpeed, spellSpeed};
@@ -109,7 +107,7 @@ namespace AttributeConstants {
 
     }();
     constexpr static auto attrBySubAttr = [] {
-        std::array<AttributeName, 18> attrBySubAttr;
+        std::array<AttributeName, 18> attrBySubAttr;// TODO init
         for (auto attr: attributeVec)
             for (auto subattr: subAttrByAttr[attr])
                 attrBySubAttr[subattr] = attr;

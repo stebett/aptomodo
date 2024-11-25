@@ -13,7 +13,7 @@ namespace RenderingManager {
 
     void DrawLevel(const Camera2D &camera);
 
-    void Draw(entt::registry &registry, const Camera2D &camera, unsigned int frame);
+    void Draw(entt::registry &registry, const Camera2D &camera, unsigned int frame); // TODO this should draw on a framebuffer
 }
 
 

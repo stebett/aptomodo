@@ -1,4 +1,3 @@
-// TODO move raylib in vendors dir
 #include <raylib.h>
 #include <entt/entity/registry.hpp>
 #include "includes/components.h"
@@ -17,6 +16,8 @@
 #include "includes/managers/gui.h"
 #include "managers/framerateManager.h"
 
+/* TODO All the level related stuff and the game loop function should be in another file
+ */
 enum class LevelOutcome {
     WIN,
     LOSE,
@@ -25,6 +26,11 @@ enum class LevelOutcome {
     NONE,
 };
 
+/* TODO
+ * Different levels should
+ *  - load different ldtk::levels
+ *  - have different gui windows preopened
+ */
 LevelOutcome PlayLevel() {
     auto outcome = LevelOutcome::NONE;
     entt::registry registry;
@@ -49,7 +55,7 @@ LevelOutcome PlayLevel() {
         LevelManager::Update(registry);
         RenderingManager::UpdateCamera(playerCamera, position);
         BeginDrawing();
-        if (!Config::GetBool("free_camera")) {
+        if (!Config::GetBool("free_camera")) { // TODO envelop this in a function
             BeginMode2D(playerCamera);
             freeCamera = playerCamera;
         }
@@ -60,11 +66,11 @@ LevelOutcome PlayLevel() {
         RenderingManager::DrawLevel(playerCamera);
 
         if (!paused) {
-            AI::Update(registry, player);
+            AI::Update(registry, player); // TODO this needs to be before BeginDrawing
             generateCommands(registry);
             commandSystem(registry);
             // updateEnemy(registry, player); // TODO This should be before drawing
-            if (Config::GetBool("free_camera"))
+            if (Config::GetBool("free_camera")) // TODO this will be removed when commands are finished
                 updatePlayer(registry, player, position, freeCamera);
             else {
                 // updatePlayer(registry, player, position, playerCamera);
@@ -74,9 +80,9 @@ LevelOutcome PlayLevel() {
         EndMode2D();
         GuiManager::Draw();
         DrawFPS(10, 10);
-
         DrawText(std::format("Health: {}", health.value).c_str(), 10, screenHeight - 40, 30, WHITE);
-        if (paused) {
+        // TODO make a PlayerUI namespace and just PlayerUI::Draw() everything
+        if (paused) { // TODO this feels like it should be Game::IsPaused(), put it in a namespace for now
             DrawText("PAUSE", screenHeight / 2 - 50, screenWidth / 2 - MeasureText("PAUSE", 50), 50, WHITE);
         }
 
@@ -105,15 +111,16 @@ void GameLoop() {
 }
 
 int main() {
-    InitWindow(screenWidth, screenHeight, "Apto Modo");
-    ToggleFullscreen();
+    //TODO  put all of these in Game::Instantiate()
+    InitWindow(screenWidth, screenHeight, "Apto Modo"); // TODO WindowManager::Instantiate();
+    ToggleFullscreen(); // This will be inside WindowManager::Instantiate()
     Config::Instantiate();
     AudioManager::Instantiate();
     AnimationManager::Instantiate();
     LevelManager::Instantiate();
     Params::Instantiate();
 
-    GameLoop();
-    CloseWindow();
+    GameLoop(); // Game::Run()
+    CloseWindow(); // ~Game
     return 0;
 }

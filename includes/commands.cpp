@@ -37,7 +37,7 @@ MoveCommand::MoveCommand(entt::registry &registry, const entt::entity self, cons
     : registry(registry), bitfield(bitfield), self(self) {
 }
 
-void MoveCommand::execute() {
+void MoveCommand::execute() { // TODO make this deltaTime dependant
     Position &position = registry.get<Position>(self);
     const Radius &radius = registry.get<Radius>(self);
     const Attributes &attributes = registry.get<Attributes>(self);
@@ -53,7 +53,9 @@ void MoveCommand::execute() {
 
     const Vector2 direction = Vector2Subtract(futurePos, position);
     const Vector2 movement = Vector2Scale(Vector2Normalize(direction), attributes.getMultiplied(speed));
+    // TODO Speed should definitely be just a component, that gets updated any time attributes change
     futurePos = Vector2Add(position, movement);
     solveCircleRecCollision(futurePos, radius);
+    // TODO add solve npc collisions
     position = futurePos;
 }

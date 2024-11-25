@@ -31,7 +31,7 @@ namespace RenderingManager {
             target_y = mapHeight - screenHeight / (2 * camera.zoom);
         }
 
-        camera.target = Vector2Lerp(camera.target, {target_x, target_y}, 0.1);
+        camera.target = Vector2Lerp(camera.target, {target_x, target_y}, 0.1); // TODO Substitute fps/agnostic Lerp to this
     }
 
 
@@ -45,9 +45,8 @@ namespace RenderingManager {
         }
     }
 
-
     void drawEnemyTexture(const entt::registry &registry, unsigned int frame) {
-        auto livingView = registry.view<Living, Radius, Position, LookAngle, Speed>();
+        auto livingView = registry.view<Living, Radius, Position, LookAngle, Speed>(); // TODO Draw only onscreen, add InScreen Tag
         for (auto [entity, radius, position, rotation, speed]: livingView.each()) {
             DrawTexturePro(AnimationManager::getTexture("enemy/walking/v1/", frame * speed.actual),
                            {0, 0, 240, 240},
@@ -59,7 +58,7 @@ namespace RenderingManager {
     }
 
     void drawLivingBB(const entt::registry &registry) {
-        auto livingView = registry.view<Living, Radius, Position, LookAngle, ColorBB>();
+        auto livingView = registry.view<Living, Radius, Position, LookAngle, ColorBB>();// TODO Draw only onscreen, add InScreen Tag
         for (auto [entity, radius, position, lookAngle, color]: livingView.each()) {
             DrawCircleV(position, radius, color);
             DrawLineV(position, Vector2Add(
@@ -68,6 +67,7 @@ namespace RenderingManager {
         }
     }
 
+    // TODO Draw only onscreen
     void drawItems(const entt::registry &registry) {
         for (auto [entity, position]: registry.view<Item, Position>().each()) {
             DrawRectangleV(position, {16, 16}, GOLD);
@@ -79,11 +79,11 @@ namespace RenderingManager {
      */
     void drawTooltips(const entt::registry &registry) {
         auto player = registry.view<Player>().front();
-        auto playerPosition = registry.get<Position>(player); // This could be static, or a static ref
+        auto playerPosition = registry.get<Position>(player);
         for (auto [entity, position]: registry.view<Item, Position>().each()) {
-            if (Vector2Distance(playerPosition, position) < 20) {
+            if (Vector2Distance(playerPosition, position) < 20) { // TODO make it bigger
                 DrawText("Press F to pick up", position.x, position.y, 12, BLACK);
-                return; // Only draw it for one item
+                return; // Only draw it for one item TODO why?
             }
         }
     }
@@ -127,6 +127,7 @@ namespace RenderingManager {
         }
     }
 
+    // TODO DrawSplineCatmullRom
     void drawEnemyExtra(const entt::registry &registry) {
         auto selectedView = registry.view<Living, Selected, Radius, Position, LookAngle, ColorBB, Path, Target, Chasing>();
         for (auto [entity, radius, position, lookAngle, color, path, target, chasing]: selectedView.each()) {

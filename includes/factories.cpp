@@ -50,7 +50,7 @@ entt::entity spawnEnemy(entt::registry &registry, Vector2 position) {
 
 
 entt::entity spawnEnemyFromFile(entt::registry &registry, Position position, const EnemyType& stats) {
-    static int id = 0;
+    static int id = 0; // TODO this should be hashed or something, so we don't have overlap if we add new spawns elsewhere
     const entt::entity e = registry.create();
     registry.emplace<Name>(e, stats.name);
     registry.emplace<Grade>(e, stats.grade);

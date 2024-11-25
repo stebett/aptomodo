@@ -40,12 +40,11 @@ class Config {
     static int storedFloatsIndex;
     static int storedBoolsIndex;
 public:
-    static std::unordered_map<std::string, int> indexDictInts;
+    static std::unordered_map<std::string, int> indexDictInts; // TODO make them private and use getters to const ref
     static std::unordered_map<std::string, int> indexDictFloats;
     static std::unordered_map<std::string, int> indexDictBools;
 
     toml::table writeTable();
-
 
     static void SaveAttributeParameters();
 

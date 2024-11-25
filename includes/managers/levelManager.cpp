@@ -49,7 +49,7 @@ LevelManager::~LevelManager() {
 void LevelManager::SetLevel(const int level) {
     // unload current tileset texture if necessary
     if (current_level >= 0) {
-        UnloadTexture(currentTilesetTexture);
+        UnloadTexture(currentTilesetTexture);// todo unload after drawing?
     }
 
     currentLdtkLevel = &ldtkWorld->getLevel(level);
@@ -98,7 +98,7 @@ void LevelManager::SetLevel(const int level) {
 
     EndTextureMode();
     renderedLevelTexture = renderTexture.texture;
-    // SetTextureWrap(renderedLevelTexture, TEXTURE_WRAP_MIRROR_CLAMP);
+    // SetTextureWrap(renderedLevelTexture, TEXTURE_WRAP_MIRROR_CLAMP); // TODO force zoom to stay in map boundaries instead?
 }
 
 std::vector<std::pair<std::string, Vector2> > &LevelManager::GetEntitiesPositions() {

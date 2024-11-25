@@ -18,7 +18,7 @@ public:
         m_Start = std::chrono::high_resolution_clock::now();
     }
 
-    void StartBehind(int seconds) {
+    void StartBehind(const int seconds) {
         m_Start = std::chrono::high_resolution_clock::now()-std::chrono::seconds(seconds);
     }
 
