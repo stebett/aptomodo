@@ -4,46 +4,71 @@
 #include "pch.h"
 #include "parameters.h"
 
+namespace Params {
+    void LoadAttributeParameters() {
+        try {
+            config = toml::parse_file(attributeParametersPath);
+        } catch (const toml::parse_error &err) {
+            std::cerr << "WARNING: PARAMETERS: Parsing failed:\n" << err << "\n";
+            return;
+        }
+        std::cout << "INFO: PARAMETERS: Attribute file loaded successfully" << "\n";
 
-Params *Params::instance;
-AttributeParameters Params::attributes;
-AttributeParameters Params::attributesOriginal;
-
-
-void Params::LoadAttributeParameters() {
-    toml::table config;
-    try {
-        config = toml::parse_file(attributeParametersPath);
+        attributes = AttributeParameters(config);
     }
-    catch (const toml::parse_error &err) {
-        std::cerr << "WARNING: PARAMETERS: Parsing failed:\n" << err << "\n";
-        return;
+
+    void Instantiate() {
+        LoadAttributeParameters();
     }
-    std::cout << "INFO: PARAMETERS: Attribute file loaded successfully" << "\n";
 
-    attributes = AttributeParameters(config);
-    attributesOriginal = attributes;
-}
+    float &Multiplier(const AttributeConstants::SubAttributeName name) {
+        return attributes.subAttrMultipliers[name];
+    }
 
+    float MultiplierOriginal(const AttributeConstants::SubAttributeName name) {
+        return *config.get_as<toml::array>("subAttrMultipliers")->at(name).value<float>();
+    }
 
-Params &Params::Instance() { return *instance; }
+    float &StartValue(const AttributeConstants::SubAttributeName name) {
+        return attributes.subAttrAtStart[name];
+    }
 
-void Params::SaveAttributeParameters() {
-    attributesOriginal = attributes;
-    auto table = attributes.writeTable();
-    std::ofstream output;
-    output.open(attributeParametersPath);
-    std::cout << "INFO: PARAMETERS: file opened for saving" << "\n";
-    output << table;
-    std::cout << "INFO: PARAMETERS: parameters saved" << "\n";
-    output.close();
-    std::cout << "INFO: PARAMETERS: file closed" << "\n";
+    float StartValueOriginal(const AttributeConstants::SubAttributeName name) {
+        return *config.get_as<toml::array>("subAttrAtStart")->at(name).value<float>();
+    }
 
+    int GetExpByLevel() { return attributes.expByLevel; }
+
+    int GetPointsByLevel() { return attributes.pointsByLevel; }
+
+    int GetPointsByAttr() { return attributes.pointsByAttr; }
+
+    int GetPointsAtStart() { return attributes.pointsAtStart; }
+
+    int GetExpByLevelOriginal() { return config["expByLevel"].value_or(0); }
+
+    int GetPointsByLevelOriginal() {
+        return config["pointsByLevel"].value_or(0);
+    }
+
+    int GetPointsByAttrOriginal() { return config["pointsByAttr"].value_or(0); }
+
+    int GetPointsAtStartOriginal() { return config["pointsAtStart"].value_or(0); }
+
+    void SaveAttributeParameters() {
+        auto table = attributes.writeTable();
+        std::ofstream output;
+        output.open(attributeParametersPath);
+        std::cout << "INFO: PARAMETERS: file opened for saving" << "\n";
+        output << table;
+        std::cout << "INFO: PARAMETERS: parameters saved" << "\n";
+        output.close();
+        std::cout << "INFO: PARAMETERS: file closed" << "\n";
+        LoadAttributeParameters();
+    }
 }
 
 AttributeParameters::AttributeParameters(toml::table config) {
-    fps = config["fps"].value_or(0);
-    strategy = config["strategy"].value_or(0);
     expByLevel = config["expByLevel"].value_or(0);
     pointsByLevel = config["pointsByLevel"].value_or(0);
     pointsByAttr = config["pointsByAttr"].value_or(0);
@@ -67,7 +92,7 @@ AttributeParameters::AttributeParameters(toml::table config) {
 }
 
 toml::array serializeArray(std::array<float, 18> array) {
-    toml::array result {};
+    toml::array result{};
     for (size_t i = 0; i < 18; ++i) {
         result.push_back(array[i]);
     }
@@ -76,15 +101,13 @@ toml::array serializeArray(std::array<float, 18> array) {
 
 toml::table AttributeParameters::writeTable() {
     auto table = toml::table{
-            {"fps",                fps},
-            {"strategy",           strategy},
-            {"expByLevel",         expByLevel},
-            {"pointsByLevel",      pointsByLevel},
-            {"pointsByAttr",       pointsByAttr},
-            {"pointsAtStart",      pointsAtStart},
+        {"expByLevel", expByLevel},
+        {"pointsByLevel", pointsByLevel},
+        {"pointsByAttr", pointsByAttr},
+        {"pointsAtStart", pointsAtStart},
 
-            {"subAttrMultipliers", serializeArray(subAttrMultipliers)},
-            {"subAttrAtStart",     serializeArray(subAttrAtStart)},
+        {"subAttrMultipliers", serializeArray(subAttrMultipliers)},
+        {"subAttrAtStart", serializeArray(subAttrAtStart)},
     };
     return table;
 }

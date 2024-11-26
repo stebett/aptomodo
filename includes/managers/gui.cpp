@@ -115,13 +115,11 @@ void imguiCursor(const Camera2D &camera) {
 
 void imguiEnemyAttr(entt::registry &registry) {
     ImGui::Begin("Enemy attributes");
-    ImGui::SliderInt("strategy", Config::GetIntPtr("strategy"), 0, 2);
     ImGui::Checkbox("show_astar_path", Config::GetBoolPtr("show_astar_path"));
     ImGui::Checkbox("show_enemy_fov", Config::GetBoolPtr("show_enemy_fov"));
     ImGui::Checkbox("show_enemy_texture", Config::GetBoolPtr("show_enemy_texture"));
     ImGui::SeparatorText("Selected Enemy attributes");
 
-    ImGui::SliderInt("enemy_walking_animation_fps", Config::GetIntPtr("enemy_walking_animation_fps"), 1, 120);
     auto view = registry.view<Enemy, Selected, Path, ID, ColorBB, Spread, Speed, Health, Radius, AttackTimer,
         AttackSpeed, Damage, AttackRange, Pushback, Position, LookAngle,
         BehaviorTree>();
@@ -193,16 +191,16 @@ void imguiAttributesMultipliers() {
     int n = {0};
     for (auto subattr: AttributeConstants::subAttributeVec) {
         ImGui::PushID(n);
-        bool disableR = Params::attributes.subAttrMultipliers[subattr] ==
-                        Params::attributesOriginal.subAttrMultipliers[subattr];
+        bool disableR = Params::MultiplierOriginal(subattr) ==
+                        Params::Multiplier(subattr);
         if (disableR) ImGui::BeginDisabled(true);
         if (ImGui::Button("R")) {
-            Params::attributes.subAttrMultipliers[subattr] = Params::attributesOriginal.subAttrMultipliers[subattr];
+            Params::Multiplier(subattr) = Params::MultiplierOriginal(subattr);
         };
         if (disableR) ImGui::EndDisabled();
         ImGui::SameLine();
         ImGui::DragFloat(AttributeConstants::subAttributeString[subattr],
-                         &Params::attributes.subAttrMultipliers[subattr],
+                         &Params::Multiplier(subattr),
                          0.1f, 0, 30);
         ImGui::PopID();
         n++;
@@ -338,16 +336,16 @@ void imguiSubAttributesStartValues() {
     int n = {0};
     for (auto subattr: AttributeConstants::subAttributeVec) {
         ImGui::PushID(n);
-        bool disableR = Params::attributes.subAttrAtStart[subattr] ==
-                        Params::attributesOriginal.subAttrAtStart[subattr];
+        bool disableR = Params::StartValue(subattr) ==
+                        Params::StartValueOriginal(subattr);
         if (disableR) ImGui::BeginDisabled(true);
         if (ImGui::Button("R")) {
-            Params::attributes.subAttrAtStart[subattr] = Params::attributesOriginal.subAttrAtStart[subattr];
+            Params::StartValue(subattr) = Params::StartValueOriginal(subattr);
         };
         if (disableR) ImGui::EndDisabled();
         ImGui::SameLine();
         ImGui::DragFloat(AttributeConstants::subAttributeString[subattr],
-                         &Params::attributes.subAttrAtStart[subattr],
+                         &Params::StartValue(subattr),
                          0.1f, 0, 30);
         ImGui::PopID();
         n++;
