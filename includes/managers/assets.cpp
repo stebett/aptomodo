@@ -17,7 +17,7 @@ const Sound &Assets::GetSound(const std::string &name) { return audioResources.a
 
 void Assets::InstantiateAudio() {
     InitAudioDevice();
-    SetMasterVolume(0);
+    // SetMasterVolume(0);
     LoadAudio("player_shot"); // TODO get all names from a file, or load all files in a directory
     LoadAudio("enemy_shot");
     LoadAudio("enemy_explosion");

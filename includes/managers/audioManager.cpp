@@ -17,8 +17,9 @@ namespace Audio {
     }
 
     void Update(entt::registry& registry) {
-        registry.group<Audio::Command>().each([](auto entity, auto &command) {
+        registry.group<Audio::Command>().each([&registry](auto entity, auto &command) {
             Audio::Play(command.soundName);
+            registry.destroy(entity);
         });
     }
 }

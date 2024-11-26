@@ -242,7 +242,7 @@ Status AttackMelee::update(entt::registry &registry, entt::entity self, entt::en
     const float clickAngle = atan2(playerPosition.y - position.y, playerPosition.x - position.x) * radToDeg;
     registry.emplace<AttackEffect>(registry.create(), 100, position, attackRange, clickAngle - attackSpread,
                                    clickAngle + attackSpread, BROWN);
-    Audio::Play("enemy_shot");
+    registry.emplace<Audio::Command>(registry.create(), "enemy_shot");
 
 
     triangle = TriangleAngles(position, attackRange, clickAngle - attackSpread, clickAngle + attackSpread);

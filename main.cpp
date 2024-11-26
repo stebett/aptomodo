@@ -15,6 +15,7 @@
 #include "includes/managers/gui.h"
 #include "managers/assets.h"
 #include "managers/framerateManager.h"
+#include "managers/audioManager.h"
 
 /* TODO All the level related stuff and the game loop function should be in another file
  */
@@ -54,6 +55,7 @@ LevelOutcome PlayLevel() {
         GuiManager::Update(registry, playerCamera);
         LevelManager::Update(registry);
         RenderingManager::UpdateCamera(playerCamera, position);
+        Audio::Update(registry);
         BeginDrawing();
         if (!Config::GetBool("free_camera")) { // TODO envelop this in a function
             BeginMode2D(playerCamera);
