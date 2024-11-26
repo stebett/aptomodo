@@ -3,29 +3,26 @@
 //
 
 #include "audioManager.h"
+#include "assets.h"
 
-std::unordered_map<size_t, Sound> AudioManager::resources;
-std::hash<std::string> AudioManager::hasher;
-AudioManager *AudioManager::instance;
-
-Sound &AudioManager::operator[](std::string &key) const {
-    return resources.at(hasher(key));
-}
-
-void AudioManager::LoadFromFile(const std::string &filename) {
-    resources.insert({hasher(filename), LoadSound((getAssetPath("tracce/" + filename + ".mp3").c_str()))});
-}
 
 // TODO make a copy for each sound?
-void AudioManager::Play(const std::string &key) const {
-    auto sound = resources.at(hasher(key));
-    if (IsSoundPlaying(sound))
-        PlaySound(LoadSoundAlias(sound)); // TODO this should probably be preloaded or at least limited (there could be infinite sounds)
-    else
-        PlaySound(sound);
+namespace Audio {
+    void Play(const std::string &key) {
+        if (const auto sound = Assets::GetSound(key); IsSoundPlaying(sound))
+            PlaySound(LoadSoundAlias(sound));
+            // TODO this should probably be preloaded or at least limited (there could be infinite sounds)
+        else
+            PlaySound(sound);
+    }
+
+    void Update(entt::registry& registry) {
+        registry.group<Audio::Command>().each([](auto entity, auto &command) {
+            Audio::Play(command.soundName);
+        });
+    }
 }
 
-AudioManager &AudioManager::Instance() { return *instance; }
 
 // TODO this needs to be attached to an event system: everytime the player attacks this has to trigger updateAudio and updateAnimation and so on
 //void updateAudio(entt::registry &registry) {

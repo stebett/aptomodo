@@ -35,7 +35,7 @@ void playerAttack(entt::registry &registry, entt::entity &player, Attributes &at
     };
     registry.emplace<AttackEffect>(registry.create(), effect);
 
-    AudioManager::Instance().Play("player_shot");
+    Audio::Play("player_shot");
 
     Vector2 endSegment1 = {
         playerPosition.x + attackRange * (float) cos((clickAngle - attackSpread) * degToRad),

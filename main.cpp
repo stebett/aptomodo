@@ -8,12 +8,12 @@
 #include <ai/loop.h>
 
 #include "commands.h"
-#include "includes/managers/audioManager.h"
 #include "includes/managers/animationManager.h"
 #include "includes/managers/renderingManager.h"
 #include "includes/managers/levelManager.h"
 #include "includes/managers/parameters.h"
 #include "includes/managers/gui.h"
+#include "managers/assets.h"
 #include "managers/framerateManager.h"
 
 /* TODO All the level related stuff and the game loop function should be in another file
@@ -115,7 +115,7 @@ int main() {
     InitWindow(screenWidth, screenHeight, "Apto Modo"); // TODO WindowManager::Instantiate();
     ToggleFullscreen(); // This will be inside WindowManager::Instantiate()
     Config::Instantiate();
-    AudioManager::Instantiate();
+    Assets::Instantiate();
     AnimationManager::Instantiate();
     LevelManager::Instantiate();
     Params::Instantiate();

@@ -61,7 +61,7 @@ void LevelManager::SetLevel(const int level) {
 
     for (auto &&layer: currentLdtkLevel->allLayers()) {
         if (layer.hasTileset()) {
-            currentTilesetTexture = LoadTexture((getAssetPath(layer.getTileset().path)).c_str());
+            currentTilesetTexture = LoadTexture(getAssetPath(layer.getTileset().path).c_str());
             // if it is a tile layer then draw every tile to the frame buffer
             for (auto &&tile: layer.allTiles()) {
                 const auto source_pos = tile.getTextureRect();
