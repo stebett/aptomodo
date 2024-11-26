@@ -20,22 +20,7 @@ file(GLOB_RECURSE SOURCES ${INCLUDE}/*.cpp)
 
 
 
-add_executable(${EXEC} main.cpp ${SOURCES}
-        includes/math/decay.cpp
-        includes/math/decay.h
-        includes/shadowCast.cpp
-        includes/shadowCast.h
-        includes/intGrid.cpp
-        includes/intGrid.h
-        includes/components.cpp
-        includes/enemyType.cpp
-        includes/enemyType.h
-        includes/commands.cpp
-        includes/commands.h
-        includes/ai/strategies.cpp
-        includes/managers/assets.h
-        includes/managers/game.h
-        includes/player_ui.cpp)
+add_executable(${EXEC} main.cpp ${SOURCES})
 target_link_libraries(${EXEC} PRIVATE raylib)
 target_link_libraries(${EXEC} PRIVATE LDtkLoader)
 target_link_libraries(${EXEC} PRIVATE EnTT::EnTT)

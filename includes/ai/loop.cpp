@@ -7,12 +7,11 @@
 #include "strategies.h"
 
 namespace AI {
-    void Update(entt::registry &registry, entt::entity &player) { // TODO this doesnt need to be a reference to player, just value is good
-        auto enemyView = registry.view<Living, Enemy, Strategy::Strategy>();
+    void Update(entt::registry &registry, const entt::entity player) {
+       registry.view<Living, Enemy, Strategy::Strategy>().each([&registry, player](auto enemy, auto& strategy) {
+           strategy.behavior->tick(registry, enemy, player);
+        });
         // TODO need to simulate only enemies in AI area. need something like bool Space::inAISpace(entity) {...}
         // TODO Or maybe we can have a SpaceSystem that iterates and tags all the enemies that are to render and simulate, to avoid recomputing this more than once
-        for (auto [enemy, strategy]: enemyView.each()) {
-            strategy.behavior->tick(registry, enemy, player);
-        }
     }
 }

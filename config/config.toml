@@ -8,6 +8,7 @@ show_inv_window = false
 show_enemy_window = false
 free_camera = false
 draw_level_collisions = false
+draw_enemies_outside_screen = true
 enemySightRange = +130.01234
 enemySightRangeChasing = 250.0
 enemyHearRange = 70.0

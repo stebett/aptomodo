@@ -17,6 +17,12 @@ struct Enemy {
 struct Living {
 };
 
+struct ToRender {
+};
+
+struct ToSimulate {
+};
+
 struct Chasing {
     Timer timer;
     float duration;
@@ -117,6 +123,7 @@ struct Speed {
 struct Health {
     float value;
     float max;
+
     operator float() const noexcept;
 
     float operator-(const float x) const noexcept;

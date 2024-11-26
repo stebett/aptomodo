@@ -59,12 +59,21 @@ namespace RenderingManager {
     }
 
     void drawLivingBB(const entt::registry &registry) {
-        auto livingView = registry.view<Living, Radius, Position, LookAngle, ColorBB>();// TODO Draw only onscreen, add InScreen Tag
+        auto livingView = registry.view<Living, ToRender, Radius, Position, LookAngle, ColorBB>();// TODO Draw only onscreen, add InScreen Tag
         for (auto [entity, radius, position, lookAngle, color]: livingView.each()) {
             DrawCircleV(position, radius, color);
             DrawLineV(position, Vector2Add(
                           position, Vector2Scale(Vector2{cos(lookAngle * DEG2RAD), sin(lookAngle * DEG2RAD)}, 20.0f)),
                       BLACK);
+        }
+        if (Config::GetBool("draw_enemies_outside_screen")) {
+            auto outsideScreen = registry.view<Living, Enemy, Radius, Position, LookAngle, ColorBB>(entt::exclude<ToRender>);// TODO Draw only onscreen, add InScreen Tag
+            for (auto [entity, radius, position, lookAngle, color]: outsideScreen.each()) {
+                DrawCircleV(position, radius, BLACK);
+                DrawLineV(position, Vector2Add(
+                              position, Vector2Scale(Vector2{cos(lookAngle * DEG2RAD), sin(lookAngle * DEG2RAD)}, 20.0f)),
+                          BLACK);
+            }
         }
     }
 

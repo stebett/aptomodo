@@ -5,7 +5,6 @@
 #ifndef APTOMODO_ITEMS_H
 #define APTOMODO_ITEMS_H
 
-#include <string> // todo remove
 /*
     Detect items when close (maybe in the collision loop)
      show a toooltip

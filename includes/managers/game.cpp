@@ -8,6 +8,7 @@
 #include <factories.h>
 #include <player_ui.h>
 #include <ai/loop.h>
+#include <systems/space.h>
 
 #include "assets.h"
 #include "audioManager.h"
@@ -73,6 +74,8 @@ LevelOutcome PlayLevel(int levelNumber) {
 
 
         EndDrawing();
+
+        Space::Update(registry, playerCamera);
 
         framerateManager.Update();
         if (IsKeyPressed(KEY_Q)) {
