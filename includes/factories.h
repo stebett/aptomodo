@@ -4,22 +4,15 @@
 
 #ifndef APTOMODO_FACTORIES_H
 #define APTOMODO_FACTORIES_H
+#include <managers/levelManager.h>
 
-#include "components.h"
 
-entt::entity spawnRandomEnemy(entt::registry &registry);
-
-void spawnEnemies(entt::registry &registry);
-
-entt::entity spawnEnemy(entt::registry &registry, Vector2 position);
-
-entt::entity spawnPlayer(entt::registry &registry);
 
 Camera2D spawnCamera();
 
-void spawnItems(entt::registry& registry);
+void spawnEntities(entt::registry &registry, const std::vector<Level::Entity>&);
 
-
+entt::entity spawnPlayer(entt::registry &registry);
 
 
 #endif //APTOMODO_FACTORIES_H

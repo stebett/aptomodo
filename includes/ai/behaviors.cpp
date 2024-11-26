@@ -15,6 +15,7 @@
 #include <managers/levelManager.h>
 
 #include "shadowCast.h"
+#include "managers/game.h"
 
 
 Status PlayerInView::update(entt::registry &registry, entt::entity self, entt::entity player) {
@@ -39,7 +40,7 @@ Status PlayerInView::update(entt::registry &registry, entt::entity self, entt::e
     if (const bool outSightRange = !CheckCollisionCircles(playerPosition, playerRadius, position, sightRange)) {
         return FAILURE;
     }
-    if (const bool inFOV = isTargetInFOV(LevelManager::grid, position.x, position.y, playerPosition.x,
+    if (const bool inFOV = isTargetInFOV(Game::grid, position.x, position.y, playerPosition.x,
                                          playerPosition.y, sightRange, lookingAngleDeg - 90.0f,
                                          lookingAngleDeg + 90.0f)) {
         chasing.timer.Reset();
@@ -86,8 +87,8 @@ bool emplaceRandomTarget(entt::registry &registry, entt::entity self) {
         const auto theta = static_cast<float>(2.0 * M_PI * i / num_points);
         const float x = round(position.x + Config::GetFloat("enemyPatrolDistance") * cos(theta));
         const float y = round(position.y + Config::GetFloat("enemyPatrolDistance") * sin(theta));
-        if (LevelManager::grid.inWorldBounds(x, y) &&
-            LevelManager::grid.fromWorld(x, y) == IntValue::EMPTY) {
+        if (Game::grid.inWorldBounds(x, y) &&
+            Game::grid.fromWorld(x, y) == IntValue::EMPTY) {
             uniquePoints.insert(Target{x, y});
         }
     }

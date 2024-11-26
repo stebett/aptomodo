@@ -6,6 +6,7 @@
 #include "renderingManager.h"
 #include "../components.h"
 #include "animationManager.h"
+#include "game.h"
 #include "levelManager.h"
 #include "shadowCast.h"
 #include "../config.h"
@@ -100,7 +101,7 @@ namespace RenderingManager {
         // Don't really get why but it works
         const Vector2 cameraZero = GetScreenToWorld2D({0, 0}, camera);
 
-        DrawTextureRec(LevelManager::renderedLevelTexture,
+        DrawTextureRec(Game::levelTexture,
                        {
                            cameraZero.x, -cameraZero.y - screenHeight / camera.zoom, screenWidth / camera.zoom,
                            -screenHeight / camera.zoom
@@ -116,11 +117,11 @@ namespace RenderingManager {
         for (auto row = 0; row < IntGrid::rows(); row++) {
             for (auto col = 0; col < IntGrid::cols(); col++) {
                 Color color = {255, 255, 255, 0};
-                if (LevelManager::grid(row, col) == IntValue::OBSTACLE)
+                if (Game::grid(row, col) == IntValue::OBSTACLE)
                     color = {255, 0, 0, 125};
-                if (LevelManager::grid(row, col) == IntValue::NEAR_OBSTACLE)
+                if (Game::grid(row, col) == IntValue::NEAR_OBSTACLE)
                     color = {255, 0, 0, 50};
-                if (LevelManager::grid(row, col) == IntValue::NPC)
+                if (Game::grid(row, col) == IntValue::NPC)
                     color = {255, 255, 0, 50};
                 DrawRectangle(row * tileSize, col * tileSize, tileSize, tileSize, color);
             }
@@ -140,7 +141,7 @@ namespace RenderingManager {
                 const auto colorRange = isChasing ? ColorAlpha(RED, 0.1) : ColorAlpha(WHITE, 0.1);
                 // DrawCircleSector(position, sightRange, lookAngle - 91.0f, lookAngle + 91.0f, 2, colorRange);
                 DrawCircleV(position, hearRange, colorRange);
-                visualizeFOV(LevelManager::grid, position.x, position.y, sightRange, lookAngle - 91.0f, lookAngle + 91.0f);
+                visualizeFOV(Game::grid, position.x, position.y, sightRange, lookAngle - 91.0f, lookAngle + 91.0f);
             }
 
             if (Config::GetBool("show_astar_path")) {

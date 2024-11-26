@@ -16,6 +16,7 @@
 #include "managers/assets.h"
 #include "managers/framerateManager.h"
 #include "managers/audioManager.h"
+#include "managers/game.h"
 
 /* TODO All the level related stuff and the game loop function should be in another file
  */
@@ -32,7 +33,7 @@ enum class LevelOutcome {
  *  - load different ldtk::levels
  *  - have different gui windows preopened
  */
-LevelOutcome PlayLevel() {
+LevelOutcome PlayLevel(int levelNumber) {
     auto outcome = LevelOutcome::NONE;
     entt::registry registry;
     GuiManager::Instantiate();
@@ -40,10 +41,12 @@ LevelOutcome PlayLevel() {
     auto playerCamera = spawnCamera();
     auto freeCamera = spawnCamera();
 
-    auto player = spawnPlayer(registry);
-    spawnEnemies(registry);
-    spawnItems(registry);
+    spawnEntities(registry, Level::LoadEntities(Assets::GetLevel(levelNumber)));
+    Game::levelTexture = Level::LoadLevelTexture(Assets::GetLevel(levelNumber));
+    Game::grid = Level::LoadIntGrid(Assets::GetLevel(levelNumber));
+    Assets::Clean();
 
+    auto player = registry.view<Player>().front();
     auto &position = registry.get<Position>(player);
     auto &health = registry.get<Health>(player);
 
@@ -53,7 +56,6 @@ LevelOutcome PlayLevel() {
     bool paused = false;
     while (!windowsShouldClose) {
         GuiManager::Update(registry, playerCamera);
-        LevelManager::Update(registry);
         RenderingManager::UpdateCamera(playerCamera, position);
         Audio::Update(registry);
         BeginDrawing();
@@ -108,7 +110,7 @@ LevelOutcome PlayLevel() {
 void GameLoop() {
     auto outcome = LevelOutcome::NONE;
     do {
-        outcome = PlayLevel();
+        outcome = PlayLevel(0);
     } while (outcome != LevelOutcome::QUIT);
 }
 
@@ -119,7 +121,6 @@ int main() {
     Config::Instantiate();
     Assets::Instantiate();
     AnimationManager::Instantiate();
-    LevelManager::Instantiate();
     Params::Instantiate();
 
     GameLoop(); // Game::Run()

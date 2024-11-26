@@ -3,12 +3,14 @@
 //
 
 #include "factories.h"
+
+#include <components.h>
 #include "constants.h"
-#include "managers/levelManager.h"
 #include "attributes.h"
 #include "enemyType.h"
 #include "items.h"
 #include "ai/strategies.h"
+#include "managers/assets.h"
 
 // TODO Make a common factory, and define components used here in factories.h
 
@@ -28,29 +30,11 @@ entt::entity spawnLiving(entt::registry &registry) {
     return e;
 }
 
-entt::entity spawnEnemy(entt::registry &registry, Vector2 position) {
+
+entt::entity spawnEnemyFromFile(entt::registry &registry, Position position, const std::string &enemyName) {
+    const EnemyType &stats = Assets::GetEnemiesData().getType(enemyName);
     static int id = 0;
-    entt::entity e = spawnLiving(registry);
-    //    if (id > 0) { return enemy; }
-    registry.emplace<Path>(e);
-    registry.emplace<Position>(e, position);
-    registry.emplace<ColorBB>(e, RED);
-    registry.emplace<Enemy>(e);
-    registry.emplace<Chasing>(e);
-    auto &chasing = registry.get<Chasing>(e);
-    chasing.timer.StartBehind(100);;
-    registry.emplace<ID>(e, id++);
-    registry.emplace<Health>(e, 50);
-    registry.emplace<Experience>(e, 50);
-    registry.emplace<Strategy::Strategy>(e, std::make_unique<Strategy::Melee>(registry, e));
-    //TODO need to be sure that this gets deleted
-    return e;
-}
-
-
-
-entt::entity spawnEnemyFromFile(entt::registry &registry, Position position, const EnemyType& stats) {
-    static int id = 0; // TODO this should be hashed or something, so we don't have overlap if we add new spawns elsewhere
+    // TODO this should be hashed or something, so we don't have overlap if we add new spawns elsewhere, or stored in Game::ID
     const entt::entity e = registry.create();
     registry.emplace<Name>(e, stats.name);
     registry.emplace<Grade>(e, stats.grade);
@@ -80,18 +64,9 @@ entt::entity spawnEnemyFromFile(entt::registry &registry, Position position, con
     return e;
 };
 
-entt::entity spawnRandomEnemy(entt::registry &registry) {
-    const Position randomPos = {
-        static_cast<float>(rng::uniform(rng::seed)),
-        static_cast<float>(rng::uniform(rng::seed))
-    };
-    auto dataFile = EnemyDataFile();
-    dataFile.loadCSV("../config/enemies.csv");
-    return spawnEnemyFromFile(registry, randomPos, dataFile.getType("Buco"));
-}
 
 entt::entity spawnPlayer(entt::registry &registry, Vector2 position) {
-    entt::entity e = spawnLiving(registry);
+    const entt::entity e = spawnLiving(registry);
     registry.emplace<Player>(e);
     registry.emplace<Position>(e, position);
     registry.emplace<ColorBB>(e, BLUE);
@@ -102,21 +77,6 @@ entt::entity spawnPlayer(entt::registry &registry, Vector2 position) {
     return e;
 }
 
-entt::entity spawnPlayer(entt::registry &registry) {
-    auto entitiesPositions = LevelManager::GetEntitiesPositions();
-    for (const auto &[label, position]: entitiesPositions) {
-        if (label == "Player") return spawnPlayer(registry, position);
-    }
-    return {};
-}
-
-void spawnEnemies(entt::registry &registry) {
-    auto dataFile = EnemyDataFile();
-    dataFile.loadCSV("../config/enemies.csv");
-    for (const auto &[label, position]: LevelManager::GetEnemiesPositions()) {
-        spawnEnemyFromFile(registry, position, dataFile.getType(label));
-    }
-}
 
 Camera2D spawnCamera() {
     Camera2D camera = {0};
@@ -127,40 +87,52 @@ Camera2D spawnCamera() {
     return camera;
 }
 
-void spawnAmulet(entt::registry &registry) {
-    Vector2 position{};
-    for (const auto &[label, pos]: LevelManager::GetEntitiesPositions()) {
-        if (label == "Amulet") position = pos;
+entt::entity spawnItemFromFile(entt::registry &registry, Vector2 position, const std::string &name) {
+    // TODO make this load amulets from file
+    return entt::entity();
+}
+
+
+void spawnEntities(entt::registry &registry, const std::vector<Level::Entity>& entities) {
+    for (auto& [position, type, name]: entities) {
+        if (type == "Enemy") spawnEnemyFromFile(registry, position, name);
+        if (type == "Item") spawnItemFromFile(registry, position, name);
+        if (type == "Player") spawnPlayer(registry, position);
     }
-    AttributeConstants::Modifier modifier = {
-        AttributeConstants::strength, 2, AttributeConstants::ModifierOperator::ADD
-    };
-
-    entt::entity e = registry.create();
-    registry.emplace<Item>(e);
-    registry.emplace<Position>(e, position);
-    registry.emplace<AttributeConstants::Modifier>(e, modifier);
-    registry.emplace<Name>(e, "Amuleto de sto'cazzo");
 }
 
 
-void spawnAmulet2(entt::registry &registry) {
-    Vector2 position{};
-    for (const auto &[label, pos]: LevelManager::GetEntitiesPositions()) {
-        if (label == "Amulet2") position = pos;
-    }
-    AttributeConstants::Modifier modifier = {
-        AttributeConstants::strength, 2, AttributeConstants::ModifierOperator::MUL
-    };
 
-    entt::entity e = registry.create();
-    registry.emplace<Item>(e);
-    registry.emplace<Position>(e, position);
-    registry.emplace<AttributeConstants::Modifier>(e, modifier);
-    registry.emplace<Name>(e, "Amuleto della mia minchia");
-}
 
-void spawnItems(entt::registry &registry) {
-    spawnAmulet(registry);
-    spawnAmulet2(registry);
-}
+// void spawnAmulet(entt::registry &registry) {
+//     Vector2 position{};
+//     for (const auto &[label, pos]: LevelManager::GetEntitiesPositions()) {
+//         if (label == "Amulet") position = pos;
+//     }
+//     AttributeConstants::Modifier modifier = {
+//         AttributeConstants::strength, 2, AttributeConstants::ModifierOperator::ADD
+//     };
+//
+//     entt::entity e = registry.create();
+//     registry.emplace<Item>(e);
+//     registry.emplace<Position>(e, position);
+//     registry.emplace<AttributeConstants::Modifier>(e, modifier);
+//     registry.emplace<Name>(e, "Amuleto de sto'cazzo");
+// }
+//
+//
+// void spawnAmulet2(entt::registry &registry) {
+//     Vector2 position{};
+//     for (const auto &[label, pos]: LevelManager::GetEntitiesPositions()) {
+//         if (label == "Amulet2") position = pos;
+//     }
+//     AttributeConstants::Modifier modifier = {
+//         AttributeConstants::strength, 2, AttributeConstants::ModifierOperator::MUL
+//     };
+//
+//     entt::entity e = registry.create();
+//     registry.emplace<Item>(e);
+//     registry.emplace<Position>(e, position);
+//     registry.emplace<AttributeConstants::Modifier>(e, modifier);
+//     registry.emplace<Name>(e, "Amuleto della mia minchia");
+// }

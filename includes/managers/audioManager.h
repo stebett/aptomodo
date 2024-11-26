@@ -11,8 +11,6 @@ namespace Audio {
         std::string soundName;
     };
 
-    void Play(const std::string &key);
-
     void Update(entt::registry &registry);
 };
 

@@ -6,6 +6,7 @@
 #include "managers/levelManager.h"
 
 #include "pch.h"
+#include "managers/game.h"
 
 // NODE
 bool Node::operator==(const Node &otherNode) const {
@@ -54,8 +55,8 @@ std::vector<Node> neighbors(const Node node) {
             if (x == 0 && y == 0) continue;
             if (neighbor_x < 0 || neighbor_x >= IntGrid::rows()) continue;
             if (neighbor_y < 0 || neighbor_y >= IntGrid::cols()) continue;
-            if (LevelManager::grid.safe(neighbor_x, neighbor_y) == IntValue::OBSTACLE) continue;
-            // if (LevelManager::grid(neighbor_x, neighbor_y) == IntValue::NPC) continue;
+            if (Game::grid.safe(neighbor_x, neighbor_y) == IntValue::OBSTACLE) continue;
+            // if (Game::grid(neighbor_x, neighbor_y) == IntValue::NPC) continue;
             neighbors.emplace_back(neighbor_x, neighbor_y);
         }
     return neighbors;
@@ -115,8 +116,8 @@ void Search::step() {
         if (!came_from.contains(neighbor)) {
             if (neighbor == start | neighbor == came_from[current]) continue;
             float terrainPenalty = 3.0f * static_cast<float>(
-                                       LevelManager::grid.safe(neighbor.x, neighbor.y) == IntValue::NEAR_OBSTACLE);
-            terrainPenalty += static_cast<float>(LevelManager::grid.safe(neighbor.x, neighbor.y) == IntValue::NPC) *
+                                       Game::grid.safe(neighbor.x, neighbor.y) == IntValue::NEAR_OBSTACLE);
+            terrainPenalty += static_cast<float>(Game::grid.safe(neighbor.x, neighbor.y) == IntValue::NPC) *
                     1.5f;
             open.emplace(neighbor, manhattan(neighbor, end) + terrainPenalty);
             came_from[neighbor] = current;
