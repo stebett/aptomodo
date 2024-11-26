@@ -34,7 +34,8 @@ add_executable(${EXEC} main.cpp ${SOURCES}
         includes/commands.h
         includes/ai/strategies.cpp
         includes/managers/assets.h
-        includes/managers/game.h)
+        includes/managers/game.h
+        includes/player_ui.cpp)
 target_link_libraries(${EXEC} PRIVATE raylib)
 target_link_libraries(${EXEC} PRIVATE LDtkLoader)
 target_link_libraries(${EXEC} PRIVATE EnTT::EnTT)
