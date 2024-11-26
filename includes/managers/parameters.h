@@ -36,8 +36,8 @@ struct AttributeParameters {
  */
 namespace Params {
 
-    static inline AttributeParameters attributes;
-    static inline toml::table config;
+    static AttributeParameters attributes;
+    static toml::table config;
 
     void SaveAttributeParameters();
     void LoadAttributeParameters();

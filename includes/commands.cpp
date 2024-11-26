@@ -29,7 +29,7 @@ void generateCommands(entt::registry &registry) {
     if (IsKeyPressed(KEY_S) || IsKeyDown(KEY_S)) bitfield.set(1);
     if (IsKeyPressed(KEY_A) || IsKeyDown(KEY_A)) bitfield.set(2);
     if (IsKeyPressed(KEY_D) || IsKeyDown(KEY_D)) bitfield.set(3);
-    registry.emplace_or_replace<CommandHolder>(player, std::make_unique<MoveCommand>(registry, player, bitfield));
+    if (!bitfield.none()) registry.emplace_or_replace<CommandHolder>(player, std::make_unique<MoveCommand>(registry, player, bitfield));
 }
 
 

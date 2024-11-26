@@ -19,7 +19,7 @@ Attributes::Attributes(int st, int in, int ag, int wi, int co, int pe) {
 
     for (auto attr: attributeVec)
         for (auto subattr: subAttrByAttr[attr])
-            subValues[subattr] = Params::attributes.pointsAtStart;
+            subValues[subattr] = Params::GetPointsAtStart();
 }
 
 Attributes::Attributes() : Attributes(1, 1, 1, 1, 1, 1) {}
@@ -56,22 +56,22 @@ void Attributes::updateModifiers(const std::vector<Modifier> &modifiers) {
 [[nodiscard]] float Attributes::getMultiplied(const SubAttributeName subattr) const {
     //TODO add a check that the attr is not too small to support the subattrs
 //        return subValuesMultiplied[subattr]; ?
-    return Params::attributes.subAttrAtStart[subattr] + static_cast<float>(subValues[subattr]) * Params::attributes.subAttrMultipliers[subattr];
+    return Params::StartValue(subattr) + static_cast<float>(subValues[subattr]) * Params::Multiplier(subattr);
 }
 
 int Attributes::freeAttrPoints() const {
-    return (level - 1) * Params::attributes.pointsByLevel - std::accumulate(values.begin(), values.end(), 0) + 6;
+    return (level - 1) * Params::GetPointsByLevel() - std::accumulate(values.begin(), values.end(), 0) + 6;
 }
 
-int Attributes::freeSubAttrPoints(AttributeName attr) const {
-    int attrValue = get(attr);
+int Attributes::freeSubAttrPoints(const AttributeName attr) const {
+    const int attrValue = get(attr);
     int subAttrTotal = 0;
-    for (auto sa: subAttrByAttr.at(attr)) subAttrTotal += subValues[sa] - Params::attributes.pointsAtStart;
-    return Params::attributes.pointsByAttr * attrValue - subAttrTotal;
+    for (const auto sa: subAttrByAttr.at(attr)) subAttrTotal += subValues[sa] - Params::GetPointsAtStart();
+    return Params::GetPointsByAttr() * attrValue - subAttrTotal;
 }
 
 int Attributes::freeSubAttrPoints(SubAttributeName subattr) const {
-    AttributeName attr = attrBySubAttr.at(subattr);
+    const AttributeName attr = attrBySubAttr.at(subattr);
     return freeSubAttrPoints(attr);
 }
 
@@ -83,11 +83,11 @@ bool Attributes::outOfSubAttrPoints(const SubAttributeName subattr) const {
     return freeSubAttrPoints(subattr) <= 0;
 }
 
-bool Attributes::atMinAttrPoints(AttributeName attr) const {
+bool Attributes::atMinAttrPoints(const AttributeName attr) const {
     int subAttrTotal = 0;
-    for (auto sa: subAttrByAttr.at(attr)) subAttrTotal += subValues[sa] - Params::attributes.pointsAtStart;
+    for (const auto sa: subAttrByAttr.at(attr)) subAttrTotal += subValues[sa] - Params::GetPointsAtStart();
     return values[attr] <= 1 ||
-           subAttrTotal > Params::attributes.pointsByAttr * values[attr] - Params::attributes.pointsByAttr;
+           subAttrTotal > Params::GetPointsByAttr() * values[attr] - Params::GetPointsByAttr();
 }
 
 
@@ -127,14 +127,14 @@ int Attributes::expForCurrentLevel() const {
     int total = 0;
     int l = level - 1;
     while (l > 0) {
-        total += l * Params::attributes.expByLevel;
+        total += l * Params::GetExpByLevel();
         l -= 1;
     }
     return total;
 }
 
 int Attributes::expToNextLevel() const {
-    return expForCurrentLevel() + level * Params::attributes.expByLevel;
+    return expForCurrentLevel() + level * Params::GetExpByLevel();
 }
 
 void Attributes::levelUp() {
