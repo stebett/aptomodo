@@ -4,6 +4,9 @@
 
 
 #include "renderingManager.h"
+
+#include <math/decay.h>
+
 #include "../components.h"
 #include "animationManager.h"
 #include "game.h"
@@ -14,7 +17,7 @@
 
 namespace RenderingManager {
 
-    void UpdateCamera(Camera2D &camera, const Vector2 &playerPosition) {
+    void UpdateCamera(Camera2D &camera, const Vector2 &playerPosition, const float delta) {
         float target_x = playerPosition.x;
         float target_y = playerPosition.y;
 
@@ -32,7 +35,11 @@ namespace RenderingManager {
             target_y = mapHeight - screenHeight / (2 * camera.zoom);
         }
 
-        camera.target = Vector2Lerp(camera.target, {target_x, target_y}, 0.1); // TODO Substitute fps/agnostic Lerp to this
+        constexpr float decay = 10;
+        target_x = expDecay(camera.target.x, target_x, decay, delta);
+        target_y = expDecay(camera.target.y, target_y, decay, delta);
+        camera.target = {target_x, target_y};
+        // camera.target = Vector2Lerp(camera.target, {target_x, target_y}, 0.1); // TODO Substitute fps/agnostic Lerp to this
     }
 
 
@@ -47,7 +54,7 @@ namespace RenderingManager {
     }
 
     void drawEnemyTexture(const entt::registry &registry, unsigned int frame) {
-        auto livingView = registry.view<Living, Radius, Position, LookAngle, Speed>(); // TODO Draw only onscreen, add InScreen Tag
+        auto livingView = registry.view<Living, ToRender, Radius, Position, LookAngle, Speed>();
         for (auto [entity, radius, position, rotation, speed]: livingView.each()) {
             DrawTexturePro(AnimationManager::getTexture("enemy/walking/v1/", frame * speed.actual),
                            {0, 0, 240, 240},
@@ -59,7 +66,7 @@ namespace RenderingManager {
     }
 
     void drawLivingBB(const entt::registry &registry) {
-        auto livingView = registry.view<Living, ToRender, Radius, Position, LookAngle, ColorBB>();// TODO Draw only onscreen, add InScreen Tag
+        auto livingView = registry.view<Living, ToRender, Radius, Position, LookAngle, ColorBB>();
         for (auto [entity, radius, position, lookAngle, color]: livingView.each()) {
             DrawCircleV(position, radius, color);
             DrawLineV(position, Vector2Add(
@@ -67,7 +74,7 @@ namespace RenderingManager {
                       BLACK);
         }
         if (Config::GetBool("draw_enemies_outside_screen")) {
-            auto outsideScreen = registry.view<Living, Enemy, Radius, Position, LookAngle, ColorBB>(entt::exclude<ToRender>);// TODO Draw only onscreen, add InScreen Tag
+            auto outsideScreen = registry.view<Living, Enemy, Radius, Position, LookAngle, ColorBB>(entt::exclude<ToRender>);
             for (auto [entity, radius, position, lookAngle, color]: outsideScreen.each()) {
                 DrawCircleV(position, radius, BLACK);
                 DrawLineV(position, Vector2Add(
@@ -91,7 +98,7 @@ namespace RenderingManager {
         auto player = registry.view<Player>().front();
         auto playerPosition = registry.get<Position>(player);
         for (auto [entity, position]: registry.view<Item, Position>().each()) {
-            if (Vector2Distance(playerPosition, position) < 20) { // TODO make it bigger
+            if (Vector2Distance(playerPosition, position) < 40) {
                 DrawText("Press F to pick up", position.x, position.y, 12, BLACK);
                 return; // Only draw it for one item TODO why?
             }

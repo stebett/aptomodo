@@ -49,7 +49,7 @@ LevelOutcome PlayLevel(int levelNumber) {
     bool paused = false;
     while (!windowsShouldClose) {
         GuiManager::Update(registry, playerCamera);
-        RenderingManager::UpdateCamera(playerCamera, position);
+        RenderingManager::UpdateCamera(playerCamera, position, framerateManager.deltaTime);
         Audio::Update(registry);
         BeginDrawing();
         if (!Config::GetBool("free_camera")) { // TODO envelop this in a function

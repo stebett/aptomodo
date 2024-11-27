@@ -8,7 +8,7 @@
 
 namespace AI {
     void Update(entt::registry &registry, const entt::entity player) {
-       registry.view<Living, Enemy, Strategy::Strategy>().each([&registry, player](auto enemy, auto& strategy) {
+       registry.view<ToSimulate, Living, Enemy, Strategy::Strategy>().each([&registry, player](auto enemy, auto& strategy) {
            strategy.behavior->tick(registry, enemy, player);
         });
         // TODO need to simulate only enemies in AI area. need something like bool Space::inAISpace(entity) {...}

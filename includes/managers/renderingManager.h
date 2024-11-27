@@ -9,7 +9,7 @@
 #include <entt/entity/registry.hpp>
 
 namespace RenderingManager {
-    void UpdateCamera(Camera2D &camera, const Vector2 &playerPosition);
+    void UpdateCamera(Camera2D &camera, const Vector2 &playerPosition, float delta);
 
     void DrawLevel(const Camera2D &camera);
 

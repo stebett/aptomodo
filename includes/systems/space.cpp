@@ -7,18 +7,29 @@
 #include <components.h>
 #include <constants.h>
 
-bool isPointInRectangle(const Vector2 &point, const Rectangle &rec) {
-    return (rec.x <= point.x) && (point.x <= rec.width) && (rec.y <= point.y) && (point.y <= rec.height);
+constexpr int simPad{100};
+constexpr Rectangle renderSpace{0, 0, screenWidth, screenHeight};
+constexpr Rectangle simulationSpace{-simPad, -simPad, screenWidth + simPad, screenHeight + simPad};
+
+bool inRenderSpace(const Vector2 &point, const Camera2D &camera) {
+    return CheckCollisionPointRec(GetWorldToScreen2D(point, camera), renderSpace);
+}
+
+bool inSimSpace(const Vector2 &point, const Camera2D &camera) {
+    return CheckCollisionPointRec(GetWorldToScreen2D(point, camera), simulationSpace);
 }
 
 namespace Space {
     void Update(entt::registry &registry, const Camera2D &camera) {
         registry.view<Position>().each([&camera, &registry](auto entity, auto position) {
-            if (CheckCollisionPointRec(GetWorldToScreen2D(position, camera),
-                                       {0, 0, screenWidth, screenHeight})) {
-                registry.emplace_or_replace<ToRender>(entity);
-            } else {
+            if (!inSimSpace(position, camera)) {
                 registry.remove<ToRender>(entity);
+                registry.remove<ToSimulate>(entity);
+            } else {
+                registry.emplace_or_replace<ToSimulate>(entity);
+                if (inRenderSpace(position, camera)) {
+                    registry.emplace_or_replace<ToRender>(entity);
+                }
             }
         });
     }
