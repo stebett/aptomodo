@@ -19,7 +19,7 @@ struct CommandHolder {
 };
 
 namespace Inputs {
-    void Listen(entt::registry &registry, float delta);
+    void Listen(entt::registry &registry,  const Camera2D& camera, float delta);
 
     void Update(entt::registry &registry);
 }
@@ -52,5 +52,13 @@ namespace Command {
         void execute() override;
     };
 
+    class SelectEnemy final : public CommandBase {
+        entt::registry &registry;
+        Vector2 mousePosition;
+    public:
+        SelectEnemy(entt::registry &registry, const Vector2 &mouse_position);
+
+        void execute() override;
+    };
 }
 #endif //COMMANDS_H

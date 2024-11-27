@@ -66,7 +66,7 @@ LevelOutcome PlayLevel(const int levelNumber) {
         ClearBackground(WHITE);
         Rendering::DrawLevel(playerCamera);
 
-        Inputs::Listen(registry, framerateManager.deltaTime);
+        Inputs::Listen(registry, playerCamera, framerateManager.deltaTime);
         Inputs::Update(registry);
         Rendering::Draw(registry, playerCamera, framerateManager.framesCounter); // This has to stay after updatePlayer
         EndMode2D();

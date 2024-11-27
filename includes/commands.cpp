@@ -8,6 +8,7 @@
 #include <bitset>
 #include <collisions.h>
 #include <components.h>
+#include <config.h>
 #include <constants.h>
 
 namespace Inputs {
@@ -22,7 +23,7 @@ namespace Inputs {
     }
 
 
-    void Listen(entt::registry &registry, float delta) {
+    void Listen(entt::registry &registry, const Camera2D& camera, float delta) {
         auto player = registry.view<Player>().front();
         std::bitset<4> bitfield;
         if (!Game::IsPaused()) {
@@ -43,12 +44,18 @@ namespace Inputs {
         if (IsKeyPressed(KEY_P))
             registry.emplace_or_replace<CommandHolder>(
                 entt::entity(), std::make_unique<Command::Pause>());
+
+        if (IsMouseButtonPressed(MOUSE_RIGHT_BUTTON))
+            registry.emplace_or_replace<CommandHolder>(
+                entt::entity(),
+                std::make_unique<Command::SelectEnemy>(registry,
+                    GetScreenToWorld2D(GetMousePosition(), camera)));
     }
 }
 
 namespace Command {
     Move::Move(entt::registry &registry, const entt::entity self, const std::bitset<4> bitfield, const float delta)
-        : registry(registry), self(self), bitfield(bitfield), delta(delta){
+        : registry(registry), self(self), bitfield(bitfield), delta(delta) {
     }
 
     void Move::execute() {
@@ -67,8 +74,9 @@ namespace Command {
         if (futurePos.y - radius < 0 || futurePos.y + radius > mapHeight) futurePos.y = position.y;
 
         const Vector2 direction = Vector2Subtract(futurePos, position);
-        constexpr float deltaCorrector {60};
-        const Vector2 movement = Vector2Scale(Vector2Normalize(direction), attributes.getMultiplied(speed)*delta*deltaCorrector);
+        constexpr float deltaCorrector{60};
+        const Vector2 movement = Vector2Scale(Vector2Normalize(direction),
+                                              attributes.getMultiplied(speed) * delta * deltaCorrector);
         // TODO Speed should definitely be just a component, that gets updated any time attributes change
         futurePos = Vector2Add(position, movement);
         solveCircleRecCollision(futurePos, radius);
@@ -89,5 +97,21 @@ namespace Command {
 
     void Pause::execute() {
         Game::Pause();
+    }
+
+
+    SelectEnemy::SelectEnemy(entt::registry &registry, const Vector2 &mouse_position): registry(registry),
+        mousePosition(mouse_position) {
+    }
+
+    void SelectEnemy::execute() {
+        const auto enemyView = registry.view<Enemy, ToRender, Living, Radius, Position>();
+        registry.clear<Selected>();
+        for (auto [enemy, radius, position]: enemyView.each()) {
+            if (CheckCollisionPointCircle(mousePosition, position, radius)) {
+                registry.emplace<Selected>(enemy);
+                *Config::GetBoolPtr("show_enemy_window") = true;
+            }
+        }
     }
 };
