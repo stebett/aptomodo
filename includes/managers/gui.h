@@ -10,7 +10,7 @@
 #include <imgui.h>
 #include "raylib.h"
 
-class GuiManager {
+class Gui {
     static ImGuiIO *m_io;
 
 public:
@@ -20,7 +20,7 @@ public:
 
     static void Draw();
 
-    ~GuiManager();
+    ~Gui();
 };
 
 ImGuiIO InitGui();

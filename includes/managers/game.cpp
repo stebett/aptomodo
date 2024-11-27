@@ -20,16 +20,19 @@
 Texture2D Game::levelTexture;
 IntGrid Game::grid;
 bool Game::paused = false;
+bool Game::levelFinished = false;
+int Game::Level = 0;
+LevelOutcome Game::levelOutcome = LevelOutcome::NONE;
 
 /* TODO
  * Different levels should
  *  - load different ldtk::levels
  *  - have different gui windows preopened
  */
-LevelOutcome PlayLevel(int levelNumber) {
+LevelOutcome PlayLevel(const int levelNumber) {
     auto outcome = LevelOutcome::NONE;
     entt::registry registry;
-    GuiManager::Instantiate();
+    Gui::Instantiate();
 
     auto playerCamera = spawnCamera();
     auto freeCamera = spawnCamera();
@@ -45,58 +48,41 @@ LevelOutcome PlayLevel(int levelNumber) {
 
     FramerateManager framerateManager;
 
-    bool windowsShouldClose = false;
-    bool paused = false;
-    while (!windowsShouldClose) {
-        GuiManager::Update(registry, playerCamera);
-        RenderingManager::UpdateCamera(playerCamera, position, framerateManager.deltaTime);
+    while (!Game::IsLevelFinished()) {
+        if (!Game::IsPaused()) Space::Update(registry, playerCamera);
+        Gui::Update(registry, playerCamera);
+        Rendering::UpdateCamera(playerCamera, position, framerateManager.deltaTime);
         Audio::Update(registry);
+        if (!Game::IsPaused()) AI::Update(registry, player);
+
         BeginDrawing();
-        if (!Config::GetBool("free_camera")) { // TODO envelop this in a function
+        if (!Config::GetBool("free_camera")) {
+            // TODO envelop this in a function
             BeginMode2D(playerCamera);
             freeCamera = playerCamera;
-        }
-        else
+        } else
             BeginMode2D(freeCamera);
 
         ClearBackground(WHITE);
-        RenderingManager::DrawLevel(playerCamera);
+        Rendering::DrawLevel(playerCamera);
 
-        if (!Game::IsPaused()) {
-            AI::Update(registry, player); // TODO this needs to be before BeginDrawing
-            generateCommands(registry);
-            commandSystem(registry);
-        }
-        RenderingManager::Draw(registry, playerCamera, framerateManager.framesCounter); // This has to stay after updatePlayer
+        Inputs::Listen(registry, framerateManager.deltaTime);
+        Inputs::Update(registry);
+        Rendering::Draw(registry, playerCamera, framerateManager.framesCounter); // This has to stay after updatePlayer
         EndMode2D();
         PlayerUI::Draw(health.value);
-        GuiManager::Draw();
-
+        Gui::Draw();
 
         EndDrawing();
-
-        Space::Update(registry, playerCamera);
-
         framerateManager.Update();
-        if (IsKeyPressed(KEY_Q)) {
-            windowsShouldClose = true;
-            outcome = LevelOutcome::QUIT;
-        }
-        if (IsKeyPressed(KEY_R)) {
-            windowsShouldClose = true;
-            outcome = LevelOutcome::RESTART;
-        }
-        if (IsKeyPressed(KEY_P)) { paused = !paused; }
     }
 
-    return outcome;
+    return Game::GetOutcome();
 }
 
 void Game::Loop() {
-    auto outcome = LevelOutcome::NONE;
-    do {
-        outcome = PlayLevel(0);
-    } while (outcome != LevelOutcome::QUIT);
+    while (levelOutcome != LevelOutcome::QUIT)
+        PlayLevel(Level);
 }
 
 bool Game::IsPaused() {
@@ -104,5 +90,21 @@ bool Game::IsPaused() {
 };
 
 void Game::Pause() {
-    paused = true;
+    paused = !paused;
+}
+
+bool Game::IsLevelFinished() {
+    return levelFinished;
+}
+
+void Game::ExitLevel() {
+    levelFinished = true;
+}
+
+LevelOutcome Game::GetOutcome() {
+    return levelOutcome;
+}
+
+void Game::SetOutcome(const LevelOutcome outcome) {
+    levelOutcome = outcome;
 }

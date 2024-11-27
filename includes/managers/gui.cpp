@@ -12,7 +12,7 @@
 #include "enemyType.h"
 #include "items.h"
 
-ImGuiIO *GuiManager::m_io;
+ImGuiIO *Gui::m_io;
 
 
 
@@ -411,7 +411,7 @@ void imguiWindowMain(entt::registry &registry, ImGuiIO io, const Camera2D &camer
 }
 
 
-void GuiManager::Instantiate() {
+void Gui::Instantiate() {
     ImGui::CreateContext();
     m_io = &ImGui::GetIO();
     m_io->ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard; // Enable Keyboard Controls
@@ -424,7 +424,7 @@ void GuiManager::Instantiate() {
     ImGui_ImplRaylib_BuildFontAtlas();
 }
 
-void GuiManager::Update(entt::registry &registry, const Camera2D &camera) {
+void Gui::Update(entt::registry &registry, const Camera2D &camera) {
     ImGui_ImplRaylib_ProcessEvents();
 
     // Start the Dear ImGui frame
@@ -437,11 +437,11 @@ void GuiManager::Update(entt::registry &registry, const Camera2D &camera) {
     ImGui::Render();
 }
 
-void GuiManager::Draw() {
+void Gui::Draw() {
     ImGui_ImplRaylib_RenderDrawData(ImGui::GetDrawData());
 }
 
-GuiManager::~GuiManager() {
+Gui::~Gui() {
     ImGui_ImplRaylib_Shutdown();
     ImGui::DestroyContext();
 }

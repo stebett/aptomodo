@@ -15,7 +15,7 @@
 #include "../config.h"
 #include "../items.h"
 
-namespace RenderingManager {
+namespace Rendering {
 
     void UpdateCamera(Camera2D &camera, const Vector2 &playerPosition, const float delta) {
         float target_x = playerPosition.x;
@@ -35,11 +35,9 @@ namespace RenderingManager {
             target_y = mapHeight - screenHeight / (2 * camera.zoom);
         }
 
-        constexpr float decay = 10;
-        target_x = expDecay(camera.target.x, target_x, decay, delta);
-        target_y = expDecay(camera.target.y, target_y, decay, delta);
+        target_x = expDecay(camera.target.x, target_x, Config::GetFloat("CameraDecay"), delta);
+        target_y = expDecay(camera.target.y, target_y, Config::GetFloat("CameraDecay"), delta);
         camera.target = {target_x, target_y};
-        // camera.target = Vector2Lerp(camera.target, {target_x, target_y}, 0.1); // TODO Substitute fps/agnostic Lerp to this
     }
 
 

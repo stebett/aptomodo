@@ -5,35 +5,52 @@
 #ifndef COMMANDS_H
 #define COMMANDS_H
 #include <bitset>
+#include <managers/game.h>
 
-class Command {
+class CommandBase {
 public:
-    virtual ~Command() = default;
+    virtual ~CommandBase() = default;
 
     virtual void execute() = 0;
 };
 
 struct CommandHolder {
-    std::unique_ptr<Command> command;
+    std::unique_ptr<CommandBase> command;
 };
 
-void generateCommands(entt::registry &registry);
+namespace Inputs {
+    void Listen(entt::registry &registry, float delta);
 
-void commandSystem(entt::registry &registry);
+    void Update(entt::registry &registry);
+}
 
-class MoveCommand final : public Command {
-    entt::registry &registry;
-    entt::entity self;
-    std::bitset<4> bitfield;
+namespace Command {
+    class Move final : public CommandBase {
+        entt::registry &registry;
+        entt::entity self;
+        std::bitset<4> bitfield;
+        float delta{};
 
-public:
-    MoveCommand(entt::registry &registry, entt::entity self, std::bitset<4> bitfield);
+    public:
+        Move(entt::registry &registry, entt::entity self, std::bitset<4> bitfield, float delta);
 
-    void execute() override;
-};
+        void execute() override;
+    };
 
+    class Quit final : public CommandBase {
+    public:
+        void execute() override;
+    };
 
+    class Restart final : public CommandBase {
+    public:
+        void execute() override;
+    };
 
+    class Pause final : public CommandBase {
+    public:
+        void execute() override;
+    };
 
-
+}
 #endif //COMMANDS_H

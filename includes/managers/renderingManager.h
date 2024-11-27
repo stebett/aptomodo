@@ -8,7 +8,7 @@
 #include <raylib.h>
 #include <entt/entity/registry.hpp>
 
-namespace RenderingManager {
+namespace Rendering {
     void UpdateCamera(Camera2D &camera, const Vector2 &playerPosition, float delta);
 
     void DrawLevel(const Camera2D &camera);

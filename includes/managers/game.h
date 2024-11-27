@@ -18,15 +18,28 @@ enum class LevelOutcome {
 class Game {
 private:
     static bool paused;;
+    static bool levelFinished;
+    static LevelOutcome levelOutcome;
+
 public:
-    int Level{};
+    static int Level;
     static Texture2D levelTexture;
     static IntGrid grid;
 
 
     static void Loop();
+
     static bool IsPaused();
+
     static void Pause();
+
+    static void ExitLevel();
+
+    static void SetOutcome(LevelOutcome);
+
+    [[nodiscard]] static bool IsLevelFinished();
+
+    [[nodiscard]] static LevelOutcome GetOutcome();
 };
 
 
