@@ -10,6 +10,8 @@
 #include <components.h>
 #include <config.h>
 #include <constants.h>
+#include <items.h>
+#include <managers/audioManager.h>
 
 namespace Inputs {
     void Update(entt::registry &registry) {
@@ -23,7 +25,7 @@ namespace Inputs {
     }
 
 
-    void Listen(entt::registry &registry, const Camera2D& camera, float delta) {
+    void Listen(entt::registry &registry, Camera2D &camera, float delta) {
         auto player = registry.view<Player>().front();
         std::bitset<4> bitfield;
         if (!Game::IsPaused()) {
@@ -44,12 +46,30 @@ namespace Inputs {
         if (IsKeyPressed(KEY_P))
             registry.emplace_or_replace<CommandHolder>(
                 entt::entity(), std::make_unique<Command::Pause>());
+        if (IsKeyPressed(KEY_M))
+            registry.emplace_or_replace<CommandHolder>(
+                entt::entity(), std::make_unique<Command::Mute>());
+        if (IsKeyPressed(KEY_P))
+            registry.emplace_or_replace<CommandHolder>(
+                entt::entity(), std::make_unique<Command::PickUp>(registry, player));
 
-        if (IsMouseButtonPressed(MOUSE_RIGHT_BUTTON))
+        if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT))
             registry.emplace_or_replace<CommandHolder>(
                 entt::entity(),
                 std::make_unique<Command::SelectEnemy>(registry,
-                    GetScreenToWorld2D(GetMousePosition(), camera)));
+                                                       GetScreenToWorld2D(GetMousePosition(), camera)));
+
+        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+            registry.emplace_or_replace<CommandHolder>(
+                entt::entity(),
+                std::make_unique<Command::Attack>(registry,
+                                                  player,
+                                                  GetScreenToWorld2D(GetMousePosition(), camera)));
+
+        if (abs(GetMouseWheelMove()) > 0.1)
+            registry.emplace_or_replace<CommandHolder>(
+                entt::entity(),
+                std::make_unique<Command::Zoom>(camera));
     }
 }
 
@@ -85,6 +105,68 @@ namespace Command {
     }
 
 
+    Attack::Attack(entt::registry &registry, entt::entity self, const Vector2 mousePosition)
+        : registry(registry), self(self), mousePosition(mousePosition) {
+    }
+
+    void Attack::execute() {
+        auto &attackTimer = registry.get<AttackTimer>(self).timer;
+        const auto &attributes = registry.get<Attributes>(self);
+        if (attackTimer.ElapsedSeconds() < attributes.getMultiplied(AttributeConstants::attackSpeed)) return;
+        attackTimer.Reset();
+        Position &playerPosition = registry.get<Position>(self);
+
+        const float attackRange = attributes.getMultiplied(AttributeConstants::range);
+        const float attackSpread = attributes.getMultiplied(AttributeConstants::spread);
+        const float damage = attributes.getMultiplied(AttributeConstants::damagePhysical);
+        //    float pushback = registry.get<Pushback>(player);
+
+        float clickAngle = atan2(mousePosition.y - playerPosition.y, mousePosition.x - playerPosition.x) * radToDeg;
+
+        AttackEffect effect = {
+            100, playerPosition, attackRange, clickAngle - attackSpread, clickAngle + attackSpread,
+            PURPLE
+        };
+        registry.emplace<AttackEffect>(registry.create(), effect);
+
+        registry.emplace<Audio::Command>(registry.create(), "player_shot");
+
+        Vector2 endSegment1 = {
+            playerPosition.x + attackRange * (float) cos((clickAngle - attackSpread) * degToRad),
+            playerPosition.y + attackRange * (float) sin((clickAngle - attackSpread) * degToRad)
+        };
+        Vector2 endSegment2 = {
+            playerPosition.x + attackRange * (float) cos((clickAngle + attackSpread) * degToRad),
+            playerPosition.y + attackRange * (float) sin((clickAngle + attackSpread) * degToRad)
+        };
+
+        auto enemyView = registry.view<Enemy, Living, Health, Radius, Position>();
+        for (auto [enemy, health, radius, position]: enemyView.each()) {
+            if (CheckCollisionCircleTriangle(position, radius, playerPosition,
+                                             endSegment1, endSegment2, attackRange)) {
+                health -= damage;
+                //            float m = sqrt(pow(playerPosition.x + position.x, 2) + pow(playerPosition.y + position.y, 2));
+                //            position = {(position.x + (position.x - playerPosition.x) * pushback / m),
+                //                        position.y + (position.y - playerPosition.y) * pushback / m};
+            }
+        }
+    }
+
+    PickUp::PickUp(entt::registry &registry, entt::entity self): registry(registry),
+                                                                 self(self) {
+    }
+
+    void PickUp::execute() {
+        const Position playerPosition = registry.get<Position>(self);
+        for (auto [entity, position]: registry.view<Item, Position>().each()) {
+            if (Vector2Distance(playerPosition, position) < 20) {
+                registry.emplace<OnPlayer>(entity);
+                registry.remove<Position>(entity);
+                return; // Only draw it for one item
+            }
+        }
+    }
+
     void Quit::execute() {
         Game::SetOutcome(LevelOutcome::QUIT);
         Game::ExitLevel();
@@ -99,9 +181,9 @@ namespace Command {
         Game::Pause();
     }
 
-
-    SelectEnemy::SelectEnemy(entt::registry &registry, const Vector2 &mouse_position): registry(registry),
-        mousePosition(mouse_position) {
+    SelectEnemy::SelectEnemy(entt::registry &registry, const Vector2 &mouse_position)
+        : registry(registry),
+          mousePosition(mouse_position) {
     }
 
     void SelectEnemy::execute() {
@@ -113,5 +195,17 @@ namespace Command {
                 *Config::GetBoolPtr("show_enemy_window") = true;
             }
         }
+    }
+
+    void Mute::execute() {
+        GetMasterVolume() == 0 ? SetMasterVolume(100) : SetMasterVolume(0);
+    }
+
+    Zoom::Zoom(Camera2D &camera)
+        : camera(camera) {
+    }
+
+    void Zoom::execute() {
+        camera.zoom += GetMouseWheelMove() / 10;
     }
 };

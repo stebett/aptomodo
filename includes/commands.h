@@ -19,7 +19,7 @@ struct CommandHolder {
 };
 
 namespace Inputs {
-    void Listen(entt::registry &registry,  const Camera2D& camera, float delta);
+    void Listen(entt::registry &registry,  Camera2D& camera, float delta);
 
     void Update(entt::registry &registry);
 }
@@ -33,6 +33,27 @@ namespace Command {
 
     public:
         Move(entt::registry &registry, entt::entity self, std::bitset<4> bitfield, float delta);
+
+        void execute() override;
+    };
+
+    class Attack final : public CommandBase {
+        entt::registry &registry;
+        entt::entity self;
+        Vector2 mousePosition;
+
+    public:
+        Attack(entt::registry &registry, entt::entity self, Vector2 mousePosition);
+
+        void execute() override;
+    };
+
+    class PickUp final : public CommandBase {
+        entt::registry &registry;
+        entt::entity self;
+
+    public:
+        PickUp(entt::registry &registry, entt::entity self);
 
         void execute() override;
     };
@@ -57,6 +78,19 @@ namespace Command {
         Vector2 mousePosition;
     public:
         SelectEnemy(entt::registry &registry, const Vector2 &mouse_position);
+
+        void execute() override;
+    };
+
+    class Mute final : public CommandBase {
+    public:
+        void execute() override;
+    };
+
+    class Zoom final : public CommandBase {
+        Camera2D& camera;
+    public:
+        explicit Zoom(Camera2D &camera);
 
         void execute() override;
     };
