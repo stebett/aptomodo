@@ -5,6 +5,7 @@
 #include "camera.h"
 
 #include <config.h>
+#include <managers/gui.h>
 #include <math/decay.h>
 
 GameCamera::operator Camera2D() const noexcept {
@@ -52,7 +53,8 @@ void GameCamera::Update(const Vector2 &playerPosition, const float delta) {
         freeCamera = playerCamera;
         FollowPlayer(playerPosition, delta);
     }
-    Zoom();
+    if (!Gui::WantMouse())
+        Zoom();
 }
 
 void GameCamera::Zoom() const {

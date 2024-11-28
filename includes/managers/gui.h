@@ -20,6 +20,9 @@ public:
 
     static void Draw();
 
+    static bool WantMouse();
+    static bool WantKeyboard();
+
     ~Gui();
 };
 

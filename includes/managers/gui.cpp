@@ -441,6 +441,14 @@ void Gui::Draw() {
     ImGui_ImplRaylib_RenderDrawData(ImGui::GetDrawData());
 }
 
+bool Gui::WantMouse() {
+    return m_io->WantCaptureMouse;
+}
+
+bool Gui::WantKeyboard() {
+    return m_io->WantCaptureKeyboard;
+}
+
 Gui::~Gui() {
     ImGui_ImplRaylib_Shutdown();
     ImGui::DestroyContext();
