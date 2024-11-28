@@ -8,6 +8,8 @@
 #include <unordered_map>
 #include <set>
 #include <queue>
+#include <bitset>
+
 
 // STL strings and streams
 #include <format>

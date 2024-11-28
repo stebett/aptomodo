@@ -4,8 +4,8 @@
 
 #ifndef COMMANDS_H
 #define COMMANDS_H
-#include <bitset>
-#include <managers/game.h>
+
+class GameCamera;
 
 class CommandBase {
 public:
@@ -19,7 +19,7 @@ struct CommandHolder {
 };
 
 namespace Inputs {
-    void Listen(entt::registry &registry,  Camera2D& camera, float delta);
+    void Listen(entt::registry &registry, GameCamera& camera, float delta);
 
     void Update(entt::registry &registry);
 }
@@ -30,9 +30,18 @@ namespace Command {
         entt::entity self;
         std::bitset<4> bitfield;
         float delta{};
-
     public:
         Move(entt::registry &registry, entt::entity self, std::bitset<4> bitfield, float delta);
+
+        void execute() override;
+    };
+
+    class MoveCamera final : public CommandBase {
+        GameCamera& camera;
+        std::bitset<4> bitfield;
+        float delta{};
+    public:
+        MoveCamera(GameCamera& camera, std::bitset<4> bitfield, float delta);
 
         void execute() override;
     };
@@ -87,12 +96,5 @@ namespace Command {
         void execute() override;
     };
 
-    class Zoom final : public CommandBase {
-        Camera2D& camera;
-    public:
-        explicit Zoom(Camera2D &camera);
-
-        void execute() override;
-    };
 }
 #endif //COMMANDS_H

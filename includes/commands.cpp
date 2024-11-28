@@ -5,13 +5,14 @@
 #include "commands.h"
 
 #include <attributes.h>
-#include <bitset>
+#include <camera.h>
 #include <collisions.h>
 #include <components.h>
 #include <config.h>
 #include <constants.h>
 #include <items.h>
 #include <managers/audioManager.h>
+#include <managers/game.h>
 
 namespace Inputs {
     void Update(entt::registry &registry) {
@@ -25,7 +26,7 @@ namespace Inputs {
     }
 
 
-    void Listen(entt::registry &registry, Camera2D &camera, float delta) {
+    void Listen(entt::registry &registry, GameCamera &camera, float delta) {
         auto player = registry.view<Player>().front();
         std::bitset<4> bitfield;
         if (!Game::IsPaused()) {
@@ -34,8 +35,13 @@ namespace Inputs {
             if (IsKeyPressed(KEY_A) || IsKeyDown(KEY_A)) bitfield.set(2);
             if (IsKeyPressed(KEY_D) || IsKeyDown(KEY_D)) bitfield.set(3);
             if (!bitfield.none())
-                registry.emplace_or_replace<CommandHolder>(
-                    entt::entity(), std::make_unique<Command::Move>(registry, player, bitfield, delta));
+                if (Config::GetBool("free_camera")) {
+                    registry.emplace_or_replace<CommandHolder>(
+                        entt::entity(), std::make_unique<Command::MoveCamera>(camera, bitfield, delta));
+                } else {
+                    registry.emplace_or_replace<CommandHolder>(
+                        entt::entity(), std::make_unique<Command::Move>(registry, player, bitfield, delta));
+                }
         }
         if (IsKeyPressed(KEY_Q))
             registry.emplace_or_replace<CommandHolder>(
@@ -65,11 +71,6 @@ namespace Inputs {
                 std::make_unique<Command::Attack>(registry,
                                                   player,
                                                   GetScreenToWorld2D(GetMousePosition(), camera)));
-
-        if (abs(GetMouseWheelMove()) > 0.1)
-            registry.emplace_or_replace<CommandHolder>(
-                entt::entity(),
-                std::make_unique<Command::Zoom>(camera));
     }
 }
 
@@ -102,6 +103,19 @@ namespace Command {
         solveCircleRecCollision(futurePos, radius);
         // TODO add solve npc collisions
         position = futurePos;
+    }
+
+    MoveCamera::MoveCamera(GameCamera &camera, const std::bitset<4> bitfield, const float delta)
+        : camera(camera), bitfield(bitfield), delta(delta) {
+    }
+
+    void MoveCamera::execute() {
+        Vector2 movement = {0, 0};
+        movement.y -= 4.0f * static_cast<float>(bitfield[0]);
+        movement.y += 4.0f * static_cast<float>(bitfield[1]);
+        movement.x -= 4.0f * static_cast<float>(bitfield[2]);
+        movement.x += 4.0f * static_cast<float>(bitfield[3]);
+        camera.MoveFreeCamera(movement);
     }
 
 
@@ -199,13 +213,5 @@ namespace Command {
 
     void Mute::execute() {
         GetMasterVolume() == 0 ? SetMasterVolume(100) : SetMasterVolume(0);
-    }
-
-    Zoom::Zoom(Camera2D &camera)
-        : camera(camera) {
-    }
-
-    void Zoom::execute() {
-        camera.zoom += GetMouseWheelMove() / 10;
     }
 };

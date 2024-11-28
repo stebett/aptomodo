@@ -4,6 +4,7 @@
 
 #include "game.h"
 
+#include <camera.h>
 #include <components.h>
 #include <factories.h>
 #include <player_ui.h>
@@ -34,8 +35,7 @@ LevelOutcome PlayLevel(const int levelNumber) {
     entt::registry registry;
     Gui::Instantiate();
 
-    auto playerCamera = spawnCamera();
-    auto freeCamera = spawnCamera();
+    GameCamera camera {};
 
     spawnEntities(registry, Level::LoadEntities(Assets::GetLevel(levelNumber)));
     Game::levelTexture = Level::LoadLevelTexture(Assets::GetLevel(levelNumber));
@@ -43,32 +43,28 @@ LevelOutcome PlayLevel(const int levelNumber) {
     Assets::Clean();
 
     auto player = registry.view<Player>().front();
-    const auto &position = registry.get<Position>(player);
+    const auto &playerPosition = registry.get<Position>(player);
     const auto &health = registry.get<Health>(player);
 
     FramerateManager framerateManager;
 
     while (!Game::IsLevelFinished()) {
-        if (!Game::IsPaused()) Space::Update(registry, playerCamera);
-        Gui::Update(registry, playerCamera);
-        Rendering::UpdateCamera(playerCamera, position, framerateManager.deltaTime);
+        if (!Game::IsPaused()) Space::Update(registry, camera.GetPlayerCamera());
+        Gui::Update(registry, camera);
+        camera.Update(playerPosition, framerateManager.deltaTime);
         Audio::Update(registry);
         if (!Game::IsPaused()) AI::Update(registry, player);
 
         BeginDrawing();
-        if (!Config::GetBool("free_camera")) {
-            // TODO envelop this in a function
-            BeginMode2D(playerCamera);
-            freeCamera = playerCamera;
-        } else
-            BeginMode2D(freeCamera);
+        BeginMode2D(camera);
+
 
         ClearBackground(WHITE);
-        Rendering::DrawLevel(playerCamera);
+        Rendering::DrawLevel(camera.GetPlayerCamera());
 
-        Inputs::Listen(registry, playerCamera, framerateManager.deltaTime);
+        Inputs::Listen(registry, camera, framerateManager.deltaTime);
         Inputs::Update(registry);
-        Rendering::Draw(registry, playerCamera, framerateManager.framesCounter); // This has to stay after updatePlayer
+        Rendering::Draw(registry, camera.GetPlayerCamera(), framerateManager.framesCounter); // This has to stay after updatePlayer
         EndMode2D();
         PlayerUI::Draw(health.value);
         Gui::Draw();

@@ -5,13 +5,10 @@
 #include "managers/assets.h"
 #include "managers/game.h"
 
-/* TODO All the level related stuff and the game loop function should be in another file
- */
-
 
 int main() {
-    InitWindow(screenWidth, screenHeight, "Apto Modo"); // TODO WindowManager::Instantiate();
-    ToggleFullscreen(); // This will be inside WindowManager::Instantiate()
+    InitWindow(screenWidth, screenHeight, "Apto Modo");
+    ToggleFullscreen();
     Config::Instantiate();
     Assets::Instantiate();
     AnimationManager::Instantiate();

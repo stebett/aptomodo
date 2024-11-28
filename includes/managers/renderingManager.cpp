@@ -17,28 +17,6 @@
 
 namespace Rendering {
 
-    void UpdateCamera(Camera2D &camera, const Vector2 &playerPosition, const float delta) {
-        float target_x = playerPosition.x;
-        float target_y = playerPosition.y;
-
-        // Don't show map end
-        if (playerPosition.x < screenWidth / (2 * camera.zoom)) {
-            target_x = screenWidth / (2 * camera.zoom);
-        }
-        if (playerPosition.x > mapWidth - screenWidth / (2 * camera.zoom)) {
-            target_x = mapWidth - screenWidth / (2 * camera.zoom);
-        }
-        if (playerPosition.y < screenHeight / (2 * camera.zoom)) {
-            target_y = screenHeight / (2 * camera.zoom);
-        }
-        if (playerPosition.y > mapHeight - screenHeight / (2 * camera.zoom)) {
-            target_y = mapHeight - screenHeight / (2 * camera.zoom);
-        }
-
-        target_x = expDecay(camera.target.x, target_x, Config::GetFloat("CameraDecay"), delta);
-        target_y = expDecay(camera.target.y, target_y, Config::GetFloat("CameraDecay"), delta);
-        camera.target = {target_x, target_y};
-    }
 
 
     void drawAttacks(entt::registry &registry) {
