@@ -3,9 +3,6 @@
 //
 
 #include "astar.h"
-#include "managers/levelManager.h"
-
-#include "pch.h"
 #include "managers/game.h"
 
 // NODE
@@ -115,8 +112,11 @@ void Search::step() {
     for (auto neighbor: neighbors(current)) {
         if (!came_from.contains(neighbor)) {
             if (neighbor == start | neighbor == came_from[current]) continue;
-            const float terrainPenalty = 3.0f * static_cast<float>(
-                                             Game::grid.safe(neighbor.x, neighbor.y)[IntValue::NEAR_OBSTACLE]);
+            float terrainPenalty = 3.0f * static_cast<float>(
+                                       Game::grid.safe(neighbor.x, neighbor.y)[IntValue::NEAR_OBSTACLE]);
+            // terrainPenalty += static_cast<float>(Game::grid.safe(neighbor.x, neighbor.y)[IntValue::NPC]) *
+                    // 20.0f;
+            // terrainPenalty *= static_cast<float>(manhattan(neighbor, start) >=3 ); //remove terrain penalty in the 2 tiles around the start
             open.emplace(neighbor, manhattan(neighbor, end) + terrainPenalty);
             came_from[neighbor] = current;
             closed[neighbor] = closed[current] + manhattan(neighbor, current) + terrainPenalty;

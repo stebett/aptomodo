@@ -147,6 +147,7 @@ namespace Rendering {
                 for (size_t i = 0; i < path.indexMax; ++i) {
                     DrawCircleV({points[i].x, points[i].y}, 2, YELLOW);
                 }
+                DrawSplineCatmullRom(points.data(), path.indexMax, 2.0f, GREEN);
                 DrawCircleV(target, 2, ORANGE);
             }
         }
