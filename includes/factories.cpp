@@ -62,6 +62,8 @@ entt::entity spawnEnemyFromFile(entt::registry &registry, Position position, con
     registry.emplace<Living>(e);
     registry.emplace<AttackTimer>(e);
     registry.emplace<LookAngle>(e, 0.0f);
+    Physics::EmplaceDynamicBody(registry, e, position, stats.radius);
+
     return e;
 };
 
@@ -77,7 +79,7 @@ entt::entity spawnPlayer(entt::registry &registry, Vector2 position) {
     registry.emplace<Attributes>(e, attr);
     registry.emplace<Health>(e, attr.getMultiplied(AttributeConstants::health));
     registry.emplace<Experience>(e, 0);
-    Physics::EmplaceDynamicBody(registry, e, position, 8);
+    Physics::EmplaceDynamicBody(registry, e, position, 10.0f);
     return e;
 }
 

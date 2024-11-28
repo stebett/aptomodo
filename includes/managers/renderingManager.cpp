@@ -5,8 +5,6 @@
 
 #include "renderingManager.h"
 
-#include <math/decay.h>
-
 #include "../components.h"
 #include "animationManager.h"
 #include "game.h"
@@ -14,6 +12,7 @@
 #include "shadowCast.h"
 #include "../config.h"
 #include "../items.h"
+#include "../../vendors/box2d/src/array.h"
 
 namespace Rendering {
 
@@ -42,9 +41,13 @@ namespace Rendering {
     }
 
     void drawLivingBB(const entt::registry &registry) {
-        auto livingView = registry.view<Living, ToRender, Radius, Position, LookAngle, ColorBB>();
-        for (auto [entity, radius, position, lookAngle, color]: livingView.each()) {
-            DrawCircleV(position, radius, color);
+        auto livingView = registry.view<Living, ToRender, b2BodyId, Radius, Position, LookAngle, ColorBB>();
+        for (auto [entity,body,  radius , position, lookAngle, color]: livingView.each()) {
+            auto pos = b2Body_GetPosition(body);
+            b2ShapeId shape {};
+            b2Body_GetShapes(body,&shape, 1);
+            auto circle = b2Shape_GetCircle(shape);
+            DrawCircle(pos.x, pos.y, circle.radius, RED);
             DrawLineV(position, Vector2Add(
                           position, Vector2Scale(Vector2{cos(lookAngle * DEG2RAD), sin(lookAngle * DEG2RAD)}, 20.0f)),
                       BLACK);

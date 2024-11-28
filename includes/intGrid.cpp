@@ -5,6 +5,7 @@
 #include "intGrid.h"
 
 #include <constants.h>
+#include <systems/physics.h>
 
 
 [[nodiscard]] size_t clamp(const size_t value, const size_t min, const size_t max) {
@@ -93,6 +94,7 @@ void IntGrid::initialize(const ldtk::Layer &layer) {
                     grid[x][y].set(IntValue::OBSTACLE);
                     grid[x][y].set(IntValue::WATER);
                     grid[x][y].set(IntValue::OPAQUE);
+                    Physics::EmplaceStaticBody({static_cast<float>(x*Const::tileSize), static_cast<float>(y*Const::tileSize)}, Const::tileSize);
                     break;
                 }
                 case 3: {

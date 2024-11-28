@@ -5,8 +5,6 @@
 #ifndef PHYSICS_H
 #define PHYSICS_H
 
-#include <components.h>
-#include <box2d/box2d.h>
 
 class Physics {
     static b2WorldId worldId;
@@ -16,7 +14,9 @@ public:
     static constexpr int subStepCount {4};
     static void Instantiate();
 
-    static void EmplaceDynamicBody(entt::registry &registry, entt::entity entity, const Vector2 position, float radius);
+    static void EmplaceDynamicBody(entt::registry &registry, entt::entity entity, Vector2 position, float radius);
+
+    static void EmplaceStaticBody(Vector2 position, float side);
 
     static void Update(entt::registry &registry);
 };

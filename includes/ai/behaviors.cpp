@@ -10,6 +10,7 @@
 #include <components.h>
 #include <config.h>
 #include <constants.h>
+#include <box2d/box2d.h>
 #include <managers/animationManager.h>
 #include <managers/audioManager.h>
 #include <managers/levelManager.h>
@@ -197,24 +198,23 @@ Status MoveTowardsTarget::update(entt::registry &registry, entt::entity self, en
         return FAILURE;
     }
     const Vector2 nextTarget = reachedTile(position, path.getCurrent()) ? path.getNext() : path.getCurrent();
-    const auto radius = registry.get<Radius>(self);
-    const auto id = registry.get<ID>(self);
+
     auto &lookAngle = registry.get<LookAngle>(self);
     const float speedDivider = registry.get<Chasing>(self).isChasing() ? 1.0f : 3.0f;
     auto &speed = registry.get<Speed>(self);
     speed.value = speed.max / speedDivider;
     const Vector2 direction = Vector2Subtract(nextTarget, position);
-    const Vector2 movement = Vector2Scale(Vector2Normalize(direction), speed);
-    Vector2 futurePos = Vector2Add(position, movement);
-    solveCollisionEnemyEnemy(registry, id, futurePos, radius);
-    solveCircleRecCollision(futurePos, radius);
-    if (!facesTargetDirection(position, futurePos, lookAngle)) {
-        adjustLookAngle(position, futurePos, lookAngle);
-        futurePos = position;
-    }
 
-    speed.actual = Vector2Distance(position, futurePos);
-    position = futurePos;
+    const auto body = registry.get<b2BodyId>(self);
+
+    const Vector2 velocity = Vector2Scale(Vector2Normalize(direction), speed*60);
+    b2Body_SetLinearVelocity(body, {velocity.x, velocity.y}); // TODO fix
+
+    // if (!facesTargetDirection(position, futurePos, lookAngle)) {
+    //     adjustLookAngle(position, futurePos, lookAngle);
+    //     futurePos = position;
+    // }
+    //
     return SUCCESS;
 }
 

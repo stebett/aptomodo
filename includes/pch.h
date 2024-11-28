@@ -34,3 +34,4 @@
 #include <LDtkLoader/Project.hpp>
 #include <LDtkLoader/World.hpp>
 #include <LDtkLoader/Entity.hpp>
+#include <box2d/box2d.h>

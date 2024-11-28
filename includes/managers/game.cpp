@@ -61,7 +61,7 @@ LevelOutcome PlayLevel(const int levelNumber) {
 
     while (!Game::IsLevelFinished()) {
         if (!Game::IsPaused()) {
-            Physics::Update(registry);
+            Physics::Update(registry); // TODO properly update at fixed timestep
             Space::Update(registry, camera.GetPlayerCamera());
             AI::Update(registry, player);
             PlayerFaceMouse(registry, player, camera);
