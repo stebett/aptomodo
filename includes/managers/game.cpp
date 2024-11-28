@@ -42,22 +42,23 @@ LevelOutcome PlayLevel(const int levelNumber) {
     Game::grid = Level::LoadIntGrid(Assets::GetLevel(levelNumber));
     Assets::Clean();
 
-    auto player = registry.view<Player>().front();
+    const auto player = registry.view<Player>().front();
     const auto &playerPosition = registry.get<Position>(player);
     const auto &health = registry.get<Health>(player);
 
     FramerateManager framerateManager;
 
     while (!Game::IsLevelFinished()) {
-        if (!Game::IsPaused()) Space::Update(registry, camera.GetPlayerCamera());
+        if (!Game::IsPaused()) {
+            Space::Update(registry, camera.GetPlayerCamera());
+            AI::Update(registry, player);
+        }
         Gui::Update(registry, camera);
         camera.Update(playerPosition, framerateManager.deltaTime);
         Audio::Update(registry);
-        if (!Game::IsPaused()) AI::Update(registry, player);
 
         BeginDrawing();
         BeginMode2D(camera);
-
 
         ClearBackground(WHITE);
         Rendering::DrawLevel(camera.GetPlayerCamera());
@@ -66,9 +67,9 @@ LevelOutcome PlayLevel(const int levelNumber) {
         Inputs::Update(registry);
         Rendering::Draw(registry, camera.GetPlayerCamera(), framerateManager.framesCounter); // This has to stay after updatePlayer
         EndMode2D();
+
         PlayerUI::Draw(health.value);
         Gui::Draw();
-
         EndDrawing();
         framerateManager.Update();
     }
