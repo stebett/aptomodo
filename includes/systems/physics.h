@@ -19,6 +19,8 @@ public:
     static void EmplaceStaticBody(Vector2 position, float side);
 
     static void Update(entt::registry &registry);
+
+    static void Step();
 };
 
 

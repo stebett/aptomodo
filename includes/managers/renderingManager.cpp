@@ -12,7 +12,6 @@
 #include "shadowCast.h"
 #include "../config.h"
 #include "../items.h"
-#include "../../vendors/box2d/src/array.h"
 
 namespace Rendering {
 
@@ -47,7 +46,7 @@ namespace Rendering {
             b2ShapeId shape {};
             b2Body_GetShapes(body,&shape, 1);
             auto circle = b2Shape_GetCircle(shape);
-            DrawCircle(pos.x, pos.y, circle.radius, RED);
+            DrawCircle(pos.x, pos.y, circle.radius, color);
             DrawLineV(position, Vector2Add(
                           position, Vector2Scale(Vector2{cos(lookAngle * DEG2RAD), sin(lookAngle * DEG2RAD)}, 20.0f)),
                       BLACK);

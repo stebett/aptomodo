@@ -37,9 +37,13 @@ void Physics::EmplaceStaticBody(const Vector2 position, float side) {
 
 
 void Physics::Update(entt::registry &registry) {
-    b2World_Step(worldId, timeStep, subStepCount);
     registry.view<ToSimulate, b2BodyId, Position>().each([](auto entity, auto body, Position &position) {
         auto p = b2Body_GetPosition(body);
         position = {p.x, p.y};
     });
+}
+
+void Physics::Step() {
+    b2World_Step(worldId, timeStep, subStepCount);
+
 }

@@ -61,7 +61,13 @@ LevelOutcome PlayLevel(const int levelNumber) {
 
     while (!Game::IsLevelFinished()) {
         if (!Game::IsPaused()) {
-            Physics::Update(registry); // TODO properly update at fixed timestep
+            framerateManager.accumulator += framerateManager.deltaTime;
+            while (framerateManager.accumulator >= Physics::timeStep) {
+                Physics::Step(); // TODO properly update at fixed timestep
+                framerateManager.accumulator -= Physics::timeStep;
+            }
+            Physics::Update(registry);
+
             Space::Update(registry, camera.GetPlayerCamera());
             AI::Update(registry, player);
             PlayerFaceMouse(registry, player, camera);
@@ -84,7 +90,9 @@ LevelOutcome PlayLevel(const int levelNumber) {
         PlayerUI::Draw(health.value);
         Gui::Draw();
         EndDrawing();
+
         framerateManager.Update();
+
     }
 
     return Game::GetOutcome();
