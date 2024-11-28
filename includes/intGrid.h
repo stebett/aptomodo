@@ -57,6 +57,10 @@ public:
     static size_t worldToGrid(float coord, size_t maxIndex);
 
     void setVisible(size_t row, size_t col);
+
+    void setOccupied(const Vector2 &pos);
+
+    void setFree(const Vector2 &pos);
 };
 
 #endif //INTGRID_H

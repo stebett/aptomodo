@@ -62,6 +62,14 @@ void IntGrid::setVisible(const size_t row, const size_t col) {
     // grid[row][col] = IntValue::VISIBLE;
 }
 
+void IntGrid::setOccupied(const Vector2 &pos) {
+    grid[pos.x][pos.y].set(IntValue::NPC);
+}
+
+void IntGrid::setFree(const Vector2 &pos) {
+    grid[pos.x][pos.y][IntValue::NPC] = false;
+}
+
 // void IntGrid::reset() {
 //     for (size_t row=0; row < rows(); ++row) {
 //         for (size_t col=0; col < cols(); ++col) {

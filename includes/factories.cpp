@@ -68,6 +68,7 @@ entt::entity spawnEnemyFromFile(entt::registry &registry, Position position, con
 entt::entity spawnPlayer(entt::registry &registry, Vector2 position) {
     const entt::entity e = spawnLiving(registry);
     registry.emplace<Player>(e);
+    registry.emplace<ToRender>(e);
     registry.emplace<Position>(e, position);
     registry.emplace<ColorBB>(e, BLUE);
     auto attr = Attributes();
