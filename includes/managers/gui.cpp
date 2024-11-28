@@ -321,11 +321,6 @@ void imguiConfig() {
         ImGui::PopID();
         n++;
     }
-    ImGui::SeparatorText("Extra");
-    ImGui::Checkbox("show_bounding_box", Config::GetBoolPtr("show_bounding_box"));
-    ImGui::Checkbox("show_attacks", Config::GetBoolPtr("show_attacks"));
-    ImGui::Checkbox("free_camera", Config::GetBoolPtr("free_camera"));
-    ImGui::Checkbox("draw_level_collisions", Config::GetBoolPtr("draw_level_collisions"));
     ImGui::End();
 }
 
