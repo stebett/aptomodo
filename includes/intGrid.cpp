@@ -12,12 +12,12 @@
 }
 
 size_t IntGrid::worldToGrid(const float coord, const size_t maxIndex) {
-    const int index = static_cast<int>(std::floor(coord / tileSize));
+    const int index = static_cast<int>(std::floor(coord / Const::tileSize));
     return clamp(index, 0, maxIndex);
 }
 
 float gridToWorld(const int coord) {
-    return static_cast<float>(coord * tileSize);
+    return static_cast<float>(coord * Const::tileSize);
 }
 
 IntGrid::IntGrid() {
@@ -50,7 +50,7 @@ const IntValue &IntGrid::operator()(const size_t row, const size_t col) const {
 }
 
 [[nodiscard]] bool IntGrid::inWorldBounds(const float x, const float y) {
-    return (x > 0) && (y > 0) && (x < Rows * tileSize) && (y < Cols * tileSize);
+    return (x > 0) && (y > 0) && (x < Rows * Const::tileSize) && (y < Cols * Const::tileSize);
 }
 
 [[nodiscard]] bool IntGrid::isOpaque(const size_t row, const size_t col) const {
@@ -58,7 +58,7 @@ const IntValue &IntGrid::operator()(const size_t row, const size_t col) const {
 }
 
 void IntGrid::setVisible(const size_t row, const size_t col) {
-    DrawRectangle(row*tileSize, col*tileSize, tileSize, tileSize, ColorAlpha(YELLOW, 0.1));
+    DrawRectangle(row*Const::tileSize, col*Const::tileSize, Const::tileSize, Const::tileSize, ColorAlpha(YELLOW, 0.1));
     // grid[row][col] = IntValue::VISIBLE;
 }
 

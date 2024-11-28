@@ -6,6 +6,7 @@
 #include "controls.h"
 
 #include <external/miniaudio.h>
+#include <math/mathConstants.h>
 
 #include "collisions.h"
 #include "constants.h"
@@ -27,7 +28,7 @@ void playerAttack(entt::registry &registry, entt::entity &player, Attributes &at
     float damage = attributes.getMultiplied(AttributeConstants::damagePhysical);
     //    float pushback = registry.get<Pushback>(player);
 
-    float clickAngle = atan2(clickPosition.y - playerPosition.y, clickPosition.x - playerPosition.x) * radToDeg;
+    float clickAngle = atan2(clickPosition.y - playerPosition.y, clickPosition.x - playerPosition.x) * Math::Const::radToDeg;
 
     AttackEffect effect = {
         100, playerPosition, attackRange, clickAngle - attackSpread, clickAngle + attackSpread,
@@ -38,12 +39,12 @@ void playerAttack(entt::registry &registry, entt::entity &player, Attributes &at
     registry.emplace<Audio::Command>(registry.create(), "player_shot");
 
     Vector2 endSegment1 = {
-        playerPosition.x + attackRange * (float) cos((clickAngle - attackSpread) * degToRad),
-        playerPosition.y + attackRange * (float) sin((clickAngle - attackSpread) * degToRad)
+        playerPosition.x + attackRange *  cos((clickAngle - attackSpread) * Math::Const::degToRad),
+        playerPosition.y + attackRange * sin((clickAngle - attackSpread) * Math::Const::degToRad)
     };
-    Vector2 endSegment2 = {
-        playerPosition.x + attackRange * (float) cos((clickAngle + attackSpread) * degToRad),
-        playerPosition.y + attackRange * (float) sin((clickAngle + attackSpread) * degToRad)
+    const Vector2 endSegment2 = {
+        playerPosition.x + attackRange * cos((clickAngle + attackSpread) * Math::Const::degToRad),
+        playerPosition.y + attackRange *  sin((clickAngle + attackSpread) * Math::Const::degToRad)
     };
 
     auto enemyView = registry.view<Enemy, Living, Health, Radius, Position>();
@@ -128,8 +129,8 @@ void processDashCommand(Position &position, const LookAngle lookAngle, const Rad
 
 
 void movePlayer(Position &position, Vector2 &futurePos, const float radius, const Attributes &attributes) {
-    if (futurePos.x - radius < 0 || futurePos.x + radius > mapWidth) futurePos.x = position.x;
-    if (futurePos.y - radius < 0 || futurePos.y + radius > mapHeight) futurePos.y = position.y;
+    if (futurePos.x - radius < 0 || futurePos.x + radius > Const::mapWidth) futurePos.x = position.x;
+    if (futurePos.y - radius < 0 || futurePos.y + radius > Const::mapHeight) futurePos.y = position.y;
 
     const Vector2 direction = Vector2Subtract(futurePos, position);
     const Vector2 movement = Vector2Scale(Vector2Normalize(direction),

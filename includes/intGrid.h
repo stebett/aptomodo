@@ -20,7 +20,7 @@ enum class IntValue {
 
 
 // TODO this needs to be an array of a bitfield, so that we can set the tiles to multiple values at the same time
-using Map = std::array<std::array<IntValue, IntGridHeight>, IntGridWidth>;
+using Map = std::array<std::array<IntValue, Const::IntGridHeight>, Const::IntGridWidth>;
 
 class IntGrid {
 private:

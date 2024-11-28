@@ -7,7 +7,7 @@
 
 
 int main() {
-    InitWindow(screenWidth, screenHeight, "Apto Modo");
+    InitWindow(Const::screenWidth, Const::screenHeight, "Apto Modo");
     ToggleFullscreen();
     Config::Instantiate();
     Assets::Instantiate();

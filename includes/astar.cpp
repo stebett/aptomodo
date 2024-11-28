@@ -19,7 +19,7 @@ bool Node::operator<(Node const &right) const {
 }
 
 void Node::draw(Color color) const {
-    DrawRectangle(x * tileSize, y * tileSize, tileSize, tileSize, color);
+    DrawRectangle(x * Const::tileSize, y * Const::tileSize, Const::tileSize, Const::tileSize, color);
 }
 
 Node::Node() = default;
@@ -29,7 +29,7 @@ Node::Node(int x, int y) : x(x), y(y) {
 
 
 Node getTile(const Vector2 &position) {
-    return {static_cast<int>(floor(position.x / tileSize)), static_cast<int>(floor(position.y / tileSize))};
+    return {static_cast<int>(floor(position.x / Const::tileSize)), static_cast<int>(floor(position.y / Const::tileSize))};
 }
 
 std::size_t std::hash<Node>::operator()(const Node &k) const {
@@ -172,8 +172,8 @@ void Search::exportPath(Path &pathToUpdate) {
 
     for (int i = 0; i < size; i++) {
         pathToUpdate.path[i] = {
-            static_cast<float>(path[i + 1].x) * tileSize + static_cast<float>(tileSize) / 2,
-            static_cast<float>(path[i + 1].y) * tileSize + static_cast<float>(tileSize) / 2
+            static_cast<float>(path[i + 1].x) * Const::tileSize + static_cast<float>(Const::tileSize) / 2,
+            static_cast<float>(path[i + 1].y) * Const::tileSize + static_cast<float>(Const::tileSize) / 2
         };
     }
     pathToUpdate.index = 0;

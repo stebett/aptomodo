@@ -22,7 +22,7 @@ entt::entity spawnLiving(entt::registry &registry) {
     registry.emplace<AttackTimer>(e);
     registry.emplace<AttackSpeed>(e, 0.3f);
     registry.emplace<Damage>(e, 5.0f);
-    registry.emplace<AttackRange>(e, 3 * tileSize);
+    registry.emplace<AttackRange>(e, 3 * Const::tileSize);
     registry.emplace<Pushback>(e, 1.0f);
     registry.emplace<Spread>(e, 10.0f);
     registry.emplace<LookAngle>(e, 0.0f);
@@ -80,8 +80,8 @@ entt::entity spawnPlayer(entt::registry &registry, Vector2 position) {
 
 Camera2D spawnCamera() {
     Camera2D camera = {0};
-    camera.target = {mapWidth / 2, mapHeight / 2};
-    camera.offset = {screenWidth / 2, screenHeight / 2};
+    camera.target = {Const::mapWidth / 2, Const::mapHeight / 2};
+    camera.offset = {Const::screenWidth / 2, Const::screenHeight / 2};
     camera.rotation = 0.0f;
     camera.zoom = 4.0f;
     return camera;

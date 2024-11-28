@@ -8,8 +8,8 @@
 #include <constants.h>
 
 constexpr int simPad{700};
-constexpr Rectangle renderSpace{0, 0, screenWidth, screenHeight};
-constexpr Rectangle simulationSpace{-simPad, -simPad, screenWidth + simPad, screenHeight + simPad};
+constexpr Rectangle renderSpace{0, 0, Const::screenWidth, Const::screenHeight};
+constexpr Rectangle simulationSpace{-simPad, -simPad, Const::screenWidth + simPad, Const::screenHeight + simPad};
 
 bool pointInRec(const Vector2& point, const Rectangle& rec) {
     return (point.x >= rec.x) && (point.x < rec.width) && (point.y >= rec.y) && (point.y < rec.height);

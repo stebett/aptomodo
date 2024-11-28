@@ -95,8 +95,8 @@ namespace Rendering {
 
         DrawTextureRec(Game::levelTexture,
                        {
-                           cameraZero.x, -cameraZero.y - screenHeight / camera.zoom, screenWidth / camera.zoom,
-                           -screenHeight / camera.zoom
+                           cameraZero.x, -cameraZero.y - Const::screenHeight / camera.zoom, Const::screenWidth / camera.zoom,
+                           -Const::screenHeight / camera.zoom
                        },
                        cameraZero, WHITE);
 
@@ -115,7 +115,7 @@ namespace Rendering {
                     color = {255, 0, 0, 50};
                 if (Game::grid(row, col) == IntValue::NPC)
                     color = {255, 255, 0, 50};
-                DrawRectangle(row * tileSize, col * tileSize, tileSize, tileSize, color);
+                DrawRectangle(row * Const::tileSize, col * Const::tileSize, Const::tileSize, Const::tileSize, color);
             }
         }
     }

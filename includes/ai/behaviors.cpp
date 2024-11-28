@@ -13,6 +13,7 @@
 #include <managers/animationManager.h>
 #include <managers/audioManager.h>
 #include <managers/levelManager.h>
+#include <math/mathConstants.h>
 
 #include "shadowCast.h"
 #include "managers/game.h"
@@ -240,7 +241,7 @@ Status AttackMelee::update(entt::registry &registry, entt::entity self, entt::en
     //    float pushback = registry.get<Pushback>(enemy);
 
 
-    const float clickAngle = atan2(playerPosition.y - position.y, playerPosition.x - position.x) * radToDeg;
+    const float clickAngle = atan2(playerPosition.y - position.y, playerPosition.x - position.x) * Math::Const::radToDeg;
     registry.emplace<AttackEffect>(registry.create(), 100, position, attackRange, clickAngle - attackSpread,
                                    clickAngle + attackSpread, BROWN);
     registry.emplace<Audio::Command>(registry.create(), "enemy_shot");

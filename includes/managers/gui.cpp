@@ -129,8 +129,8 @@ void imguiEnemyAttr(entt::registry &registry) {
         ImGui::SliderFloat("health", &health.value, 0, 200, "%.3f", 0);
         ImGui::SliderFloat("radius", &radius.value, 0, 50, "%.3f", 0);
         ImGui::SliderFloat("lookAngle", &lookAngle.value, -360, 360, "%.3f", 0);
-        ImGui::SliderFloat("position x", &position.x, 0, mapWidth, "%.3f", 0);
-        ImGui::SliderFloat("position y ", &position.y, 0, mapHeight, "%.3f", 0);
+        ImGui::SliderFloat("position x", &position.x, 0, Const::mapWidth, "%.3f", 0);
+        ImGui::SliderFloat("position y ", &position.y, 0, Const::mapHeight, "%.3f", 0);
         ImGui::SliderFloat("enemySightRange", Config::GetFloatPtr("enemySightRange"), 0, 800, "%.3f", 0);
         ImGui::SliderFloat("enemySightRangeChasing", Config::GetFloatPtr("enemySightRangeChasing"), 0, 800, "%.3f", 0);
         ImGui::SliderFloat("enemyHearRange", Config::GetFloatPtr("enemyHearRange"), 0, 800, "%.3f", 0);
@@ -178,8 +178,8 @@ void imguiPlayerAttr(entt::registry &registry) {
              attackspeed, damage, attackrange,pushback, position]: view.each()) {
         ImGui::SliderFloat("health", &health.value, 0, 200, "%.3f", 0);
         ImGui::SliderFloat("radius", &radius.value, 0, 50, "%.3f", 0);
-        ImGui::SliderFloat("position x", &position.x, 0, mapWidth, "%.3f", 0);
-        ImGui::SliderFloat("position y ", &position.y, 0, mapHeight, "%.3f", 0);
+        ImGui::SliderFloat("position x", &position.x, 0, Const::mapWidth, "%.3f", 0);
+        ImGui::SliderFloat("position y ", &position.y, 0, Const::mapHeight, "%.3f", 0);
     }
     ImGui::End();
 }

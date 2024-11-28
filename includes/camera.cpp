@@ -22,17 +22,17 @@ void GameCamera::FollowPlayer(const Vector2 &playerPosition, const float delta) 
     float target_y = playerPosition.y;
 
     // Don't show map end
-    if (playerPosition.x < screenWidth / (2 * activeCamera->zoom)) {
-        target_x = screenWidth / (2 * activeCamera->zoom);
+    if (playerPosition.x < Const::screenWidth / (2 * activeCamera->zoom)) {
+        target_x = Const::screenWidth / (2 * activeCamera->zoom);
     }
-    if (playerPosition.x > mapWidth - screenWidth / (2 * activeCamera->zoom)) {
-        target_x = mapWidth - screenWidth / (2 * activeCamera->zoom);
+    if (playerPosition.x > Const::mapWidth - Const::screenWidth / (2 * activeCamera->zoom)) {
+        target_x = Const::mapWidth - Const::screenWidth / (2 * activeCamera->zoom);
     }
-    if (playerPosition.y < screenHeight / (2 * activeCamera->zoom)) {
-        target_y = screenHeight / (2 * activeCamera->zoom);
+    if (playerPosition.y < Const::screenHeight / (2 * activeCamera->zoom)) {
+        target_y = Const::screenHeight / (2 * activeCamera->zoom);
     }
-    if (playerPosition.y > mapHeight - screenHeight / (2 * activeCamera->zoom)) {
-        target_y = mapHeight - screenHeight / (2 * activeCamera->zoom);
+    if (playerPosition.y > Const::mapHeight - Const::screenHeight / (2 * activeCamera->zoom)) {
+        target_y = Const::mapHeight - Const::screenHeight / (2 * activeCamera->zoom);
     }
 
     target_x = expDecay(activeCamera->target.x, target_x, Config::GetFloat("CameraDecay"), delta);

@@ -13,6 +13,7 @@
 #include <items.h>
 #include <managers/audioManager.h>
 #include <managers/game.h>
+#include "math/mathConstants.h"
 
 namespace Inputs {
     void Update(entt::registry &registry) {
@@ -91,8 +92,8 @@ namespace Command {
         futurePos.x -= 4.0f * static_cast<float>(bitfield[2]);
         futurePos.x += 4.0f * static_cast<float>(bitfield[3]);
 
-        if (futurePos.x - radius < 0 || futurePos.x + radius > mapWidth) futurePos.x = position.x;
-        if (futurePos.y - radius < 0 || futurePos.y + radius > mapHeight) futurePos.y = position.y;
+        if (futurePos.x - radius < 0 || futurePos.x + radius > Const::mapWidth) futurePos.x = position.x;
+        if (futurePos.y - radius < 0 || futurePos.y + radius > Const::mapHeight) futurePos.y = position.y;
 
         const Vector2 direction = Vector2Subtract(futurePos, position);
         constexpr float deltaCorrector{60};
@@ -135,7 +136,8 @@ namespace Command {
         const float damage = attributes.getMultiplied(AttributeConstants::damagePhysical);
         //    float pushback = registry.get<Pushback>(player);
 
-        float clickAngle = atan2(mousePosition.y - playerPosition.y, mousePosition.x - playerPosition.x) * radToDeg;
+        float clickAngle = atan2(mousePosition.y - playerPosition.y, mousePosition.x - playerPosition.x) *
+                           Math::Const::radToDeg;
 
         AttackEffect effect = {
             100, playerPosition, attackRange, clickAngle - attackSpread, clickAngle + attackSpread,
@@ -146,12 +148,12 @@ namespace Command {
         registry.emplace<Audio::Command>(registry.create(), "player_shot");
 
         Vector2 endSegment1 = {
-            playerPosition.x + attackRange * (float) cos((clickAngle - attackSpread) * degToRad),
-            playerPosition.y + attackRange * (float) sin((clickAngle - attackSpread) * degToRad)
+            playerPosition.x + attackRange * cos((clickAngle - attackSpread) * Math::Const::radToDeg),
+            playerPosition.y + attackRange * sin((clickAngle - attackSpread) * Math::Const::radToDeg)
         };
         Vector2 endSegment2 = {
-            playerPosition.x + attackRange * (float) cos((clickAngle + attackSpread) * degToRad),
-            playerPosition.y + attackRange * (float) sin((clickAngle + attackSpread) * degToRad)
+            playerPosition.x + attackRange * cos((clickAngle + attackSpread) * Math::Const::radToDeg),
+            playerPosition.y + attackRange * sin((clickAngle + attackSpread) * Math::Const::radToDeg)
         };
 
         auto enemyView = registry.view<Enemy, Living, Health, Radius, Position>();
