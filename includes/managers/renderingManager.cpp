@@ -138,17 +138,11 @@ namespace Rendering {
             if (Config::GetBool("show_astar_path")) {
                 // Draw lines connecting points
                 auto points = path.path;
-                for (size_t i = 0; i < path.indexMax - 1; ++i) {
-                    Vector2 p1 = {points[i].x, points[i].y};
-                    Vector2 p2 = {points[i + 1].x, points[i + 1].y};
-                    DrawLineV(p1, p2, BLACK);
-                }
-
                 for (size_t i = 0; i < path.indexMax; ++i) {
-                    DrawCircleV({points[i].x, points[i].y}, 2, YELLOW);
+                    DrawCircleV({points[i].x, points[i].y}, 2, ColorAlpha(ORANGE, 0.2));
                 }
-                DrawSplineCatmullRom(points.data(), path.indexMax, 2.0f, GREEN);
-                DrawCircleV(target, 2, ORANGE);
+                DrawSplineCatmullRom(points.data(), path.indexMax, 1.0f, ColorAlpha(ORANGE, 0.2));
+                DrawCircleV(target, 2, ColorAlpha(RED, 0.2));
             }
         }
     }
