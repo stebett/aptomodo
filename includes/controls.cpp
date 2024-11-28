@@ -204,4 +204,3 @@ void updatePlayer(entt::registry &registry, entt::entity &player, Position &posi
     if (exp >= attributes.expToNextLevel()) attributes.levelUp();
     updateAttributes(registry, attributes);
 }
-

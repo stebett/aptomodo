@@ -25,6 +25,15 @@ bool Game::levelFinished = false;
 int Game::Level = 0;
 LevelOutcome Game::levelOutcome = LevelOutcome::NONE;
 
+// TODO find a better place for this
+void PlayerFaceMouse(entt::registry& registry, const entt::entity player, const Camera2D &camera) {
+    auto &lookAngle = registry.get<LookAngle>(player);
+    const auto position = registry.get<Position>(player);
+    const auto [mouseX, mouseY] = GetScreenToWorld2D(GetMousePosition(), camera);
+    lookAngle = atan2(mouseY - position.y, mouseX - position.x) * RAD2DEG;
+}
+
+
 /* TODO
  * Different levels should
  *  - load different ldtk::levels
@@ -52,6 +61,7 @@ LevelOutcome PlayLevel(const int levelNumber) {
         if (!Game::IsPaused()) {
             Space::Update(registry, camera.GetPlayerCamera());
             AI::Update(registry, player);
+            PlayerFaceMouse(registry, player, camera);
         }
         Gui::Update(registry, camera);
         camera.Update(playerPosition, framerateManager.deltaTime);
