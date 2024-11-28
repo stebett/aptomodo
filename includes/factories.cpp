@@ -11,6 +11,7 @@
 #include "items.h"
 #include "ai/strategies.h"
 #include "managers/assets.h"
+#include "systems/physics.h"
 
 // TODO Make a common factory, and define components used here in factories.h
 
@@ -69,12 +70,14 @@ entt::entity spawnPlayer(entt::registry &registry, Vector2 position) {
     const entt::entity e = spawnLiving(registry);
     registry.emplace<Player>(e);
     registry.emplace<ToRender>(e);
+    registry.emplace<ToSimulate>(e);
     registry.emplace<Position>(e, position);
     registry.emplace<ColorBB>(e, BLUE);
     auto attr = Attributes();
     registry.emplace<Attributes>(e, attr);
     registry.emplace<Health>(e, attr.getMultiplied(AttributeConstants::health));
     registry.emplace<Experience>(e, 0);
+    Physics::EmplaceDynamicBody(registry, e, position, 8);
     return e;
 }
 

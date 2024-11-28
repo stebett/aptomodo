@@ -9,6 +9,7 @@
 #include <factories.h>
 #include <player_ui.h>
 #include <ai/loop.h>
+#include <systems/physics.h>
 #include <systems/space.h>
 
 #include "assets.h"
@@ -43,6 +44,7 @@ LevelOutcome PlayLevel(const int levelNumber) {
     auto outcome = LevelOutcome::NONE;
     entt::registry registry;
     Gui::Instantiate();
+    Physics::Instantiate();
 
     GameCamera camera {};
 
@@ -59,6 +61,7 @@ LevelOutcome PlayLevel(const int levelNumber) {
 
     while (!Game::IsLevelFinished()) {
         if (!Game::IsPaused()) {
+            Physics::Update(registry);
             Space::Update(registry, camera.GetPlayerCamera());
             AI::Update(registry, player);
             PlayerFaceMouse(registry, player, camera);

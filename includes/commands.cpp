@@ -11,8 +11,11 @@
 #include <config.h>
 #include <constants.h>
 #include <items.h>
+#include <box2d/box2d.h>
 #include <managers/audioManager.h>
 #include <managers/game.h>
+
+#include "../vendors/box2d/src/body.h"
 #include "math/mathConstants.h"
 
 namespace Inputs {
@@ -35,14 +38,13 @@ namespace Inputs {
             if (IsKeyPressed(KEY_S) || IsKeyDown(KEY_S)) bitfield.set(1);
             if (IsKeyPressed(KEY_A) || IsKeyDown(KEY_A)) bitfield.set(2);
             if (IsKeyPressed(KEY_D) || IsKeyDown(KEY_D)) bitfield.set(3);
-            if (!bitfield.none())
-                if (Config::GetBool("free_camera")) {
-                    registry.emplace_or_replace<CommandHolder>(
-                        entt::entity(), std::make_unique<Command::MoveCamera>(camera, bitfield, delta));
-                } else {
-                    registry.emplace_or_replace<CommandHolder>(
-                        entt::entity(), std::make_unique<Command::Move>(registry, player, bitfield, delta));
-                }
+            if (Config::GetBool("free_camera")) {
+                registry.emplace_or_replace<CommandHolder>(
+                    entt::entity(), std::make_unique<Command::MoveCamera>(camera, bitfield, delta));
+            } else {
+                registry.emplace_or_replace<CommandHolder>(
+                    entt::entity(), std::make_unique<Command::Move>(registry, player, bitfield, delta));
+            }
         }
         if (IsKeyPressed(KEY_Q))
             registry.emplace_or_replace<CommandHolder>(
@@ -75,34 +77,24 @@ namespace Inputs {
     }
 }
 
+
 namespace Command {
     Move::Move(entt::registry &registry, const entt::entity self, const std::bitset<4> bitfield, const float delta)
         : registry(registry), self(self), bitfield(bitfield), delta(delta) {
     }
 
     void Move::execute() {
-        Position &position = registry.get<Position>(self);
-        const Radius &radius = registry.get<Radius>(self);
-        const Attributes &attributes = registry.get<Attributes>(self);
-        Vector2 futurePos = registry.get<Position>(self);
+        const auto &attributes = registry.get<Attributes>(self);
+        const auto body = registry.get<b2BodyId>(self);
+        Vector2 direction = {0.0f, 0.0f};
 
-        futurePos.y -= 4.0f * static_cast<float>(bitfield[0]);
-        futurePos.y += 4.0f * static_cast<float>(bitfield[1]);
-        futurePos.x -= 4.0f * static_cast<float>(bitfield[2]);
-        futurePos.x += 4.0f * static_cast<float>(bitfield[3]);
+        direction.y -= static_cast<float>(bitfield[0]);
+        direction.y += static_cast<float>(bitfield[1]);
+        direction.x -= static_cast<float>(bitfield[2]);
+        direction.x += static_cast<float>(bitfield[3]);
 
-        if (futurePos.x - radius < 0 || futurePos.x + radius > Const::mapWidth) futurePos.x = position.x;
-        if (futurePos.y - radius < 0 || futurePos.y + radius > Const::mapHeight) futurePos.y = position.y;
-
-        const Vector2 direction = Vector2Subtract(futurePos, position);
-        constexpr float deltaCorrector{60};
-        const Vector2 movement = Vector2Scale(Vector2Normalize(direction),
-                                              attributes.getMultiplied(speed) * delta * deltaCorrector);
-        // TODO Speed should definitely be just a component, that gets updated any time attributes change
-        futurePos = Vector2Add(position, movement);
-        solveCircleRecCollision(futurePos, radius);
-        // TODO add solve npc collisions
-        position = futurePos;
+        const Vector2 velocity = Vector2Scale(Vector2Normalize(direction), attributes.getMultiplied(speed)*60);
+        b2Body_SetLinearVelocity(body, {velocity.x, velocity.y});
     }
 
     MoveCamera::MoveCamera(GameCamera &camera, const std::bitset<4> bitfield, const float delta)
