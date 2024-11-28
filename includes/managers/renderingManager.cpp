@@ -60,9 +60,8 @@ namespace Rendering {
         }
     }
 
-    // TODO Draw only onscreen
     void drawItems(const entt::registry &registry) {
-        for (auto [entity, position]: registry.view<Item, Position>().each()) {
+        for (auto [entity, position]: registry.view<Item, ToRender, Position>().each()) {
             DrawRectangleV(position, {16, 16}, GOLD);
         }
     }
@@ -109,11 +108,11 @@ namespace Rendering {
         for (auto row = 0; row < IntGrid::rows(); row++) {
             for (auto col = 0; col < IntGrid::cols(); col++) {
                 Color color = {255, 255, 255, 0};
-                if (Game::grid(row, col) == IntValue::OBSTACLE)
+                if (Game::grid(row, col)[IntValue::OBSTACLE])
                     color = {255, 0, 0, 125};
-                if (Game::grid(row, col) == IntValue::NEAR_OBSTACLE)
+                if (Game::grid(row, col)[IntValue::NEAR_OBSTACLE])
                     color = {255, 0, 0, 50};
-                if (Game::grid(row, col) == IntValue::NPC)
+                if (Game::grid(row, col)[IntValue::NPC])
                     color = {255, 255, 0, 50};
                 DrawRectangle(row * Const::tileSize, col * Const::tileSize, Const::tileSize, Const::tileSize, color);
             }

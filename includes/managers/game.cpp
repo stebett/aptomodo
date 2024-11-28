@@ -34,7 +34,7 @@ void PlayerFaceMouse(entt::registry& registry, const entt::entity player, const 
 }
 
 
-/* TODO
+/*
  * Different levels should
  *  - load different ldtk::levels
  *  - have different gui windows preopened

@@ -81,7 +81,6 @@ namespace Command {
     }
 
     void Move::execute() {
-        // TODO make this deltaTime dependant
         Position &position = registry.get<Position>(self);
         const Radius &radius = registry.get<Radius>(self);
         const Attributes &attributes = registry.get<Attributes>(self);

@@ -22,11 +22,11 @@ float gridToWorld(const int coord) {
 
 IntGrid::IntGrid() {
     for (auto &row: grid) {
-        row.fill(IntValue::INVALID);
+        row.fill(IntValue::EMPTY);
     }
 }
 
-const IntValue &IntGrid::operator()(const size_t row, const size_t col) const {
+const GridBitmap &IntGrid::operator()(const size_t row, const size_t col) const {
     if (row >= Rows || col >= Cols) {
         throw std::out_of_range("Index out of bounds");
     }
@@ -36,16 +36,16 @@ const IntValue &IntGrid::operator()(const size_t row, const size_t col) const {
 [[nodiscard]] size_t IntGrid::rows() { return Rows; }
 [[nodiscard]] size_t IntGrid::cols() { return Cols; }
 
-[[nodiscard]] const IntValue &IntGrid::safe(const size_t row, const size_t col) const {
+[[nodiscard]] const GridBitmap &IntGrid::safe(const size_t row, const size_t col) const {
     return grid[clamp(row, 0, Rows - 1)][clamp(col, 0, Cols - 1)];
 }
 
 
-[[nodiscard]] const IntValue &IntGrid::fromWorld(const float row, const float col) const {
+[[nodiscard]] const GridBitmap &IntGrid::fromWorld(const float row, const float col) const {
     return grid[worldToGrid(row, Rows - 1)][worldToGrid(col, Cols - 1)];
 }
 
-[[nodiscard]] const IntValue &IntGrid::fromWorld(const Vector2 position) const {
+[[nodiscard]] const GridBitmap &IntGrid::fromWorld(const Vector2 position) const {
     return grid[worldToGrid(position.x, Rows - 1)][worldToGrid(position.y, Cols - 1)];
 }
 
@@ -54,7 +54,7 @@ const IntValue &IntGrid::operator()(const size_t row, const size_t col) const {
 }
 
 [[nodiscard]] bool IntGrid::isOpaque(const size_t row, const size_t col) const {
-    return grid[clamp(row, 0, Rows - 1)][clamp(col, 0, Cols - 1)] == IntValue::OBSTACLE;
+    return grid[clamp(row, 0, Rows - 1)][clamp(col, 0, Cols - 1)][IntValue::OPAQUE];
 }
 
 void IntGrid::setVisible(const size_t row, const size_t col) {
@@ -76,20 +76,24 @@ void IntGrid::initialize(const ldtk::Layer &layer) {
     for (int x = 0; x <= IntGrid::rows() -1; x++) {
         for (int y = 0; y <= IntGrid::cols()-1; y++) {
             switch (layer.getIntGridVal(x, y).value) {
-                case -1: {
-                    grid[x][y] = IntValue::EMPTY;
-                    break;
-                }
                 case 1: {
-                    grid[x][y] = IntValue::OBSTACLE;
+                    grid[x][y].set(IntValue::GRASS);
+                    grid[x][y].set(IntValue::EMPTY);
+                    grid[x][y].set(IntValue::OPAQUE);
                     break;
                 }
                 case 2: {
-                    grid[x][y] = IntValue::NEAR_OBSTACLE;
+                    grid[x][y].set(IntValue::OBSTACLE);
+                    grid[x][y].set(IntValue::WATER);
+                    break;
+                }
+                case 3: {
+                    grid[x][y].set(IntValue::NEAR_OBSTACLE);
+                    grid[x][y].set(IntValue::SAND);
                     break;
                 }
                 default:
-                    grid[x][y] = IntValue::INVALID;
+                    grid[x][y].set(IntValue::EMPTY);
             }
         }
     }

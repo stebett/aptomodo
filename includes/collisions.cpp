@@ -66,7 +66,7 @@ void solveCircleRecCollision(Vector2 &futurePos, float radius) {
 
     for (float x = upperBoundary.x; x <= lowerBoundary.x; x+=Const::tileSize) {
         for (float y = upperBoundary.y; y <= lowerBoundary.y; y+=Const::tileSize) {
-            if (Game::grid.fromWorld(x, y) == IntValue::OBSTACLE) { // should also return whether it's out of map
+            if (Game::grid.fromWorld(x, y)[IntValue::OBSTACLE]) { // should also return whether it's out of map
                 clampedX = std::max(x, std::min(futurePos.x, x + float(Const::tileSize)));
                 clampedY = std::max(y, std::min(futurePos.y, y + float(Const::tileSize)));
                 distanceX = clampedX - futurePos.x;

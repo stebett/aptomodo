@@ -6,7 +6,6 @@
 #define APTOMODO_CONSTANTS_H
 
 
-// TODO these should defintely be in a namespace
 namespace Const {
     constexpr int screenWidth = 1920; // TODO allow resizing
     constexpr int screenHeight = 1080;

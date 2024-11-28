@@ -89,7 +89,7 @@ bool emplaceRandomTarget(entt::registry &registry, entt::entity self) {
         const float x = round(position.x + Config::GetFloat("enemyPatrolDistance") * cos(theta));
         const float y = round(position.y + Config::GetFloat("enemyPatrolDistance") * sin(theta));
         if (Game::grid.inWorldBounds(x, y) &&
-            Game::grid.fromWorld(x, y) == IntValue::EMPTY) {
+            Game::grid.fromWorld(x, y)[IntValue::EMPTY]) {
             uniquePoints.insert(Target{x, y});
         }
     }
