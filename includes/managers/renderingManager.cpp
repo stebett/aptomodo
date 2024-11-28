@@ -129,8 +129,8 @@ namespace Rendering {
 
             if (Config::GetBool("show_enemy_fov")) {
                 const auto isChasing = chasing.isChasing();
-                const auto hearRange = isChasing ? config::enemyHearRangeChasing : config::enemyHearRange;
-                const auto sightRange = isChasing ? config::enemySightRangeChasing : config::enemySightRange;
+                const auto hearRange = isChasing  ? Config::GetFloat("enemyHearRangeChasing") :  Config::GetFloat("enemyHearRange");
+                const auto sightRange = isChasing ? Config::GetFloat("enemySightRangeChasing") :  Config::GetFloat("enemySightRange");
                 const auto colorRange = isChasing ? ColorAlpha(RED, 0.1) : ColorAlpha(WHITE, 0.1);
                 // DrawCircleSector(position, sightRange, lookAngle - 91.0f, lookAngle + 91.0f, 2, colorRange);
                 DrawCircleV(position, hearRange, colorRange);
