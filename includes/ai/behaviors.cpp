@@ -28,7 +28,9 @@ Status PlayerInView::update(entt::registry &registry, entt::entity self, entt::e
     const bool isChasing = chasing.isChasing();
 
     const auto hearRange = isChasing ? Config::GetFloat("enemyHearRangeChasing") : Config::GetFloat("enemyHearRange");
-    const auto sightRange = isChasing ? Config::GetFloat("enemySightRangeChasing"): Config::GetFloat("enemySightRange");
+    const auto sightRange = isChasing
+                                ? Config::GetFloat("enemySightRangeChasing")
+                                : Config::GetFloat("enemySightRange");
     assert(hearRange < sightRange && "Sight range must be bigger then hear range, or you have to change this logic");
     if (const bool inHearRange = CheckCollisionCircles(playerPosition, playerRadius, position, hearRange)) {
         chasing.timer.Reset();
@@ -125,9 +127,9 @@ Status GetPlayerTarget::update(entt::registry &registry, entt::entity self, entt
     return SUCCESS;
 }
 
-void adjustLookAngle(const Vector2 &position, const Vector2 &target, LookAngle &lookAngle, float step = 8.0f) {
+void adjustLookAngle(const Vector2 &target, LookAngle &lookAngle, float step = 8.0f) {
     // Compute the target angle in degrees
-    float targetAngle = atan2(target.y - position.y, target.x - position.x) * RAD2DEG;
+    float targetAngle = atan2(target.y, target.x) * RAD2DEG;
 
     // Normalize angles to the range [0, 360)
     lookAngle = fmod(lookAngle + 360.0f, 360.0f);
@@ -149,13 +151,13 @@ void adjustLookAngle(const Vector2 &position, const Vector2 &target, LookAngle &
     lookAngle = fmod(lookAngle + 360.0f, 360.0f);
 }
 
-bool facesTargetDirection(const Vector2 &position, const Vector2 &target, const LookAngle &lookAngle) {
-    return abs(lookAngle - fmod(atan2(target.y - position.y, target.x - position.x) * RAD2DEG + 360.0f, 360.0f)) < 0.1;
+bool facesTargetDirection(const Vector2 &target, const LookAngle &lookAngle) {
+    return abs(lookAngle - fmod(atan2(target.y, target.x) * RAD2DEG + 360.0f, 360.0f)) < 0.1;
 }
 
-void faceDirection(const Vector2 &position, const Vector2 &target, LookAngle &lookAngle) {
+void faceDirection(const Vector2 &target, LookAngle &lookAngle) {
     //    lookAngle = Lerp(lookAngle, atan2(target.y - position.y, target.x - position.x) * RAD2DEG, turningRate);
-    lookAngle = atan2(target.y - position.y, target.x - position.x) * RAD2DEG;
+    lookAngle = atan2(target.y, target.x) * RAD2DEG;
 }
 
 void solveCollisionEnemyEnemy(const entt::registry &registry, const int id, Vector2 &futurePos, const float radius) {
@@ -210,15 +212,11 @@ Status MoveTowardsTarget::update(entt::registry &registry, entt::entity self, en
     const Vector2 direction = Vector2Subtract(nextTarget, position);
 
     const auto body = registry.get<b2BodyId>(self);
+    constexpr int framerateCorrection = 60;
+    const Vector2 velocity = Vector2Scale(Vector2Normalize(direction), speed * framerateCorrection);
+    b2Body_SetLinearVelocity(body, {velocity.x, velocity.y});
+    adjustLookAngle(velocity, lookAngle);
 
-    const Vector2 velocity = Vector2Scale(Vector2Normalize(direction), speed*60);
-    b2Body_SetLinearVelocity(body, {velocity.x, velocity.y}); // TODO fix
-
-    // if (!facesTargetDirection(position, futurePos, lookAngle)) {
-    //     adjustLookAngle(position, futurePos, lookAngle);
-    //     futurePos = position;
-    // }
-    //
     return SUCCESS;
 }
 
@@ -227,11 +225,8 @@ Status AttackMelee::update(entt::registry &registry, entt::entity self, entt::en
     const auto position = registry.get<Position>(self);
     const auto &playerPosition = registry.get<Position>(player);
     auto &lookAngle = registry.get<LookAngle>(self);
+    adjustLookAngle(Vector2Subtract(playerPosition, position), lookAngle);
 
-    if (!facesTargetDirection(position, playerPosition, lookAngle)) {
-        adjustLookAngle(position, playerPosition, lookAngle);
-        return FAILURE;
-    }
     auto &attackTimer = registry.get<AttackTimer>(self).timer;
     if (attackTimer.ElapsedSeconds() < registry.get<AttackSpeed>(self)) return RUNNING;
     attackTimer.Reset();
@@ -245,7 +240,8 @@ Status AttackMelee::update(entt::registry &registry, entt::entity self, entt::en
     //    float pushback = registry.get<Pushback>(enemy);
 
 
-    const float clickAngle = atan2(playerPosition.y - position.y, playerPosition.x - position.x) * Math::Const::radToDeg;
+    const float clickAngle = atan2(playerPosition.y - position.y, playerPosition.x - position.x) *
+                             Math::Const::radToDeg;
     registry.emplace<AttackEffect>(registry.create(), 100, position, attackRange, clickAngle - attackSpread,
                                    clickAngle + attackSpread, BROWN);
     registry.emplace<Audio::Command>(registry.create(), "enemy_shot");
