@@ -14,9 +14,6 @@
 #include "../items.h"
 
 namespace Rendering {
-
-
-
     void drawAttacks(entt::registry &registry) {
         auto effectView = registry.view<AttackEffect>();
         for (auto [entity, effect]: effectView.each()) {
@@ -41,10 +38,10 @@ namespace Rendering {
 
     void drawLivingBB(const entt::registry &registry) {
         auto livingView = registry.view<Living, ToRender, b2BodyId, Radius, Position, LookAngle, ColorBB>();
-        for (auto [entity,body,  radius , position, lookAngle, color]: livingView.each()) {
+        for (auto [entity,body, radius , position, lookAngle, color]: livingView.each()) {
             auto pos = b2Body_GetPosition(body);
-            b2ShapeId shape {};
-            b2Body_GetShapes(body,&shape, 1);
+            b2ShapeId shape{};
+            b2Body_GetShapes(body, &shape, 1);
             auto circle = b2Shape_GetCircle(shape);
             DrawCircle(pos.x, pos.y, circle.radius, color);
             DrawLineV(position, Vector2Add(
@@ -52,11 +49,13 @@ namespace Rendering {
                       BLACK);
         }
         if (Config::GetBool("draw_enemies_outside_screen")) {
-            auto outsideScreen = registry.view<Living, Enemy, Radius, Position, LookAngle, ColorBB>(entt::exclude<ToRender>);
+            auto outsideScreen = registry.view<Living, Enemy, Radius, Position, LookAngle, ColorBB>(
+                entt::exclude<ToRender>);
             for (auto [entity, radius, position, lookAngle, color]: outsideScreen.each()) {
                 DrawCircleV(position, radius, BLACK);
                 DrawLineV(position, Vector2Add(
-                              position, Vector2Scale(Vector2{cos(lookAngle * DEG2RAD), sin(lookAngle * DEG2RAD)}, 20.0f)),
+                              position,
+                              Vector2Scale(Vector2{cos(lookAngle * DEG2RAD), sin(lookAngle * DEG2RAD)}, 20.0f)),
                           BLACK);
             }
         }
@@ -96,7 +95,8 @@ namespace Rendering {
 
         DrawTextureRec(Game::levelTexture,
                        {
-                           cameraZero.x, -cameraZero.y - Const::screenHeight / camera.zoom, Const::screenWidth / camera.zoom,
+                           cameraZero.x, -cameraZero.y - Const::screenHeight / camera.zoom,
+                           Const::screenWidth / camera.zoom,
                            -Const::screenHeight / camera.zoom
                        },
                        cameraZero, WHITE);
@@ -123,14 +123,19 @@ namespace Rendering {
 
     // TODO DrawSplineCatmullRom
     void drawEnemyExtra(const entt::registry &registry) {
-        auto selectedView = registry.view<Living, ToRender, Selected, Radius, Position, LookAngle, ColorBB, Path, Target, Chasing>();
+        auto selectedView = registry.view<Living, ToRender, Selected, Radius, Position, LookAngle, ColorBB, Path, Target
+            , Chasing>();
         for (auto [entity, radius, position, lookAngle, color, path, target, chasing]: selectedView.each()) {
             DrawCircleV(position, radius + 2, PURPLE);
 
             if (Config::GetBool("show_enemy_fov")) {
                 const auto isChasing = chasing.isChasing();
-                const auto hearRange = isChasing  ? Config::GetFloat("enemyHearRangeChasing") :  Config::GetFloat("enemyHearRange");
-                const auto sightRange = isChasing ? Config::GetFloat("enemySightRangeChasing") :  Config::GetFloat("enemySightRange");
+                const auto hearRange = isChasing
+                                           ? Config::GetFloat("enemyHearRangeChasing")
+                                           : Config::GetFloat("enemyHearRange");
+                const auto sightRange = isChasing
+                                            ? Config::GetFloat("enemySightRangeChasing")
+                                            : Config::GetFloat("enemySightRange");
                 const auto colorRange = isChasing ? ColorAlpha(RED, 0.1) : ColorAlpha(WHITE, 0.1);
                 // DrawCircleSector(position, sightRange, lookAngle - 91.0f, lookAngle + 91.0f, 2, colorRange);
                 DrawCircleV(position, hearRange, colorRange);
@@ -138,25 +143,27 @@ namespace Rendering {
             }
 
             if (Config::GetBool("show_astar_path")) {
-                // Draw lines connecting points
                 auto points = path.path;
-                constexpr float alpha = 0.7;
+                constexpr float alpha = 0.9;
+                constexpr float astarRadius = 2;
+                constexpr auto astarColor = Color{255, 255, 255, 255};
                 for (size_t i = 0; i < path.indexMax; ++i) {
-                    DrawCircleV({points[i].x, points[i].y}, 2, ColorAlpha(ORANGE, alpha));
+                    DrawCircleV({points[i].x, points[i].y}, astarRadius, ColorAlpha(astarColor, alpha));
                 }
-                DrawSplineCatmullRom(points.data(), path.indexMax, 1.0f, ColorAlpha(ORANGE, alpha));
-                DrawCircleV(target, 2, ColorAlpha(RED, alpha));
+                // DrawSplineCatmullRom(points.data(), path.indexMax, 1.0f, ColorAlpha(astartColor, alpha));
+                DrawCircleV(target, astarRadius + 0.5, ColorAlpha(astarColor, alpha));
             }
         }
     }
 
 
-    void Draw(entt::registry& registry, const Camera2D &camera, const unsigned int frame) {
+    void Draw(entt::registry &registry, const Camera2D &camera, const unsigned int frame) {
         drawItems(registry);
 
         drawEnemyExtra(registry);
         if (Config::GetBool("show_bounding_box")) drawLivingBB(registry);
-        if (Config::GetBool("show_enemy_texture")) drawEnemyTexture(registry, frame / Config::GetInt("enemy_walking_animation_fps"));
+        if (Config::GetBool("show_enemy_texture")) drawEnemyTexture(
+            registry, frame / Config::GetInt("enemy_walking_animation_fps"));
         if (Config::GetBool("show_attacks")) drawAttacks(registry);
         if (Config::GetBool("draw_level_collisions")) drawLevelCollisions();
 

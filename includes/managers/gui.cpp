@@ -15,7 +15,6 @@
 ImGuiIO *Gui::m_io;
 
 
-
 // Function to render and interact with the table
 void imguiEnemyTypesEditor() {
     ImGui::Begin("Enemy Types Editor");
@@ -45,9 +44,10 @@ void imguiEnemyTypesEditor() {
             EnemyType &enemy = enemyList[i];
             ImGui::TableNextRow();
 
-            char * name = enemy.name.data();
+            char *name = enemy.name.data();
             // Editable fields for each column
-            ImGui::TableNextColumn(); ImGui::InputText(("##Name" + std::to_string(i)).c_str(), name, 80);
+            ImGui::TableNextColumn();
+            ImGui::InputText(("##Name" + std::to_string(i)).c_str(), name, 80);
             ImGui::TableNextColumn();
             ImGui::InputInt(("##Grade" + std::to_string(i)).c_str(), &enemy.grade);
             ImGui::TableNextColumn();
@@ -78,7 +78,8 @@ void imguiEnemyTypesEditor() {
     }
 
     // Add a button for adding a new EnemyType
-    if (ImGui::Button("Add New Enemy")) { // TODO save
+    if (ImGui::Button("Add New Enemy")) {
+        // TODO save
         enemyList.push_back(EnemyType{
             "NewEnemy", 1, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
             Color(1.0f, 1.0f, 1.0f, 1.0f), 100.0f, 10, "", ""
@@ -121,11 +122,11 @@ void imguiEnemyAttr(entt::registry &registry) {
     ImGui::SeparatorText("Selected Enemy attributes");
 
     auto view = registry.view<Enemy, Selected, Path, ID, ColorBB, Spread, Speed, Health, Radius, AttackTimer,
-        AttackSpeed, Damage, AttackRange, Pushback, Position, LookAngle,
-        BehaviorTree>();
+        AttackSpeed, Damage, AttackRange, Position, LookAngle,
+        Strategy::Strategy>();
     for (auto [entity, path, id, colorbb, spread, speed, health, radius,
              timelastattack, attackspeed, damage,
-             attackrange, pushback, position, lookAngle, strategy]: view.each()) {
+             attackrange, position, lookAngle, strategy]: view.each()) {
         ImGui::SliderFloat("health", &health.value, 0, 200, "%.3f", 0);
         ImGui::SliderFloat("radius", &radius.value, 0, 50, "%.3f", 0);
         ImGui::SliderFloat("lookAngle", &lookAngle.value, -360, 360, "%.3f", 0);
@@ -138,7 +139,7 @@ void imguiEnemyAttr(entt::registry &registry) {
 
         ImGui::SeparatorText("Behavior Tree");
         std::vector<std::pair<const char *, Status> > result;
-        collectNodeStatus(strategy.getRoot(), result);
+        collectNodeStatus(strategy.behavior->getRoot(), result);
 
         int n = 0;
         for (auto [name, status]: result) {
@@ -357,9 +358,8 @@ void imguiWindowMain(entt::registry &registry, ImGuiIO io, const Camera2D &camer
     static bool show_start_values = false;
     static bool show_cursor_window = false;
     static bool show_enemy_types_window = false;
+
     ImGui::Begin("Main");
-
-
     ImGui::Checkbox("Player Window", &show_player_window);
     if (show_player_window)
         imguiPlayerAttr(registry);
@@ -421,14 +421,10 @@ void Gui::Instantiate() {
 
 void Gui::Update(entt::registry &registry, const Camera2D &camera) {
     ImGui_ImplRaylib_ProcessEvents();
-
-    // Start the Dear ImGui frame
     ImGui_ImplRaylib_NewFrame();
     ImGui::NewFrame();
 
     imguiWindowMain(registry, *m_io, camera);
-
-    // Rendering
     ImGui::Render();
 }
 
