@@ -5,8 +5,10 @@
 #include "physics.h"
 #include <components.h>
 
+#include "attacks.h"
+
 b2WorldId Physics::worldId;
-std::unordered_map<int32_t, entt::entity> Physics::entityMap {};
+std::unordered_map<int32_t, entt::entity> Physics::bodyMap{};
 
 void Physics::Instantiate() {
     b2WorldDef worldDef = b2DefaultWorldDef();
@@ -19,7 +21,7 @@ void Physics::EmplaceDynamicBody(entt::registry &registry, entt::entity entity, 
     bodyDef.type = b2_dynamicBody;
     bodyDef.position = (b2Vec2){position.x, position.y};
     b2BodyId bodyId = b2CreateBody(worldId, &bodyDef);
-    entityMap[bodyId.index1] = entity;
+    bodyMap[bodyId.index1] = entity;
     const auto circle = b2Circle({0.0, 0.0}, radius);
     b2ShapeDef shapeDef = b2DefaultShapeDef();
     shapeDef.density = 1.0f;
@@ -37,6 +39,22 @@ void Physics::EmplaceStaticBody(const Vector2 position, float side) {
     b2CreatePolygonShape(bodyId, &shapeDef, &Box);
 }
 
+void Physics::EmplaceSword(entt::registry &registry, entt::entity entity, Vector2 anchor, float half_width,
+                           float half_height) {
+    b2BodyDef bodyDef = b2DefaultBodyDef();
+    bodyDef.type = b2_kinematicBody;
+    bodyDef.position = (b2Vec2){anchor.x, anchor.y};
+    b2BodyId bodyId = b2CreateBody(worldId, &bodyDef);
+    bodyMap[bodyId.index1] = entity;
+    b2Polygon box = b2MakeBox(half_width, half_height);
+    b2ShapeDef shapeDef = b2DefaultShapeDef();
+    shapeDef.density = 1.0f;
+    shapeDef.friction = 0.0f;
+    shapeDef.isSensor = true;
+    b2CreatePolygonShape(bodyId, &shapeDef, &box);
+    registry.emplace<b2BodyId>(entity, bodyId);
+}
+
 
 void Physics::Update(entt::registry &registry) {
     const auto [moveEvents, moveCount] = b2World_GetBodyEvents(worldId);
@@ -44,9 +62,22 @@ void Physics::Update(entt::registry &registry) {
         const b2BodyMoveEvent *event = moveEvents + i;
         b2BodyId bodyId = event->bodyId;
         b2Body_SetLinearVelocity(bodyId, {0.0f, 0.0f});
-        Position &position = registry.get<Position>(entityMap[bodyId.index1]);
-        const auto [x, y] = event->transform.p;
-        position = {x, y};
+        const auto entity = bodyMap[bodyId.index1];
+        if (registry.all_of<Position>(entity)) {
+            Position &position = registry.get<Position>(entity);
+            const auto [x, y] = event->transform.p;
+            position = {x, y};
+        }
+    }
+
+    const b2SensorEvents sensorEvents = b2World_GetSensorEvents(worldId);
+    for (int i = 0; i < sensorEvents.beginCount; ++i) {
+        const b2SensorBeginTouchEvent *beginTouch = sensorEvents.beginEvents + i;
+        const auto weapon = bodyMap[b2Shape_GetBody(beginTouch->sensorShapeId).index1];
+        const auto target = bodyMap[b2Shape_GetBody(beginTouch->visitorShapeId).index1];
+        const auto sword = registry.get<Attacks::Sword>(weapon);
+        auto &health = registry.get<Health>(target);
+        health -= sword.damage;
     }
 }
 

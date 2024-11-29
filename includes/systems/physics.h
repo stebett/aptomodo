@@ -8,7 +8,7 @@
 
 class Physics {
     static b2WorldId worldId;
-    static std::unordered_map<int32_t, entt::entity> entityMap;
+    static std::unordered_map<int32_t, entt::entity> bodyMap;
 
 public:
     static constexpr float timeStep{1.0 / 60.0};
@@ -18,7 +18,12 @@ public:
 
     static void EmplaceDynamicBody(entt::registry &registry, entt::entity entity, Vector2 position, float radius);
 
+    // Todo these functions should return a bodyId, Physics should never touch the registry
+
     static void EmplaceStaticBody(Vector2 position, float side);
+
+    static void EmplaceSword(entt::registry &registry, entt::entity entity, Vector2 anchor, float half_width,
+                             float half_height);
 
     static void Update(entt::registry &registry);
 

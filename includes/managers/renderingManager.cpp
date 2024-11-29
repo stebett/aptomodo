@@ -7,6 +7,7 @@
 
 #include "../components.h"
 #include "animationManager.h"
+#include "attacks.h"
 #include "game.h"
 #include "levelManager.h"
 #include "shadowCast.h"
@@ -35,6 +36,17 @@ namespace Rendering {
                            WHITE);
         }
     }
+
+    void drawAttacksBB(const entt::registry &registry) {
+        registry.view<Attacks::Sword, b2BodyId>().each([](auto entity, auto sword, auto body) {
+            auto pos = b2Body_GetPosition(body);
+            b2ShapeId shape{};
+            b2Body_GetShapes(body, &shape, 1);
+            auto polygon = b2Shape_GetPolygon(shape);
+            DrawCircle(pos.x, pos.y, 5, RED);
+        });
+    }
+
 
     void drawLivingBB(const entt::registry &registry) {
         auto livingView = registry.view<Living, ToRender, b2BodyId, Radius, Position, LookAngle, ColorBB>();
@@ -162,12 +174,14 @@ namespace Rendering {
 
         drawEnemyExtra(registry);
         if (Config::GetBool("show_bounding_box")) drawLivingBB(registry);
-        if (Config::GetBool("show_enemy_texture")) drawEnemyTexture(
-            registry, frame / Config::GetInt("enemy_walking_animation_fps"));
+        if (Config::GetBool("show_enemy_texture"))
+            drawEnemyTexture(
+                registry, frame / Config::GetInt("enemy_walking_animation_fps"));
         if (Config::GetBool("show_attacks")) drawAttacks(registry);
         if (Config::GetBool("draw_level_collisions")) drawLevelCollisions();
 
         drawProjectiles(registry);
+        drawAttacksBB(registry);
         drawTooltips(registry);
     }
 }

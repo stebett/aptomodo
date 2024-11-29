@@ -12,7 +12,9 @@
 #include <managers/audioManager.h>
 #include <managers/game.h>
 #include <managers/gui.h>
+#include <systems/physics.h>
 
+#include "attacks.h"
 #include "math/mathConstants.h"
 #include "status.h"
 #include "status.h"
@@ -76,6 +78,11 @@ namespace Command {
         attackTimer.Reset();
         Position &playerPosition = registry.get<Position>(self);
 
+        auto swordEntity = registry.create();
+        Physics::EmplaceSword(registry, swordEntity, playerPosition, 10, 10);
+        auto sword = Attacks::Sword{100.0f};
+        registry.emplace<Attacks::Sword>(swordEntity, sword);
+
         const float attackRange = attributes.getMultiplied(AttributeConstants::range);
         const float attackSpread = attributes.getMultiplied(AttributeConstants::spread);
         const float damage = attributes.getMultiplied(AttributeConstants::damagePhysical);
@@ -84,33 +91,33 @@ namespace Command {
         float clickAngle = atan2(mousePosition.y - playerPosition.y, mousePosition.x - playerPosition.x) *
                            Math::Const::radToDeg;
 
-        AttackEffect effect = {
-            100, playerPosition, attackRange, clickAngle - attackSpread, clickAngle + attackSpread,
-            PURPLE
-        };
-        registry.emplace<AttackEffect>(registry.create(), effect);
-
-        registry.emplace<Audio::Command>(registry.create(), "player_shot");
-
-        Vector2 endSegment1 = {
-            playerPosition.x + attackRange * cos((clickAngle - attackSpread) * Math::Const::radToDeg),
-            playerPosition.y + attackRange * sin((clickAngle - attackSpread) * Math::Const::radToDeg)
-        };
-        Vector2 endSegment2 = {
-            playerPosition.x + attackRange * cos((clickAngle + attackSpread) * Math::Const::radToDeg),
-            playerPosition.y + attackRange * sin((clickAngle + attackSpread) * Math::Const::radToDeg)
-        };
-
-        auto enemyView = registry.view<Enemy, Living, Health, Radius, Position>();
-        for (auto [enemy, health, radius, position]: enemyView.each()) {
-            if (CheckCollisionCircleTriangle(position, radius, playerPosition,
-                                             endSegment1, endSegment2, attackRange)) {
-                health -= damage;
+        // AttackEffect effect = {
+        //     100, playerPosition, attackRange, clickAngle - attackSpread, clickAngle + attackSpread,
+        //     PURPLE
+        // };
+        // registry.emplace<AttackEffect>(registry.create(), effect);
+        //
+        // registry.emplace<Audio::Command>(registry.create(), "player_shot");
+        //
+        // Vector2 endSegment1 = {
+        //     playerPosition.x + attackRange * cos((clickAngle - attackSpread) * Math::Const::radToDeg),
+        //     playerPosition.y + attackRange * sin((clickAngle - attackSpread) * Math::Const::radToDeg)
+        // };
+        // Vector2 endSegment2 = {
+        //     playerPosition.x + attackRange * cos((clickAngle + attackSpread) * Math::Const::radToDeg),
+        //     playerPosition.y + attackRange * sin((clickAngle + attackSpread) * Math::Const::radToDeg)
+        // };
+        //
+        // auto enemyView = registry.view<Enemy, Living, Health, Radius, Position>();
+        // for (auto [enemy, health, radius, position]: enemyView.each()) {
+        //     if (CheckCollisionCircleTriangle(position, radius, playerPosition,
+        //                                      endSegment1, endSegment2, attackRange)) {
+        //         health -= damage;
                 //            float m = sqrt(pow(playerPosition.x + position.x, 2) + pow(playerPosition.y + position.y, 2));
                 //            position = {(position.x + (position.x - playerPosition.x) * pushback / m),
                 //                        position.y + (position.y - playerPosition.y) * pushback / m};
-            }
-        }
+            // }
+        // }
     }
 
     PickUp::PickUp(entt::registry &registry, entt::entity self): registry(registry),
