@@ -7,10 +7,15 @@
 
 
 namespace Attacks {
+    struct Hit {
+    };
+
     class Sword {
     public:
         float damage = 0;
-        explicit Sword(const float damage) :damage(damage) {};
+
+        explicit Sword(const float damage) : damage(damage) {
+        };
     };
 }
 
