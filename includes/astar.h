@@ -22,6 +22,8 @@ public:
     Node();
 
     Node(int x, int y);
+
+    explicit Node(Vector2 vec);
 };
 
 Node getTile(const Vector2 &position);
@@ -31,7 +33,6 @@ struct std::hash<Node> {
     std::size_t operator()(const Node &k) const;
 };
 
-
 using EvaluatedNode = std::pair<Node, float>;
 
 struct CompareNodes {
@@ -39,7 +40,7 @@ struct CompareNodes {
 };
 
 // TODO use this directly instead of Path
-// TODO Integrate path in a spline (you can already draw it with DrawSplineCatmullRom)
+// TODO Integrate path in a spline
 class Search {
     std::priority_queue<EvaluatedNode, std::vector<EvaluatedNode>, CompareNodes> open;
     unsigned int frontier_idx = 0;
@@ -48,7 +49,8 @@ class Search {
     Node start;
     Node end;
     Node current;
-    int stepNumber;
+    std::unordered_set<Node> forcedFree;
+    int stepNumber = 0;
     int stepLimit = 100;
 
 public:
@@ -56,6 +58,8 @@ public:
     std::vector<Node> path;
 
     void init(Node nodeStart, Node nodeEnd);
+
+    void setFree(std::unordered_set<Node> nodes);
 
     void reset();
 

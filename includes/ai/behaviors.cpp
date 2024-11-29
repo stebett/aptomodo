@@ -9,12 +9,10 @@
 #include <collisions.h>
 #include <components.h>
 #include <config.h>
-#include <constants.h>
-#include <box2d/box2d.h>
 #include <managers/animationManager.h>
 #include <managers/audioManager.h>
-#include <managers/levelManager.h>
 #include <math/mathConstants.h>
+#include <systems/space.h>
 
 #include "shadowCast.h"
 #include "managers/game.h"
@@ -182,6 +180,7 @@ void solveCollisionEnemyEnemy(const entt::registry &registry, const int id, Vect
 Status MoveTowardsTarget::update(entt::registry &registry, entt::entity self, entt::entity player) {
     Path &path = registry.get<Path>(self);
     auto &position = registry.get<Position>(self);
+    auto &radius = registry.get<Radius>(self);
 
     if (!path.isValid()) {
         Search search;
@@ -189,6 +188,11 @@ Status MoveTowardsTarget::update(entt::registry &registry, entt::entity self, en
         const Node start = getTile(position);
         const Node end = getTile(target);
         search.init(start, end);
+        std::unordered_set<Node> tileSet{};
+        for (const auto v: Space::tilesOccupied(position, radius))
+            tileSet.insert(Node(v));
+        search.setFree(tileSet);
+
         while (!search.completed) { search.step(); }
         if (search.path.empty()) { return FAILURE; }
         search.exportPath(path);

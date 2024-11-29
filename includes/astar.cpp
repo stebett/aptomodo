@@ -3,6 +3,8 @@
 //
 
 #include "astar.h"
+
+#include <utility>
 #include "managers/game.h"
 
 // NODE
@@ -24,9 +26,14 @@ Node::Node() = default;
 Node::Node(int x, int y) : x(x), y(y) {
 }
 
+Node::Node(const Vector2 vec): x(static_cast<int>(vec.x)), y(static_cast<int>(vec.y)) {
+}
+
 
 Node getTile(const Vector2 &position) {
-    return {static_cast<int>(floor(position.x / Const::tileSize)), static_cast<int>(floor(position.y / Const::tileSize))};
+    return {
+        static_cast<int>(floor(position.x / Const::tileSize)), static_cast<int>(floor(position.y / Const::tileSize))
+    };
 }
 
 std::size_t std::hash<Node>::operator()(const Node &k) const {
@@ -53,7 +60,6 @@ std::vector<Node> neighbors(const Node node) {
             if (neighbor_x < 0 || neighbor_x >= IntGrid::rows()) continue;
             if (neighbor_y < 0 || neighbor_y >= IntGrid::cols()) continue;
             if (Game::grid.safe(neighbor_x, neighbor_y)[IntValue::OBSTACLE]) continue;
-            // if (Game::grid(neighbor_x, neighbor_y) == IntValue::NPC) continue;
             neighbors.emplace_back(neighbor_x, neighbor_y);
         }
     return neighbors;
@@ -69,6 +75,10 @@ void Search::init(Node nodeStart, Node nodeEnd) {
     end = nodeEnd;
     closed[start] = 0.0f;
     open.emplace(start, manhattan(start, end));
+}
+
+void Search::setFree(std::unordered_set<Node> nodes) {
+    forcedFree = std::move(nodes);
 }
 
 void Search::reset() {
@@ -114,9 +124,8 @@ void Search::step() {
             if (neighbor == start | neighbor == came_from[current]) continue;
             float terrainPenalty = 3.0f * static_cast<float>(
                                        Game::grid.safe(neighbor.x, neighbor.y)[IntValue::NEAR_OBSTACLE]);
-            // terrainPenalty += static_cast<float>(Game::grid.safe(neighbor.x, neighbor.y)[IntValue::NPC]) *
-                    // 20.0f;
-            // terrainPenalty *= static_cast<float>(manhattan(neighbor, start) >=3 ); //remove terrain penalty in the 2 tiles around the start
+            if (!forcedFree.contains(neighbor) && Game::grid.safe(neighbor.x, neighbor.y)[IntValue::NPC])
+                terrainPenalty += 20.0f;
             open.emplace(neighbor, manhattan(neighbor, end) + terrainPenalty);
             came_from[neighbor] = current;
             closed[neighbor] = closed[current] + manhattan(neighbor, current) + terrainPenalty;

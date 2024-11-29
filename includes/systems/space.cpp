@@ -39,32 +39,32 @@ void emplaceStuff(entt::registry &registry, const entt::entity entity, const Vec
     }
 }
 
-std::vector<Vector2> tilesOccupied(const Vector2 center, const float radius) {
-    std::vector<Vector2> occupiedTiles;
-    const int top = ceil(center.y - radius) / Const::tileSize;
-    const int bottom = floor(center.y + radius) / Const::tileSize;
-    const int left = ceil(center.x - radius) / Const::tileSize;
-    const int right = floor(center.x + radius) / Const::tileSize;
+namespace Space {
+    std::vector<Vector2> tilesOccupied(const Vector2 center, const float radius) {
+        std::vector<Vector2> occupiedTiles;
+        const int top = ceil(center.y - radius) / Const::tileSize;
+        const int bottom = floor(center.y + radius) / Const::tileSize;
+        const int left = ceil(center.x - radius) / Const::tileSize;
+        const int right = floor(center.x + radius) / Const::tileSize;
 
-    for (int y = top; y <= bottom; y++) {
-        for (int x = left; x <= right; x++) {
-            const auto point = Vector2{static_cast<float>(x), static_cast<float>(y)};
-            if (CheckCollisionCircleRec(center, radius,
-                                        {
-                                            point.x * Const::tileSize,
-                                            point.y * Const::tileSize,
-                                            Const::tileSize,
-                                            Const::tileSize
-                                        })) {
-                occupiedTiles.emplace_back(point);
+        for (int y = top; y <= bottom; y++) {
+            for (int x = left; x <= right; x++) {
+                const auto point = Vector2{static_cast<float>(x), static_cast<float>(y)};
+                if (CheckCollisionCircleRec(center, radius,
+                                            {
+                                                point.x * Const::tileSize,
+                                                point.y * Const::tileSize,
+                                                Const::tileSize,
+                                                Const::tileSize
+                                            })) {
+                    occupiedTiles.emplace_back(point);
+                }
             }
         }
+        return occupiedTiles;
     }
-    return occupiedTiles;
-}
 
 
-namespace Space {
     void Update(entt::registry &registry, const Camera2D &camera) {
         static std::vector<Vector2> occupied{}; // TODO make this a set
         for (auto tile: occupied) Game::grid.setFree(tile);

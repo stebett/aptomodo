@@ -123,7 +123,7 @@ namespace Rendering {
 
     // TODO DrawSplineCatmullRom
     void drawEnemyExtra(const entt::registry &registry) {
-        auto selectedView = registry.view<Living, Selected, Radius, Position, LookAngle, ColorBB, Path, Target, Chasing>();
+        auto selectedView = registry.view<Living, ToRender, Selected, Radius, Position, LookAngle, ColorBB, Path, Target, Chasing>();
         for (auto [entity, radius, position, lookAngle, color, path, target, chasing]: selectedView.each()) {
             DrawCircleV(position, radius + 2, PURPLE);
 
@@ -140,11 +140,12 @@ namespace Rendering {
             if (Config::GetBool("show_astar_path")) {
                 // Draw lines connecting points
                 auto points = path.path;
+                constexpr float alpha = 0.7;
                 for (size_t i = 0; i < path.indexMax; ++i) {
-                    DrawCircleV({points[i].x, points[i].y}, 2, ColorAlpha(ORANGE, 0.2));
+                    DrawCircleV({points[i].x, points[i].y}, 2, ColorAlpha(ORANGE, alpha));
                 }
-                DrawSplineCatmullRom(points.data(), path.indexMax, 1.0f, ColorAlpha(ORANGE, 0.2));
-                DrawCircleV(target, 2, ColorAlpha(RED, 0.2));
+                DrawSplineCatmullRom(points.data(), path.indexMax, 1.0f, ColorAlpha(ORANGE, alpha));
+                DrawCircleV(target, 2, ColorAlpha(RED, alpha));
             }
         }
     }
