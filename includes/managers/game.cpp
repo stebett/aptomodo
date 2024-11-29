@@ -9,6 +9,7 @@
 #include <factories.h>
 #include <player_ui.h>
 #include <ai/loop.h>
+#include <systems/inputs.h>
 #include <systems/physics.h>
 #include <systems/space.h>
 
@@ -18,6 +19,7 @@
 #include "framerateManager.h"
 #include "gui.h"
 #include "renderingManager.h"
+#include "systems/statusUpdate.h"
 
 Texture2D Game::levelTexture;
 IntGrid Game::grid;
@@ -61,9 +63,10 @@ LevelOutcome PlayLevel(const int levelNumber) {
 
     while (!Game::IsLevelFinished()) {
         if (!Game::IsPaused()) {
+            StatusEffect::Update(registry);
             framerateManager.accumulator += framerateManager.deltaTime;
             while (framerateManager.accumulator >= Physics::timeStep) {
-                Physics::Step(); // TODO properly update at fixed timestep
+                Physics::Step();
                 framerateManager.accumulator -= Physics::timeStep;
             }
             Physics::Update(registry);

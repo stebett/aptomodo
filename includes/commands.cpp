@@ -5,86 +5,22 @@
 #include "commands.h"
 
 #include <attributes.h>
-#include <camera.h>
 #include <collisions.h>
 #include <components.h>
 #include <config.h>
-#include <constants.h>
 #include <items.h>
-#include <box2d/box2d.h>
 #include <managers/audioManager.h>
 #include <managers/game.h>
 #include <managers/gui.h>
 
-#include "../vendors/box2d/src/body.h"
 #include "math/mathConstants.h"
-
-namespace Inputs {
-    void Update(entt::registry &registry) {
-        auto view = registry.view<CommandHolder>();
-        // todo the view should clean itself each time? or only if commands are successfully executed?
-        // maybe commands can reinsert themselves if they fail
-        for (auto [e, holder]: view.each()) {
-            holder.command->execute();
-            registry.remove<CommandHolder>(e);
-        }
-    }
-
-
-    void Listen(entt::registry &registry, GameCamera &camera, float delta) {
-        auto player = registry.view<Player>().front();
-        if (!Gui::WantKeyboard()) {
-            std::bitset<4> bitfield;
-            if (!Game::IsPaused()) {
-                if (IsKeyPressed(KEY_W) || IsKeyDown(KEY_W)) bitfield.set(0);
-                if (IsKeyPressed(KEY_S) || IsKeyDown(KEY_S)) bitfield.set(1);
-                if (IsKeyPressed(KEY_A) || IsKeyDown(KEY_A)) bitfield.set(2);
-                if (IsKeyPressed(KEY_D) || IsKeyDown(KEY_D)) bitfield.set(3);
-                if (Config::GetBool("free_camera")) {
-                    registry.emplace_or_replace<CommandHolder>(
-                        entt::entity(), std::make_unique<Command::MoveCamera>(camera, bitfield, delta));
-                } else {
-                    registry.emplace_or_replace<CommandHolder>(
-                        entt::entity(), std::make_unique<Command::Move>(registry, player, bitfield, delta));
-                }
-            }
-            if (IsKeyPressed(KEY_Q))
-                registry.emplace_or_replace<CommandHolder>(
-                    entt::entity(), std::make_unique<Command::Quit>());
-            if (IsKeyPressed(KEY_R))
-                registry.emplace_or_replace<CommandHolder>(
-                    entt::entity(), std::make_unique<Command::Restart>());
-            if (IsKeyPressed(KEY_P))
-                registry.emplace_or_replace<CommandHolder>(
-                    entt::entity(), std::make_unique<Command::Pause>());
-            if (IsKeyPressed(KEY_M))
-                registry.emplace_or_replace<CommandHolder>(
-                    entt::entity(), std::make_unique<Command::Mute>());
-            if (IsKeyPressed(KEY_P))
-                registry.emplace_or_replace<CommandHolder>(
-                    entt::entity(), std::make_unique<Command::PickUp>(registry, player));
-        }
-        if (!Gui::WantMouse()) {
-            if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT))
-                registry.emplace_or_replace<CommandHolder>(
-                    entt::entity(),
-                    std::make_unique<Command::SelectEnemy>(registry,
-                                                           GetScreenToWorld2D(GetMousePosition(), camera)));
-
-            if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
-                registry.emplace_or_replace<CommandHolder>(
-                    entt::entity(),
-                    std::make_unique<Command::Attack>(registry,
-                                                      player,
-                                                      GetScreenToWorld2D(GetMousePosition(), camera)));
-        }
-    }
-}
+#include "status.h"
+#include "status.h"
 
 
 namespace Command {
-    Move::Move(entt::registry &registry, const entt::entity self, const std::bitset<4> bitfield, const float delta)
-        : registry(registry), self(self), bitfield(bitfield), delta(delta) {
+    Move::Move(entt::registry &registry, const entt::entity self, const std::bitset<4> bitfield)
+        : registry(registry), self(self), bitfield(bitfield) {
     }
 
     void Move::execute() {
@@ -97,8 +33,22 @@ namespace Command {
         direction.x -= static_cast<float>(bitfield[2]);
         direction.x += static_cast<float>(bitfield[3]);
 
-        const Vector2 velocity = Vector2Scale(Vector2Normalize(direction), attributes.getMultiplied(speed) * 60);
+        constexpr int framerateCorrection = 60;
+        const bool isDashing = registry.all_of<StatusEffect::Dash>(self);
+        const auto dashSpeed = Config::GetFloat("dash_speed");
+        const float actualSpeed = isDashing ? dashSpeed : framerateCorrection * attributes.getMultiplied(speed);
+        const Vector2 velocity = Vector2Scale(Vector2Normalize(direction), actualSpeed);
         b2Body_SetLinearVelocity(body, {velocity.x, velocity.y});
+    }
+
+    Dash::Dash(entt::registry &registry, const entt::entity self)
+        : registry(registry), self(self) {
+    }
+
+    void Dash::execute() {
+        const float dashDuration = Config::GetFloat("dash_duration");
+        auto duration_in_seconds = std::chrono::duration<float>(dashDuration);
+        registry.emplace_or_replace<StatusEffect::Dash>(self, duration_in_seconds);
     }
 
     MoveCamera::MoveCamera(GameCamera &camera, const std::bitset<4> bitfield, const float delta)

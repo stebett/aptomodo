@@ -21,7 +21,10 @@ file(GLOB_RECURSE SOURCES ${INCLUDE}/*.cpp)
 
 
 
-add_executable(${EXEC} main.cpp ${SOURCES})
+add_executable(${EXEC} main.cpp ${SOURCES}
+        includes/systems/inputs.cpp
+        includes/systems/statusUpdate.h
+        includes/status.h)
 target_link_libraries(${EXEC} PRIVATE raylib)
 target_link_libraries(${EXEC} PRIVATE box2d)
 target_link_libraries(${EXEC} PRIVATE LDtkLoader)

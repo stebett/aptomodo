@@ -4,8 +4,8 @@
 
 #ifndef COMMANDS_H
 #define COMMANDS_H
+#include <camera.h>
 
-class GameCamera;
 
 class CommandBase {
 public:
@@ -14,34 +14,43 @@ public:
     virtual void execute() = 0;
 };
 
+
+struct ExecuteLate {};
 struct CommandHolder {
     std::unique_ptr<CommandBase> command;
 };
 
-namespace Inputs {
-    void Listen(entt::registry &registry, GameCamera& camera, float delta);
 
-    void Update(entt::registry &registry);
-}
 
 namespace Command {
     class Move final : public CommandBase {
         entt::registry &registry;
         entt::entity self;
         std::bitset<4> bitfield;
-        float delta{};
+
     public:
-        Move(entt::registry &registry, entt::entity self, std::bitset<4> bitfield, float delta);
+        Move(entt::registry &registry, entt::entity self, std::bitset<4> bitfield);
+
+        void execute() override;
+    };
+
+    class Dash final : public CommandBase {
+        entt::registry &registry;
+        const entt::entity self;
+
+    public:
+        Dash(entt::registry &registry, entt::entity self);
 
         void execute() override;
     };
 
     class MoveCamera final : public CommandBase {
-        GameCamera& camera;
+        GameCamera &camera;
         std::bitset<4> bitfield;
         float delta{};
+
     public:
-        MoveCamera(GameCamera& camera, std::bitset<4> bitfield, float delta);
+        MoveCamera(GameCamera &camera, std::bitset<4> bitfield, float delta);
 
         void execute() override;
     };
@@ -85,6 +94,7 @@ namespace Command {
     class SelectEnemy final : public CommandBase {
         entt::registry &registry;
         Vector2 mousePosition;
+
     public:
         SelectEnemy(entt::registry &registry, const Vector2 &mouse_position);
 
@@ -95,6 +105,5 @@ namespace Command {
     public:
         void execute() override;
     };
-
 }
 #endif //COMMANDS_H
