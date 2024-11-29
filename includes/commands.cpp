@@ -74,12 +74,13 @@ namespace Command {
     void Attack::execute() {
         auto &attackTimer = registry.get<AttackTimer>(self).timer;
         const auto &attributes = registry.get<Attributes>(self);
+        const auto lookAngle = registry.get<LookAngle>(self);
         if (attackTimer.ElapsedSeconds() < attributes.getMultiplied(AttributeConstants::attackSpeed)) return;
         attackTimer.Reset();
         Position &playerPosition = registry.get<Position>(self);
 
         auto swordEntity = registry.create();
-        Physics::EmplaceSword(registry, swordEntity, playerPosition, 10, 10);
+        Physics::EmplaceSword(registry, swordEntity, playerPosition, 3, 25, lookAngle);
         auto sword = Attacks::Sword{100.0f};
         registry.emplace<Attacks::Sword>(swordEntity, sword);
 

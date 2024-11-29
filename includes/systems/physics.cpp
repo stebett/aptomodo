@@ -36,13 +36,15 @@ b2BodyId Physics::CreateDynamicCircularBody(const entt::entity entity, const Vec
 }
 
 void Physics::EmplaceSword(entt::registry &registry, entt::entity entity, Vector2 anchor, float half_width,
-                           float half_height) {
+                           float half_height, float degrees) {
     b2BodyDef bodyDef = b2DefaultBodyDef();
     bodyDef.type = b2_kinematicBody;
     bodyDef.position = (b2Vec2){anchor.x, anchor.y};
     b2BodyId bodyId = b2CreateBody(worldId, &bodyDef);
     bodyMap[bodyId.index1] = entity;
-    b2Polygon box = b2MakeBox(half_width, half_height);
+    Vector2 center = {0, 0};
+    b2Polygon box = b2MakeOffsetBox(half_width, half_height, {center.x, center.y},
+                                    b2Rot(cos((degrees +90)* M_PI / 180.0), sin((degrees + 90) * M_PI / 180.0)));
     b2ShapeDef shapeDef = b2DefaultShapeDef();
     shapeDef.density = 1.0f;
     shapeDef.friction = 0.0f;
@@ -60,8 +62,6 @@ void Physics::EmplaceStaticBody(const Vector2 position, float side) {
     b2ShapeDef shapeDef = b2DefaultShapeDef();
     b2CreatePolygonShape(bodyId, &shapeDef, &Box);
 }
-
-
 
 
 void Physics::Update(entt::registry &registry) {

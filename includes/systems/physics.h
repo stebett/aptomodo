@@ -32,7 +32,7 @@ public:
     static void EmplaceStaticBody(Vector2 position, float side);
 
     static void EmplaceSword(entt::registry &registry, entt::entity entity, Vector2 anchor, float half_width,
-                             float half_height);
+                             float half_height, float rotation);
 
     static void Update(entt::registry &registry);
 

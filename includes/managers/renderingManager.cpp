@@ -37,13 +37,24 @@ namespace Rendering {
         }
     }
 
+
     void drawAttacksBB(const entt::registry &registry) {
         registry.view<Attacks::Sword, b2BodyId>().each([](auto entity, auto sword, auto body) {
             auto pos = b2Body_GetPosition(body);
             b2ShapeId shape{};
             b2Body_GetShapes(body, &shape, 1);
             auto polygon = b2Shape_GetPolygon(shape);
-            DrawCircle(pos.x, pos.y, 5, RED);
+            // DrawCircle(pos.x, pos.y, 5, RED);
+            std::vector<Vector2> points;
+            points.reserve(polygon.count + 1);
+            for (int i{0}; i < polygon.count-1; i++) {
+                auto [x, y] = polygon.vertices[i];
+                auto [x2, y2] = polygon.vertices[i + 1];
+                DrawLineEx({x + pos.x, y + pos.y}, {x2 + pos.x, y2 + pos.y}, 3, RED);
+            }
+            auto [x0, y0] = polygon.vertices[0];
+            auto [xn, yn] = polygon.vertices[polygon.count-1];
+            DrawLineEx({x0 + pos.x, y0 + pos.y}, {xn + pos.x, yn + pos.y}, 3, RED);
         });
     }
 
