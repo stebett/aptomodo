@@ -10,33 +10,29 @@
 b2WorldId Physics::worldId;
 std::unordered_map<int32_t, entt::entity> Physics::bodyMap{};
 
+
 void Physics::Instantiate() {
     b2WorldDef worldDef = b2DefaultWorldDef();
     worldDef.gravity = {0.0f, 0.0f};
     worldId = b2CreateWorld(&worldDef);
 }
 
-void Physics::EmplaceDynamicBody(entt::registry &registry, entt::entity entity, const Vector2 position, float radius) {
+b2BodyId Physics::CreateDynamicCircularBody(const entt::entity entity, const Vector2 position,
+                                            const float radius, const ContactCategories category) {
     b2BodyDef bodyDef = b2DefaultBodyDef();
     bodyDef.type = b2_dynamicBody;
     bodyDef.position = (b2Vec2){position.x, position.y};
-    b2BodyId bodyId = b2CreateBody(worldId, &bodyDef);
-    bodyMap[bodyId.index1] = entity;
-    const auto circle = b2Circle({0.0, 0.0}, radius);
-    b2ShapeDef shapeDef = b2DefaultShapeDef();
-    shapeDef.density = 1.0f;
-    shapeDef.friction = 0.3f;
-    b2CreateCircleShape(bodyId, &shapeDef, &circle);
-    registry.emplace<b2BodyId>(entity, bodyId);
-}
 
-void Physics::EmplaceStaticBody(const Vector2 position, float side) {
-    b2BodyDef bodyDef = b2DefaultBodyDef();
-    bodyDef.position = (b2Vec2){position.x + side / 2, position.y + side / 2};
-    b2BodyId bodyId = b2CreateBody(worldId, &bodyDef);
-    b2Polygon Box = b2MakeBox(side / 2, side / 2);
     b2ShapeDef shapeDef = b2DefaultShapeDef();
-    b2CreatePolygonShape(bodyId, &shapeDef, &Box);
+    shapeDef.filter.categoryBits = category;
+    shapeDef.friction = 0.0f;
+
+    const auto bodyId = b2CreateBody(worldId, &bodyDef);
+    const auto circle = b2Circle({0.0, 0.0}, radius);
+    b2CreateCircleShape(bodyId, &shapeDef, &circle);
+    bodyMap[bodyId.index1] = entity;
+
+    return bodyId;
 }
 
 void Physics::EmplaceSword(entt::registry &registry, entt::entity entity, Vector2 anchor, float half_width,
@@ -51,9 +47,21 @@ void Physics::EmplaceSword(entt::registry &registry, entt::entity entity, Vector
     shapeDef.density = 1.0f;
     shapeDef.friction = 0.0f;
     shapeDef.isSensor = true;
+    shapeDef.filter.maskBits = Physics::Enemy;
     b2CreatePolygonShape(bodyId, &shapeDef, &box);
     registry.emplace<b2BodyId>(entity, bodyId);
 }
+
+void Physics::EmplaceStaticBody(const Vector2 position, float side) {
+    b2BodyDef bodyDef = b2DefaultBodyDef();
+    bodyDef.position = (b2Vec2){position.x + side / 2, position.y + side / 2};
+    b2BodyId bodyId = b2CreateBody(worldId, &bodyDef);
+    b2Polygon Box = b2MakeBox(side / 2, side / 2);
+    b2ShapeDef shapeDef = b2DefaultShapeDef();
+    b2CreatePolygonShape(bodyId, &shapeDef, &Box);
+}
+
+
 
 
 void Physics::Update(entt::registry &registry) {

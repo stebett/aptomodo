@@ -11,12 +11,21 @@ class Physics {
     static std::unordered_map<int32_t, entt::entity> bodyMap;
 
 public:
+
+    enum ContactCategories {
+        None = 0x00000000,
+        Static = 0x00000001,
+        Dynamic = 0x00000002,
+        Enemy = 0x00000004,
+        Player = 0x00000008,
+    };
+
     static constexpr float timeStep{1.0 / 60.0};
     static constexpr int subStepCount{4};
 
     static void Instantiate();
 
-    static void EmplaceDynamicBody(entt::registry &registry, entt::entity entity, Vector2 position, float radius);
+    static b2BodyId CreateDynamicCircularBody(entt::entity entity, Vector2 position, float radius, ContactCategories category);
 
     // Todo these functions should return a bodyId, Physics should never touch the registry
 

@@ -62,8 +62,8 @@ entt::entity spawnEnemyFromFile(entt::registry &registry, Position position, con
     registry.emplace<Living>(e);
     registry.emplace<AttackTimer>(e);
     registry.emplace<LookAngle>(e, 0.0f);
-    Physics::EmplaceDynamicBody(registry, e, position, stats.radius);
-
+    auto bodyId = Physics::CreateDynamicCircularBody(e, position, stats.radius, Physics::Enemy);
+    registry.emplace<b2BodyId>(e, bodyId);
     return e;
 };
 
@@ -79,7 +79,8 @@ entt::entity spawnPlayer(entt::registry &registry, Vector2 position) {
     registry.emplace<Attributes>(e, attr);
     registry.emplace<Health>(e, attr.getMultiplied(AttributeConstants::health));
     registry.emplace<Experience>(e, 0);
-    Physics::EmplaceDynamicBody(registry, e, position, 10.0f);
+    auto bodyId = Physics::CreateDynamicCircularBody(e, position, 10.0f, Physics::Player);
+    registry.emplace<b2BodyId>(e, bodyId);
     return e;
 }
 
@@ -99,15 +100,13 @@ entt::entity spawnItemFromFile(entt::registry &registry, Vector2 position, const
 }
 
 
-void spawnEntities(entt::registry &registry, const std::vector<Level::Entity>& entities) {
-    for (auto& [position, type, name]: entities) {
+void spawnEntities(entt::registry &registry, const std::vector<Level::Entity> &entities) {
+    for (auto &[position, type, name]: entities) {
         if (type == "Enemy") spawnEnemyFromFile(registry, position, name);
         if (type == "Item") spawnItemFromFile(registry, position, name);
         if (type == "Player") spawnPlayer(registry, position);
     }
 }
-
-
 
 
 // void spawnAmulet(entt::registry &registry) {
