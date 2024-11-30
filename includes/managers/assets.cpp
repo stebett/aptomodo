@@ -24,7 +24,7 @@ const Sound &Assets::GetSound(const std::string &name) { return audioResources.a
 
 const ldtk::Level &Assets::GetLevel(const int levelNumber) {
     assert(LDTKProject && "ERROR ASSETS LDTK Project has already been cleared");
-    return LDTKProject->getWorld().getLevel(levelNumber);;
+    return LDTKProject->getWorld().getLevel(std::format("Level_{}", levelNumber));;
 }
 
 EnemyDataFile &Assets::GetEnemiesData() {

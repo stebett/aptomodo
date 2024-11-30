@@ -10,6 +10,7 @@
 #include "constants.h"
 #include "config.h"
 #include "enemyType.h"
+#include "game.h"
 #include "items.h"
 
 ImGuiIO *Gui::m_io;
@@ -85,6 +86,16 @@ void imguiEnemyTypesEditor() {
             Color(1.0f, 1.0f, 1.0f, 1.0f), 100.0f, 10, "", ""
         });
     }
+    ImGui::End();
+}
+
+void imguiLevel() {
+    ImGui::Begin("Level");
+    if (ImGui::InputInt("Select Level", &Game::Level)) {
+        Game::SetOutcome(LevelOutcome::RESTART);
+        Game::ExitLevel();
+    }
+
     ImGui::End();
 }
 
@@ -394,11 +405,16 @@ void imguiWindowMain(entt::registry &registry, ImGuiIO io, const Camera2D &camer
     static bool show_cursor_window = false;
     static bool show_enemy_types_window = false;
     static bool show_local_space_window = false;
+    static bool show_level_window = false;
 
     ImGui::Begin("Main");
     ImGui::Checkbox("Player Window", &show_player_window);
     if (show_player_window)
         imguiPlayerAttr(registry);
+
+    ImGui::Checkbox("Level Window", &show_level_window);
+    if (show_level_window)
+        imguiLevel();
 
     ImGui::Checkbox("Cursor Window", &show_cursor_window);
     if (show_cursor_window)

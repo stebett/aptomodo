@@ -35,6 +35,8 @@ public:
 
     static void ExitLevel();
 
+    static void EnterLevel();
+
     static void SetOutcome(LevelOutcome);
 
     [[nodiscard]] static bool IsLevelFinished();

@@ -49,7 +49,7 @@ void PlayerFaceMouse(entt::registry &registry, const entt::entity player, const 
  *  - have different gui windows preopened
  */
 LevelOutcome PlayLevel(const int levelNumber) {
-    auto outcome = LevelOutcome::NONE;
+    Game::EnterLevel();
     entt::registry registry;
     Gui::Instantiate();
     Physics::Instantiate();
@@ -59,7 +59,7 @@ LevelOutcome PlayLevel(const int levelNumber) {
     spawnEntities(registry, Level::LoadEntities(Assets::GetLevel(levelNumber)));
     Game::levelTexture = Level::LoadLevelTexture(Assets::GetLevel(levelNumber));
     Game::grid = Level::LoadIntGrid(Assets::GetLevel(levelNumber));
-    Assets::Clean();
+    // Assets::Clean();
 
     const auto player = registry.view<Player>().front();
     const auto &playerPosition = registry.get<Position>(player);
@@ -127,6 +127,11 @@ bool Game::IsLevelFinished() {
 
 void Game::ExitLevel() {
     levelFinished = true;
+}
+
+void Game::EnterLevel() {
+    levelFinished = false;
+    levelOutcome = LevelOutcome::NONE;
 }
 
 LevelOutcome Game::GetOutcome() {
