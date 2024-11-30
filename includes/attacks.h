@@ -9,6 +9,7 @@
 namespace Attacks {
     struct Hit {
     };
+
     void Update(entt::registry &registry);
 
     class Attack {
@@ -20,14 +21,20 @@ namespace Attacks {
 
     class LocalTransform {
     public:
-        b2Transform transform;
+        b2Transform transformBegin;
+        b2Transform transformEnd;
 
-        explicit LocalTransform(b2Transform transform) : transform(transform) {};
+        explicit LocalTransform(b2Transform transform) : transformBegin(transform), transformEnd(transform) {
+        };
 
-        [[nodiscard]] const b2Transform& get(float t) const {
-            return transform;
+        explicit LocalTransform(b2Transform t1, b2Transform t2) : transformBegin(t1), transformEnd(t2) {
+        };
+
+        [[nodiscard]] b2Transform get(const float t) const {
+            const auto p = b2Lerp(transformBegin.p, transformEnd.p, t);
+            const auto q = b2NLerp(transformBegin.q, transformEnd.q, t);
+            return {p, q};
         }
-
     };
 
     struct BodyCouple {

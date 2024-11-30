@@ -8,16 +8,14 @@
 #include <chrono>
 
 struct PassiveTimer {
-    std::chrono::time_point<std::chrono::high_resolution_clock> start;
-    std::chrono::duration<long double> duration;
+    double start;
+    double duration;
 
-    explicit PassiveTimer(float duration);
+    explicit PassiveTimer(const double durationSeconds)
+    : duration(durationSeconds) {
+        start = GetTime();
+    }
 };
-
-inline PassiveTimer::PassiveTimer(const float duration)
-    : duration(std::chrono::duration<float>(duration)) {
-    start = std::chrono::high_resolution_clock::now();
-}
 
 
 class Timer {

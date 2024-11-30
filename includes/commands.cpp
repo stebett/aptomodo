@@ -85,9 +85,12 @@ namespace Command {
         constexpr float halfHeight = 25;
         b2BodyId swordBodyId = Physics::EmplaceSword(swordEntity, playerPosition, halfWidth, halfHeight);
         registry.emplace<Attacks::Attack>(swordEntity, Attacks::Attack{100.0f});
-        registry.emplace<Attacks::LocalTransform>(swordEntity, b2Transform({halfHeight+radius, 0 }, b2Rot(0, 1)));
+        b2Transform front = b2Transform({halfHeight+radius, 0 }, b2Rot(0, 1));
+        b2Transform beg = b2Transform({halfHeight+6, 6 }, b2Rot(cos(-0.8), sin(-0.8)));
+        b2Transform end = b2Transform({halfHeight+radius, 0 }, b2Rot(cos(0), sin(-0)));
+        registry.emplace<Attacks::LocalTransform>(swordEntity, beg, front);
         registry.emplace<Attacks::BodyCouple>(swordEntity, Attacks::BodyCouple{body, swordBodyId});
-        registry.emplace<PassiveTimer>(swordEntity, 5.0f);
+        registry.emplace<PassiveTimer>(swordEntity, 0.5f);
 
         const float attackRange = attributes.getMultiplied(AttributeConstants::range);
         const float attackSpread = attributes.getMultiplied(AttributeConstants::spread);
