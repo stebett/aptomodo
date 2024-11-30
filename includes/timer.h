@@ -7,6 +7,18 @@
 
 #include <chrono>
 
+struct PassiveTimer {
+    std::chrono::time_point<std::chrono::high_resolution_clock> start;
+    std::chrono::duration<long double> duration;
+
+    explicit PassiveTimer(float duration);
+};
+
+inline PassiveTimer::PassiveTimer(const float duration)
+    : duration(std::chrono::duration<float>(duration)) {
+    start = std::chrono::high_resolution_clock::now();
+}
+
 
 class Timer {
 public:
@@ -19,12 +31,12 @@ public:
     }
 
     void StartBehind(const int seconds) {
-        m_Start = std::chrono::high_resolution_clock::now()-std::chrono::seconds(seconds);
+        m_Start = std::chrono::high_resolution_clock::now() - std::chrono::seconds(seconds);
     }
 
-    [[nodiscard]] float ElapsedSeconds() const  {
+    [[nodiscard]] float ElapsedSeconds() const {
         return std::chrono::duration_cast<std::chrono::nanoseconds>(
-                std::chrono::high_resolution_clock::now() - m_Start).count() * 0.001f * 0.001f * 0.001f;
+                   std::chrono::high_resolution_clock::now() - m_Start).count() * 0.001f * 0.001f * 0.001f;
     }
 
     [[nodiscard]] float ElapsedMillis() const {

@@ -11,7 +11,7 @@
 namespace StatusEffect {
     void updateDash(entt::registry &registry, std::chrono::time_point<std::chrono::high_resolution_clock> now) {
         registry.view<StatusEffect::Dash>().each([&registry, now](auto entity, const StatusEffect::Dash &dash) {
-            if (now - dash.start  > dash.duration)
+            if (now - dash.timer.start  > dash.timer.duration)
                 registry.remove<Dash>(entity);
 
             Speed &speed = registry.get<Speed>(entity);

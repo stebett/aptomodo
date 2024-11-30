@@ -4,14 +4,14 @@
 
 #ifndef STATUS_H
 #define STATUS_H
+#include <timer.h>
 
 
 namespace StatusEffect {
     struct Dash {
-        std::chrono::time_point<std::chrono::high_resolution_clock> start;
-        std::chrono::duration<long double> duration;
+        PassiveTimer timer;
 
-        explicit Dash(std::chrono::duration<long double> duration);
+        explicit Dash(float duration);
     };
 }
 

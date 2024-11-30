@@ -9,13 +9,13 @@
 namespace Attacks {
     struct Hit {
     };
+    void Update(entt::registry &registry);
 
-    class Sword {
+    class Attack {
     public:
         float damage = 0;
 
-        explicit Sword(const float damage) : damage(damage) {
-        };
+        explicit Attack(const float damage);;
     };
 }
 

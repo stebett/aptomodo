@@ -49,8 +49,7 @@ namespace Command {
 
     void Dash::execute() {
         const float dashDuration = Config::GetFloat("dash_duration");
-        auto duration_in_seconds = std::chrono::duration<float>(dashDuration);
-        registry.emplace_or_replace<StatusEffect::Dash>(self, duration_in_seconds);
+        registry.emplace_or_replace<StatusEffect::Dash>(self, dashDuration);
     }
 
     MoveCamera::MoveCamera(GameCamera &camera, const std::bitset<4> bitfield, const float delta)
@@ -82,8 +81,9 @@ namespace Command {
 
         auto swordEntity = registry.create();
         Physics::EmplaceSword(registry, swordEntity, body, playerPosition, 3, 25, lookAngle);
-        auto sword = Attacks::Sword{100.0f};
-        registry.emplace<Attacks::Sword>(swordEntity, sword);
+        auto sword = Attacks::Attack{100.0f};
+        registry.emplace<Attacks::Attack>(swordEntity, sword);
+        registry.emplace<PassiveTimer>(swordEntity, 1.0f);
 
         const float attackRange = attributes.getMultiplied(AttributeConstants::range);
         const float attackSpread = attributes.getMultiplied(AttributeConstants::spread);

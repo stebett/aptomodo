@@ -14,6 +14,7 @@
 #include <systems/space.h>
 
 #include "assets.h"
+#include "attacks.h"
 #include "audioManager.h"
 #include "commands.h"
 #include "framerateManager.h"
@@ -64,6 +65,7 @@ LevelOutcome PlayLevel(const int levelNumber) {
     while (!Game::IsLevelFinished()) {
         if (!Game::IsPaused()) {
             StatusEffect::Update(registry);
+            Attacks::Update(registry);
             framerateManager.accumulator += framerateManager.deltaTime;
             while (framerateManager.accumulator >= Physics::timeStep) {
                 Physics::Step();

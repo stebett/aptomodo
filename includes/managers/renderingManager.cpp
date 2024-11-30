@@ -39,7 +39,7 @@ namespace Rendering {
 
 
     void drawAttacksBB(const entt::registry &registry) {
-        registry.view<Attacks::Sword, b2BodyId>().each([](auto entity, auto sword, auto body) {
+        registry.view<Attacks::Attack, b2BodyId>().each([](auto entity, auto sword, auto body) {
             b2ShapeId shape{};
             b2Body_GetShapes(body, &shape, 1);
             auto [pos, rotation] = b2Body_GetTransform(body);
