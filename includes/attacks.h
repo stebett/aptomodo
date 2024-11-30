@@ -4,6 +4,8 @@
 
 #ifndef ATTACKS_H
 #define ATTACKS_H
+#include <components.h>
+#include <systems/physics.h>
 
 
 namespace Attacks {
@@ -33,6 +35,22 @@ namespace Attacks {
         [[nodiscard]] b2Transform get(const float t) const {
             const auto p = b2Lerp(transformBegin.p, transformEnd.p, t);
             const auto q = b2NLerp(transformBegin.q, transformEnd.q, t);
+            return {p, q};
+        }
+    };
+
+    class LocalTransformSpline {
+    public:
+        LocalSpline spline;
+
+        explicit LocalTransformSpline(LocalSpline localSpline) : spline(localSpline) {
+        };
+
+
+        [[nodiscard]] b2Transform get(const float t) const {
+            const auto p = b2Lerp({spline.localPoints[0].x, spline.localPoints[0].y},
+                                  {spline.localPoints[3].x, spline.localPoints[3].y}, t);
+            const auto q = b2Rot{1, 0};
             return {p, q};
         }
     };

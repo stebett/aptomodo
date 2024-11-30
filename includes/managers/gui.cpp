@@ -32,50 +32,57 @@ auto createBody = [](const entt::entity entity) {
 auto createShape = [](b2BodyId bodyId, b2Polygon box) {
     b2ShapeDef shapeDef = b2DefaultShapeDef();
     shapeDef.isSensor = true;
+    shapeDef.filter.maskBits = Physics::Enemy;
     return b2CreatePolygonShape(bodyId, &shapeDef, &box);
 };
 
-auto emplaceWeaponStuff = [](entt::registry &registry, b2BodyId bodyId, const entt::entity entity) {
-    const auto player = registry.view<Player>().front();
-    const auto playerBody = registry.get<b2BodyId>(player);
-    registry.emplace<Attacks::Attack>(entity, Attacks::Attack{100.0f});
-    auto front = b2Transform({0, 0}, b2Rot(0, 1));
-    registry.emplace<Attacks::LocalTransform>(entity, front);
-    registry.emplace<Attacks::BodyCouple>(entity, Attacks::BodyCouple{playerBody, bodyId});
-    registry.emplace<PassiveTimer>(entity, 0.5f);
-    return 0;
-};
 
 
-void imguiBodyEditor(entt::registry &registry) {
+void imguiBodyEditor(entt::registry &registry, LocalSpline spline) {
     ImGui::SeparatorText("Body Editor`");
-    if (ImGui::Button("Create Body")) {
-        static auto half_width{5.0f};
-        static auto half_height{5.0f};
+    static bool go{true};
+    static bool force_go{false};
+    static float duration = 2.0f;
+    static float interval = 0.5f;
+    static auto half_width{5.0f};
+    static auto half_height{5.0f};
+    static float lastTime = GetTime() - duration;
+    if (ImGui::Checkbox("Create Body", &go)) {
+    }
 
-        // static auto entity{registry.create()};
-        // static auto body{createBody(entity)};
-        // static auto box{b2MakeBox(half_width, half_height)};
-        // static auto shape{createShape(body, box)};
-        // static auto o{emplaceWeaponStuff};
+
+    if (force_go || (go && ((lastTime + duration + interval) < GetTime()))) {
+        force_go = false;
+        lastTime = GetTime();
         auto entity{registry.create()};
+        auto body{createBody(entity)};
         auto box{b2MakeBox(half_width, half_height)};
+        auto shape{createShape(body, box)};
 
-        b2BodyDef bodyDef = b2DefaultBodyDef();
-        bodyDef.type = b2_kinematicBody;
-        const b2BodyId body = b2CreateBody(Physics::GetWorldID(), &bodyDef);
-        Physics::ConnectBodyToEntity(body, entity);
-        b2ShapeDef shapeDef = b2DefaultShapeDef();
-        shapeDef.isSensor = true;
-        auto shapeId = b2CreatePolygonShape(body, &shapeDef, &box);
         const auto player = registry.view<Player>().front();
         const auto playerBody = registry.get<b2BodyId>(player);
         registry.emplace<Attacks::Attack>(entity, Attacks::Attack{100.0f});
-        auto front = b2Transform({0, 0}, b2Rot(0, 1));
-        registry.emplace<Attacks::LocalTransform>(entity, front);
+        registry.emplace<Attacks::LocalTransformSpline>(entity, spline);
         registry.emplace<Attacks::BodyCouple>(entity, Attacks::BodyCouple{playerBody, body});
-        registry.emplace<PassiveTimer>(entity, 2.0f);
+        registry.emplace<PassiveTimer>(entity, duration);
     }
+
+    ImGui::SliderFloat("duration", &duration, 0, 10);
+    ImGui::SliderFloat("interval", &interval, 0, 10);
+    if (ImGui::SliderFloat("half_width", &half_width, 0, 50)) {
+        force_go = true;
+        registry.view<Attacks::BodyCouple>().each([&registry](auto entity, auto body) {
+            Physics::DestroyBody(body.weapon);
+            registry.destroy(entity);
+        });
+    }
+    if (ImGui::SliderFloat("half_height", &half_height, 0, 50)) {
+        force_go = true;
+        registry.view<Attacks::BodyCouple>().each([&registry](auto entity, auto body) {
+            Physics::DestroyBody(body.weapon);
+            registry.destroy(entity);
+        });
+    };
 }
 
 void imguiSplineEditor(entt::registry &registry, const Camera2D &camera) {
@@ -127,10 +134,9 @@ void imguiSplineEditor(entt::registry &registry, const Camera2D &camera) {
     if (std::views::all(pointsCreated))
         registry.emplace_or_replace<LocalSpline>(entity, points);
 
-    imguiBodyEditor(registry);
+    imguiBodyEditor(registry, LocalSpline(points));
     ImGui::End();
 }
-
 
 
 // Function to render and interact with the table

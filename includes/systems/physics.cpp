@@ -42,6 +42,11 @@ void Physics::ConnectBodyToEntity(b2BodyId body, entt::entity entity) {
     bodyMap[body.index1] = entity;
 }
 
+void Physics::DestroyBody(b2BodyId body) {
+    bodyMap.erase(body.index1);
+    b2DestroyBody(body);
+}
+
 b2BodyId Physics::EmplaceSword(float half_width, float half_height) {
     b2BodyDef bodyDef = b2DefaultBodyDef();
     bodyDef.type = b2_kinematicBody;

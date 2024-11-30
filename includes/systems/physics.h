@@ -35,6 +35,8 @@ public:
 
     static void ConnectBodyToEntity(b2BodyId body, entt::entity entity);
 
+    static void DestroyBody(b2BodyId body);
+
     static void Update(entt::registry &registry);
 
     static void Step();
