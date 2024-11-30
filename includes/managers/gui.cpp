@@ -6,6 +6,9 @@
 
 #include <ranges>
 #include <ai/strategies.h>
+#include <systems/physics.h>
+
+#include "attacks.h"
 #include "attributes.h"
 #include "parameters.h"
 #include "components.h"
@@ -16,6 +19,64 @@
 #include "items.h"
 
 ImGuiIO *Gui::m_io;
+
+
+auto createBody = [](const entt::entity entity) {
+    b2BodyDef bodyDef = b2DefaultBodyDef();
+    bodyDef.type = b2_kinematicBody;
+    const b2BodyId body = b2CreateBody(Physics::GetWorldID(), &bodyDef);
+    Physics::ConnectBodyToEntity(body, entity);
+    return body;
+};
+
+auto createShape = [](b2BodyId bodyId, b2Polygon box) {
+    b2ShapeDef shapeDef = b2DefaultShapeDef();
+    shapeDef.isSensor = true;
+    return b2CreatePolygonShape(bodyId, &shapeDef, &box);
+};
+
+auto emplaceWeaponStuff = [](entt::registry &registry, b2BodyId bodyId, const entt::entity entity) {
+    const auto player = registry.view<Player>().front();
+    const auto playerBody = registry.get<b2BodyId>(player);
+    registry.emplace<Attacks::Attack>(entity, Attacks::Attack{100.0f});
+    auto front = b2Transform({0, 0}, b2Rot(0, 1));
+    registry.emplace<Attacks::LocalTransform>(entity, front);
+    registry.emplace<Attacks::BodyCouple>(entity, Attacks::BodyCouple{playerBody, bodyId});
+    registry.emplace<PassiveTimer>(entity, 0.5f);
+    return 0;
+};
+
+
+void imguiBodyEditor(entt::registry &registry) {
+    ImGui::SeparatorText("Body Editor`");
+    if (ImGui::Button("Create Body")) {
+        static auto half_width{5.0f};
+        static auto half_height{5.0f};
+
+        // static auto entity{registry.create()};
+        // static auto body{createBody(entity)};
+        // static auto box{b2MakeBox(half_width, half_height)};
+        // static auto shape{createShape(body, box)};
+        // static auto o{emplaceWeaponStuff};
+        auto entity{registry.create()};
+        auto box{b2MakeBox(half_width, half_height)};
+
+        b2BodyDef bodyDef = b2DefaultBodyDef();
+        bodyDef.type = b2_kinematicBody;
+        const b2BodyId body = b2CreateBody(Physics::GetWorldID(), &bodyDef);
+        Physics::ConnectBodyToEntity(body, entity);
+        b2ShapeDef shapeDef = b2DefaultShapeDef();
+        shapeDef.isSensor = true;
+        auto shapeId = b2CreatePolygonShape(body, &shapeDef, &box);
+        const auto player = registry.view<Player>().front();
+        const auto playerBody = registry.get<b2BodyId>(player);
+        registry.emplace<Attacks::Attack>(entity, Attacks::Attack{100.0f});
+        auto front = b2Transform({0, 0}, b2Rot(0, 1));
+        registry.emplace<Attacks::LocalTransform>(entity, front);
+        registry.emplace<Attacks::BodyCouple>(entity, Attacks::BodyCouple{playerBody, body});
+        registry.emplace<PassiveTimer>(entity, 2.0f);
+    }
+}
 
 void imguiSplineEditor(entt::registry &registry, const Camera2D &camera) {
     static std::array<Vector2, 4> points{};
@@ -31,8 +92,7 @@ void imguiSplineEditor(entt::registry &registry, const Camera2D &camera) {
         pointsCreated[1] = true;
         points[0] = Vector2Subtract(mouse, playerPos);
         points[1] = Vector2Add(points[0], {20, 20});
-    }
-    else if (!pointsCreated[3] && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+    } else if (!pointsCreated[3] && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
         pointsCreated[2] = true;
         pointsCreated[3] = true;
         points[3] = Vector2Subtract(mouse, playerPos);
@@ -40,7 +100,8 @@ void imguiSplineEditor(entt::registry &registry, const Camera2D &camera) {
     }
 
     for (int i{0}; i < 4; i++) {
-        if (CheckCollisionPointCircle(Vector2Subtract(mouse, playerPos), points[i], 5.0f) && IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
+        if (CheckCollisionPointCircle(Vector2Subtract(mouse, playerPos), points[i], 5.0f) && IsMouseButtonDown(
+                MOUSE_BUTTON_LEFT)) {
             pointsMoving[i] = true;
             break;
         }
@@ -65,8 +126,12 @@ void imguiSplineEditor(entt::registry &registry, const Camera2D &camera) {
     static entt::entity entity{registry.create()};
     if (std::views::all(pointsCreated))
         registry.emplace_or_replace<LocalSpline>(entity, points);
+
+    imguiBodyEditor(registry);
     ImGui::End();
 }
+
+
 
 // Function to render and interact with the table
 void imguiEnemyTypesEditor() {

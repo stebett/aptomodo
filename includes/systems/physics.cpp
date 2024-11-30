@@ -38,19 +38,20 @@ b2BodyId Physics::CreateDynamicCircularBody(const entt::entity entity, const Vec
     return bodyId;
 }
 
-b2BodyId Physics::EmplaceSword(entt::entity entity, Vector2 anchor,
-                               float half_width,
-                               float half_height) {
+void Physics::ConnectBodyToEntity(b2BodyId body, entt::entity entity) {
+    bodyMap[body.index1] = entity;
+}
+
+b2BodyId Physics::EmplaceSword(float half_width, float half_height) {
     b2BodyDef bodyDef = b2DefaultBodyDef();
     bodyDef.type = b2_kinematicBody;
     b2BodyId bodyId = b2CreateBody(worldId, &bodyDef);
-
-    bodyMap[bodyId.index1] = entity;
     b2Polygon box = b2MakeBox(half_width, half_height);
     b2ShapeDef shapeDef = b2DefaultShapeDef();
     shapeDef.isSensor = true;
     shapeDef.filter.maskBits = Physics::Enemy;
     b2CreatePolygonShape(bodyId, &shapeDef, &box);
+
 
     return bodyId;
     //

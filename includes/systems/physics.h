@@ -31,9 +31,9 @@ public:
 
     static void EmplaceStaticBody(Vector2 position, float side);
 
-    static b2BodyId EmplaceSword(entt::entity entity, Vector2 anchor,
-                                          float half_width,
-                                          float half_height);
+    static b2BodyId EmplaceSword(float half_width, float half_height);
+
+    static void ConnectBodyToEntity(b2BodyId body, entt::entity entity);
 
     static void Update(entt::registry &registry);
 

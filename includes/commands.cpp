@@ -83,7 +83,8 @@ namespace Command {
         auto swordEntity = registry.create();
         constexpr float halfWidth = 3;
         constexpr float halfHeight = 25;
-        b2BodyId swordBodyId = Physics::EmplaceSword(swordEntity, playerPosition, halfWidth, halfHeight);
+        b2BodyId swordBodyId = Physics::EmplaceSword(halfWidth, halfHeight);
+        Physics::ConnectBodyToEntity(swordBodyId, swordEntity);
         registry.emplace<Attacks::Attack>(swordEntity, Attacks::Attack{100.0f});
         b2Transform front = b2Transform({halfHeight+radius, 0 }, b2Rot(0, 1));
         b2Transform beg = b2Transform({halfHeight+6, 6 }, b2Rot(cos(-0.8), sin(-0.8)));
