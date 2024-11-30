@@ -38,8 +38,6 @@ void PlayerFaceMouse(entt::registry &registry, const entt::entity player, const 
     const auto [mouseX, mouseY] = GetScreenToWorld2D(GetMousePosition(), camera);
     const auto radians = atan2(mouseY - transform.p.y, mouseX - transform.p.x);
     lookAngle = radians * RAD2DEG;
-    float radiansDiff = Config::GetFloat("b2box_raylib_radians_diff");
-    auto raylibRot = b2Rot(cos(-radiansDiff), sin(-radiansDiff));
 
     b2Body_SetTransform(body, transform.p, b2Rot(cos(radians), sin(radians)));
 }

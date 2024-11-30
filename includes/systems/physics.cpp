@@ -14,6 +14,8 @@ std::unordered_map<int32_t, entt::entity> Physics::bodyMap{};
 void Physics::Instantiate() {
     b2WorldDef worldDef = b2DefaultWorldDef();
     worldDef.gravity = {0.0f, 0.0f};
+    worldDef.maximumLinearVelocity = {1000};
+
     worldId = b2CreateWorld(&worldDef);
 }
 

@@ -114,6 +114,41 @@ void imguiCursor(const Camera2D &camera) {
     ImGui::End();
 }
 
+void imguiLocalSpace(entt::registry &registry, const Camera2D &camera) {
+    auto player = registry.view<Player>().front();
+    auto body = registry.get<b2BodyId>(player);
+    auto [pos, rot] = b2Body_GetTransform(body);
+    const auto [mouseX, mouseY] = GetScreenToWorld2D(GetMousePosition(), camera);
+    static auto click = Vector2(0, 0);
+    static auto clickTransform = b2Transform{pos, rot};
+    static auto clickRad = 0.0f;
+    static auto clickDeg = 0.0f;
+    const auto radians = atan2(mouseY - pos.y, mouseX - pos.x);
+    const auto degrees = radians * RAD2DEG;
+
+    if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+        click = {mouseX, mouseY};
+        clickTransform = {pos, rot};
+        clickRad = radians;
+        clickDeg = degrees;
+    }
+
+    ImGui::Begin("LocalSpace");
+    ImGui::Text("Mouse Local Pos: %f, %f", mouseX - pos.x, mouseY - pos.y);
+    ImGui::Text("Mouse Local Rot: %f, %f", rot.c, rot.s);
+    ImGui::Text("Mouse Local Rot: %f degrees", degrees);
+    ImGui::Text("Mouse Local Rot: %f radians", radians);
+    ImGui::Text("Last click: %f x, %f y,\n %f c %f s \n %f deg %f rad",
+                click.x - clickTransform.p.x,
+                click.y - clickTransform.p.y,
+                clickTransform.q.c,
+                clickTransform.q.s,
+                clickDeg,
+                clickRad);
+    ImGui::End();
+}
+
+
 void imguiEnemyAttr(entt::registry &registry) {
     ImGui::Begin("Enemy attributes");
     ImGui::Checkbox("show_astar_path", Config::GetBoolPtr("show_astar_path"));
@@ -358,6 +393,7 @@ void imguiWindowMain(entt::registry &registry, ImGuiIO io, const Camera2D &camer
     static bool show_start_values = false;
     static bool show_cursor_window = false;
     static bool show_enemy_types_window = false;
+    static bool show_local_space_window = false;
 
     ImGui::Begin("Main");
     ImGui::Checkbox("Player Window", &show_player_window);
@@ -367,6 +403,10 @@ void imguiWindowMain(entt::registry &registry, ImGuiIO io, const Camera2D &camer
     ImGui::Checkbox("Cursor Window", &show_cursor_window);
     if (show_cursor_window)
         imguiCursor(camera);
+
+    ImGui::Checkbox("Local Space Window", &show_local_space_window);
+    if (show_local_space_window)
+        imguiLocalSpace(registry, camera);
 
 
     ImGui::Checkbox("Enemy Window", Config::GetBoolPtr("show_enemy_window"));
