@@ -120,3 +120,12 @@ void AttackEffect::Draw() const {
 }
 
 bool AttackEffect::Expired() const { return m_timer.ElapsedMillis() > m_duration; }
+
+std::array<Vector2, 4> LocalSpline::getGlobal(const Vector2 reference) const {
+    return {
+        Vector2Add(localPoints[0], reference),
+        Vector2Add(localPoints[1], reference),
+        Vector2Add(localPoints[2], reference),
+        Vector2Add(localPoints[3], reference),
+    };
+}

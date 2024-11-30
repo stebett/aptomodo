@@ -16,15 +16,18 @@
 
 namespace Rendering {
     void drawSplines(entt::registry &registry) {
-        registry.view<Spline>().each([](auto entity, auto spline) {
-            DrawLineV(spline.points[0], spline.points[1], GRAY);
-            DrawLineV(spline.points[2], spline.points[3], GRAY);
+        const auto player = registry.view<Player>().front();
+        const auto playerPos = registry.get<Position>(player);
+        registry.view<LocalSpline>().each([playerPos](auto entity, auto spline) {
+            const std::array<Vector2, 4> globalPoints = spline.getGlobal(playerPos);
+            DrawLineV(globalPoints[0], globalPoints[1], GRAY);
+            DrawLineV(globalPoints[2], globalPoints[3], GRAY);
             constexpr float radius = 3.0f;
-            DrawCircleV(spline.points[0], radius, RED);
-            DrawCircleV(spline.points[1], radius, PINK);
-            DrawCircleV(spline.points[2], radius, SKYBLUE);
-            DrawCircleV(spline.points[3], radius, DARKBLUE);
-            DrawSplineBezierCubic(spline.points.data(), 4, 1, BLACK);
+            DrawCircleV(globalPoints[0], radius, RED);
+            DrawCircleV(globalPoints[1], radius, PINK);
+            DrawCircleV(globalPoints[2], radius, SKYBLUE);
+            DrawCircleV(globalPoints[3], radius, DARKBLUE);
+            DrawSplineBezierCubic(globalPoints.data(), 4, 1, BLACK);
 
             // for (auto point: spline.points) {
             //     DrawCircleV(point, 5, RED);

@@ -19,40 +19,42 @@ ImGuiIO *Gui::m_io;
 
 void imguiSplineEditor(entt::registry &registry, const Camera2D &camera) {
     static std::array<Vector2, 4> points{};
-    static std::array<bool, 4> pointsCreated{false};
-    static std::array<bool, 4> pointsMoving{false};
+    static std::array<bool, 4> pointsCreated = {false};
+    static std::array<bool, 4> pointsMoving = {false};
 
     const auto mouse = GetScreenToWorld2D(GetMousePosition(), camera);
+    const auto player = registry.view<Player>().front();
+    const auto playerPos = registry.get<Position>(player);
 
     if (!pointsCreated[0] && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
         pointsCreated[0] = true;
         pointsCreated[1] = true;
-        points[0] = mouse;
-        points[1] = Vector2Add(mouse, {20, 20});
+        points[0] = Vector2Subtract(mouse, playerPos);
+        points[1] = Vector2Add(points[0], {20, 20});
     }
-    if (!pointsCreated[3] && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+    else if (!pointsCreated[3] && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
         pointsCreated[2] = true;
         pointsCreated[3] = true;
-        points[3] = mouse;
-        points[2] = Vector2Add(mouse, {20, 20});
+        points[3] = Vector2Subtract(mouse, playerPos);
+        points[2] = Vector2Add(points[3], {20, 20});
     }
 
     for (int i{0}; i < 4; i++) {
-        if (CheckCollisionPointCircle(mouse, points[i], 5.0f) && IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
+        if (CheckCollisionPointCircle(Vector2Subtract(mouse, playerPos), points[i], 5.0f) && IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
             pointsMoving[i] = true;
             break;
         }
     }
     for (int i{0}; i < 4; i++) {
         if (pointsMoving[i]) {
-            points[i] = mouse;
+            points[i] = Vector2Subtract(mouse, playerPos);
             if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
                 pointsMoving[i] = false;
-                break;
             }
         }
     }
     ImGui::Begin("Spline editor");
+
 
     for (int n{0}; n < 4; n++) {
         ImGui::PushID(n);
@@ -62,7 +64,7 @@ void imguiSplineEditor(entt::registry &registry, const Camera2D &camera) {
 
     static entt::entity entity{registry.create()};
     if (std::views::all(pointsCreated))
-        registry.emplace_or_replace<Spline>(entity, points);
+        registry.emplace_or_replace<LocalSpline>(entity, points);
     ImGui::End();
 }
 
@@ -456,7 +458,7 @@ void imguiWindowMain(entt::registry &registry, ImGuiIO io, const Camera2D &camer
     static bool show_enemy_types_window = false;
     static bool show_local_space_window = false;
     static bool show_level_window = false;
-
+    static auto inEditor = Config::GetBoolPtr("in_editor");
     ImGui::Begin("Main");
     ImGui::Checkbox("Player Window", &show_player_window);
     if (show_player_window)
@@ -464,8 +466,10 @@ void imguiWindowMain(entt::registry &registry, ImGuiIO io, const Camera2D &camer
 
 
     ImGui::Checkbox("Spline Window", Config::GetBoolPtr("show_spline_ui"));
-    if (Config::GetBool("show_spline_ui"))
+    if (Config::GetBool("show_spline_ui")) {
+        *inEditor = true;
         imguiSplineEditor(registry, camera);
+    }
 
     ImGui::Checkbox("Level Window", &show_level_window);
     if (show_level_window)

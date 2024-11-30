@@ -25,7 +25,7 @@ namespace Inputs {
 
     void Listen(entt::registry &registry, GameCamera &camera, float delta) {
         auto player = registry.view<Player>().front();
-        if (!Gui::WantKeyboard()) {
+        if (!Gui::WantKeyboard() || !Gui::WantMouse()) {
             std::bitset<4> bitfield;
             if (!Game::IsPaused()) {
                 if (IsKeyPressed(KEY_W) || IsKeyDown(KEY_W)) bitfield.set(0);
@@ -60,7 +60,7 @@ namespace Inputs {
                 registry.emplace_or_replace<CommandHolder>(
                     registry.create(), std::make_unique<Command::Dash>(registry, player));
         }
-        if (!Gui::WantMouse()) {
+        if (!Gui::WantMouse() && !Config::GetBool("in_editor")) {
             if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT))
                 registry.emplace_or_replace<CommandHolder>(
                     entt::entity(),
