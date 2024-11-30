@@ -15,6 +15,23 @@
 #include "../items.h"
 
 namespace Rendering {
+    void drawSplines(entt::registry &registry) {
+        registry.view<Spline>().each([](auto entity, auto spline) {
+            DrawLineV(spline.points[0], spline.points[1], GRAY);
+            DrawLineV(spline.points[2], spline.points[3], GRAY);
+            constexpr float radius = 3.0f;
+            DrawCircleV(spline.points[0], radius, RED);
+            DrawCircleV(spline.points[1], radius, PINK);
+            DrawCircleV(spline.points[2], radius, SKYBLUE);
+            DrawCircleV(spline.points[3], radius, DARKBLUE);
+            DrawSplineBezierCubic(spline.points.data(), 4, 1, BLACK);
+
+            // for (auto point: spline.points) {
+            //     DrawCircleV(point, 5, RED);
+            // }
+        });
+    }
+
     void drawAttacks(entt::registry &registry) {
         auto effectView = registry.view<AttackEffect>();
         for (auto [entity, effect]: effectView.each()) {
@@ -88,7 +105,6 @@ namespace Rendering {
             DrawLineV(position, Vector2Add(
                           position, Vector2Scale(Vector2{cos(lookAngle * DEG2RAD), sin(lookAngle * DEG2RAD)}, 20.0f)),
                       BLACK);
-
         }
         if (Config::GetBool("draw_enemies_outside_screen")) {
             auto outsideScreen = registry.view<Living, Enemy, Radius, Position, LookAngle, ColorBB>(
@@ -213,5 +229,6 @@ namespace Rendering {
         drawProjectiles(registry);
         drawAttacksBB(registry);
         drawTooltips(registry);
+        drawSplines(registry);
     }
 }

@@ -213,5 +213,9 @@ public:
     [[nodiscard]] bool Expired() const;
 };
 
+// p1, c1, c2, p2
+struct Spline {
+    std::array<Vector2, 4> points {};
+};
 
 #endif //APTOMODO_COMPONENTS_H

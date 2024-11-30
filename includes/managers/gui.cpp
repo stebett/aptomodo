@@ -3,6 +3,8 @@
 //
 
 #include "gui.h"
+
+#include <ranges>
 #include <ai/strategies.h>
 #include "attributes.h"
 #include "parameters.h"
@@ -15,6 +17,54 @@
 
 ImGuiIO *Gui::m_io;
 
+void imguiSplineEditor(entt::registry &registry, const Camera2D &camera) {
+    static std::array<Vector2, 4> points{};
+    static std::array<bool, 4> pointsCreated{false};
+    static std::array<bool, 4> pointsMoving{false};
+
+    const auto mouse = GetScreenToWorld2D(GetMousePosition(), camera);
+
+    if (!pointsCreated[0] && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+        pointsCreated[0] = true;
+        pointsCreated[1] = true;
+        points[0] = mouse;
+        points[1] = Vector2Add(mouse, {20, 20});
+    }
+    if (!pointsCreated[3] && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+        pointsCreated[2] = true;
+        pointsCreated[3] = true;
+        points[3] = mouse;
+        points[2] = Vector2Add(mouse, {20, 20});
+    }
+
+    for (int i{0}; i < 4; i++) {
+        if (CheckCollisionPointCircle(mouse, points[i], 5.0f) && IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
+            pointsMoving[i] = true;
+            break;
+        }
+    }
+    for (int i{0}; i < 4; i++) {
+        if (pointsMoving[i]) {
+            points[i] = mouse;
+            if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
+                pointsMoving[i] = false;
+                break;
+            }
+        }
+    }
+    ImGui::Begin("Spline editor");
+
+    for (int n{0}; n < 4; n++) {
+        ImGui::PushID(n);
+        ImGui::Text("Point %i: %f x, %f y", n, points[n].x, points[n].y);
+        ImGui::PopID();
+    }
+
+    static entt::entity entity{registry.create()};
+    if (std::views::all(pointsCreated))
+        registry.emplace_or_replace<Spline>(entity, points);
+    ImGui::End();
+}
 
 // Function to render and interact with the table
 void imguiEnemyTypesEditor() {
@@ -411,6 +461,11 @@ void imguiWindowMain(entt::registry &registry, ImGuiIO io, const Camera2D &camer
     ImGui::Checkbox("Player Window", &show_player_window);
     if (show_player_window)
         imguiPlayerAttr(registry);
+
+
+    ImGui::Checkbox("Spline Window", Config::GetBoolPtr("show_spline_ui"));
+    if (Config::GetBool("show_spline_ui"))
+        imguiSplineEditor(registry, camera);
 
     ImGui::Checkbox("Level Window", &show_level_window);
     if (show_level_window)

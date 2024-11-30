@@ -9,6 +9,7 @@ show_enemy_window = false
 free_camera = false
 draw_level_collisions = false
 draw_enemies_outside_screen = true
+show_spline_ui = true
 cameraDecay = 10.0
 dash_speed = 10000.0
 dash_duration = 0.1
