@@ -6,6 +6,8 @@
 #define ATTACKS_H
 #include <math/spline.h>
 
+#include "math/bezier.h"
+
 
 namespace Attacks {
     struct Hit {
@@ -48,8 +50,10 @@ namespace Attacks {
 
         [[nodiscard]] b2Transform get(const float t) const {
             const auto points = spline.getLocal();
-            const auto p = b2Lerp({points[0].x, points[0].y},
-                                  {points[3].x, points[3].y}, t);
+            const auto bezier = spline.getLocalBezier();
+            const Math::Vec2 p = bezier.valueAt(t);
+            // const auto p = b2Lerp({points[0].x, points[0].y},
+            //                       {points[3].x, points[3].y}, t);
             const auto q = b2Rot{1, 0};
             return {p, q};
         }

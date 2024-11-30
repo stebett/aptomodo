@@ -4,6 +4,7 @@
 
 #ifndef SPLINE_H
 #define SPLINE_H
+#include "bezier.h"
 #include "math/mathConstants.h"
 
 
@@ -17,6 +18,7 @@ struct LocalSpline {
     LocalSpline(const std::array<b2Vec2, 4> &points, std::array<b2Transform, 4> transforms);
 
     [[nodiscard]] std::array<Vector2, 4> getGlobal(b2Transform);
+    [[nodiscard]] Bezier::Bezier<3> getLocalBezier() const;
     [[nodiscard]] std::array<Math::Vec2, 4> getLocal() const;
 
 

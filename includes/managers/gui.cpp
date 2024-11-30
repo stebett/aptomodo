@@ -550,7 +550,9 @@ void imguiWindowMain(entt::registry &registry, ImGuiIO io, const Camera2D &camer
     if (Config::GetBool("show_spline_ui")) {
         *inEditor = true;
         imguiSplineEditor(registry, camera);
-    }
+    } else
+        *inEditor = true;
+
 
     ImGui::Checkbox("Level Window", &show_level_window);
     if (show_level_window)

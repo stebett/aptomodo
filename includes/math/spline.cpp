@@ -2,7 +2,7 @@
 // Created by ginko on 11/30/24.
 //
 
-#include "spline.h"
+#include <math/spline.h>
 
 LocalSpline::LocalSpline(const std::array<b2Vec2, 4> &points,
                          std::array<b2Transform, 4> transforms) : localPoints(points), transforms(transforms) {
@@ -24,6 +24,17 @@ std::array<Vector2, 4> LocalSpline::getGlobal(const b2Transform ref) {
         Math::Vec2(b2TransformPoint(ref, b2InvTransformPoint(transforms[2], localPoints[2]))),
         Math::Vec2(b2TransformPoint(ref, b2InvTransformPoint(transforms[3], localPoints[3]))),
     };
+}
+
+Bezier::Bezier<3> LocalSpline::getLocalBezier() const{
+    auto points = getLocal();
+    return Bezier::Bezier<3> ({
+    {points[0].x, points[0].y},
+    {points[1].x, points[1].y},
+    {points[2].x, points[2].y},
+    {points[3].x, points[3].y},
+    });
+
 }
 
 std::array<Math::Vec2, 4> LocalSpline::getLocal() const {
