@@ -69,14 +69,14 @@ void imguiBodyEditor(entt::registry &registry, LocalSpline spline) {
 
     ImGui::SliderFloat("duration", &duration, 0, 10);
     ImGui::SliderFloat("interval", &interval, 0, 10);
-    if (ImGui::SliderFloat("half_width", &half_width, 0, 50)) {
+    if (ImGui::SliderFloat("half_width", &half_width, 0.1, 50)) {
         force_go = true;
         registry.view<Attacks::BodyCouple>().each([&registry](auto entity, auto body) {
             Physics::DestroyBody(body.weapon);
             registry.destroy(entity);
         });
     }
-    if (ImGui::SliderFloat("half_height", &half_height, 0, 50)) {
+    if (ImGui::SliderFloat("half_height", &half_height, 0.1, 50)) {
         force_go = true;
         registry.view<Attacks::BodyCouple>().each([&registry](auto entity, auto body) {
             Physics::DestroyBody(body.weapon);

@@ -52,9 +52,14 @@ namespace Attacks {
             const auto points = spline.getLocal();
             const auto bezier = spline.getLocalBezier();
             const Math::Vec2 p = bezier.valueAt(t);
+            const Math::Vec2 norm = bezier.normalAt(t);
             // const auto p = b2Lerp({points[0].x, points[0].y},
             //                       {points[3].x, points[3].y}, t);
-            const auto q = b2Rot{1, 0};
+            if (isnan(norm.x) || isnan(norm.y)) {
+                return {p, b2Rot(cos(0), sin(0))};
+            }
+            auto radians = atan2(norm.y, norm.x);
+            auto q = b2Rot(cos(radians), sin(radians));
             return {p, q};
         }
     };
