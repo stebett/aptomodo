@@ -10,5 +10,31 @@ namespace Math {
         constexpr float radToDeg = (180.0 / 3.141592653589793238463); // TODO move in math probably
         constexpr float degToRad = (3.141592653589793238463 / 180.0);
     }
+
+    class Vec2 {
+    public:
+        float x;
+        float y;
+
+        Vec2() : x{0}, y{0} {
+        };
+
+        Vec2(Vector2 vec) : x{vec.x}, y{vec.y} {
+        };
+
+        Vec2(b2Vec2 vec) : x{vec.x}, y{vec.y} {
+        };
+
+
+        operator Vector2() const noexcept {
+            return {x, y};
+        }
+
+        operator b2Vec2() const noexcept {
+            return {x, y};
+        }
+
+
+    };
 }
 #endif //MATHCONSTANTS_H

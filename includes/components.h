@@ -213,11 +213,5 @@ public:
     [[nodiscard]] bool Expired() const;
 };
 
-// p1, c1, c2, p2
-struct LocalSpline {
-    std::array<Vector2, 4> localPoints{};
-
-    [[nodiscard]] std::array<Vector2, 4> getGlobal(Vector2 reference) const;
-};
 
 #endif //APTOMODO_COMPONENTS_H

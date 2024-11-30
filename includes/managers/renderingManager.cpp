@@ -13,13 +13,15 @@
 #include "shadowCast.h"
 #include "../config.h"
 #include "../items.h"
+#include "math/spline.h"
 
 namespace Rendering {
     void drawSplines(entt::registry &registry) {
         const auto player = registry.view<Player>().front();
-        const auto playerPos = registry.get<Position>(player);
-        registry.view<LocalSpline>().each([playerPos](auto entity, auto spline) {
-            const std::array<Vector2, 4> globalPoints = spline.getGlobal(playerPos);
+        const auto playerBody = registry.get<b2BodyId>(player);
+        const auto playerTransform = b2Body_GetTransform(playerBody);
+        registry.view<LocalSpline>().each([playerTransform](auto entity,  LocalSpline spline) {
+            const std::array<Vector2, 4> globalPoints = spline.getGlobal(playerTransform);
             DrawLineV(globalPoints[0], globalPoints[1], GRAY);
             DrawLineV(globalPoints[2], globalPoints[3], GRAY);
             constexpr float radius = 3.0f;

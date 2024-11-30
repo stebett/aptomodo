@@ -6,6 +6,7 @@
 
 #include <ranges>
 #include <ai/strategies.h>
+#include <math/mathConstants.h>
 #include <systems/physics.h>
 
 #include "attacks.h"
@@ -35,7 +36,6 @@ auto createShape = [](b2BodyId bodyId, b2Polygon box) {
     shapeDef.filter.maskBits = Physics::Enemy;
     return b2CreatePolygonShape(bodyId, &shapeDef, &box);
 };
-
 
 
 void imguiBodyEditor(entt::registry &registry, LocalSpline spline) {
@@ -86,28 +86,37 @@ void imguiBodyEditor(entt::registry &registry, LocalSpline spline) {
 }
 
 void imguiSplineEditor(entt::registry &registry, const Camera2D &camera) {
-    static std::array<Vector2, 4> points{};
+    static std::array<b2Vec2, 4> points{};
+    static std::array<b2Transform, 4> transforms{};
     static std::array<bool, 4> pointsCreated = {false};
     static std::array<bool, 4> pointsMoving = {false};
 
-    const auto mouse = GetScreenToWorld2D(GetMousePosition(), camera);
+    const Math::Vec2 mouse = GetScreenToWorld2D(GetMousePosition(), camera);
     const auto player = registry.view<Player>().front();
-    const auto playerPos = registry.get<Position>(player);
+    const auto playerBody = registry.get<b2BodyId>(player);
+    const auto playerTransform = b2Body_GetTransform(playerBody);
 
     if (!pointsCreated[0] && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
         pointsCreated[0] = true;
         pointsCreated[1] = true;
-        points[0] = Vector2Subtract(mouse, playerPos);
-        points[1] = Vector2Add(points[0], {20, 20});
+        points[0] = mouse;
+        points[1] = b2Add(points[0], {20, 20});
+        transforms[0] = b2Body_GetTransform(playerBody);
+        transforms[1] = b2Body_GetTransform(playerBody);
     } else if (!pointsCreated[3] && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
         pointsCreated[2] = true;
         pointsCreated[3] = true;
-        points[3] = Vector2Subtract(mouse, playerPos);
-        points[2] = Vector2Add(points[3], {20, 20});
+        points[3] = mouse;
+        points[2] = b2Add(points[3], {20, 20});
+        transforms[2] = b2Body_GetTransform(playerBody);
+        transforms[3] = b2Body_GetTransform(playerBody);
     }
 
+    auto spline = LocalSpline{points, transforms};
+
     for (int i{0}; i < 4; i++) {
-        if (CheckCollisionPointCircle(Vector2Subtract(mouse, playerPos), points[i], 5.0f) && IsMouseButtonDown(
+        if (CheckCollisionPointCircle(spline.getGlobal(b2Body_GetTransform(playerBody))[i], mouse, 5.0f) &&
+            IsMouseButtonDown(
                 MOUSE_BUTTON_LEFT)) {
             pointsMoving[i] = true;
             break;
@@ -115,7 +124,9 @@ void imguiSplineEditor(entt::registry &registry, const Camera2D &camera) {
     }
     for (int i{0}; i < 4; i++) {
         if (pointsMoving[i]) {
-            points[i] = Vector2Subtract(mouse, playerPos);
+            points[i] = mouse;
+            transforms[i] = b2Body_GetTransform(playerBody);
+
             if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
                 pointsMoving[i] = false;
             }
@@ -131,10 +142,9 @@ void imguiSplineEditor(entt::registry &registry, const Camera2D &camera) {
     }
 
     static entt::entity entity{registry.create()};
-    if (std::views::all(pointsCreated))
-        registry.emplace_or_replace<LocalSpline>(entity, points);
+    registry.emplace_or_replace<LocalSpline>(entity, spline);
 
-    imguiBodyEditor(registry, LocalSpline(points));
+    imguiBodyEditor(registry, spline);
     ImGui::End();
 }
 

@@ -4,8 +4,7 @@
 
 #ifndef ATTACKS_H
 #define ATTACKS_H
-#include <components.h>
-#include <systems/physics.h>
+#include <math/spline.h>
 
 
 namespace Attacks {
@@ -48,8 +47,9 @@ namespace Attacks {
 
 
         [[nodiscard]] b2Transform get(const float t) const {
-            const auto p = b2Lerp({spline.localPoints[0].x, spline.localPoints[0].y},
-                                  {spline.localPoints[3].x, spline.localPoints[3].y}, t);
+            const auto points = spline.getLocal();
+            const auto p = b2Lerp({points[0].x, points[0].y},
+                                  {points[3].x, points[3].y}, t);
             const auto q = b2Rot{1, 0};
             return {p, q};
         }
