@@ -15,7 +15,29 @@ namespace Attacks {
     public:
         float damage = 0;
 
-        explicit Attack(const float damage);;
+        explicit Attack(float damage);;
+    };
+
+    class LocalTransform {
+    public:
+        b2Transform transform;
+
+        explicit LocalTransform(b2Transform transform) : transform(transform) {};
+
+        [[nodiscard]] const b2Transform& get(float t) const {
+            return transform;
+        }
+
+    };
+
+    struct BodyCouple {
+        BodyCouple(const b2BodyId &owner, const b2BodyId &weapon)
+            : owner(owner),
+              weapon(weapon) {
+        }
+
+        b2BodyId owner;
+        b2BodyId weapon;
     };
 }
 

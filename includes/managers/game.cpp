@@ -30,11 +30,18 @@ int Game::Level = 0;
 LevelOutcome Game::levelOutcome = LevelOutcome::NONE;
 
 // TODO find a better place for this
-void PlayerFaceMouse(entt::registry& registry, const entt::entity player, const Camera2D &camera) {
+void PlayerFaceMouse(entt::registry &registry, const entt::entity player, const Camera2D &camera) {
     auto &lookAngle = registry.get<LookAngle>(player);
-    const auto position = registry.get<Position>(player);
+    const auto body = registry.get<b2BodyId>(player);
+    const auto transform{b2Body_GetTransform(body)};
+
     const auto [mouseX, mouseY] = GetScreenToWorld2D(GetMousePosition(), camera);
-    lookAngle = atan2(mouseY - position.y, mouseX - position.x) * RAD2DEG;
+    const auto radians = atan2(mouseY - transform.p.y, mouseX - transform.p.x);
+    lookAngle = radians * RAD2DEG;
+    float radiansDiff = Config::GetFloat("b2box_raylib_radians_diff");
+    auto raylibRot = b2Rot(cos(-radiansDiff), sin(-radiansDiff));
+
+    b2Body_SetTransform(body, transform.p, b2Rot(cos(radians), sin(radians)));
 }
 
 
@@ -49,7 +56,7 @@ LevelOutcome PlayLevel(const int levelNumber) {
     Gui::Instantiate();
     Physics::Instantiate();
 
-    GameCamera camera {};
+    GameCamera camera{};
 
     spawnEntities(registry, Level::LoadEntities(Assets::GetLevel(levelNumber)));
     Game::levelTexture = Level::LoadLevelTexture(Assets::GetLevel(levelNumber));
@@ -89,7 +96,8 @@ LevelOutcome PlayLevel(const int levelNumber) {
 
         Inputs::Listen(registry, camera, framerateManager.deltaTime);
         Inputs::Update(registry);
-        Rendering::Draw(registry, camera.GetPlayerCamera(), framerateManager.framesCounter); // This has to stay after updatePlayer
+        Rendering::Draw(registry, camera.GetPlayerCamera(), framerateManager.framesCounter);
+        // This has to stay after updatePlayer
         EndMode2D();
 
         PlayerUI::Draw(health.value);
@@ -97,7 +105,6 @@ LevelOutcome PlayLevel(const int levelNumber) {
         EndDrawing();
 
         framerateManager.Update();
-
     }
 
     return Game::GetOutcome();

@@ -11,7 +11,6 @@ class Physics {
     static std::unordered_map<int32_t, entt::entity> bodyMap;
 
 public:
-
     enum ContactCategories {
         None = 0x00000000,
         Static = 0x00000001,
@@ -25,14 +24,16 @@ public:
 
     static void Instantiate();
 
-    static b2BodyId CreateDynamicCircularBody(entt::entity entity, Vector2 position, float radius, ContactCategories category);
+    static b2BodyId CreateDynamicCircularBody(entt::entity entity, Vector2 position, float radius,
+                                              ContactCategories category);
 
     // Todo these functions should return a bodyId, Physics should never touch the registry
 
     static void EmplaceStaticBody(Vector2 position, float side);
 
-    static void EmplaceSword(entt::registry &registry, entt::entity entity, b2BodyId spawningBody, Vector2 anchor,
-                             float half_width, float half_height, float degrees);
+    static b2BodyId EmplaceSword(entt::entity entity, Vector2 anchor,
+                                          float half_width,
+                                          float half_height);
 
     static void Update(entt::registry &registry);
 

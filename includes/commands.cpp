@@ -75,15 +75,19 @@ namespace Command {
         const auto &attributes = registry.get<Attributes>(self);
         const auto lookAngle = registry.get<LookAngle>(self);
         const auto body = registry.get<b2BodyId>(self);
+        const auto radius = registry.get<Radius>(self);
         if (attackTimer.ElapsedSeconds() < attributes.getMultiplied(AttributeConstants::attackSpeed)) return;
         attackTimer.Reset();
         Position &playerPosition = registry.get<Position>(self);
 
         auto swordEntity = registry.create();
-        Physics::EmplaceSword(registry, swordEntity, body, playerPosition, 3, 25, lookAngle);
-        auto sword = Attacks::Attack{100.0f};
-        registry.emplace<Attacks::Attack>(swordEntity, sword);
-        registry.emplace<PassiveTimer>(swordEntity, 1.0f);
+        constexpr float halfWidth = 3;
+        constexpr float halfHeight = 25;
+        b2BodyId swordBodyId = Physics::EmplaceSword(swordEntity, playerPosition, halfWidth, halfHeight);
+        registry.emplace<Attacks::Attack>(swordEntity, Attacks::Attack{100.0f});
+        registry.emplace<Attacks::LocalTransform>(swordEntity, b2Transform({halfHeight+radius, 0 }, b2Rot(0, 1)));
+        registry.emplace<Attacks::BodyCouple>(swordEntity, Attacks::BodyCouple{body, swordBodyId});
+        registry.emplace<PassiveTimer>(swordEntity, 5.0f);
 
         const float attackRange = attributes.getMultiplied(AttributeConstants::range);
         const float attackSpread = attributes.getMultiplied(AttributeConstants::spread);

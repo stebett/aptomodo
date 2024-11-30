@@ -17,6 +17,7 @@ enemySightRangeChasing = 250.0
 enemyHearRange = 70.0
 enemyHearRangeChasing = 100.0
 enemyPatrolDistance = 90.0
+b2box_raylib_radians_diff = 3.0
 fps = 60
 enemy_walking_animation_fps = 8
 strategy = 0

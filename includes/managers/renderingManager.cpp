@@ -39,8 +39,9 @@ namespace Rendering {
 
 
     void drawAttacksBB(const entt::registry &registry) {
-        registry.view<Attacks::Attack, b2BodyId>().each([](auto entity, auto sword, auto body) {
+        registry.view<Attacks::Attack, Attacks::BodyCouple>().each([](auto entity, auto sword, auto bodyCouple) {
             b2ShapeId shape{};
+            b2BodyId body = bodyCouple.weapon;
             b2Body_GetShapes(body, &shape, 1);
             auto [pos, rotation] = b2Body_GetTransform(body);
             auto polygon = b2Shape_GetPolygon(shape);
@@ -87,6 +88,7 @@ namespace Rendering {
             DrawLineV(position, Vector2Add(
                           position, Vector2Scale(Vector2{cos(lookAngle * DEG2RAD), sin(lookAngle * DEG2RAD)}, 20.0f)),
                       BLACK);
+
         }
         if (Config::GetBool("draw_enemies_outside_screen")) {
             auto outsideScreen = registry.view<Living, Enemy, Radius, Position, LookAngle, ColorBB>(
