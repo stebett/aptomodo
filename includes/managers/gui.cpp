@@ -5,6 +5,7 @@
 #include "gui.h"
 
 #include <ranges>
+#include <rlImGui.h>
 #include <ai/strategies.h>
 #include <math/mathConstants.h>
 #include <systems/physics.h>
@@ -18,6 +19,7 @@
 #include "enemyType.h"
 #include "game.h"
 #include "items.h"
+#include "math/bezierEditor.h"
 
 ImGuiIO *Gui::m_io;
 
@@ -37,9 +39,35 @@ auto createShape = [](b2BodyId bodyId, b2Polygon box) {
     return b2CreatePolygonShape(bodyId, &shapeDef, &box);
 };
 
+Camera2D spawn() {
+    Camera2D Camera {};
+    Camera.zoom = 1;
+    Camera.target.x = 0;
+    Camera.target.y = 0;
+    Camera.rotation = 0;
+    Camera.offset.x = GetScreenWidth() / 2.0f;
+    Camera.offset.y = GetScreenHeight() / 2.0f;
+    return Camera;
+}
+void imguiEasingEditor() {
+    ImGui::Begin("Easing editor");
+
+    static auto camera = spawn();
+    ClearBackground(WHITE);
+
+    BeginMode2D(camera);
+
+
+    EndMode2D();
+    ImGui::End();
+
+
+}
+
 
 void imguiBodyEditor(entt::registry &registry, LocalSpline spline) {
     ImGui::SeparatorText("Body Editor`");
+    ImGui::ShowBezierDemo();
     static bool go{true};
     static bool force_go{false};
     static float duration = 2.0f;
@@ -67,7 +95,7 @@ void imguiBodyEditor(entt::registry &registry, LocalSpline spline) {
         registry.emplace<PassiveTimer>(entity, duration);
     }
 
-    ImGui::SliderFloat("duration", &duration, 0, 10);
+    ImGui::SliderFloat("duration", &duration, 0.1, 10);
     ImGui::SliderFloat("interval", &interval, 0, 10);
     if (ImGui::SliderFloat("half_width", &half_width, 0.1, 50)) {
         force_go = true;

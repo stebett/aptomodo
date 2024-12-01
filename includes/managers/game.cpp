@@ -8,6 +8,7 @@
 #include <components.h>
 #include <factories.h>
 #include <player_ui.h>
+#include <rlImGui.h>
 #include <ai/loop.h>
 #include <systems/inputs.h>
 #include <systems/physics.h>
@@ -100,6 +101,7 @@ LevelOutcome PlayLevel(const int levelNumber) {
 
         PlayerUI::Draw(health.value);
         Gui::Draw();
+
         EndDrawing();
 
         framerateManager.Update();

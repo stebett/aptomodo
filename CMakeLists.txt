@@ -26,7 +26,8 @@ add_executable(${EXEC} main.cpp ${SOURCES}
         includes/systems/statusUpdate.h
         includes/status.h
         includes/attacks.h
-        includes/math/bezier.h)
+        includes/math/bezier.h
+        includes/math/bezierEditor.h)
 target_link_libraries(${EXEC} PRIVATE raylib)
 target_link_libraries(${EXEC} PRIVATE box2d)
 target_link_libraries(${EXEC} PRIVATE LDtkLoader)

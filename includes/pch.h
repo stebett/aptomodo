@@ -29,7 +29,11 @@
 #include <raylib.h>
 #include <raymath.h>
 #include <entt/entity/registry.hpp>
+
+#define IMGUI_DEFINE_MATH_OPERATORS
 #include <imgui.h>
+#include <imgui_internal.h>
+
 #include <imgui_impl_raylib.h>
 #include <LDtkLoader/Project.hpp>
 #include <LDtkLoader/World.hpp>
