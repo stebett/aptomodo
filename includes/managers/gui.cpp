@@ -66,22 +66,25 @@ void imguiEasingEditor() {
 
 
 void imguiBodyEditor(entt::registry &registry, LocalSpline spline) {
-    static float  x1 = 0.0f;
-    static float y1 = 0.0f;
-    static float x2 = 1.0f;
-    static float y2 = 1.0f;
+
     ImGui::SeparatorText("Body Editor`");
-    ImGui::ShowBezierEditor(x1, y1, x2, y2);
-    ImGui::DragFloat("x1", &x1);
     static bool go{true};
     static bool force_go{false};
     static float duration = 2.0f;
     static float interval = 0.5f;
     static auto half_width{5.0f};
     static auto half_height{5.0f};
+    // easing
+    static float  x1 = 0.0f;
+    static float y1 = 0.0f;
+    static float x2 = 1.0f;
+    static float y2 = 1.0f;
+    ImGui::ShowBezierEditor(x1, y1, x2, y2);
+    auto transformSpline = Attacks::LocalTransformSpline{spline};
+    transformSpline.easingSpeed = {x1, y1, x2, y2};
+
     static float lastTime = GetTime() - duration;
-    if (ImGui::Checkbox("Create Body", &go)) {
-    }
+    ImGui::Checkbox("Create Body", &go);
 
 
     if (force_go || (go && ((lastTime + duration + interval) < GetTime()))) {
@@ -95,7 +98,7 @@ void imguiBodyEditor(entt::registry &registry, LocalSpline spline) {
         const auto player = registry.view<Player>().front();
         const auto playerBody = registry.get<b2BodyId>(player);
         registry.emplace<Attacks::Attack>(entity, Attacks::Attack{100.0f});
-        registry.emplace<Attacks::LocalTransformSpline>(entity, spline);
+        registry.emplace<Attacks::LocalTransformSpline>(entity, transformSpline);
         registry.emplace<Attacks::BodyCouple>(entity, Attacks::BodyCouple{playerBody, body});
         registry.emplace<PassiveTimer>(entity, duration);
     }

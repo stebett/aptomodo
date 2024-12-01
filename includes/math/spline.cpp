@@ -26,15 +26,14 @@ std::array<Vector2, 4> LocalSpline::getGlobal(const b2Transform ref) {
     };
 }
 
-Bezier::Bezier<3> LocalSpline::getLocalBezier() const{
+Bezier::Bezier<3> LocalSpline::getLocalBezier() const {
     auto points = getLocal();
-    return Bezier::Bezier<3> ({
-    {points[0].x, points[0].y},
-    {points[1].x, points[1].y},
-    {points[2].x, points[2].y},
-    {points[3].x, points[3].y},
+    return Bezier::Bezier<3>({
+        {points[0].x, points[0].y},
+        {points[1].x, points[1].y},
+        {points[2].x, points[2].y},
+        {points[3].x, points[3].y},
     });
-
 }
 
 std::array<Math::Vec2, 4> LocalSpline::getLocal() const {
@@ -44,4 +43,16 @@ std::array<Math::Vec2, 4> LocalSpline::getLocal() const {
         b2Sub(localPoints[2], transforms[2].p),
         b2Sub(localPoints[3], transforms[3].p)
     };
+}
+
+EasingSpline::EasingSpline(float x1, float y1, float x2, float y2) : bezier({
+    {0.0f, 0.0f},
+    {x1, y1},
+    {x2, y2},
+    {1.0f, 1.0f}
+}) {
+}
+
+float EasingSpline::valueAt(float t) const {
+    return bezier.valueAt(t).y;
 }

@@ -1,6 +1,10 @@
+// ImGui Bezier widget. @r-lyeh, public domain
+// v1.02: add BezierValue(); comments; usage
+// v1.01: out-of-bounds coord snapping; custom border width; spacing; cosmetics
+// v1.00: initial version
 //
-// Created by ginko on 12/1/24.
-//
+// [ref] http://robnapier.net/faster-bezier
+// [ref] http://easings.net/es#easeInSine
 
 #include "bezierEditor.h"
 

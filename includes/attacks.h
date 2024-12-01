@@ -43,18 +43,17 @@ namespace Attacks {
     class LocalTransformSpline {
     public:
         LocalSpline spline;
+        EasingSpline easingSpeed {LinearEasing};
 
         explicit LocalTransformSpline(LocalSpline localSpline) : spline(localSpline) {
         };
 
 
         [[nodiscard]] b2Transform get(const float t) const {
-            const auto points = spline.getLocal();
             const auto bezier = spline.getLocalBezier();
-            const Math::Vec2 p = bezier.valueAt(t);
-            const Math::Vec2 norm = bezier.normalAt(t);
-            // const auto p = b2Lerp({points[0].x, points[0].y},
-            //                       {points[3].x, points[3].y}, t);
+            const auto eased_t = easingSpeed.valueAt(t);
+            const Math::Vec2 p = bezier.valueAt(eased_t);
+            const Math::Vec2 norm = bezier.normalAt(eased_t);
             if (isnan(norm.x) || isnan(norm.y)) {
                 return {p, b2Rot(cos(0), sin(0))};
             }

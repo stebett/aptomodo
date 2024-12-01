@@ -20,9 +20,15 @@ struct LocalSpline {
     [[nodiscard]] std::array<Vector2, 4> getGlobal(b2Transform);
     [[nodiscard]] Bezier::Bezier<3> getLocalBezier() const;
     [[nodiscard]] std::array<Math::Vec2, 4> getLocal() const;
-
-
 };
+
+struct EasingSpline {
+    Bezier::Bezier<3> bezier;
+    EasingSpline(float x1, float y1, float x2, float y2);
+    float valueAt(float t) const;
+};
+
+const EasingSpline LinearEasing {0, 0, 1, 1};
 
 
 
