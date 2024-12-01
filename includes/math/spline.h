@@ -25,7 +25,8 @@ struct LocalSpline {
 struct EasingSpline {
     Bezier::Bezier<3> bezier;
     EasingSpline(float x1, float y1, float x2, float y2);
-    float valueAt(float t) const;
+    explicit EasingSpline(std::array<float, 4> points);
+    [[nodiscard]] float valueAt(float t) const;
 };
 
 const EasingSpline LinearEasing {0, 0, 1, 1};

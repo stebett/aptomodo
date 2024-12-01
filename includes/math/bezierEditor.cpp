@@ -167,16 +167,26 @@ namespace ImGui {
         return curves;
     };
 
-    void ShowBezierEditor(float &x1, float &y1, float &x2, float &y2) {
+    void ShowBezierEditor(float *points, const char *label, bool *open) {
+        Begin(label, open);
+        Bezier(label, points);
+        End();
+    }
+
+
+    void ShowBezierEditor(float &x1, float &y1, float &x2, float &y2, const char *label, bool *open) {
+        Begin("Bezier Editor", open);
         const char *items[] = {"easeLinear", "easeInSine", "easeOutSine", "easeInOutSine"};
         static auto curves = getStandardCurves();
         static int item_current = 1;
         if (ImGui::ListBox("listbox", &item_current, items, IM_ARRAYSIZE(items), 4))
             curves = getStandardCurves();
-        Bezier("easeLinear", curves[item_current].data());
+        Bezier(label, curves[item_current].data());
         x1 = curves[item_current][0];
         y1 = curves[item_current][1];
         x2 = curves[item_current][2];
         y2 = curves[item_current][3];
+
+        End();
     }
 }

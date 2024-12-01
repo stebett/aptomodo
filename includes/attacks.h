@@ -42,12 +42,23 @@ namespace Attacks {
 
     class LocalTransformSpline {
     public:
+
+
         LocalSpline spline;
         EasingSpline easingSpeed {LinearEasing};
+        EasingSpline easingAngle {LinearEasing};
+        float startRadians {0};
+        float endRadians {2};
+
+
+        [[nodiscard]] b2Rot startAngle() const {return b2Rot(cos(startRadians), sin(startRadians));}
+        [[nodiscard]] b2Rot endAngle() const {return b2Rot(cos(endRadians), sin(endRadians));}
 
         explicit LocalTransformSpline(LocalSpline localSpline) : spline(localSpline) {
         };
 
+        LocalTransformSpline(const LocalSpline &spline, const EasingSpline &easing_speed, const EasingSpline &easing_angle, const b2Rot &start_angle,
+    const b2Rot &end_angle);
 
         [[nodiscard]] b2Transform get(const float t) const {
             const auto bezier = spline.getLocalBezier();
@@ -55,10 +66,12 @@ namespace Attacks {
             const Math::Vec2 p = bezier.valueAt(eased_t);
             const Math::Vec2 norm = bezier.normalAt(eased_t);
             if (isnan(norm.x) || isnan(norm.y)) {
-                return {p, b2Rot(cos(0), sin(0))};
+                return {p, startAngle()};
             }
-            auto radians = atan2(norm.y, norm.x);
-            auto q = b2Rot(cos(radians), sin(radians));
+            const auto radians = atan2(norm.y, norm.x);
+            const auto eased_angle_t = easingAngle.valueAt(t);
+
+            const auto q = b2MulRot(b2Rot(cos(radians), sin(radians)), b2NLerp(startAngle(), endAngle(), eased_angle_t));
             return {p, q};
         }
     };

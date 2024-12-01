@@ -40,7 +40,7 @@ auto createShape = [](b2BodyId bodyId, b2Polygon box) {
 };
 
 Camera2D spawn() {
-    Camera2D Camera {};
+    Camera2D Camera{};
     Camera.zoom = 1;
     Camera.target.x = 0;
     Camera.target.y = 0;
@@ -49,6 +49,7 @@ Camera2D spawn() {
     Camera.offset.y = GetScreenHeight() / 2.0f;
     return Camera;
 }
+
 void imguiEasingEditor() {
     ImGui::Begin("Easing editor");
 
@@ -60,13 +61,10 @@ void imguiEasingEditor() {
 
     EndMode2D();
     ImGui::End();
-
-
 }
 
 
 void imguiBodyEditor(entt::registry &registry, LocalSpline spline) {
-
     ImGui::SeparatorText("Body Editor`");
     static bool go{true};
     static bool force_go{false};
@@ -75,13 +73,29 @@ void imguiBodyEditor(entt::registry &registry, LocalSpline spline) {
     static auto half_width{5.0f};
     static auto half_height{5.0f};
     // easing
-    static float  x1 = 0.0f;
-    static float y1 = 0.0f;
-    static float x2 = 1.0f;
-    static float y2 = 1.0f;
-    ImGui::ShowBezierEditor(x1, y1, x2, y2);
+    static float startRadians{0};
+    static float endRadians{2};
+    ImGui::SliderFloat("start radians", &startRadians, -3.14, 3.14);
+    ImGui::SameLine();
+    if (ImGui::Button("Reset Start")) startRadians = 0;
+    ImGui::SliderFloat("end radians", &endRadians, -3.14, 3.14);
+    ImGui::SameLine();
+    if (ImGui::Button("Reset End")) endRadians = 0;
     auto transformSpline = Attacks::LocalTransformSpline{spline};
-    transformSpline.easingSpeed = {x1, y1, x2, y2};
+    transformSpline.startRadians = startRadians;
+    transformSpline.endRadians = endRadians;
+
+    static std::array<float, 4> easingSpeed{};
+    static bool openSpeedEditor = true;
+    if (ImGui::Button("Speed Bezier Editor")) openSpeedEditor = !openSpeedEditor;
+    if (openSpeedEditor) ImGui::ShowBezierEditor(easingSpeed.data(), "speed", &openSpeedEditor);
+    transformSpline.easingSpeed = EasingSpline(easingSpeed);
+
+    static std::array<float, 4> easingAngle{};
+    static bool openAngleEditor = true;
+    if (ImGui::Button("Angle Bezier Editor")) openAngleEditor = !openAngleEditor;
+    if (openAngleEditor) ImGui::ShowBezierEditor(easingAngle.data(), "angle", &openAngleEditor);
+    transformSpline.easingAngle = EasingSpline(easingAngle);
 
     static float lastTime = GetTime() - duration;
     ImGui::Checkbox("Create Body", &go);
@@ -105,6 +119,7 @@ void imguiBodyEditor(entt::registry &registry, LocalSpline spline) {
 
     ImGui::SliderFloat("duration", &duration, 0.1, 10);
     ImGui::SliderFloat("interval", &interval, 0, 10);
+
     if (ImGui::SliderFloat("half_width", &half_width, 0.1, 50)) {
         force_go = true;
         registry.view<Attacks::BodyCouple>().each([&registry](auto entity, auto body) {

@@ -27,4 +27,6 @@ namespace Attacks {
 
     Attack::Attack(const float damage): damage(damage) {
     }
+
+
 }

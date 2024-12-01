@@ -53,6 +53,14 @@ EasingSpline::EasingSpline(float x1, float y1, float x2, float y2) : bezier({
 }) {
 }
 
+EasingSpline::EasingSpline(std::array<float, 4> points): bezier({
+            {0.0f, 0.0f},
+        {points[0], points[1]},
+        {points[2], points[3]},
+        {1.0f, 1.0f}
+}) {
+}
+
 float EasingSpline::valueAt(float t) const {
     return bezier.valueAt(t).y;
 }
