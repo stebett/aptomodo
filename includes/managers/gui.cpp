@@ -5,7 +5,6 @@
 #include "gui.h"
 
 #include <ranges>
-#include <rlImGui.h>
 #include <ai/strategies.h>
 #include <math/mathConstants.h>
 #include <systems/physics.h>
@@ -68,51 +67,76 @@ void imguiBodyEditor(entt::registry &registry, LocalSpline spline) {
     ImGui::SeparatorText("Body Editor`");
     static bool go{true};
     static bool force_go{false};
+
     static float duration = 2.0f;
     static float interval = 0.5f;
-    static auto half_width{5.0f};
-    static auto half_height{5.0f};
-    // easing
-    static float startRadians{0};
-    static float endRadians{2};
-    ImGui::SliderFloat("start radians", &startRadians, -3.14, 3.14);
-    ImGui::SameLine();
-    if (ImGui::Button("Reset Start")) startRadians = 0;
-    ImGui::SliderFloat("end radians", &endRadians, -3.14, 3.14);
-    ImGui::SameLine();
-    if (ImGui::Button("Reset End")) endRadians = 0;
-    auto transformSpline = Attacks::LocalTransformSpline{spline};
-    transformSpline.startRadians = startRadians;
-    transformSpline.endRadians = endRadians;
 
-    static std::array<float, 4> easingSpeed{};
-    static bool openSpeedEditor = true;
+    static auto s = Attacks::LocalTransformSpline{spline};
+    s.spline = spline;
+    ImGui::SliderFloat("Start Radians", &s.startRadians, -3.14f, 3.14f);
+    ImGui::SameLine();
+    if (ImGui::Button("Reset Start Radians")) s.startRadians = 0;
+
+    ImGui::SliderFloat("End Radians", &s.endRadians, -3.14f, 3.14f);
+    ImGui::SameLine();
+    if (ImGui::Button("Reset End Radians")) s.endRadians = 0;
+
+    ImGui::SliderFloat("Start Dim1", &s.startDim1, 0.1, 30);
+    ImGui::SameLine();
+    if (ImGui::Button("Reset Start Dim1")) s.startDim1 = 5;
+
+    ImGui::SliderFloat("Start Dim2", &s.startDim2, 0.1, 30);
+    ImGui::SameLine();
+    if (ImGui::Button("Reset Start Dim2")) s.startDim2 = 5;
+
+    ImGui::SliderFloat("End Dim1", &s.endDim1, 0.1, 30);
+    ImGui::SameLine();
+    if (ImGui::Button("Reset End Dim1")) s.endDim1 = 5;
+
+    ImGui::SliderFloat("End Dim2", &s.endDim2, 0.1, 30);
+    ImGui::SameLine();
+    if (ImGui::Button("Reset End Dim2")) s.endDim2 = 5;
+
+
+    static std::array<float, 4> easingSpeed{0, 0, 1, 1};
+    static bool openSpeedEditor = false;
     if (ImGui::Button("Speed Bezier Editor")) openSpeedEditor = !openSpeedEditor;
     if (openSpeedEditor) ImGui::ShowBezierEditor(easingSpeed.data(), "speed", &openSpeedEditor);
-    transformSpline.easingSpeed = EasingSpline(easingSpeed);
+    s.easingSpeed = EasingSpline(easingSpeed);
 
-    static std::array<float, 4> easingAngle{};
-    static bool openAngleEditor = true;
+    static std::array<float, 4> easingAngle{0, 0, 1, 1};
+    static bool openAngleEditor = false;
     if (ImGui::Button("Angle Bezier Editor")) openAngleEditor = !openAngleEditor;
     if (openAngleEditor) ImGui::ShowBezierEditor(easingAngle.data(), "angle", &openAngleEditor);
-    transformSpline.easingAngle = EasingSpline(easingAngle);
+    s.easingAngle = EasingSpline(easingAngle);
+
+    static std::array<float, 4> easingDim1{0, 0, 1, 1};
+    static bool openEasingDim1Editor = false;
+    if (ImGui::Button("Dim1 Bezier Editor")) openEasingDim1Editor = !openEasingDim1Editor;
+    if (openEasingDim1Editor) ImGui::ShowBezierEditor(easingDim1.data(), "dim1", &openEasingDim1Editor);
+    s.easingDim1 = EasingSpline(easingDim1);
+
+    static std::array<float, 4> easingDim2{0, 0, 1, 1};
+    static bool openEasingDim2Editor = false;
+    if (ImGui::Button("Dim2 Bezier Editor")) openEasingDim2Editor = !openEasingDim2Editor;
+    if (openEasingDim2Editor) ImGui::ShowBezierEditor(easingDim2.data(), "dim2", &openEasingDim2Editor);
+    s.easingDim2 = EasingSpline(easingDim2);
 
     static float lastTime = GetTime() - duration;
     ImGui::Checkbox("Create Body", &go);
-
+    auto entity{registry.create()};
+    auto body{createBody(entity)};
+    auto box{b2MakeBox(s.startDim1, s.startDim2)};
+    auto shape{createShape(body, box)};
 
     if (force_go || (go && ((lastTime + duration + interval) < GetTime()))) {
         force_go = false;
         lastTime = GetTime();
-        auto entity{registry.create()};
-        auto body{createBody(entity)};
-        auto box{b2MakeBox(half_width, half_height)};
-        auto shape{createShape(body, box)};
 
         const auto player = registry.view<Player>().front();
         const auto playerBody = registry.get<b2BodyId>(player);
         registry.emplace<Attacks::Attack>(entity, Attacks::Attack{100.0f});
-        registry.emplace<Attacks::LocalTransformSpline>(entity, transformSpline);
+        registry.emplace<Attacks::LocalTransformSpline>(entity, s);
         registry.emplace<Attacks::BodyCouple>(entity, Attacks::BodyCouple{playerBody, body});
         registry.emplace<PassiveTimer>(entity, duration);
     }
@@ -120,20 +144,16 @@ void imguiBodyEditor(entt::registry &registry, LocalSpline spline) {
     ImGui::SliderFloat("duration", &duration, 0.1, 10);
     ImGui::SliderFloat("interval", &interval, 0, 10);
 
-    if (ImGui::SliderFloat("half_width", &half_width, 0.1, 50)) {
-        force_go = true;
-        registry.view<Attacks::BodyCouple>().each([&registry](auto entity, auto body) {
-            Physics::DestroyBody(body.weapon);
-            registry.destroy(entity);
-        });
-    }
-    if (ImGui::SliderFloat("half_height", &half_height, 0.1, 50)) {
-        force_go = true;
-        registry.view<Attacks::BodyCouple>().each([&registry](auto entity, auto body) {
-            Physics::DestroyBody(body.weapon);
-            registry.destroy(entity);
-        });
-    };
+    // if (ImGui::SliderFloat("half_width", &half_width, 0.1, 50) ||
+    //     ImGui::SliderFloat("half_height", &half_height, 0.1, 50)) {
+    //     registry.view<Attacks::BodyCouple>().each([&registry](auto entity, auto body) {
+    //         b2ShapeId shape;
+    //         b2Body_GetShapes(body.weapon, &shape, 1);
+    //         b2DestroyShape(shape, false);
+    //         auto newBox{b2MakeBox(half_width, half_height)};
+    //         createShape(body.weapon, newBox);
+    //     });
+    // }
 }
 
 void imguiSplineEditor(entt::registry &registry, const Camera2D &camera) {

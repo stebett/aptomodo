@@ -7,17 +7,31 @@
 #include <timer.h>
 #include <systems/physics.h>
 
+auto createShapeHelper = [](b2BodyId bodyId, b2Polygon box) {
+    b2ShapeDef shapeDef = b2DefaultShapeDef();
+    shapeDef.isSensor = true;
+    shapeDef.filter.maskBits = Physics::Enemy;
+    return b2CreatePolygonShape(bodyId, &shapeDef, &box);
+};
+
 namespace Attacks {
     void Update(entt::registry &registry) {
         const auto now = GetTime();
         registry.view<Attacks::Attack>().each([&registry, now](auto entity, const auto attack) {
             auto timer{registry.get<PassiveTimer>(entity)};
+            const auto t = (now - timer.start) / timer.duration;
             auto bodyCouple{registry.get<BodyCouple>(entity)};
-            // auto oldTransform{registry.get<LocalTransform>(entity).get((now - timer.start) / timer.duration)};
-            auto oldTransform{registry.get<LocalTransformSpline>(entity).get((now - timer.start) / timer.duration)};
+            const auto transformer = registry.get<LocalTransformSpline>(entity);
+            auto oldTransform{transformer.get(t)};
             auto ownerTransform{b2Body_GetTransform(bodyCouple.owner)};
             auto newTransform = b2MulTransforms(ownerTransform, oldTransform);
             b2Body_SetTransform(bodyCouple.weapon, newTransform.p, newTransform.q);
+
+            b2ShapeId shape;
+            b2Body_GetShapes(bodyCouple.weapon, &shape, 1);
+            b2DestroyShape(shape, false);
+            createShapeHelper(bodyCouple.weapon, b2MakeBox(transformer.getDim1(t), transformer.getDim2(t)));
+
             if (now - timer.start > timer.duration) {
                 Physics::DestroyBody(bodyCouple.weapon);;
                 registry.destroy(entity);
@@ -27,6 +41,4 @@ namespace Attacks {
 
     Attack::Attack(const float damage): damage(damage) {
     }
-
-
 }
