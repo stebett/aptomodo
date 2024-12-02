@@ -9,11 +9,10 @@
 bool EnemyDataFile::loadCSV(const std::string &filename) {
     std::ifstream file(filename);
     if (!file.is_open()) {
-        std::cerr << "ERROR: ENEMIES:  Could not open type file " << filename << "\n";
+        SPDLOG_ERROR("[ENEMIES]:  Could not open enemy type file: {}", filename);
         return false;
     }
-    std::cout << "INFO: ENEMIES: Reading type file " << filename << "\n";
-
+    SPDLOG_INFO("[ENEMIES]:   Reading type file : {}", filename);
 
     std::string line;
     if (std::getline(file, line)) {
@@ -74,7 +73,7 @@ EnemyType& EnemyDataFile::getType(const std::string & name) {
             return enemyType;
         }
     }
-    std::cerr << "WARNING: ENEMIES: did not find enemy type -> " << name  << "\n";
+    SPDLOG_WARN("[ENEMIES]: did not find enemy of type: {} ", name);
 
     return enemyStats[0];
 }

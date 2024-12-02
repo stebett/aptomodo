@@ -50,7 +50,7 @@ void Assets::InstantiateEnemiesFile() {
 
 void Assets::InstantiateLevel() {
     LDTKProject = std::make_unique<ldtk::Project>();
-    std::cout << getAssetPath("project.ldtk") << "\n";
+    SPDLOG_DEBUG("[ASSETS] LDTK Project path: {}", getAssetPath("project.ldtk"));
     LDTKProject->loadFromFile(getAssetPath("project.ldtk"));
 
 }

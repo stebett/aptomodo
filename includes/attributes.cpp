@@ -108,7 +108,7 @@ void Attributes::decrease(const SubAttributeName subattr) {
 
 void Attributes::increase(const AttributeName attr) {
     if (outOfAttrPoints()) {
-        std::cout << "You don't have free attribute points\n";
+        SPDLOG_INFO("You don't have free attribute points");
         return;
     }
     values[attr] += 1;
@@ -116,7 +116,7 @@ void Attributes::increase(const AttributeName attr) {
 
 void Attributes::increase(const SubAttributeName subattr) {
     if (outOfSubAttrPoints(subattr)) {
-        std::cout << "You don't have free subattribute points\n";
+        SPDLOG_INFO("You don't have free subattribute points");
         return;
     }
     subValues[subattr] += 1;

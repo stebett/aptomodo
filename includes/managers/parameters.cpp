@@ -9,10 +9,10 @@ namespace Params {
         try {
             config = toml::parse_file(attributeParametersPath);
         } catch (const toml::parse_error &err) {
-            std::cerr << "WARNING: PARAMETERS: Parsing failed:\n" << err << "\n";
+            SPDLOG_WARN("[PARAMETERS]: Parsing failed: {}", err);
             return;
         }
-        std::cout << "INFO: PARAMETERS: Attribute file loaded successfully" << "\n";
+        SPDLOG_INFO("PARAMETERS: Attribute file loaded successfully");
 
         attributes = AttributeParameters(config);
     }
@@ -59,11 +59,11 @@ namespace Params {
         auto table = attributes.writeTable();
         std::ofstream output;
         output.open(attributeParametersPath);
-        std::cout << "INFO: PARAMETERS: file opened for saving" << "\n";
+        SPDLOG_INFO("[PARAMETERS]: file opened for saving");
         output << table;
-        std::cout << "INFO: PARAMETERS: parameters saved" << "\n";
+        SPDLOG_INFO("[PARAMETERS]: parameters saved");
         output.close();
-        std::cout << "INFO: PARAMETERS: file closed" << "\n";
+        SPDLOG_INFO("[PARAMETERS]: file closed");
         LoadAttributeParameters();
     }
 }

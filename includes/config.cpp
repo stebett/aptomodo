@@ -15,35 +15,32 @@ std::unordered_map<std::string, int> Config::indexDictFloats{};
 std::unordered_map<std::string, int> Config::indexDictBools{};
 toml::table Config::config{};
 
-void Config::SaveAttributeParameters() {//todo implement
+void Config::SaveAttributeParameters() {
+    //todo implement
 }
 
 void Config::LoadAttributeParameters() {
     try {
         config = toml::parse_file(configPath);
-        for (const auto& [key, value] : config) {
-            std::cout << "Key: " << key.data() << "\n";
+        for (const auto &[key, value]: config) {
             if (value.is_integer()) {
-                std::cout << "Type: Integer\n";
                 addInt(key.data());
             } else if (value.is_floating_point()) {
-                std::cout << "Type: Float\n";
                 addFloat(key.data());
             } else if (value.is_boolean()) {
-                std::cout << "Type: Boolean\n";
                 addBool(key.data());
             }
         }
     } catch (const toml::parse_error &err) {
-        std::cerr << "WARNING: CONFIG: Parsing failed:\n" << err << "\n";
+        SPDLOG_WARN("[CONFIG]: Parsing failed: {}", err);
         return;
     }
-    std::cout << "INFO: CONFIG: File loaded successfully" << "\n";
+    SPDLOG_INFO("[CONFIG]: File loaded successfully");
 }
 
 
 void Config::addBool(const std::string &name) {
-    storedBools[storedBoolsIndex] =  config[name].value_or(false);
+    storedBools[storedBoolsIndex] = config[name].value_or(false);
     indexDictBools[name] = storedBoolsIndex;
     storedBoolsIndex++;
     assert(storedBoolsIndex < preStoredValues && "[CONFIG] Not enough pre-stored values");
