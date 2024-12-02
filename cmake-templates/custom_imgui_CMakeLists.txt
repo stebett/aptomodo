@@ -1,0 +1,17 @@
+# vendors/imgui/CMakeLists.txt
+cmake_minimum_required(VERSION 3.10)
+
+add_library(imgui STATIC
+        imgui.cpp
+        imgui_draw.cpp
+        imgui_demo.cpp
+        imgui_widgets.cpp
+)
+
+# Add the directory containing imgui.h to the include path
+target_include_directories(imgui PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+
+# Ensure headers are available directly as "imgui.h"
+target_include_directories(imgui INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
+
+target_compile_features(imgui PUBLIC cxx_std_11)
