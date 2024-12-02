@@ -14,7 +14,7 @@ int main() {
     AnimationManager::Instantiate();
     Params::Instantiate();
 
-    Game::Level = 1;
+    Game::Level = 2;
 
     Game::Loop();
     CloseWindow(); // ~Game
