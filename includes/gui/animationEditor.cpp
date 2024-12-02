@@ -5,9 +5,9 @@
 #include "animationEditor.h"
 #include "rlImGui.h"
 #include "managers/game.h"
-#include "camera.h"
 
-constexpr const char *logPrefix{"[GUI] [Animation Editor]"};
+constexpr int gridEdge = 4;
+constexpr int gridSize = 500;
 
 void ShowAnimationEditor() {
     ImGui::Begin("Animation Editor");
@@ -21,13 +21,20 @@ void ShowAnimationEditor() {
     ImGui::End();
 }
 
+int roundUpToNextMultiple(float value, int n) {
+    if (n == 0) return value; // Avoid division by zero
+    return round(value / n) * n;}
+
 Rectangle RectangleFromTwoPoints(std::array<Vector2, 2> points) {
     const float xMin = std::min(points[0].x, points[1].x);
     const float yMin = std::min(points[0].y, points[1].y);
     const float width = std::abs(points[0].x - points[1].x);
     const float height = std::abs(points[0].y - points[1].y);
 
-    return Rectangle(xMin, yMin, width, height);
+    return Rectangle(xMin,
+                     yMin,
+                     width,
+                     height);
 }
 
 enum class Direction {
@@ -42,6 +49,8 @@ void SelectRectangles(const Camera2D &camera, std::vector<Rectangle> &recs) {
     static const Color selectedColor = PURPLE;
     static std::array<Vector2, 2> points{};
     static Vector2 *pointMoving = {};
+    static Rectangle *recMoving = nullptr;
+
     for (size_t i{0}; i < recs.size(); i++) {
         Color col = i == recs.size() - 1 ? selectedColor : baseColor;
         DrawRectangleLinesEx(recs[i], 1, col);
@@ -59,7 +68,7 @@ void SelectRectangles(const Camera2D &camera, std::vector<Rectangle> &recs) {
 
     static Vector2 mouse = newMouse;
     static Direction direction = Direction::None;
-    if (direction == Direction::None && IsKeyDown(KEY_LEFT_CONTROL)) {
+    if (direction == Direction::None && IsKeyDown(KEY_LEFT_CONTROL) && (pointMoving || recMoving)) {
         auto [x, y] = newMouse - mouse;
         if (abs(x) < abs(y)) direction = Direction::Vertical;
         if (abs(x) > abs(y)) direction = Direction::Horizontal;
@@ -67,9 +76,7 @@ void SelectRectangles(const Camera2D &camera, std::vector<Rectangle> &recs) {
     if (direction == Direction::Vertical) newMouse.x = mouse.x;
     if (direction == Direction::Horizontal) newMouse.y = mouse.y;
     if (IsKeyReleased(KEY_LEFT_CONTROL)) direction = Direction::None;
-    mouse = newMouse;
-
-    static Rectangle *recMoving = nullptr;
+    mouse = Vector2(roundUpToNextMultiple(newMouse.x, gridEdge), roundUpToNextMultiple(newMouse.y, gridEdge));
 
 
     if (IsKeyDown(KEY_LEFT_CONTROL) && IsKeyPressed(KEY_Z)) {
@@ -78,7 +85,7 @@ void SelectRectangles(const Camera2D &camera, std::vector<Rectangle> &recs) {
         points[0] = Vector2Zeros;
         points[1] = Vector2Zeros;
     }
-    if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT) && !recs.empty()) {
+    if (IsKeyDown(KEY_LEFT_CONTROL) && IsKeyPressed(KEY_V) && !recs.empty()) {
         auto newRec = recs.back();
         newRec.x = mouse.x;
         newRec.y = mouse.y;
@@ -124,8 +131,14 @@ void SelectRectangles(const Camera2D &camera, std::vector<Rectangle> &recs) {
     if (pointMoving) {
         *pointMoving = mouse;
         if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
-            recs.push_back(RectangleFromTwoPoints(points));
+            if (Vector2Distance(points[0], points[1]) > 5) {
+                recs.push_back(RectangleFromTwoPoints(points));
+            } else {
+                points[0] = Vector2Zeros;
+                points[1] = Vector2Zeros;
+            }
             pointMoving = nullptr;
+
         }
     }
 
@@ -199,15 +212,19 @@ LevelOutcome AnimationEditorLevel(Camera2D &camera) {
         texture = LoadTexture(path.c_str());
         draw = true;
         float textureLargerDimension = std::max(texture.width, texture.height);
-        float screenLargerDimension = std::max(GetScreenWidth(), GetScreenWidth());
+        std::array<int, 2> screenDimensions = {GetScreenWidth(), GetScreenHeight()};
+        int dim = texture.width > texture.height ? 0 : 1;
 
-// Calculate zoom to fit the larger texture dimension, adding a quarter margin
-        float zoomFactor = screenLargerDimension / textureLargerDimension * 1.25f;
+        float zoomFactor = screenDimensions[dim] / textureLargerDimension * 0.75f;
 
-// Set camera properties
-        camera.target = Vector2(texture.width / 2, texture.height / 2);
-        camera.offset = Vector2(texture.width / 2, texture.height / 2);
+
         camera.zoom = zoomFactor;
+        Vector2 screenDimensionsCorrected = GetScreenToWorld2D(Vector2(GetScreenWidth(), GetScreenHeight()), camera);
+
+        camera.target = Vector2(0, 0);
+        camera.offset = screenDimensionsCorrected / 2;
+
+
     }
     if (draw) DrawTexture(texture, 0, 0, RAYWHITE);
 
@@ -232,8 +249,17 @@ LevelOutcome PlayAnimationEditorLevel() {
     SPDLOG_INFO("Entering level");
     Camera2D camera{};
     camera.target = {0, 0};
+    camera.zoom = 3.4;
     Game::SetOutcome(LevelOutcome::QUIT);
-
+    RenderTexture2D grid{LoadRenderTexture(gridSize * gridEdge, gridSize * gridEdge)};
+    BeginTextureMode(grid);
+    for (int i{-gridSize}; i <= gridSize; i++) {
+        int start = -gridSize * gridEdge;
+        int j = i * gridEdge;
+        DrawLineEx(Vector2(start, j), Vector2(-start, j), 1, ColorAlpha(WHITE, 0.3));
+        DrawLineEx(Vector2(j, start), Vector2(j, -start), 1, ColorAlpha(WHITE, 0.3));
+    }
+    EndTextureMode();
     SetTargetFPS(60);
     while (!Game::IsLevelFinished()) {
         camera.zoom += GetMouseWheelMove() / 10;
@@ -252,9 +278,9 @@ LevelOutcome PlayAnimationEditorLevel() {
 
         BeginDrawing();
         BeginMode2D(camera);
-        ClearBackground(BLACK);
+        ClearBackground(DARKGRAY);
+        DrawTexture(grid.texture, -round(gridSize*gridEdge/2), -round(gridSize*gridEdge/2), RAYWHITE);
         AnimationEditorLevel(camera);
-
         EndMode2D();
         EndDrawing();
     }
