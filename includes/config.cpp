@@ -32,7 +32,7 @@ void Config::LoadAttributeParameters() {
             }
         }
     } catch (const toml::parse_error &err) {
-        SPDLOG_WARN("[CONFIG]: Parsing failed: {}", err);
+        spdlog::error("[CONFIG]: Parsing failed");
         return;
     }
     SPDLOG_INFO("[CONFIG]: File loaded successfully");

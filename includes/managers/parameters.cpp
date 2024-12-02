@@ -9,7 +9,7 @@ namespace Params {
         try {
             config = toml::parse_file(attributeParametersPath);
         } catch (const toml::parse_error &err) {
-            SPDLOG_WARN("[PARAMETERS]: Parsing failed: {}", err);
+            SPDLOG_WARN("[PARAMETERS]: Parsing failed");
             return;
         }
         SPDLOG_INFO("PARAMETERS: Attribute file loaded successfully");

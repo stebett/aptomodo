@@ -36,11 +36,18 @@ Node getTile(const Vector2 &position) {
     };
 }
 
+
 std::size_t std::hash<Node>::operator()(const Node &k) const {
-    std::size_t seed = 0;
-    boost::hash_combine(seed, k.x);
-    boost::hash_combine(seed, k.y);
-    return seed;
+    using std::size_t;
+    using std::hash;
+    using std::string;
+
+    // Compute individual hash values for first,
+    // second and third and combine them using XOR
+    // and bit shifting:
+
+    return ((hash<int>()(k.x)
+             ^ (hash<int>()(k.y) << 1)) >> 1);
 }
 
 bool CompareNodes::operator()(const std::pair<Node, float> &a, const std::pair<Node, float> &b) const {
