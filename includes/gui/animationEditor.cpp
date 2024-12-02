@@ -23,7 +23,8 @@ void ShowAnimationEditor() {
 
 int roundUpToNextMultiple(float value, int n) {
     if (n == 0) return value; // Avoid division by zero
-    return round(value / n) * n;}
+    return round(value / n) * n;
+}
 
 Rectangle RectangleFromTwoPoints(std::array<Vector2, 2> points) {
     const float xMin = std::min(points[0].x, points[1].x);
@@ -195,12 +196,16 @@ void SelectRectangles(const Camera2D &camera, std::vector<Rectangle> &recs) {
     }
 }
 
-struct Animation {
-    Texture2D texture;
-    int count;
-    std::vector<Rectangle> sources;
-};
-
+void PlayAnimation(Animation anim, Vector2 pos, double t) {
+    if (anim.frameCount < 1) return;
+    static int i = 0;
+    static double start = t;
+    if (t - start > 0.2) {
+        start = t;
+        i = (i + 1) % anim.frameCount;
+    }
+    DrawTextureRec(anim.texture, anim.sources[i], pos, WHITE);
+}
 
 LevelOutcome AnimationEditorLevel(Camera2D &camera) {
     static Texture2D texture = {};
@@ -234,10 +239,12 @@ LevelOutcome AnimationEditorLevel(Camera2D &camera) {
     if (IsKeyPressed(KEY_ENTER)) done = true;
     if (IsKeyPressed(KEY_BACKSPACE)) done = false;
 
-    static auto anim = Animation(texture, recs.size(), recs);
-
+    auto anim = Animation(texture, recs.size(), recs);
+    if (!recs.empty())
+        PlayAnimation(anim, Vector2(texture.width / 2, texture.height + 10), GetTime());
     return LevelOutcome::WIN;
 }
+
 
 /*
  * Different levels should
@@ -279,7 +286,7 @@ LevelOutcome PlayAnimationEditorLevel() {
         BeginDrawing();
         BeginMode2D(camera);
         ClearBackground(DARKGRAY);
-        DrawTexture(grid.texture, -round(gridSize*gridEdge/2), -round(gridSize*gridEdge/2), RAYWHITE);
+        DrawTexture(grid.texture, -round(gridSize * gridEdge / 2), -round(gridSize * gridEdge / 2), RAYWHITE);
         AnimationEditorLevel(camera);
         EndMode2D();
         EndDrawing();

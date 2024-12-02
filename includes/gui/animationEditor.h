@@ -13,11 +13,12 @@
 
 #include "managers/game.h"
 
-namespace ImGui {
+struct Animation {
+    Texture2D texture;
+    int frameCount;
+    std::vector<Rectangle> sources;
+};
 
-    void ShowAnimationEditor();
-
-}
 LevelOutcome AnimationEditorLevel(const Camera2D &camera);
 
 LevelOutcome PlayAnimationEditorLevel();
