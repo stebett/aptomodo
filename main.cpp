@@ -1,12 +1,14 @@
-#include "includes/constants.h"
 #include "includes/config.h"
+#include "includes/constants.h"
 #include "includes/managers/animationManager.h"
+#include "includes/managers/assets.h"
+#include "includes/managers/game.h"
+#include "includes/managers/logging.h"
 #include "includes/managers/parameters.h"
-#include "managers/assets.h"
-#include "managers/game.h"
 
 
 int main() {
+    Log::Instantiate();
     InitWindow(Const::screenWidth, Const::screenHeight, "Apto Modo");
     ToggleFullscreen();
     Config::Instantiate();
@@ -17,6 +19,6 @@ int main() {
     Game::Level = 2;
 
     Game::Loop();
-    CloseWindow(); // ~Game
+    CloseWindow();
     return 0;
 }

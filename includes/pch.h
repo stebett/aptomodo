@@ -1,5 +1,7 @@
 #pragma once
 
+#define IMGUI_DEFINE_MATH_OPERATORS
+
 // STL containers
 #include <array>
 #include <vector>
@@ -30,7 +32,6 @@
 #include <raymath.h>
 #include <entt/entity/registry.hpp>
 
-#define IMGUI_DEFINE_MATH_OPERATORS
 #include <imgui.h>
 #include <imgui_internal.h>
 
@@ -39,3 +40,7 @@
 #include <LDtkLoader/World.hpp>
 #include <LDtkLoader/Entity.hpp>
 #include <box2d/box2d.h>
+
+#include <spdlog/spdlog.h>
+#include <spdlog/sinks/basic_file_sink.h>
+#include <spdlog/sinks/stdout_color_sinks.h>
