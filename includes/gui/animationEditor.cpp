@@ -5,21 +5,10 @@
 #include "animationEditor.h"
 #include "rlImGui.h"
 #include "managers/game.h"
+#include "managers/gui.h"
 
 constexpr int gridEdge = 4;
 constexpr int gridSize = 500;
-
-void ShowAnimationEditor() {
-    ImGui::Begin("Animation Editor");
-    if (IsFileDropped()) {
-        auto file{LoadDroppedFiles()};
-        auto path = std::filesystem::path(file.paths[0]);
-        SPDLOG_INFO("Loading file {}", path.string());
-        static auto texture = LoadTexture(path.c_str());
-        rlImGuiImage(&texture);
-    }
-    ImGui::End();
-}
 
 int roundUpToNextMultiple(float value, int n) {
     if (n == 0) return value; // Avoid division by zero
@@ -156,7 +145,7 @@ void SelectRectangles(const Camera2D &camera, std::vector<Rectangle> &recs) {
         points[1] = movingTopRight;
         lastMouse = mouse;
 
-        float threshold = 3.0f;
+        float threshold = gridEdge;
         for (auto rec: recs) {
             if (rec.x == recMoving->x && rec.y == recMoving->y) continue;
 
@@ -164,8 +153,6 @@ void SelectRectangles(const Camera2D &camera, std::vector<Rectangle> &recs) {
             auto topLeft = Vector2{rec.x, rec.y};
             auto topRight = Vector2{rec.x + rec.width, rec.y};
             auto bottomLeft = Vector2{rec.x, rec.y + rec.height};
-
-
 
             // Case 1: top-right of moving to top-left of another
             if (abs(Vector2Distance(movingTopRight, topLeft)) < threshold) {
@@ -216,18 +203,15 @@ LevelOutcome AnimationEditorLevel(Camera2D &camera) {
         SPDLOG_INFO("Loading file {}", path.string());
         texture = LoadTexture(path.c_str());
         draw = true;
-        float textureLargerDimension = std::max(texture.width, texture.height);
-        std::array<int, 2> screenDimensions = {GetScreenWidth(), GetScreenHeight()};
-        int dim = texture.width > texture.height ? 0 : 1;
-
-        float zoomFactor = screenDimensions[dim] / textureLargerDimension * 0.75f;
+        Vector2 screenDimensions = Vector2(GetScreenWidth(), GetScreenHeight());
+        float zoomFactor = screenDimensions.x / texture.width * 0.75f;
 
 
         camera.zoom = zoomFactor;
         Vector2 screenDimensionsCorrected = GetScreenToWorld2D(Vector2(GetScreenWidth(), GetScreenHeight()), camera);
 
-        camera.target = Vector2(0, 0);
-        camera.offset = screenDimensionsCorrected / 2;
+        camera.target = Vector2(texture.width/2,  texture.height/2+24);
+        camera.offset = screenDimensions / 2;
 
 
     }
@@ -241,7 +225,7 @@ LevelOutcome AnimationEditorLevel(Camera2D &camera) {
 
     auto anim = Animation(texture, recs.size(), recs);
     if (!recs.empty())
-        PlayAnimation(anim, Vector2(texture.width / 2, texture.height + 10), GetTime());
+        PlayAnimation(anim, Vector2(texture.width / 2-recs[0].width/2, texture.height + 10), GetTime());
     return LevelOutcome::WIN;
 }
 
@@ -255,6 +239,10 @@ LevelOutcome PlayAnimationEditorLevel() {
     Game::EnterLevel();
     SPDLOG_INFO("Entering level");
     Camera2D camera{};
+    entt::registry registry;
+
+    Gui::Instantiate();
+
     camera.target = {0, 0};
     camera.zoom = 3.4;
     Game::SetOutcome(LevelOutcome::QUIT);
@@ -282,6 +270,7 @@ LevelOutcome PlayAnimationEditorLevel() {
         camera.target.y += static_cast<float>(bitfield[1]);
         camera.target.x -= static_cast<float>(bitfield[2]);
         camera.target.x += static_cast<float>(bitfield[3]);
+        Gui::Update(registry, camera);
 
         BeginDrawing();
         BeginMode2D(camera);
@@ -289,8 +278,13 @@ LevelOutcome PlayAnimationEditorLevel() {
         DrawTexture(grid.texture, -round(gridSize * gridEdge / 2), -round(gridSize * gridEdge / 2), RAYWHITE);
         AnimationEditorLevel(camera);
         EndMode2D();
+        Gui::Draw();
+
         EndDrawing();
+
     }
+    Gui::Draw();
+
 
     return Game::GetOutcome();
 }
