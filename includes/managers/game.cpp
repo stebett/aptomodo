@@ -22,6 +22,7 @@
 #include "gui.h"
 #include "renderingManager.h"
 #include "systems/statusUpdate.h"
+#include "gui/animationEditor.h"
 
 Texture2D Game::levelTexture;
 IntGrid Game::grid;
@@ -112,7 +113,8 @@ LevelOutcome PlayLevel(const int levelNumber) {
 
 void Game::Loop() {
     while (levelOutcome != LevelOutcome::QUIT)
-        PlayLevel(Level);
+//        PlayLevel(Level);
+        PlayAnimationEditorLevel();
 }
 
 bool Game::IsPaused() {

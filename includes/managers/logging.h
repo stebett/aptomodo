@@ -8,7 +8,10 @@
 
 namespace Log {
     void Instantiate();
-}
+
+    template<typename... T>
+    std::basic_string<char> runtime(std::string_view fmt, T &&... args);
+    }
 
 
 #endif //LOGGING_H
