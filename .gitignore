@@ -7,3 +7,5 @@
 /bin-windows/
 /cmake-build-release/
 /logs/log.txt
+vendors/imgui/CMakeLists.txt
+vendors/rlImGui/CMakeLists.txt
