@@ -35,14 +35,7 @@ include_directories(${INCLUDE})
 file(GLOB_RECURSE SOURCES ${INCLUDE}/*.cpp)
 
 
-add_executable(${EXEC} main.cpp ${SOURCES}
-        includes/systems/inputs.cpp
-        includes/systems/statusUpdate.h
-        includes/status.h
-        includes/attacks.h
-        includes/math/bezier.h
-        includes/math/bezierEditor.h
-        includes/managers/logging.h)
+add_executable(${EXEC} main.cpp ${SOURCES})
 target_link_libraries(${EXEC} PRIVATE raylib)
 target_link_libraries(${EXEC} PRIVATE box2d)
 target_link_libraries(${EXEC} PRIVATE LDtkLoader)
@@ -51,10 +44,6 @@ target_link_libraries(${EXEC} PRIVATE rlimgui)
 target_link_libraries(${EXEC} PRIVATE imgui)
 target_link_libraries(${EXEC} PRIVATE spdlog)
 target_link_libraries(${EXEC} PRIVATE tomlplusplus::tomlplusplus)
-target_include_directories(${EXEC} PRIVATE vendors/boost/libs/container_hash/include)
-target_include_directories(${EXEC} PRIVATE vendors/boost/libs/config/include)
-target_include_directories(${EXEC} PRIVATE vendors/boost/libs/describe/include)
-target_include_directories(${EXEC} PRIVATE vendors/boost/libs/mp11/include)
 
 target_compile_definitions(${EXEC} PUBLIC ASSETS_PATH="../assets/current/")
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")

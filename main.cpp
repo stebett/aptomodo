@@ -1,5 +1,5 @@
-#include "includes/config.h"
 #include "includes/constants.h"
+#include "includes/managers/configManager.h"
 #include "includes/managers/animationManager.h"
 #include "includes/managers/assets.h"
 #include "includes/managers/game.h"

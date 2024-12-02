@@ -5,10 +5,10 @@
 #include "pch.h"
 #include "behaviors.h"
 
-#include <astar.h>
+#include "astar.h"
 #include <collisions.h>
 #include <components.h>
-#include <config.h>
+#include "managers/configManager.h"
 #include <managers/animationManager.h>
 #include <managers/audioManager.h>
 #include <math/mathConstants.h>

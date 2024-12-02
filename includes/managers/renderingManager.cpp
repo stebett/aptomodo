@@ -11,7 +11,7 @@
 #include "game.h"
 #include "levelManager.h"
 #include "shadowCast.h"
-#include "../config.h"
+#include "configManager.h"
 #include "../items.h"
 #include "math/spline.h"
 

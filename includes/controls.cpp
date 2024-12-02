@@ -12,7 +12,7 @@
 #include "constants.h"
 #include "managers/audioManager.h"
 #include "managers/animationManager.h"
-#include "config.h"
+#include "managers/configManager.h"
 #include "attributes.h"
 #include "items.h"
 

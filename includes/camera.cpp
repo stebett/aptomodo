@@ -4,7 +4,7 @@
 
 #include "camera.h"
 
-#include <config.h>
+#include "managers/configManager.h"
 #include <managers/gui.h>
 #include <math/decay.h>
 

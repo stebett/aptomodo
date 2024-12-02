@@ -1,10 +1,6 @@
 [submodule "vendors/raylib"]
 	path = vendors/raylib
 	url = https://github.com/raysan5/raylib/
-[submodule "vendors/boost"]
-	path = vendors/boost
-	url = https://github.com/boostorg/boost.git
-    ignore = dirty
 [submodule "vendors/LDtkLoader"]
 	path = vendors/LDtkLoader
 	url = https://github.com/Madour/LDtkLoader

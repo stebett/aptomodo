@@ -14,11 +14,11 @@
 #include "parameters.h"
 #include "components.h"
 #include "constants.h"
-#include "config.h"
+#include "configManager.h"
 #include "enemyType.h"
 #include "game.h"
 #include "items.h"
-#include "math/bezierEditor.h"
+#include "gui/bezierEditor.h"
 
 ImGuiIO *Gui::m_io;
 

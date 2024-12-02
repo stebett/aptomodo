@@ -6,7 +6,7 @@
 
 #include <attributes.h>
 #include <components.h>
-#include <config.h>
+#include "managers/configManager.h"
 #include <items.h>
 #include <managers/game.h>
 #include <managers/gui.h>

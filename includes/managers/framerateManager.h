@@ -6,7 +6,7 @@
 #define APTOMODO_FRAMERATEMANAGER_H
 
 #include <raylib.h>
-#include "../config.h"
+#include "configManager.h"
 
 struct FramerateManager {
     unsigned int framesCounter = 0u;

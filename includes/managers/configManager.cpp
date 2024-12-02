@@ -2,7 +2,7 @@
 // Created by ginko on 16/04/24.
 //
 
-#include "config.h"
+#include "configManager.h"
 
 int Config::storedIntsIndex{0};
 int Config::storedFloatsIndex{0};
