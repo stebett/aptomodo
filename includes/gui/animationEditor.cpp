@@ -30,24 +30,45 @@ Rectangle RectangleFromTwoPoints(std::array<Vector2, 2> points) {
     return Rectangle(xMin, yMin, width, height);
 }
 
+enum class Direction {
+    Horizontal,
+    Vertical,
+    None,
+};
+
 
 void SelectRectangles(const Camera2D &camera, std::vector<Rectangle> &recs) {
-
+    static const Color baseColor = WHITE;
+    static const Color selectedColor = PURPLE;
     static std::array<Vector2, 2> points{};
     static Vector2 *pointMoving = {};
-    for (auto rec: recs)
-        DrawRectangleLinesEx(rec, 1, WHITE);
+    for (size_t i{0}; i < recs.size(); i++) {
+        Color col = i == recs.size() - 1 ? selectedColor : baseColor;
+        DrawRectangleLinesEx(recs[i], 1, col);
+    }
     if (pointMoving) {
-        DrawRectangleLinesEx(RectangleFromTwoPoints(points), 1, WHITE);
+        DrawRectangleLinesEx(RectangleFromTwoPoints(points), 1, baseColor);
     }
     if (points[0] != Vector2Zeros || points[1] != Vector2Zeros) {
         DrawCircleV(points[0], 1, BLUE);
         DrawCircleV(points[1], 1, RED);
     }
 
-
-    const Vector2 mouse = GetScreenToWorld2D(GetMousePosition(), camera);
     static Vector2 lastMouse{};
+    Vector2 newMouse{GetScreenToWorld2D(GetMousePosition(), camera)};
+
+    static Vector2 mouse = newMouse;
+    static Direction direction = Direction::None;
+    if (direction == Direction::None && IsKeyDown(KEY_LEFT_CONTROL)) {
+        auto [x, y] = newMouse - mouse;
+        if (abs(x) < abs(y)) direction = Direction::Vertical;
+        if (abs(x) > abs(y)) direction = Direction::Horizontal;
+    }
+    if (direction == Direction::Vertical) newMouse.x = mouse.x;
+    if (direction == Direction::Horizontal) newMouse.y = mouse.y;
+    if (IsKeyReleased(KEY_LEFT_CONTROL)) direction = Direction::None;
+    mouse = newMouse;
+
     static Rectangle *recMoving = nullptr;
 
 
@@ -87,7 +108,7 @@ void SelectRectangles(const Camera2D &camera, std::vector<Rectangle> &recs) {
                 }
             }
             if (success) {
-                std::rotate(recs.begin(), recs.begin() + index +1, recs.end());
+                std::rotate(recs.begin(), recs.begin() + index + 1, recs.end());
                 recMoving = &recs.back();
             }
 
