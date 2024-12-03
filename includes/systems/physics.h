@@ -5,6 +5,14 @@
 #ifndef PHYSICS_H
 #define PHYSICS_H
 
+struct Body {
+    b2BodyId id;
+    ~Body() {
+        b2DestroyBody(id);
+    }
+    operator b2BodyId() const noexcept { return id; }
+
+};
 
 class Physics {
     static b2WorldId worldId;

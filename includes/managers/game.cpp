@@ -113,8 +113,8 @@ LevelOutcome PlayLevel(const int levelNumber) {
 
 void Game::Loop() {
     while (levelOutcome != LevelOutcome::QUIT)
-//        PlayLevel(Level);
-        PlayAnimationEditorLevel();
+        PlayLevel(Level);
+//        PlayAnimationEditorLevel();
 }
 
 bool Game::IsPaused() {
