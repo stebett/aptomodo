@@ -23,7 +23,7 @@ public:
     static bool WantMouse();
     static bool WantKeyboard();
 
-    ~Gui();
+    static void Clean();
 };
 
 ImGuiIO InitGui();

@@ -283,7 +283,7 @@ LevelOutcome PlayAnimationEditorLevel() {
         EndDrawing();
 
     }
-    Gui::Draw();
+    Gui::Clean();
 
 
     return Game::GetOutcome();

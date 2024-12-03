@@ -107,7 +107,8 @@ LevelOutcome PlayLevel(const int levelNumber) {
 
         framerateManager.Update();
     }
-
+    Physics::Clean();
+    Gui::Clean();
     return Game::GetOutcome();
 }
 

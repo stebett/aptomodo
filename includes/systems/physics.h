@@ -50,6 +50,8 @@ public:
     static void Step();
 
     static b2WorldId GetWorldID();
+
+    static void Clean();
 };
 
 

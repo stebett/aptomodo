@@ -709,7 +709,7 @@ bool Gui::WantKeyboard() {
     return m_io->WantCaptureKeyboard;
 }
 
-Gui::~Gui() {
+void Gui::Clean() {
     ImGui_ImplRaylib_Shutdown();
     ImGui::DestroyContext();
 }

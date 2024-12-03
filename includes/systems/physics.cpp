@@ -113,3 +113,7 @@ void Physics::Step() {
 b2WorldId Physics::GetWorldID() {
     return worldId;
 }
+
+void Physics::Clean() {
+    b2DestroyWorld(worldId);
+}
