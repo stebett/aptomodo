@@ -40,6 +40,9 @@ public:
 
     static void Clean();
 
+    static void CleanAudio();
+
+    static void CleanLDTK();
 };
 
 

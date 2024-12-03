@@ -31,8 +31,21 @@ EnemyDataFile &Assets::GetEnemiesData() {
     return enemiesData;
 }
 
-void Assets::Clean() {
+void Assets::CleanAudio() {
+    for (auto & audioResource : audioResources) {
+        SPDLOG_INFO("[ASSETS] Unloading sound"); // maybe for debugging find a way to get the name
+        UnloadSound(audioResource.second);
+    }
+}
+
+void Assets::CleanLDTK() {
     LDTKProject.reset();
+
+}
+
+void Assets::Clean() {
+    CleanLDTK();
+    CleanAudio();
 }
 
 void Assets::InstantiateAudio() {

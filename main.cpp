@@ -20,5 +20,6 @@ int main() {
 
     Game::Loop();
     CloseWindow();
+    Assets::Clean();
     return 0;
 }
