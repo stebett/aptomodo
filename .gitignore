@@ -9,3 +9,4 @@
 /logs/log.txt
 vendors/imgui/CMakeLists.txt
 vendors/rlImGui/CMakeLists.txt
+/cmake-build-debugemscripten/

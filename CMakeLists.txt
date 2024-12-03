@@ -1,3 +1,10 @@
+if (EMSCRIPTEN)
+    set(CMAKE_TOOLCHAIN_FILE /home/ginko/.local/src/emsdk/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake)
+    set(PLATFORM WEB)
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -s USE_GLFW=3 -s ASSERTIONS=1 -s WASM=1 -s ASYNCIFY -s GL_ENABLE_GET_PROC_ADDRESS=1 -s USE_PTHREADS=1")
+    set(CMAKE_EXECUTABLE_SUFFIX ".html") # This line is used to set your executable to build with the emscripten html template so that you can directly open it.
+endif ()
+
 cmake_minimum_required(VERSION 3.27)
 project(aptomodo)
 set(CMAKE_CXX_STANDARD 23)
@@ -51,4 +58,5 @@ if (CMAKE_BUILD_TYPE STREQUAL "Debug")
 else ()
     add_compile_definitions(SPDLOG_ACTIVE_LEVEL=SPDLOG_LEVEL_ERROR)
 endif ()
-target_precompile_headers(${EXEC} PRIVATE includes/pch.h)
+
+target_precompile_headers(${EXEC} PUBLIC includes/pch.h)

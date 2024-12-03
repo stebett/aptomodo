@@ -26,7 +26,6 @@ namespace Audio {
     }
 }
 
-
 // TODO this needs to be attached to an event system: everytime the player attacks this has to trigger updateAudio and updateAnimation and so on
 //void updateAudio(entt::registry &registry) {
 //    playerView = registry.view<Player,
