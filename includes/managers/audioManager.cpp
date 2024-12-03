@@ -10,13 +10,15 @@
 namespace Audio {
     void Play(const std::string &key) {
         if (const auto sound = Assets::GetSound(key); IsSoundPlaying(sound))
-            PlaySound(LoadSoundAlias(sound));
-            // TODO this should probably be preloaded or at least limited (there could be infinite sounds)
+            PlaySound(LoadSoundAlias(sound)); // TODO this is leaking, find a workaround
+//             TODO this should probably be preloaded or at least limited (there could be infinite sounds)
         else
             PlaySound(sound);
+
+//        auto sound = Assets::GetSound(key);
     }
 
-    void Update(entt::registry& registry) {
+    void Update(entt::registry &registry) {
         registry.group<Audio::Command>().each([&registry](auto entity, auto &command) {
             Audio::Play(command.soundName);
             registry.destroy(entity);

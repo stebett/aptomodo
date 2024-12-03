@@ -36,6 +36,7 @@ void Assets::CleanAudio() {
         SPDLOG_INFO("[ASSETS] Unloading sound"); // maybe for debugging find a way to get the name
         UnloadSound(audioResource.second);
     }
+    CloseAudioDevice();
 }
 
 void Assets::CleanLDTK() {
