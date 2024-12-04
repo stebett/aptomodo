@@ -5,6 +5,8 @@
 
 #include "shadowCast.h"
 
+using uint=uint32_t;
+
 float calculateAngle(const int dx, const int dy) {
     return std::atan2(dy, dx) * 180 / M_PI;
     // TODO this shit is taking super long, maybe we can figure out a smart way to use slopes without having to calculate tangents?

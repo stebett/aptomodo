@@ -5,7 +5,7 @@
 
 
 
-constexpr char const *configPath{"../config/config.toml"};
+constexpr char const *configPath{"config.toml"};
 constexpr size_t preStoredValues{20};
 
 class Config {
@@ -47,6 +47,8 @@ public:
 
 
     static void Instantiate() {
+        SPDLOG_INFO("Working dir: ", GetWorkingDirectory());
+        SPDLOG_INFO("Instantiating Config");
         LoadAttributeParameters();
     }
 

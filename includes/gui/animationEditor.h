@@ -20,7 +20,7 @@ struct Animation {
 };
 
 LevelOutcome AnimationEditorLevel(const Camera2D &camera);
-
+LevelOutcome PlayAnimationEditorLevelOnce();
 LevelOutcome PlayAnimationEditorLevel();
 
 

@@ -200,7 +200,7 @@ LevelOutcome AnimationEditorLevel(Camera2D &camera) {
     if (!draw && IsFileDropped()) {
         auto file{LoadDroppedFiles()};
         auto path = std::filesystem::path(file.paths[0]);
-        SPDLOG_INFO("Loading file {}", path.string());
+        SPDLOG_INFO("Loading spritesheet");
         texture = LoadTexture(path.c_str());
         draw = true;
         Vector2 screenDimensions = Vector2(GetScreenWidth(), GetScreenHeight());
@@ -210,7 +210,7 @@ LevelOutcome AnimationEditorLevel(Camera2D &camera) {
         camera.zoom = zoomFactor;
         Vector2 screenDimensionsCorrected = GetScreenToWorld2D(Vector2(GetScreenWidth(), GetScreenHeight()), camera);
 
-        camera.target = Vector2(texture.width/2,  texture.height/2+24);
+        camera.target = Vector2(texture.width / 2, texture.height / 2 + 24);
         camera.offset = screenDimensions / 2;
 
 
@@ -225,7 +225,7 @@ LevelOutcome AnimationEditorLevel(Camera2D &camera) {
 
     auto anim = Animation(texture, recs.size(), recs);
     if (!recs.empty())
-        PlayAnimation(anim, Vector2(texture.width / 2-recs[0].width/2, texture.height + 10), GetTime());
+        PlayAnimation(anim, Vector2(texture.width / 2 - recs[0].width / 2, texture.height + 10), GetTime());
     return LevelOutcome::WIN;
 }
 
@@ -236,12 +236,12 @@ LevelOutcome AnimationEditorLevel(Camera2D &camera) {
  *  - have different gui windows preopened
  */
 LevelOutcome PlayAnimationEditorLevel() {
+    SPDLOG_INFO("Entering Editor Level");
     Game::EnterLevel();
-    SPDLOG_INFO("Entering level");
     Camera2D camera{};
     entt::registry registry;
 
-    Gui::Instantiate();
+//    Gui::Instantiate();
 
     camera.target = {0, 0};
     camera.zoom = 3.4;
@@ -270,7 +270,7 @@ LevelOutcome PlayAnimationEditorLevel() {
         camera.target.y += static_cast<float>(bitfield[1]);
         camera.target.x -= static_cast<float>(bitfield[2]);
         camera.target.x += static_cast<float>(bitfield[3]);
-        Gui::Update(registry, camera);
+//        Gui::Update(registry, camera);
 
         BeginDrawing();
         BeginMode2D(camera);
@@ -278,12 +278,75 @@ LevelOutcome PlayAnimationEditorLevel() {
         DrawTexture(grid.texture, -round(gridSize * gridEdge / 2), -round(gridSize * gridEdge / 2), RAYWHITE);
         AnimationEditorLevel(camera);
         EndMode2D();
-        Gui::Draw();
+//        Gui::Draw();
 
         EndDrawing();
 
     }
-    Gui::Clean();
+//    Gui::Clean();
+
+
+    return Game::GetOutcome();
+}
+
+
+RenderTexture2D loadGrid() {
+    RenderTexture2D grid{LoadRenderTexture(gridSize * gridEdge, gridSize * gridEdge)};
+    BeginTextureMode(grid);
+    for (int i{-gridSize}; i <= gridSize; i++) {
+        int start = -gridSize * gridEdge;
+        int j = i * gridEdge;
+        DrawLineEx(Vector2(start, j), Vector2(-start, j), 1, ColorAlpha(WHITE, 0.3));
+        DrawLineEx(Vector2(j, start), Vector2(j, -start), 1, ColorAlpha(WHITE, 0.3));
+    }
+    EndTextureMode();
+    return grid;
+}
+
+/*
+ * Different levels should
+ *  - load different ldtk::levels
+ *  - have different gui windows preopened
+ */
+LevelOutcome PlayAnimationEditorLevelOnce() {
+    SPDLOG_INFO("Entering Editor Level");
+    Game::EnterLevel();
+    static Camera2D camera{};
+    static entt::registry registry;
+
+//    Gui::Instantiate();
+
+//    camera.target = {0, 0};
+//    camera.zoom = 3.4;
+//    Game::SetOutcome(LevelOutcome::QUIT);
+    static RenderTexture2D grid{loadGrid()};
+
+    camera.zoom += GetMouseWheelMove() / 10;
+    std::bitset<4> bitfield;
+    if (!Game::IsPaused()) {
+        if (IsKeyPressed(KEY_W) || IsKeyDown(KEY_W)) bitfield.set(0);
+        if (IsKeyPressed(KEY_S) || IsKeyDown(KEY_S)) bitfield.set(1);
+        if (IsKeyPressed(KEY_A) || IsKeyDown(KEY_A)) bitfield.set(2);
+        if (IsKeyPressed(KEY_D) || IsKeyDown(KEY_D)) bitfield.set(3);
+    }
+    if (IsKeyPressed(KEY_Q)) Game::ExitLevel();
+    camera.target.y -= static_cast<float>(bitfield[0]);
+    camera.target.y += static_cast<float>(bitfield[1]);
+    camera.target.x -= static_cast<float>(bitfield[2]);
+    camera.target.x += static_cast<float>(bitfield[3]);
+//        Gui::Update(registry, camera);
+
+    BeginDrawing();
+    BeginMode2D(camera);
+    ClearBackground(DARKGRAY);
+    DrawTexture(grid.texture, -round(gridSize * gridEdge / 2), -round(gridSize * gridEdge / 2), RAYWHITE);
+    AnimationEditorLevel(camera);
+    EndMode2D();
+//        Gui::Draw();
+
+    EndDrawing();
+
+//    Gui::Clean();
 
 
     return Game::GetOutcome();

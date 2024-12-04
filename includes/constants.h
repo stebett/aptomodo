@@ -24,8 +24,8 @@ namespace rng {
     static std::uniform_int_distribution<int> uniform_neg500_500(-500, 500);
 }
 
-constexpr std::string getAssetPath(const std::string &assetName) {
-    return ASSETS_PATH "" + assetName;
+inline std::string getAssetPath(const std::string &assetName) {
+    return (std::filesystem::path(ROOT_PATH) / std::filesystem::path(ASSETS_PATH) / std::filesystem::path(assetName)).string();
 }
 
 const std::unordered_map<std::string, Color> colorMap = {

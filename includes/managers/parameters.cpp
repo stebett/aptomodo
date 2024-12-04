@@ -6,8 +6,11 @@
 
 namespace Params {
     void LoadAttributeParameters() {
+        auto path = std::filesystem::path(ROOT_PATH) / std::filesystem::path(CONFIG_PATH) / std::filesystem::path(attributeParametersPath);
+        SPDLOG_INFO("Config trying to parse: ");
+        SPDLOG_INFO(path);
         try {
-            config = toml::parse_file(attributeParametersPath);
+            config = toml::parse_file(path.string());
         } catch (const toml::parse_error &err) {
             SPDLOG_WARN("[PARAMETERS]: Parsing failed");
             return;

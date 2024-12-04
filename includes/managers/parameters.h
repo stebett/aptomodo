@@ -12,7 +12,7 @@
 #include <string>
 #include "toml++/toml.hpp"
 
-constexpr char const * attributeParametersPath{"../config/attributes.toml"};
+constexpr char const * attributeParametersPath{"attributes.toml"};
 
 struct AttributeParameters {
     int expByLevel;

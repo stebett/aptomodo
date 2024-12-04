@@ -7,12 +7,16 @@
 #include <constants.h>
 
 bool EnemyDataFile::loadCSV(const std::string &filename) {
-    std::ifstream file(filename);
+    auto path = std::filesystem::path(ROOT_PATH) / std::filesystem::path(CONFIG_PATH) /  std::filesystem::path(filename);
+    SPDLOG_INFO("Config trying to parse: ");
+    SPDLOG_INFO(path);
+
+    std::ifstream file(path);
     if (!file.is_open()) {
-        SPDLOG_ERROR("[ENEMIES]:  Could not open enemy type file: {}", filename);
+        SPDLOG_ERROR("[ENEMIES]:  Could not open enemy type file");
         return false;
     }
-    SPDLOG_INFO("[ENEMIES]:   Reading type file : {}", filename);
+    SPDLOG_INFO("[ENEMIES]:   Reading type file");
 
     std::string line;
     if (std::getline(file, line)) {
@@ -73,7 +77,7 @@ EnemyType& EnemyDataFile::getType(const std::string & name) {
             return enemyType;
         }
     }
-    SPDLOG_WARN("[ENEMIES]: did not find enemy of type: {} ", name);
+    SPDLOG_WARN("[ENEMIES]: did not find enemy of type");
 
     return enemyStats[0];
 }

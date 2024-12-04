@@ -39,7 +39,16 @@
 #include <LDtkLoader/World.hpp>
 #include <LDtkLoader/Entity.hpp>
 #include <box2d/box2d.h>
+//
+//#include <spdlog/spdlog.h>
+//#include <spdlog/sinks/basic_file_sink.h>
+//#include <spdlog/sinks/stdout_color_sinks.h>
 
-#include <spdlog/spdlog.h>
-#include <spdlog/sinks/basic_file_sink.h>
-#include <spdlog/sinks/stdout_color_sinks.h>
+
+
+#define SPDLOG_TRACE(fmt, ...) std::cout << "[TRACE] " << fmt << "\n"
+#define SPDLOG_DEBUG(fmt, ...) std::cout << "[DEBUG] " << fmt << "\n"
+#define SPDLOG_INFO(fmt, ...) std::cout << "[INFO] " << fmt << "\n"
+#define SPDLOG_WARN(fmt, ...) std::cout << "[WARN] " << fmt << "\n"
+#define SPDLOG_ERROR(fmt, ...) std::cout << "[ERROR] " << fmt << "\n"
+#define SPDLOG_CRITICAL(fmt, ...) std::cout << "[CRITICAL] " << fmt << "\n"

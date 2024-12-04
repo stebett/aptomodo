@@ -4,6 +4,8 @@
 
 #ifndef GAME_H
 #define GAME_H
+#include <camera.h>
+#include "framerateManager.h"
 #include "intGrid.h"
 
 enum class LevelOutcome {
@@ -20,6 +22,10 @@ private:
     static bool paused;;
     static bool levelFinished;
     static LevelOutcome levelOutcome;
+    static entt::registry registry;
+
+    static GameCamera camera;
+    static FramerateManager framerateManager;
 
 public:
     static int Level;
@@ -42,6 +48,14 @@ public:
     [[nodiscard]] static bool IsLevelFinished();
 
     [[nodiscard]] static LevelOutcome GetOutcome();
+
+    static void LoopOnce();
+
+    static void CleanLevel();
+
+    static void PrepareLevel(const int levelNumber);
+
+    static LevelOutcome PlayLevelOnce();
 };
 
 

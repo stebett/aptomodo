@@ -24,7 +24,7 @@ struct EnemyType {
 };
 
 struct EnemyDataFile {
-    std::string path{"../config/enemies.csv"};
+    std::string path{"config/enemies.csv"};
     std::vector<std::string> headers;
     std::vector<EnemyType> enemyStats;
 

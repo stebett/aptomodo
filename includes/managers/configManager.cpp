@@ -21,7 +21,10 @@ void Config::SaveAttributeParameters() {
 
 void Config::LoadAttributeParameters() {
     try {
-        config = toml::parse_file(configPath);
+        auto path = std::filesystem::path(ROOT_PATH) / std::filesystem::path(CONFIG_PATH) / std::filesystem::path(configPath);
+        SPDLOG_INFO("Config trying to parse: ");
+        SPDLOG_INFO(path);
+        config = toml::parse_file(path.string());
         for (const auto &[key, value]: config) {
             if (value.is_integer()) {
                 addInt(key.data());
@@ -32,7 +35,7 @@ void Config::LoadAttributeParameters() {
             }
         }
     } catch (const toml::parse_error &err) {
-        spdlog::error("[CONFIG]: Parsing failed");
+        SPDLOG_ERROR("[CONFIG]: Parsing failed");
         return;
     }
     SPDLOG_INFO("[CONFIG]: File loaded successfully");
