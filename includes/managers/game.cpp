@@ -117,9 +117,9 @@ LevelOutcome PlayLevel(const int levelNumber) {
 void Game::Loop() {
     SPDLOG_INFO("Entering Loop");
 
-    while (levelOutcome != LevelOutcome::QUIT)
-//        PlayLevel(Level);
-        PlayAnimationEditorLevel();
+    while (Game::levelOutcome != LevelOutcome::QUIT)
+        PlayLevel(Level);
+//        PlayAnimationEditorLevel();
 }
 
 /*
@@ -219,7 +219,7 @@ void Game::CleanLevel() {
 void Game::LoopOnce() {
     SPDLOG_INFO("Entering Emscripten Loop");
     PlayLevelOnce();
-
+//
 //    PlayAnimationEditorLevelOnce();
 }
 
