@@ -3,6 +3,7 @@
 //
 
 #include "attacks.h"
+#include "managers/game.h"
 
 #include <timer.h>
 #include <systems/physics.h>
@@ -17,11 +18,11 @@ auto createShapeHelper = [](b2BodyId bodyId, b2Polygon box) {
 namespace Attacks {
     void Update(entt::registry &registry) {
         const auto now = GetTime();
-        registry.view<Attacks::Attack>().each([&registry, now](auto entity, const auto attack) {
-            auto timer{registry.get<PassiveTimer>(entity)};
+        Game::registry.view<Attacks::Attack>().each([now](auto entity, const auto attack) {
+            auto timer{Game::registry.get<PassiveTimer>(entity)};
             const auto t = (now - timer.start) / timer.duration;
-            auto bodyCouple{registry.get<BodyCouple>(entity)};
-            const auto transformer = registry.get<LocalTransformSpline>(entity);
+            auto bodyCouple{Game::registry.get<BodyCouple>(entity)};
+            const auto transformer = Game::registry.get<LocalTransformSpline>(entity);
             auto oldTransform{transformer.get(t)};
             auto ownerTransform{b2Body_GetTransform(bodyCouple.owner)};
             auto newTransform = b2MulTransforms(ownerTransform, oldTransform);
@@ -34,7 +35,7 @@ namespace Attacks {
 
             if (now - timer.start > timer.duration) {
                 Physics::DestroyBody(bodyCouple.weapon);;
-                registry.destroy(entity);
+                Game::registry.destroy(entity);
             }
         });
     }

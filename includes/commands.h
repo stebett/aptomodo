@@ -4,106 +4,67 @@
 
 #ifndef COMMANDS_H
 #define COMMANDS_H
+
 #include <camera.h>
+#include <type_traits>
 
 
-class CommandBase {
+template<typename Callable, typename... Args>
+concept InvocableWith = requires(Callable c, Args... args) {
+    std::invoke(c, args...); // Ensures the callable can be invoked with the arguments
+};
+
+
+template<typename Callable, typename... Args> requires InvocableWith<Callable, Args...>
+class Delayed {
+    Callable callable;
+    std::tuple<Args...> args;
+
 public:
-    virtual ~CommandBase() = default;
 
-    virtual void execute() = 0;
+    explicit Delayed(Callable callable, Args... args)
+            : callable(std::move(callable)), args(std::make_tuple(std::forward<Args>(args)...)) {}
+
+    void operator()() {
+        std::apply([this](auto &&... function_args) {
+            // Forward arguments, unwrapping references if necessary
+            std::invoke(callable, std::forward<decltype(function_args)>(function_args)...);
+        }, args);
+    }
 };
-
-
-struct ExecuteLate {};
-struct CommandHolder {
-    std::unique_ptr<CommandBase> command;
-};
-
-
-
 namespace Command {
-    class Move final : public CommandBase {
-        entt::registry &registry;
-        entt::entity self;
-        std::bitset<4> bitfield;
 
-    public:
-        Move(entt::registry &registry, entt::entity self, std::bitset<4> bitfield);
+    void Move(entt::entity self, std::bitset<4> bitfield);
 
-        void execute() override;
-    };
+    void Dash(entt::entity self);
 
-    class Dash final : public CommandBase {
-        entt::registry &registry;
-        const entt::entity self;
+    void MoveCamera(GameCamera &camera, std::bitset<4> bitfield, float delta);
 
-    public:
-        Dash(entt::registry &registry, entt::entity self);
+    void Attack(entt::entity self, Vector2 mousePosition);
 
-        void execute() override;
-    };
+    void PickUp(entt::entity self);
 
-    class MoveCamera final : public CommandBase {
-        GameCamera &camera;
-        std::bitset<4> bitfield;
-        float delta{};
+    void Quit();
 
-    public:
-        MoveCamera(GameCamera &camera, std::bitset<4> bitfield, float delta);
+    void Restart();
 
-        void execute() override;
-    };
+    void Pause();
 
-    class Attack final : public CommandBase {
-        entt::registry &registry;
-        entt::entity self;
-        Vector2 mousePosition;
+    void SelectEnemy(const Vector2 &mouse_position);
 
-    public:
-        Attack(entt::registry &registry, entt::entity self, Vector2 mousePosition);
+    void Mute();
 
-        void execute() override;
-    };
-
-    class PickUp final : public CommandBase {
-        entt::registry &registry;
-        entt::entity self;
-
-    public:
-        PickUp(entt::registry &registry, entt::entity self);
-
-        void execute() override;
-    };
-
-    class Quit final : public CommandBase {
-    public:
-        void execute() override;
-    };
-
-    class Restart final : public CommandBase {
-    public:
-        void execute() override;
-    };
-
-    class Pause final : public CommandBase {
-    public:
-        void execute() override;
-    };
-
-    class SelectEnemy final : public CommandBase {
-        entt::registry &registry;
-        Vector2 mousePosition;
-
-    public:
-        SelectEnemy(entt::registry &registry, const Vector2 &mouse_position);
-
-        void execute() override;
-    };
-
-    class Mute final : public CommandBase {
-    public:
-        void execute() override;
-    };
 }
+
+using DelayedCommandVariant = std::variant<
+        Delayed<void (*)(entt::entity, std::bitset<4>), entt::entity, std::bitset<4>>,
+        Delayed<void (*)(entt::entity), entt::entity>,
+        Delayed<void (*)(GameCamera &, const std::bitset<4>, const float), GameCamera, std::bitset<4>, float>,
+        Delayed<void (*)(entt::entity, const std::bitset<4>), entt::entity, const std::bitset<4>>,
+        Delayed<void (*)(entt::entity, Vector2), entt::entity, Vector2>,
+        Delayed<void (*)(const Vector2 &), Vector2>,
+        Delayed<void (*)()>
+>;
+
+
 #endif //COMMANDS_H

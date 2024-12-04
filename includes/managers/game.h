@@ -22,7 +22,6 @@ private:
     static bool paused;;
     static bool levelFinished;
     static LevelOutcome levelOutcome;
-    static entt::registry registry;
 
     static GameCamera camera;
     static FramerateManager framerateManager;
@@ -31,6 +30,7 @@ public:
     static int Level;
     static Texture2D levelTexture;
     static IntGrid grid;
+    static entt::registry registry;
 
 
     static void Loop();

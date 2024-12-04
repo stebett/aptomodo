@@ -6,11 +6,12 @@
 #define INPUTS_H
 
 #include <camera.h>
+#include "commands.h"
 
 namespace Inputs {
-    void Listen(entt::registry &registry, GameCamera &camera, float delta);
+    std::vector<DelayedCommandVariant> Listen(entt::registry &registry, GameCamera &camera, float delta);
 
-    void Update(entt::registry &registry);
+    void Update(std::vector<DelayedCommandVariant>);
 }
 
 

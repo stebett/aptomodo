@@ -54,41 +54,41 @@ void PlayerFaceMouse(entt::registry &registry, const entt::entity player, const 
  */
 LevelOutcome PlayLevel(const int levelNumber) {
     Game::EnterLevel();
-    entt::registry registry;
+    Game::registry = entt::registry();
     Gui::Instantiate();
     Physics::Instantiate();
 
     GameCamera camera{};
 
-    spawnEntities(registry, Level::LoadEntities(Assets::GetLevel(levelNumber)));
+    spawnEntities(Game::registry, Level::LoadEntities(Assets::GetLevel(levelNumber)));
     Game::levelTexture = Level::LoadLevelTexture(Assets::GetLevel(levelNumber));
     Game::grid = Level::LoadIntGrid(Assets::GetLevel(levelNumber));
     // Assets::Clean();
 
-    const auto player = registry.view<Player>().front();
-    const auto &playerPosition = registry.get<Position>(player);
-    const auto &health = registry.get<Health>(player);
+    const auto player = Game::registry.view<Player>().front();
+    const auto &playerPosition = Game::registry.get<Position>(player);
+    const auto &health = Game::registry.get<Health>(player);
 
     FramerateManager framerateManager;
 
     while (!Game::IsLevelFinished()) {
         if (!Game::IsPaused()) {
-            StatusEffect::Update(registry);
-            Attacks::Update(registry);
+            StatusEffect::Update(Game::registry);
+            Attacks::Update(Game::registry);
             framerateManager.accumulator += framerateManager.deltaTime;
             while (framerateManager.accumulator >= Physics::timeStep) {
                 Physics::Step();
                 framerateManager.accumulator -= Physics::timeStep;
             }
-            Physics::Update(registry);
+            Physics::Update(Game::registry);
 
-            Space::Update(registry, camera.GetPlayerCamera());
-            AI::Update(registry, player);
-            PlayerFaceMouse(registry, player, camera);
+            Space::Update(Game::registry, camera.GetPlayerCamera());
+            AI::Update(Game::registry, player);
+            PlayerFaceMouse(Game::registry, player, camera);
         }
-        Gui::Update(registry, camera);
+        Gui::Update(Game::registry, camera);
         camera.Update(playerPosition, framerateManager.deltaTime);
-        Audio::Update(registry);
+        Audio::Update(Game::registry);
 
         BeginDrawing();
         BeginMode2D(camera);
@@ -96,9 +96,9 @@ LevelOutcome PlayLevel(const int levelNumber) {
         ClearBackground(WHITE);
         Rendering::DrawLevel(camera.GetPlayerCamera());
 
-        Inputs::Listen(registry, camera, framerateManager.deltaTime);
-        Inputs::Update(registry);
-        Rendering::Draw(registry, camera.GetPlayerCamera(), framerateManager.framesCounter);
+        auto commands = Inputs::Listen(Game::registry, camera, framerateManager.deltaTime);
+        Inputs::Update(commands);
+        Rendering::Draw(Game::registry, camera.GetPlayerCamera(), framerateManager.framesCounter);
         // This has to stay after updatePlayer
         EndMode2D();
 
@@ -162,8 +162,8 @@ LevelOutcome Game::PlayLevelOnce() {
     ClearBackground(WHITE);
     Rendering::DrawLevel(camera.GetPlayerCamera());
 
-    Inputs::Listen(registry, camera, framerateManager.deltaTime);
-    Inputs::Update(registry);
+    auto commands = Inputs::Listen(registry, camera, framerateManager.deltaTime);
+    Inputs::Update(commands);
     Rendering::Draw(registry, camera.GetPlayerCamera(), framerateManager.framesCounter);
     // This has to stay after updatePlayer
     EndMode2D();
