@@ -96,7 +96,7 @@ LevelOutcome PlayLevel(const int levelNumber) {
         ClearBackground(WHITE);
         Rendering::DrawLevel(camera.GetPlayerCamera());
 
-        auto commands = Inputs::Listen(Game::registry, camera, framerateManager.deltaTime);
+        const auto commands = Inputs::Listen(Game::registry, camera, framerateManager.deltaTime);
         Inputs::Update(commands);
         Rendering::Draw(Game::registry, camera.GetPlayerCamera(), framerateManager.framesCounter);
         // This has to stay after updatePlayer

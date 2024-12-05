@@ -21,17 +21,16 @@ class Delayed {
     std::tuple<Args...> args;
 
 public:
-
     explicit Delayed(Callable callable, Args... args)
-            : callable(std::move(callable)), args(std::make_tuple(std::forward<Args>(args)...)) {}
+            : callable(callable), args(std::make_tuple(std::forward<Args>(args)...)) {}
 
     void operator()() {
         std::apply([this](auto &&... function_args) {
-            // Forward arguments, unwrapping references if necessary
             std::invoke(callable, std::forward<decltype(function_args)>(function_args)...);
         }, args);
     }
 };
+
 namespace Command {
 
     void Move(entt::entity self, std::bitset<4> bitfield);
@@ -55,16 +54,5 @@ namespace Command {
     void Mute();
 
 }
-
-using DelayedCommandVariant = std::variant<
-        Delayed<void (*)(entt::entity, std::bitset<4>), entt::entity, std::bitset<4>>,
-        Delayed<void (*)(entt::entity), entt::entity>,
-        Delayed<void (*)(GameCamera &, const std::bitset<4>, const float), GameCamera, std::bitset<4>, float>,
-        Delayed<void (*)(entt::entity, const std::bitset<4>), entt::entity, const std::bitset<4>>,
-        Delayed<void (*)(entt::entity, Vector2), entt::entity, Vector2>,
-        Delayed<void (*)(const Vector2 &), Vector2>,
-        Delayed<void (*)()>
->;
-
 
 #endif //COMMANDS_H

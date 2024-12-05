@@ -15,16 +15,11 @@
 #include "attacks.h"
 #include "math/mathConstants.h"
 #include "status.h"
-#include <memory>
-#include <tuple>
-#include <utility>
 #include <bitset>
-#include <functional>
 
 
 namespace Command {
 
-// Move Command
     void Move(entt::entity self, const std::bitset<4> bitfield) {
         const auto &attributes = Game::registry.get<Attributes>(self);
         const auto body = Game::registry.get<b2BodyId>(self);
@@ -43,13 +38,11 @@ namespace Command {
         b2Body_SetLinearVelocity(body, {velocity.x, velocity.y});
     }
 
-// Dash Command
     void Dash(entt::entity self) {
         const float dashDuration = Config::GetFloat("dash_duration");
         Game::registry.emplace_or_replace<StatusEffect::Dash>(self, dashDuration);
     }
 
-// MoveCamera Command
     void MoveCamera(GameCamera &camera, const std::bitset<4> bitfield, const float delta) {
         Vector2 movement = {0, 0};
         movement.y -= 4.0f * static_cast<float>(bitfield[0]);
@@ -59,7 +52,6 @@ namespace Command {
         camera.MoveFreeCamera(movement);
     }
 
-// Attack Command
     void Attack(entt::entity self, const Vector2 mousePosition) {
         auto &attackTimer = Game::registry.get<AttackTimer>(self).timer;
         const auto &attributes = Game::registry.get<Attributes>(self);
@@ -90,10 +82,8 @@ namespace Command {
         float clickAngle = atan2(mousePosition.y - playerPosition.y, mousePosition.x - playerPosition.x) *
                            Math::Const::radToDeg;
 
-        // You can re-add code for attack effects or interactions with enemies here
     }
 
-// PickUp Command
     void PickUp(entt::entity self) {
         const Position playerPosition = Game::registry.get<Position>(self);
         for (auto [entity, position]: Game::registry.view<Item, Position>().each()) {
@@ -105,24 +95,20 @@ namespace Command {
         }
     }
 
-// Quit Command
     void Quit() {
         Game::SetOutcome(LevelOutcome::QUIT);
         Game::ExitLevel();
     }
 
-// Restart Command
     void Restart() {
         Game::SetOutcome(LevelOutcome::RESTART);
         Game::ExitLevel();
     }
 
-// Pause Command
     void Pause() {
         Game::Pause();
     }
 
-// SelectEnemy Command
     void SelectEnemy(const Vector2 &mouse_position) {
         const auto enemyView = Game::registry.view<Enemy, ToRender, Living, Radius, Position>();
         Game::registry.clear<Selected>();
@@ -134,11 +120,8 @@ namespace Command {
         }
     }
 
-// Mute Command
     void Mute() {
         GetMasterVolume() == 0 ? SetMasterVolume(100) : SetMasterVolume(0);
     }
 
-
-}  // namespace Command
-;
+}

@@ -38,30 +38,6 @@ auto createShape = [](b2BodyId bodyId, b2Polygon box) {
     return b2CreatePolygonShape(bodyId, &shapeDef, &box);
 };
 
-//Camera2D spawn() {
-//    Camera2D Camera{};
-//    Camera.zoom = 1;
-//    Camera.target.x = 0;
-//    Camera.target.y = 0;
-//    Camera.rotation = 0;
-//    Camera.offset.x = GetScreenWidth() / 2.0f;
-//    Camera.offset.y = GetScreenHeight() / 2.0f;
-//    return Camera;
-//}
-//
-//void imguiEasingEditor() {
-//    ImGui::Begin("Easing editor");
-//
-//    static auto camera = spawn();
-//    ClearBackground(WHITE);
-//
-//    BeginMode2D(camera);
-//
-//
-//    EndMode2D();
-//    ImGui::End();
-//}
-
 
 void imguiBodyEditor(entt::registry &registry, LocalSpline spline) {
     ImGui::SeparatorText("Body Editor`");

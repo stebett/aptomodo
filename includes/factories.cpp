@@ -58,7 +58,7 @@ entt::entity spawnEnemyFromFile(entt::registry &registry, Position position, con
     chasing.timer.StartBehind(100);;
     registry.emplace<ID>(e, id++);
     registry.emplace<Strategy::Strategy>(e, std::make_unique<Strategy::Melee>(registry, e));
-    //TODO need to be sure that this gets deleted
+    //TODO This leaks (how?)
     registry.emplace<Living>(e);
     registry.emplace<AttackTimer>(e);
     registry.emplace<LookAngle>(e, 0.0f);
