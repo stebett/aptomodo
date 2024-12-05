@@ -52,7 +52,6 @@ void PlayerFaceMouse(const entt::entity player, const Camera2D &camera) {
  */
 LevelOutcome PlayLevel(const int levelNumber) {
     Game::EnterLevel();
-    Game::registry = entt::registry();
     Gui::Instantiate();
     Physics::Instantiate();
 
@@ -72,7 +71,7 @@ LevelOutcome PlayLevel(const int levelNumber) {
     while (!Game::IsLevelFinished()) {
         if (!Game::IsPaused()) {
             StatusEffect::Update();
-            Attacks::Update();
+//            Attacks::Update();
             framerateManager.accumulator += framerateManager.deltaTime;
             while (framerateManager.accumulator >= Physics::timeStep) {
                 Physics::Step();
@@ -238,6 +237,7 @@ void Game::ExitLevel() {
 }
 
 void Game::EnterLevel() {
+    registry = entt::registry();
     levelFinished = false;
     levelOutcome = LevelOutcome::NONE;
 }

@@ -53,6 +53,7 @@ struct Position {
     Position(float x, float y);;
 };
 
+
 struct Triangle {
     Vector2 v1;
     Vector2 v2;

@@ -109,12 +109,13 @@ bool reachedTile(const Vector2 &position, const Vector2 &target) {
 Status GetRandomTarget::update(entt::entity self, entt::entity player) {
     const auto position = Game::registry.get<Position>(self);
 
-    if (Game::registry.all_of<Target>(self) || reachedTile(position, Game::registry.get<Target>(self))) {
-        if (emplaceRandomTarget(self)) {
+    if (!Game::registry.all_of<Target>(self))
+        if (emplaceRandomTarget(self))
             return SUCCESS;
-        }
-        return FAILURE;
-    }
+
+    if (reachedTile(position, Game::registry.get<Target>(self)))
+        if (emplaceRandomTarget(self))
+            return SUCCESS;
     return SUCCESS;
 }
 
@@ -127,7 +128,8 @@ Status GetPlayerTarget::update(entt::entity self, entt::entity player) {
     return SUCCESS;
 }
 
-void adjustLookAngle(const Vector2 &target, LookAngle &lookAngle, float step = 8.0f) {
+void adjustLookAngle(const Vector2 &target, LookAngle &lookAngle,
+                     float step = 8.0f) { // TODO this can be done by box2d maybe
     // Compute the target angle in degrees
     float targetAngle = atan2(target.y, target.x) * RAD2DEG;
 
@@ -149,34 +151,6 @@ void adjustLookAngle(const Vector2 &target, LookAngle &lookAngle, float step = 8
 
     // Normalize the result to [0, 360)
     lookAngle = fmod(lookAngle + 360.0f, 360.0f);
-}
-
-bool facesTargetDirection(const Vector2 &target, const LookAngle &lookAngle) {
-    return abs(lookAngle - fmod(atan2(target.y, target.x) * RAD2DEG + 360.0f, 360.0f)) < 0.1;
-}
-
-void faceDirection(const Vector2 &target, LookAngle &lookAngle) {
-    //    lookAngle = Lerp(lookAngle, atan2(target.y - position.y, target.x - position.x) * RAD2DEG, turningRate);
-    lookAngle = atan2(target.y, target.x) * RAD2DEG;
-}
-
-void solveCollisionEnemyEnemy(const int id, Vector2 &futurePos, const float radius) {
-    static Vector2 distance;
-    static Vector2 enemyPos;
-    static float overlap;
-    auto enemyView = Game::registry.view<Living, Radius, Position, ID>();
-    for (auto [enemy, enemyRadius, enemyPosition, enemyID]: enemyView.each()) {
-        if (enemyID == id) continue;
-        enemyPos = {enemyPosition.x, enemyPosition.y};
-        if (CheckCollisionCircles(futurePos, radius, enemyPos, enemyRadius)) {
-            distance = Vector2Subtract(enemyPos, futurePos);
-            overlap = radius + enemyRadius - Vector2Length(distance);
-            if (overlap > 0) {
-                futurePos = Vector2Subtract(futurePos, Vector2Scale(Vector2Normalize(distance), overlap));
-                solveCircleRecCollision(futurePos, radius);
-            }
-        }
-    }
 }
 
 Status MoveTowardsTarget::update(entt::entity self, entt::entity player) {
