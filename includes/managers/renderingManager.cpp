@@ -59,7 +59,6 @@ namespace Rendering {
         }
     }
 
-
     void drawAttacksBB() {
         Game::registry.view<Attacks::Attack, Attacks::BodyCouple>().each([](auto entity, auto sword, auto bodyCouple) {
             b2ShapeId shape{};
@@ -97,7 +96,6 @@ namespace Rendering {
         });
     }
 
-
     void drawLivingBB() {
         auto livingView = Game::registry.view<Living, ToRender, b2BodyId, Radius, Position, LookAngle, ColorBB>();
         for (auto [entity, body, radius, position, lookAngle, color]: livingView.each()) {
@@ -130,9 +128,6 @@ namespace Rendering {
         }
     }
 
-    /*
-     * If player is close enough -> Pop message
-     */
     void drawTooltips() {
         auto player = Game::registry.view<Player>().front();
         auto playerPosition = Game::registry.get<Position>(player);
@@ -184,7 +179,6 @@ namespace Rendering {
         }
     }
 
-    // TODO DrawSplineCatmullRom
     void drawEnemyExtra() {
         auto selectedView = Game::registry.view<Living, ToRender, Selected, Radius, Position, LookAngle, ColorBB, Path, Target, Chasing>();
         for (auto [entity, radius, position, lookAngle, color, path, target, chasing]: selectedView.each()) {
@@ -217,7 +211,6 @@ namespace Rendering {
             }
         }
     }
-
 
     void Draw(const Camera2D &camera, const unsigned int frame) {
         drawItems();

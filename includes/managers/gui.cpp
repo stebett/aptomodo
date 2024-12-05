@@ -22,7 +22,6 @@
 
 ImGuiIO *Gui::m_io;
 
-
 auto createBody = [](const entt::entity entity) {
     b2BodyDef bodyDef = b2DefaultBodyDef();
     bodyDef.type = b2_kinematicBody;
@@ -102,7 +101,7 @@ void imguiBodyEditor(LocalSpline spline) {
     auto entity{Game::registry.create()};
     auto body{createBody(entity)};
     auto box{b2MakeBox(s.startDim1, s.startDim2)};
-    auto shape{createShape(body, box)};
+    createShape(body, box);
 
     if (force_go || (go && ((lastTime + duration + interval) < GetTime()))) {
         force_go = false;
@@ -372,7 +371,7 @@ void imguiEnemyAttr() {
                 default:
                     color = ImVec4(255, 255, 255, 255);
             }
-            ImGui::TextColored(color, name);
+            ImGui::TextColored(color, "%s", name);
             ImGui::PopID();
             n++;
         }
@@ -397,7 +396,7 @@ void imguiPlayerAttr() {
 
 void imguiAttributesMultipliers() {
     ImGui::Begin("Attribute multipliers");
-    if (ImGui::Button("Save")) { Params::SaveAttributeParameters(); };
+    if (ImGui::Button("Save")) { Params::SaveAttributeParameters(); }
     int n = {0};
     for (auto subattr: AttributeConstants::subAttributeVec) {
         ImGui::PushID(n);
@@ -406,7 +405,7 @@ void imguiAttributesMultipliers() {
         if (disableR) ImGui::BeginDisabled(true);
         if (ImGui::Button("R")) {
             Params::Multiplier(subattr) = Params::MultiplierOriginal(subattr);
-        };
+        }
         if (disableR) ImGui::EndDisabled();
         ImGui::SameLine();
         ImGui::DragFloat(AttributeConstants::subAttributeString[subattr],
@@ -432,7 +431,7 @@ void imguiAttributes() {
         ImGui::SameLine();
         ImGui::ProgressBar(static_cast<float>(experience - attributes.expForCurrentLevel()) /
                            static_cast<float>(attributes.expToNextLevel() - attributes.expForCurrentLevel()));
-        ImGui::Text("Exp %d", experience);
+        ImGui::Text("Exp %d", experience.value);
 
         ImGui::SeparatorText(std::format("Attributes - free points: {}", attributes.freeAttrPoints()).c_str());
         for (auto attr: AttributeConstants::attributeVec) {
@@ -535,7 +534,7 @@ void imguiConfig() {
 
 void imguiSubAttributesStartValues() {
     ImGui::Begin("Attribute startValues");
-    if (ImGui::Button("Save")) { Params::SaveAttributeParameters(); };
+    if (ImGui::Button("Save")) { Params::SaveAttributeParameters(); }
     int n = {0};
     for (auto subattr: AttributeConstants::subAttributeVec) {
         ImGui::PushID(n);
@@ -544,7 +543,7 @@ void imguiSubAttributesStartValues() {
         if (disableR) ImGui::BeginDisabled(true);
         if (ImGui::Button("R")) {
             Params::StartValue(subattr) = Params::StartValueOriginal(subattr);
-        };
+        }
         if (disableR) ImGui::EndDisabled();
         ImGui::SameLine();
         ImGui::DragFloat(AttributeConstants::subAttributeString[subattr],
@@ -557,84 +556,41 @@ void imguiSubAttributesStartValues() {
     ImGui::End();
 }
 
+template<typename Func, typename... Args>
+void showChecked(const char *label, Func &&func, Args &&... args) {
+    static std::unordered_map<std::string, bool> checkboxStates;
+    bool &show_window = checkboxStates[label];
+    ImGui::Checkbox(label, &show_window);
+    if (show_window) {
+        std::invoke(std::forward<Func>(func), std::forward<Args>(args)...);
+    }
+}
 
 void imguiWindowMain(ImGuiIO io, const Camera2D &camera) {
-    static bool show_config_window = false;
-    static bool show_player_window = false;
-    static bool show_instructions_window = false;
-    static bool show_multipliers = false;
-    static bool show_start_values = false;
-    static bool show_cursor_window = false;
-    static bool show_enemy_types_window = false;
-    static bool show_local_space_window = false;
-    static bool show_level_window = false;
     static auto inEditor = Config::GetBoolPtr("in_editor");
 
-    auto checkboxWindow = [
-
-    ]() {};
-
     ImGui::Begin("Main");
-
-
-    ImGui::Checkbox("Player Window", &show_player_window);
-    if (show_player_window)
-        imguiPlayerAttr();
-
 
     ImGui::Checkbox("Spline Window", Config::GetBoolPtr("show_spline_ui"));
     if (Config::GetBool("show_spline_ui")) {
         *inEditor = true;
         imguiSplineEditor(camera);
     } else
-        *inEditor = true;
+        *inEditor = false;
 
+    showChecked("Player Window", imguiPlayerAttr);
+    showChecked("Level Window", imguiLevel);
+    showChecked("Cursor Window", imguiCursor, camera);
+    showChecked("Local Space Window", imguiLocalSpace, camera);
+    showChecked("Enemy Window", imguiEnemyAttr);
+    showChecked("Enemy Types Window", imguiEnemyTypesEditor);
+    showChecked("Config Window", imguiConfig);
+    showChecked("Attributes Window", imguiAttributes);
+    showChecked("Inventory Window", imguiInventory);
+    showChecked("Instructions", imguiInstructions);
+    showChecked("Multipliers Window", imguiAttributesMultipliers);
+    showChecked("Start Values Window", imguiSubAttributesStartValues);
 
-    ImGui::Checkbox("Level Window", &show_level_window);
-    if (show_level_window)
-        imguiLevel();
-
-    ImGui::Checkbox("Cursor Window", &show_cursor_window);
-    if (show_cursor_window)
-        imguiCursor(camera);
-
-    ImGui::Checkbox("Local Space Window", &show_local_space_window);
-    if (show_local_space_window)
-        imguiLocalSpace(camera);
-
-    ImGui::Checkbox("Enemy Window", Config::GetBoolPtr("show_enemy_window"));
-    if (Config::GetBool("show_enemy_window"))
-        imguiEnemyAttr();
-
-    ImGui::Checkbox("Enemy Types Window", &show_enemy_types_window);
-    if (show_enemy_types_window)
-        imguiEnemyTypesEditor();
-
-    ImGui::Checkbox("Config Window", &show_config_window);
-    if (show_config_window)
-        imguiConfig();
-
-    ImGui::Checkbox("Attributes Window", Config::GetBoolPtr("show_attr_window"));
-    if (Config::GetBool("show_attr_window"))
-        imguiAttributes();
-
-    ImGui::Checkbox("Inventory Window", Config::GetBoolPtr("show_inv_window"));
-    if (Config::GetBool("show_inv_window"))
-        imguiInventory();
-
-    ImGui::Checkbox("Instructions", &show_instructions_window);
-    if (show_instructions_window)
-        imguiInstructions();
-
-    ImGui::Checkbox("show_multipliers", &show_multipliers);
-    if (show_multipliers)
-        imguiAttributesMultipliers();
-
-    ImGui::Checkbox("show_start_values", &show_start_values);
-    if (show_start_values)
-        imguiSubAttributesStartValues();
-
-    //    ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / m_io.Framerate, m_io.Framerate);
     ImGui::End();
 }
 

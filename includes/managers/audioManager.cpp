@@ -11,7 +11,7 @@ namespace Audio {
     void Play(const std::string &key) {
         if (const auto sound = Assets::GetSound(key); IsSoundPlaying(sound))
             PlaySound(LoadSoundAlias(sound)); // TODO this is leaking, find a workaround
-//             TODO this should probably be preloaded or at least limited (there could be infinite sounds)
+//             TODO this should probably be preloaded or at least limited (there could be infinite sound
         else
             PlaySound(sound);
 
