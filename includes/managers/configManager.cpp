@@ -3,6 +3,7 @@
 //
 
 #include "configManager.h"
+//#include "parameters.h"
 
 int Config::storedIntsIndex{0};
 int Config::storedFloatsIndex{0};
@@ -15,9 +16,37 @@ std::unordered_map<std::string, int> Config::indexDictFloats{};
 std::unordered_map<std::string, int> Config::indexDictBools{};
 toml::table Config::config{};
 
-void Config::SaveAttributeParameters() {
-    //todo implement
+toml::table Config::writeTable() {
+    auto table = toml::table{};
+    for (auto [key, value]: indexDictBools) table.emplace(key, storedBools[value]);
+    for (auto [key, value]: indexDictInts) table.emplace(key, storedInts[value]);
+    for (auto [key, value]: indexDictFloats) table.emplace(key, storedFloats[value]);
+    return table;
 }
+
+void Config::SaveAttributeParameters() {
+    try {
+        auto path = std::filesystem::path(ROOT_PATH) / std::filesystem::path(CONFIG_PATH) /
+                    std::filesystem::path(configPath);
+        SPDLOG_INFO("Config trying to save: ");
+        SPDLOG_INFO(path);
+        std::ofstream output(path, std::ios::out);
+        if (!output) {
+            SPDLOG_ERROR("[PARAMETERS]: Failed to open file for saving");
+            return;
+        }
+        SPDLOG_INFO("[PARAMETERS]: File opened for saving");
+        output << writeTable();
+        SPDLOG_INFO("[PARAMETERS]: Parameters saved");
+
+    } catch (const std::exception &e) {
+        SPDLOG_ERROR("[PARAMETERS]: Error saving parameters - {}", e.what());
+    } catch (...) {
+        SPDLOG_ERROR("[PARAMETERS]: Unknown error occurred during saving");
+    }
+    SPDLOG_INFO("[PARAMETERS]: File closed");
+}
+
 
 void Config::LoadAttributeParameters() {
     try {
@@ -86,4 +115,10 @@ float Config::GetFloat(const std::string &name) {
 
 float *Config::GetFloatPtr(const std::string &name) {
     return &storedFloats[indexDictFloats[name]];
+}
+
+void Config::Instantiate() {
+    SPDLOG_INFO("Working dir: ", GetWorkingDirectory());
+    SPDLOG_INFO("Instantiating Config");
+    LoadAttributeParameters();
 }

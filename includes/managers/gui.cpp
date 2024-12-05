@@ -505,6 +505,7 @@ void imguiInventory() {
 
 void imguiConfig() {
     ImGui::Begin("Config");
+    if (ImGui::Button("Save")) { Config::SaveAttributeParameters(); }
     ImGui::SeparatorText("Bools");
     int n{0};
     for (const auto &[name, index]: Config::indexDictBools) {

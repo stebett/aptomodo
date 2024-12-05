@@ -20,7 +20,7 @@ public:
     static std::unordered_map<std::string, int> indexDictFloats;
     static std::unordered_map<std::string, int> indexDictBools;
 
-    toml::table writeTable();
+    static toml::table writeTable();
 
     static void SaveAttributeParameters();
 
@@ -45,11 +45,7 @@ public:
     static void addInt(const std::string &name);
 
 
-    static void Instantiate() {
-        SPDLOG_INFO("Working dir: ", GetWorkingDirectory());
-        SPDLOG_INFO("Instantiating Config");
-        LoadAttributeParameters();
-    }
+    static void Instantiate();
 
 
     //    ~Parameters destroy unloads all

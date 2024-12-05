@@ -1,0 +1,2 @@
+Name,Grade,Radius,Speed,AttackSpeed,Damage,AttackRange,AttackSpread,ColorBB,Health,ExperienceGiven,Strategy,AttributesPath,TexturePath
+Buco,1,8,2.4,0.4,3,40,20,red,50,50,melee,"""""",""""""

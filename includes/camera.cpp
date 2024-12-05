@@ -36,8 +36,8 @@ void GameCamera::FollowPlayer(const Vector2 &playerPosition, const float delta) 
         target_y = Const::mapHeight - Const::screenHeight / (2 * activeCamera->zoom);
     }
 
-    target_x = expDecay(activeCamera->target.x, target_x, Config::GetFloat("CameraDecay"), delta);
-    target_y = expDecay(activeCamera->target.y, target_y, Config::GetFloat("CameraDecay"), delta);
+    target_x = expDecay(activeCamera->target.x, target_x, Config::GetFloat("cameraDecay"), delta);
+    target_y = expDecay(activeCamera->target.y, target_y, Config::GetFloat("cameraDecay"), delta);
     activeCamera->target = {target_x, target_y};
 }
 

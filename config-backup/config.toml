@@ -1,0 +1,46 @@
+show_astar_path = true
+show_enemy_fov = true
+show_bounding_box = true
+show_enemy_texture = false
+show_attacks = true
+show_attr_window = false
+show_inv_window = false
+show_enemy_window = false
+free_camera = false
+draw_level_collisions = false
+draw_enemies_outside_screen = true
+show_spline_ui = false
+in_editor = false
+cameraDecay = 10.0
+dash_speed = 10000.0
+dash_duration = 0.1
+enemySightRange = +130.01234
+enemySightRangeChasing = 250.0
+enemyHearRange = 70.0
+enemyHearRangeChasing = 100.0
+enemyPatrolDistance = 90.0
+b2box_raylib_radians_diff = 3.0
+fps = 60
+enemy_walking_animation_fps = 8
+strategy = 0
+
+attrMultipliers = [
+    3.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    0.50,
+    0.03,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    1.0,
+    6.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+]
