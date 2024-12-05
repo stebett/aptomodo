@@ -5,6 +5,6 @@
 #include "status.h"
 
 namespace StatusEffect {
-    Dash::Dash(const float duration): timer(duration) {
+    Dash::Dash(const float duration) : timer(duration) {
     }
 }

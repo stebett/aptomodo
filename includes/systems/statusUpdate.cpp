@@ -3,24 +3,25 @@
 //
 
 #include "statusUpdate.h"
+#include "managers/game.h"
 
 #include <components.h>
 #include <status.h>
 
 
 namespace StatusEffect {
-    void updateDash(entt::registry &registry, double now) {
-        registry.view<StatusEffect::Dash>().each([&registry, now](auto entity, const StatusEffect::Dash &dash) {
-            if (now - dash.timer.start  > dash.timer.duration)
-                registry.remove<Dash>(entity);
+    void updateDash(double now) {
+        Game::registry.view<StatusEffect::Dash>().each([now](auto entity, const StatusEffect::Dash &dash) {
+            if (now - dash.timer.start > dash.timer.duration)
+                Game::registry.remove<Dash>(entity);
 
-            Speed &speed = registry.get<Speed>(entity);
+            Speed &speed = Game::registry.get<Speed>(entity);
 
         });
     }
 
-    void Update(entt::registry &registry) {
+    void Update() {
         const auto now = GetTime();
-        updateDash(registry, now);
+        updateDash(now);
     }
 }

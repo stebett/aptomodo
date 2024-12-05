@@ -38,8 +38,7 @@ auto createShape = [](b2BodyId bodyId, b2Polygon box) {
     return b2CreatePolygonShape(bodyId, &shapeDef, &box);
 };
 
-
-void imguiBodyEditor(entt::registry &registry, LocalSpline spline) {
+void imguiBodyEditor(LocalSpline spline) {
     ImGui::SeparatorText("Body Editor`");
     static bool go{true};
     static bool force_go{false};
@@ -100,7 +99,7 @@ void imguiBodyEditor(entt::registry &registry, LocalSpline spline) {
 
     static float lastTime = GetTime() - duration;
     ImGui::Checkbox("Create Body", &go);
-    auto entity{registry.create()};
+    auto entity{Game::registry.create()};
     auto body{createBody(entity)};
     auto box{b2MakeBox(s.startDim1, s.startDim2)};
     auto shape{createShape(body, box)};
@@ -109,38 +108,27 @@ void imguiBodyEditor(entt::registry &registry, LocalSpline spline) {
         force_go = false;
         lastTime = GetTime();
 
-        const auto player = registry.view<Player>().front();
-        const auto playerBody = registry.get<b2BodyId>(player);
-        registry.emplace<Attacks::Attack>(entity, Attacks::Attack{100.0f});
-        registry.emplace<Attacks::LocalTransformSpline>(entity, s);
-        registry.emplace<Attacks::BodyCouple>(entity, Attacks::BodyCouple{playerBody, body});
-        registry.emplace<PassiveTimer>(entity, duration);
+        const auto player = Game::registry.view<Player>().front();
+        const auto playerBody = Game::registry.get<b2BodyId>(player);
+        Game::registry.emplace<Attacks::Attack>(entity, Attacks::Attack{100.0f});
+        Game::registry.emplace<Attacks::LocalTransformSpline>(entity, s);
+        Game::registry.emplace<Attacks::BodyCouple>(entity, Attacks::BodyCouple{playerBody, body});
+        Game::registry.emplace<PassiveTimer>(entity, duration);
     }
 
     ImGui::SliderFloat("duration", &duration, 0.1, 10);
     ImGui::SliderFloat("interval", &interval, 0, 10);
-
-    // if (ImGui::SliderFloat("half_width", &half_width, 0.1, 50) ||
-    //     ImGui::SliderFloat("half_height", &half_height, 0.1, 50)) {
-    //     registry.view<Attacks::BodyCouple>().each([&registry](auto entity, auto body) {
-    //         b2ShapeId shape;
-    //         b2Body_GetShapes(body.weapon, &shape, 1);
-    //         b2DestroyShape(shape, false);
-    //         auto newBox{b2MakeBox(half_width, half_height)};
-    //         createShape(body.weapon, newBox);
-    //     });
-    // }
 }
 
-void imguiSplineEditor(entt::registry &registry, const Camera2D &camera) {
+void imguiSplineEditor(const Camera2D &camera) {
     static std::array<b2Vec2, 4> points{};
     static std::array<b2Transform, 4> transforms{};
     static std::array<bool, 4> pointsCreated = {false};
     static std::array<bool, 4> pointsMoving = {false};
 
     const Math::Vec2 mouse = GetScreenToWorld2D(GetMousePosition(), camera);
-    const auto player = registry.view<Player>().front();
-    const auto playerBody = registry.get<b2BodyId>(player);
+    const auto player = Game::registry.view<Player>().front();
+    const auto playerBody = Game::registry.get<b2BodyId>(player);
     const auto playerTransform = b2Body_GetTransform(playerBody);
 
     if (!pointsCreated[0] && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
@@ -164,7 +152,7 @@ void imguiSplineEditor(entt::registry &registry, const Camera2D &camera) {
     for (int i{0}; i < 4; i++) {
         if (CheckCollisionPointCircle(spline.getGlobal(b2Body_GetTransform(playerBody))[i], mouse, 5.0f) &&
             IsMouseButtonDown(
-                MOUSE_BUTTON_LEFT)) {
+                    MOUSE_BUTTON_LEFT)) {
             pointsMoving[i] = true;
             break;
         }
@@ -188,23 +176,22 @@ void imguiSplineEditor(entt::registry &registry, const Camera2D &camera) {
         ImGui::PopID();
     }
 
-    static entt::entity entity{registry.create()};
-    registry.emplace_or_replace<LocalSpline>(entity, spline);
+    static entt::entity entity{Game::registry.create()};
+    Game::registry.emplace_or_replace<LocalSpline>(entity, spline);
+    imguiBodyEditor(spline);
 
-    imguiBodyEditor(registry, spline);
     ImGui::End();
+
 }
 
-
-// Function to render and interact with the table
 void imguiEnemyTypesEditor() {
     ImGui::Begin("Enemy Types Editor");
 
     // Define table columns
     static const char *columnHeaders[] = {
-        "Name", "Grade", "Radius", "Speed", "Attack Speed", "Damage",
-        "Attack Range", "Attack Spread", "Color", "Health", "Experience",
-        "Attributes Path", "Texture Path"
+            "Name", "Grade", "Radius", "Speed", "Attack Speed", "Damage",
+            "Attack Range", "Attack Spread", "Color", "Health", "Experience",
+            "Attributes Path", "Texture Path"
     };
 
     static EnemyDataFile dataFile{};
@@ -262,8 +249,8 @@ void imguiEnemyTypesEditor() {
     if (ImGui::Button("Add New Enemy")) {
         // TODO save
         enemyList.push_back(EnemyType{
-            "NewEnemy", 1, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-            Color(1.0f, 1.0f, 1.0f, 1.0f), 100.0f, 10, "", ""
+                "NewEnemy", 1, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+                Color(1.0f, 1.0f, 1.0f, 1.0f), 100.0f, 10, "", ""
         });
     }
     ImGui::End();
@@ -278,7 +265,6 @@ void imguiLevel() {
 
     ImGui::End();
 }
-
 
 void imguiInstructions() {
     ImGui::Begin("Instructions");
@@ -305,9 +291,9 @@ void imguiCursor(const Camera2D &camera) {
     ImGui::End();
 }
 
-void imguiLocalSpace(entt::registry &registry, const Camera2D &camera) {
-    auto player = registry.view<Player>().front();
-    auto body = registry.get<b2BodyId>(player);
+void imguiLocalSpace(const Camera2D &camera) {
+    auto player = Game::registry.view<Player>().front();
+    auto body = Game::registry.get<b2BodyId>(player);
     auto [pos, rot] = b2Body_GetTransform(body);
     const auto [mouseX, mouseY] = GetScreenToWorld2D(GetMousePosition(), camera);
     static auto click = Vector2(0, 0);
@@ -339,20 +325,19 @@ void imguiLocalSpace(entt::registry &registry, const Camera2D &camera) {
     ImGui::End();
 }
 
-
-void imguiEnemyAttr(entt::registry &registry) {
+void imguiEnemyAttr() {
     ImGui::Begin("Enemy attributes");
     ImGui::Checkbox("show_astar_path", Config::GetBoolPtr("show_astar_path"));
     ImGui::Checkbox("show_enemy_fov", Config::GetBoolPtr("show_enemy_fov"));
     ImGui::Checkbox("show_enemy_texture", Config::GetBoolPtr("show_enemy_texture"));
     ImGui::SeparatorText("Selected Enemy attributes");
 
-    auto view = registry.view<Enemy, Selected, Path, ID, ColorBB, Spread, Speed, Health, Radius, AttackTimer,
-        AttackSpeed, Damage, AttackRange, Position, LookAngle,
-        Strategy::Strategy>();
+    auto view = Game::registry.view<Enemy, Selected, Path, ID, ColorBB, Spread, Speed, Health, Radius, AttackTimer,
+            AttackSpeed, Damage, AttackRange, Position, LookAngle,
+            Strategy::Strategy>();
     for (auto [entity, path, id, colorbb, spread, speed, health, radius,
-             timelastattack, attackspeed, damage,
-             attackrange, position, lookAngle, strategy]: view.each()) {
+                timelastattack, attackspeed, damage,
+                attackrange, position, lookAngle, strategy]: view.each()) {
         ImGui::SliderFloat("health", &health.value, 0, 200, "%.3f", 0);
         ImGui::SliderFloat("radius", &radius.value, 0, 50, "%.3f", 0);
         ImGui::SliderFloat("lookAngle", &lookAngle.value, -360, 360, "%.3f", 0);
@@ -395,14 +380,13 @@ void imguiEnemyAttr(entt::registry &registry) {
     ImGui::End();
 }
 
-
-void imguiPlayerAttr(entt::registry &registry) {
+void imguiPlayerAttr() {
     ImGui::Begin("Player values");
 
-    auto view = registry.view<Player, ColorBB, Spread, Speed, Health, Radius, AttackTimer, AttackSpeed, Damage,
-        AttackRange, Pushback, Position>();
+    auto view = Game::registry.view<Player, ColorBB, Spread, Speed, Health, Radius, AttackTimer, AttackSpeed, Damage,
+            AttackRange, Pushback, Position>();
     for (auto [entity, colorbb, spread, speed, health, radius, timelastattack,
-             attackspeed, damage, attackrange,pushback, position]: view.each()) {
+                attackspeed, damage, attackrange, pushback, position]: view.each()) {
         ImGui::SliderFloat("health", &health.value, 0, 200, "%.3f", 0);
         ImGui::SliderFloat("radius", &radius.value, 0, 50, "%.3f", 0);
         ImGui::SliderFloat("position x", &position.x, 0, Const::mapWidth, "%.3f", 0);
@@ -410,7 +394,6 @@ void imguiPlayerAttr(entt::registry &registry) {
     }
     ImGui::End();
 }
-
 
 void imguiAttributesMultipliers() {
     ImGui::Begin("Attribute multipliers");
@@ -436,14 +419,14 @@ void imguiAttributesMultipliers() {
     ImGui::End();
 }
 
-void imguiAttributes(entt::registry &registry) {
+void imguiAttributes() {
     ImGui::Begin("Attributes");
 
     int n = {0};
     int m = {0};
     bool disableUp{false};
     bool disableDown{false};
-    auto view = registry.view<Player, Experience, Attributes>();
+    auto view = Game::registry.view<Player, Experience, Attributes>();
     for (auto [entity, experience, attributes]: view.each()) {
         ImGui::Text("Level %d", attributes.getLevel());
         ImGui::SameLine();
@@ -468,7 +451,7 @@ void imguiAttributes(entt::registry &registry) {
             ImGui::SameLine();
             ImGui::Text("%s", AttributeConstants::attributeString[attr]);
             ImGui::SeparatorText(
-                std::format("Sub-Attributes - free points: {}", attributes.freeSubAttrPoints(attr)).c_str());
+                    std::format("Sub-Attributes - free points: {}", attributes.freeSubAttrPoints(attr)).c_str());
 
             for (auto subattr: AttributeConstants::subAttrByAttr[attr]) {
                 ImGui::PushID(m);
@@ -499,17 +482,17 @@ void imguiAttributes(entt::registry &registry) {
     ImGui::End();
 }
 
-void imguiInventory(entt::registry &registry) {
+void imguiInventory() {
     ImGui::Begin("Inventory");
 
-    auto view = registry.view<OnPlayer, Item, Name, AttributeConstants::Modifier>();
+    auto view = Game::registry.view<OnPlayer, Item, Name, AttributeConstants::Modifier>();
     for (auto [entity, name, modifier]: view.each()) {
         ImGui::Text("%s", name.value.c_str());
         ImGui::SameLine();
         if (ImGui::Button("Drop")) {
-            for (auto [player, position]: registry.view<Player, Position>().each()) {
-                registry.remove<OnPlayer>(entity);
-                registry.emplace<Position>(entity, Vector2Add(position, {10, 10}));
+            for (auto [player, position]: Game::registry.view<Player, Position>().each()) {
+                Game::registry.remove<OnPlayer>(entity);
+                Game::registry.emplace<Position>(entity, Vector2Add(position, {10, 10}));
             }
         }
         ImGui::Text("Modifier: %s", AttributeConstants::attributeString[modifier.name]);
@@ -520,7 +503,6 @@ void imguiInventory(entt::registry &registry) {
 
     ImGui::End();
 }
-
 
 void imguiConfig() {
     ImGui::Begin("Config");
@@ -551,7 +533,6 @@ void imguiConfig() {
     ImGui::End();
 }
 
-
 void imguiSubAttributesStartValues() {
     ImGui::Begin("Attribute startValues");
     if (ImGui::Button("Save")) { Params::SaveAttributeParameters(); };
@@ -576,7 +557,8 @@ void imguiSubAttributesStartValues() {
     ImGui::End();
 }
 
-void imguiWindowMain(entt::registry &registry, ImGuiIO io, const Camera2D &camera) {
+
+void imguiWindowMain(ImGuiIO io, const Camera2D &camera) {
     static bool show_config_window = false;
     static bool show_player_window = false;
     static bool show_instructions_window = false;
@@ -587,16 +569,23 @@ void imguiWindowMain(entt::registry &registry, ImGuiIO io, const Camera2D &camer
     static bool show_local_space_window = false;
     static bool show_level_window = false;
     static auto inEditor = Config::GetBoolPtr("in_editor");
+
+    auto checkboxWindow = [
+
+    ]() {};
+
     ImGui::Begin("Main");
+
+
     ImGui::Checkbox("Player Window", &show_player_window);
     if (show_player_window)
-        imguiPlayerAttr(registry);
+        imguiPlayerAttr();
 
 
     ImGui::Checkbox("Spline Window", Config::GetBoolPtr("show_spline_ui"));
     if (Config::GetBool("show_spline_ui")) {
         *inEditor = true;
-        imguiSplineEditor(registry, camera);
+        imguiSplineEditor(camera);
     } else
         *inEditor = true;
 
@@ -611,12 +600,11 @@ void imguiWindowMain(entt::registry &registry, ImGuiIO io, const Camera2D &camer
 
     ImGui::Checkbox("Local Space Window", &show_local_space_window);
     if (show_local_space_window)
-        imguiLocalSpace(registry, camera);
-
+        imguiLocalSpace(camera);
 
     ImGui::Checkbox("Enemy Window", Config::GetBoolPtr("show_enemy_window"));
     if (Config::GetBool("show_enemy_window"))
-        imguiEnemyAttr(registry);
+        imguiEnemyAttr();
 
     ImGui::Checkbox("Enemy Types Window", &show_enemy_types_window);
     if (show_enemy_types_window)
@@ -628,11 +616,11 @@ void imguiWindowMain(entt::registry &registry, ImGuiIO io, const Camera2D &camer
 
     ImGui::Checkbox("Attributes Window", Config::GetBoolPtr("show_attr_window"));
     if (Config::GetBool("show_attr_window"))
-        imguiAttributes(registry);
+        imguiAttributes();
 
     ImGui::Checkbox("Inventory Window", Config::GetBoolPtr("show_inv_window"));
     if (Config::GetBool("show_inv_window"))
-        imguiInventory(registry);
+        imguiInventory();
 
     ImGui::Checkbox("Instructions", &show_instructions_window);
     if (show_instructions_window)
@@ -650,7 +638,6 @@ void imguiWindowMain(entt::registry &registry, ImGuiIO io, const Camera2D &camer
     ImGui::End();
 }
 
-
 void Gui::Instantiate() {
     ImGui::CreateContext();
     m_io = &ImGui::GetIO();
@@ -664,12 +651,12 @@ void Gui::Instantiate() {
     ImGui_ImplRaylib_BuildFontAtlas();
 }
 
-void Gui::Update(entt::registry &registry, const Camera2D &camera) {
+void Gui::Update(const Camera2D &camera) {
     ImGui_ImplRaylib_ProcessEvents();
     ImGui_ImplRaylib_NewFrame();
     ImGui::NewFrame();
 
-    imguiWindowMain(registry, *m_io, camera);
+    imguiWindowMain(*m_io, camera);
     ImGui::Render();
 }
 

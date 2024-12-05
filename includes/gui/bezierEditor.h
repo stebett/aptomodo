@@ -7,7 +7,8 @@
 
 namespace ImGui {
     void ShowBezierDemo();
-    void ShowBezierEditor(float * points, const char* label, bool* open);
+
+    void ShowBezierEditor(float *points, const char *label, bool *open);
 }
 
 

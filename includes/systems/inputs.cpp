@@ -19,7 +19,7 @@ namespace Inputs {
     }
 
 
-    std::vector<DelayedCommandVariant> Listen(entt::registry &registry, GameCamera &camera, float delta) {
+    std::vector<DelayedCommandVariant> Listen(GameCamera &camera, float delta) {
         std::vector<DelayedCommandVariant> commands{};
         auto pairKeyPress = [&commands](int key, auto functor) {
             if (IsKeyPressed(key))
@@ -29,7 +29,7 @@ namespace Inputs {
             if (IsMouseButtonPressed(key))
                 commands.emplace_back(std::forward<decltype(functor)>(functor));
         };
-        auto player = registry.view<Player>().front();
+        auto player = Game::registry.view<Player>().front();
         if (!Gui::WantKeyboard() || !Gui::WantMouse()) {
             std::bitset<4> bitfield;
             if (!Game::IsPaused()) {
@@ -56,8 +56,10 @@ namespace Inputs {
         pairKeyPress(KEY_LEFT_SHIFT, Delayed(Command::Dash, player));
 
         if (!Gui::WantMouse() && !Config::GetBool("in_editor")) {
-            pairMouseKeyPress(MOUSE_BUTTON_RIGHT, Delayed(Command::SelectEnemy, GetScreenToWorld2D(GetMousePosition(), camera)));
-            pairMouseKeyPress(MOUSE_BUTTON_LEFT, Delayed(Command::Attack, player, GetScreenToWorld2D(GetMousePosition(), camera)));
+            pairMouseKeyPress(MOUSE_BUTTON_RIGHT,
+                              Delayed(Command::SelectEnemy, GetScreenToWorld2D(GetMousePosition(), camera)));
+            pairMouseKeyPress(MOUSE_BUTTON_LEFT,
+                              Delayed(Command::Attack, player, GetScreenToWorld2D(GetMousePosition(), camera)));
         }
         return commands;
     }

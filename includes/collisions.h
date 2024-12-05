@@ -9,6 +9,7 @@
 
 bool
 CheckCollisionCircleTriangle(Vector2 center, float radius, Vector2 v1, Vector2 v2, Vector2 v3, float height);
+
 void solveCircleRecCollision(Vector2 &futurePos, float radius);
 
 

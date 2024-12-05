@@ -12,7 +12,7 @@ struct PassiveTimer {
     double duration;
 
     explicit PassiveTimer(const double durationSeconds)
-    : duration(durationSeconds) {
+            : duration(durationSeconds) {
         start = GetTime();
     }
 };
@@ -34,7 +34,7 @@ public:
 
     [[nodiscard]] float ElapsedSeconds() const {
         return std::chrono::duration_cast<std::chrono::nanoseconds>(
-                   std::chrono::high_resolution_clock::now() - m_Start).count() * 0.001f * 0.001f * 0.001f;
+                std::chrono::high_resolution_clock::now() - m_Start).count() * 0.001f * 0.001f * 0.001f;
     }
 
     [[nodiscard]] float ElapsedMillis() const {

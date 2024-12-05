@@ -32,7 +32,7 @@ EnemyDataFile &Assets::GetEnemiesData() {
 }
 
 void Assets::CleanAudio() {
-    for (auto & audioResource : audioResources) {
+    for (auto &audioResource: audioResources) {
         SPDLOG_INFO("[ASSETS] Unloading sound"); // maybe for debugging find a way to get the name
         UnloadSound(audioResource.second);
     }

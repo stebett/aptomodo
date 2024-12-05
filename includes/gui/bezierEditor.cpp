@@ -26,18 +26,25 @@ namespace ImGui {
         }
         for (unsigned step = 0; step <= steps; ++step) {
             ImVec2 point = {
-                K[step * 4 + 0] * P[0].x + K[step * 4 + 1] * P[1].x + K[step * 4 + 2] * P[2].x + K[step * 4 + 3] * P[3].
-                x,
-                K[step * 4 + 0] * P[0].y + K[step * 4 + 1] * P[1].y + K[step * 4 + 2] * P[2].y + K[step * 4 + 3] * P[3].
-                y
+                    K[step * 4 + 0] * P[0].x + K[step * 4 + 1] * P[1].x + K[step * 4 + 2] * P[2].x +
+                    K[step * 4 + 3] * P[3].
+                            x,
+                    K[step * 4 + 0] * P[0].y + K[step * 4 + 1] * P[1].y + K[step * 4 + 2] * P[2].y +
+                    K[step * 4 + 3] * P[3].
+                            y
             };
             results[step] = point;
         }
     }
 
     float BezierValue(float dt01, float P[4]) {
-        enum { STEPS = 256 };
-        ImVec2 Q[4] = {{0, 0}, {P[0], P[1]}, {P[2], P[3]}, {1, 1}};
+        enum {
+            STEPS = 256
+        };
+        ImVec2 Q[4] = {{0,    0},
+                       {P[0], P[1]},
+                       {P[2], P[3]},
+                       {1,    1}};
         ImVec2 results[STEPS + 1];
         bezier_table<STEPS>(Q, results);
         return results[(int) ((dt01 < 0 ? 0 : dt01 > 1 ? 1 : dt01) * STEPS)].y;
@@ -45,11 +52,21 @@ namespace ImGui {
 
     int Bezier(const char *label, float P[4]) {
         // visuals
-        enum { SMOOTHNESS = 64 }; // curve smoothness: the higher number of segments, the smoother curve
-        enum { CURVE_WIDTH = 4 }; // main curved line width
-        enum { LINE_WIDTH = 1 }; // handlers: small lines width
-        enum { GRAB_RADIUS = 6 }; // handlers: circle radius
-        enum { GRAB_BORDER = 2 }; // handlers: circle border width
+        enum {
+            SMOOTHNESS = 64
+        }; // curve smoothness: the higher number of segments, the smoother curve
+        enum {
+            CURVE_WIDTH = 4
+        }; // main curved line width
+        enum {
+            LINE_WIDTH = 1
+        }; // handlers: small lines width
+        enum {
+            GRAB_RADIUS = 6
+        }; // handlers: circle radius
+        enum {
+            GRAB_BORDER = 2
+        }; // handlers: circle border width
 
         const ImGuiStyle &Style = GetStyle();
         const ImGuiIO &IO = GetIO();
@@ -81,19 +98,22 @@ namespace ImGui {
         // background grid
         for (int i = 0; i <= Canvas.x; i += (Canvas.x / 4)) {
             DrawList->AddLine(
-                ImVec2(bb.Min.x + i, bb.Min.y),
-                ImVec2(bb.Min.x + i, bb.Max.y),
-                GetColorU32(ImGuiCol_TextDisabled));
+                    ImVec2(bb.Min.x + i, bb.Min.y),
+                    ImVec2(bb.Min.x + i, bb.Max.y),
+                    GetColorU32(ImGuiCol_TextDisabled));
         }
         for (int i = 0; i <= Canvas.y; i += (Canvas.y / 4)) {
             DrawList->AddLine(
-                ImVec2(bb.Min.x, bb.Min.y + i),
-                ImVec2(bb.Max.x, bb.Min.y + i),
-                GetColorU32(ImGuiCol_TextDisabled));
+                    ImVec2(bb.Min.x, bb.Min.y + i),
+                    ImVec2(bb.Max.x, bb.Min.y + i),
+                    GetColorU32(ImGuiCol_TextDisabled));
         }
 
         // eval curve
-        ImVec2 Q[4] = {{0, 0}, {P[0], P[1]}, {P[2], P[3]}, {1, 1}};
+        ImVec2 Q[4] = {{0,    0},
+                       {P[0], P[1]},
+                       {P[2], P[3]},
+                       {1,    1}};
         ImVec2 results[SMOOTHNESS + 1];
         bezier_table<SMOOTHNESS>(Q, results);
 

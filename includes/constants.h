@@ -25,31 +25,32 @@ namespace rng {
 }
 
 inline std::string getAssetPath(const std::string &assetName) {
-    return (std::filesystem::path(ROOT_PATH) / std::filesystem::path(ASSETS_PATH) / std::filesystem::path(assetName)).string();
+    return (std::filesystem::path(ROOT_PATH) / std::filesystem::path(ASSETS_PATH) /
+            std::filesystem::path(assetName)).string();
 }
 
 const std::unordered_map<std::string, Color> colorMap = {
-    {"lightgray", LIGHTGRAY},
-    {"gray", GRAY},
-    {"darkgray", DARKGRAY},
-    {"yellow", YELLOW},
-    {"gold", GOLD},
-    {"orange", ORANGE},
-    {"pink", PINK},
-    {"red", RED},
-    {"maroon", MAROON},
-    {"green", GREEN},
-    {"lime", LIME},
-    {"darkgreen", DARKGREEN},
-    {"skyblue", SKYBLUE},
-    {"blue", BLUE},
-    {"darkblue", DARKBLUE},
-    {"purple", PURPLE},
-    {"violet", VIOLET},
-    {"darkpurple", DARKPURPLE},
-    {"beige", BEIGE},
-    {"brown", BROWN},
-    {"darkbrown", DARKBROWN}
+        {"lightgray",  LIGHTGRAY},
+        {"gray",       GRAY},
+        {"darkgray",   DARKGRAY},
+        {"yellow",     YELLOW},
+        {"gold",       GOLD},
+        {"orange",     ORANGE},
+        {"pink",       PINK},
+        {"red",        RED},
+        {"maroon",     MAROON},
+        {"green",      GREEN},
+        {"lime",       LIME},
+        {"darkgreen",  DARKGREEN},
+        {"skyblue",    SKYBLUE},
+        {"blue",       BLUE},
+        {"darkblue",   DARKBLUE},
+        {"purple",     PURPLE},
+        {"violet",     VIOLET},
+        {"darkpurple", DARKPURPLE},
+        {"beige",      BEIGE},
+        {"brown",      BROWN},
+        {"darkbrown",  DARKBROWN}
 };
 
 

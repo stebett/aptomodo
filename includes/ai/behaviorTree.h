@@ -26,16 +26,17 @@ public:
 
     [[nodiscard]] virtual std::vector<Behavior *> getChildren() const;
 
-    Status tick(entt::registry &registry, entt::entity self, entt::entity player);
+    Status tick(entt::entity self, entt::entity player);
 
 protected:
     virtual void onInit() {
     };
+
     //
     virtual void onTerminate(Status) {
     };
 
-    virtual Status update(entt::registry &registry, entt::entity self, entt::entity player) { return INVALID; }
+    virtual Status update(entt::entity self, entt::entity player) { return INVALID; }
 
 public:
     Status status = INVALID;
@@ -67,7 +68,7 @@ protected:
 
     void onInit() override;
 
-    Status update(entt::registry &registry, entt::entity self, entt::entity player) override;
+    Status update(entt::entity self, entt::entity player) override;
 
 public:
     const char *name = "Sequence";
@@ -84,7 +85,7 @@ protected:
 
     void onInit() override;
 
-    Status update(entt::registry &registry, entt::entity self, entt::entity player) override;
+    Status update(entt::entity self, entt::entity player) override;
 
 public:
     const char *name = "Fallback";
@@ -96,16 +97,15 @@ protected:
     Behavior *root;
 
 public:
-    void tick(entt::registry &registry, entt::entity self, entt::entity player);
+    void tick(entt::entity self, entt::entity player);
 
     Behavior *getRoot();
 
-    explicit BehaviorTree(Behavior *behavior, entt::registry &registry, entt::entity &self)
-        : root(behavior), m_registry(registry), m_self(self) {
+    explicit BehaviorTree(Behavior *behavior, entt::entity &self)
+            : root(behavior), m_self(self) {
     };
 
 private:
-    entt::registry &m_registry;
     entt::entity &m_self;
 };
 

@@ -37,5 +37,4 @@ public:
 };
 
 
-
 #endif //APTOMODO_ANIMATIONMANAGER_H

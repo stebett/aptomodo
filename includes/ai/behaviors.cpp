@@ -18,19 +18,19 @@
 #include "managers/game.h"
 
 
-Status PlayerInView::update(entt::registry &registry, entt::entity self, entt::entity player) {
-    const auto position = registry.get<Position>(self);
-    const auto lookingAngleDeg = registry.get<LookAngle>(self);
-    const auto playerPosition = registry.get<Position>(player);
-    const auto playerRadius = registry.get<Radius>(player);
+Status PlayerInView::update(entt::entity self, entt::entity player) {
+    const auto position = Game::registry.get<Position>(self);
+    const auto lookingAngleDeg = Game::registry.get<LookAngle>(self);
+    const auto playerPosition = Game::registry.get<Position>(player);
+    const auto playerRadius = Game::registry.get<Radius>(player);
     const auto lookVector = Vector2{cos(lookingAngleDeg * DEG2RAD), sin(lookingAngleDeg * DEG2RAD)};
-    auto &chasing = registry.get<Chasing>(self);
+    auto &chasing = Game::registry.get<Chasing>(self);
     const bool isChasing = chasing.isChasing();
 
     const auto hearRange = isChasing ? Config::GetFloat("enemyHearRangeChasing") : Config::GetFloat("enemyHearRange");
     const auto sightRange = isChasing
-                                ? Config::GetFloat("enemySightRangeChasing")
-                                : Config::GetFloat("enemySightRange");
+                            ? Config::GetFloat("enemySightRangeChasing")
+                            : Config::GetFloat("enemySightRange");
     assert(hearRange < sightRange && "Sight range must be bigger then hear range, or you have to change this logic");
     if (const bool inHearRange = CheckCollisionCircles(playerPosition, playerRadius, position, hearRange)) {
         chasing.timer.Reset();
@@ -53,11 +53,11 @@ Status PlayerInView::update(entt::registry &registry, entt::entity self, entt::e
 }
 
 
-Status PlayerInMeleeRange::update(entt::registry &registry, entt::entity self, entt::entity player) {
-    const auto position = registry.get<Position>(self);
-    const auto attackRange = registry.get<AttackRange>(self);
-    const auto playerPosition = registry.get<Position>(player);
-    const auto playerRadius = registry.get<Radius>(player);
+Status PlayerInMeleeRange::update(entt::entity self, entt::entity player) {
+    const auto position = Game::registry.get<Position>(self);
+    const auto attackRange = Game::registry.get<AttackRange>(self);
+    const auto playerPosition = Game::registry.get<Position>(player);
+    const auto playerRadius = Game::registry.get<Radius>(player);
 
     if (CheckCollisionCircles(position, attackRange, playerPosition, playerRadius))
         return SUCCESS;
@@ -66,21 +66,21 @@ Status PlayerInMeleeRange::update(entt::registry &registry, entt::entity self, e
 
 Triangle TriangleAngles(const Vector2 v1, const float range, const float angle1deg, const float angle2deg) {
     return {
-        v1,
-        {
-            v1.x + range * cos(angle1deg * DEG2RAD),
-            v1.y + range * sin(angle1deg * DEG2RAD)
-        },
-        {
-            v1.x + range * cos(angle2deg * DEG2RAD),
-            v1.y + range * sin(angle2deg * DEG2RAD)
-        }
+            v1,
+            {
+                    v1.x + range * cos(angle1deg * DEG2RAD),
+                    v1.y + range * sin(angle1deg * DEG2RAD)
+            },
+            {
+                    v1.x + range * cos(angle2deg * DEG2RAD),
+                    v1.y + range * sin(angle2deg * DEG2RAD)
+            }
     };
 }
 
 
-bool emplaceRandomTarget(entt::registry &registry, entt::entity self) {
-    const auto position = registry.get<Position>(self);
+bool emplaceRandomTarget(entt::entity self) {
+    const auto position = Game::registry.get<Position>(self);
     constexpr int num_points = 20;
     std::set<Target> uniquePoints;
     std::vector<Target> sampledPoints;
@@ -98,7 +98,7 @@ bool emplaceRandomTarget(entt::registry &registry, entt::entity self) {
                         1, std::mt19937{std::random_device{}()});
 
     if (sampledPoints.empty()) return false;
-    registry.emplace_or_replace<Target>(self, sampledPoints[0]);
+    Game::registry.emplace_or_replace<Target>(self, sampledPoints[0]);
     return true;
 }
 
@@ -106,11 +106,11 @@ bool reachedTile(const Vector2 &position, const Vector2 &target) {
     return Vector2Length(Vector2Subtract(position, target)) < 5.0f;;
 }
 
-Status GetRandomTarget::update(entt::registry &registry, entt::entity self, entt::entity player) {
-    const auto position = registry.get<Position>(self);
+Status GetRandomTarget::update(entt::entity self, entt::entity player) {
+    const auto position = Game::registry.get<Position>(self);
 
-    if (!registry.all_of<Target>(self) || reachedTile(position, registry.get<Target>(self))) {
-        if (emplaceRandomTarget(registry, self)) {
+    if (Game::registry.all_of<Target>(self) || reachedTile(position, Game::registry.get<Target>(self))) {
+        if (emplaceRandomTarget(self)) {
             return SUCCESS;
         }
         return FAILURE;
@@ -118,10 +118,10 @@ Status GetRandomTarget::update(entt::registry &registry, entt::entity self, entt
     return SUCCESS;
 }
 
-Status GetPlayerTarget::update(entt::registry &registry, entt::entity self, entt::entity player) {
-    const auto playerPosition = registry.get<Position>(player);
-    registry.emplace_or_replace<Target>(self, playerPosition);
-    registry.get<Path>(self).invalidate();;
+Status GetPlayerTarget::update(entt::entity self, entt::entity player) {
+    const auto playerPosition = Game::registry.get<Position>(player);
+    Game::registry.emplace_or_replace<Target>(self, playerPosition);
+    Game::registry.get<Path>(self).invalidate();;
 
 
     return SUCCESS;
@@ -160,11 +160,11 @@ void faceDirection(const Vector2 &target, LookAngle &lookAngle) {
     lookAngle = atan2(target.y, target.x) * RAD2DEG;
 }
 
-void solveCollisionEnemyEnemy(const entt::registry &registry, const int id, Vector2 &futurePos, const float radius) {
+void solveCollisionEnemyEnemy(const int id, Vector2 &futurePos, const float radius) {
     static Vector2 distance;
     static Vector2 enemyPos;
     static float overlap;
-    auto enemyView = registry.view<Living, Radius, Position, ID>();
+    auto enemyView = Game::registry.view<Living, Radius, Position, ID>();
     for (auto [enemy, enemyRadius, enemyPosition, enemyID]: enemyView.each()) {
         if (enemyID == id) continue;
         enemyPos = {enemyPosition.x, enemyPosition.y};
@@ -179,14 +179,14 @@ void solveCollisionEnemyEnemy(const entt::registry &registry, const int id, Vect
     }
 }
 
-Status MoveTowardsTarget::update(entt::registry &registry, entt::entity self, entt::entity player) {
-    Path &path = registry.get<Path>(self);
-    auto &position = registry.get<Position>(self);
-    auto &radius = registry.get<Radius>(self);
+Status MoveTowardsTarget::update(entt::entity self, entt::entity player) {
+    Path &path = Game::registry.get<Path>(self);
+    auto &position = Game::registry.get<Position>(self);
+    auto &radius = Game::registry.get<Radius>(self);
 
     if (!path.isValid()) {
         Search search;
-        const auto target = registry.get<Target>(self);
+        const auto target = Game::registry.get<Target>(self);
         const Node start = getTile(position);
         const Node end = getTile(target);
         search.init(start, end);
@@ -200,18 +200,18 @@ Status MoveTowardsTarget::update(entt::registry &registry, entt::entity self, en
         search.exportPath(path);
     }
     if (path.indexMax == 0) {
-        registry.remove<Target>(self);
+        Game::registry.remove<Target>(self);
         return FAILURE;
     }
     const Vector2 nextTarget = reachedTile(position, path.getCurrent()) ? path.getNext() : path.getCurrent();
 
-    auto &lookAngle = registry.get<LookAngle>(self);
-    const float speedDivider = registry.get<Chasing>(self).isChasing() ? 1.0f : 3.0f;
-    auto &speed = registry.get<Speed>(self);
+    auto &lookAngle = Game::registry.get<LookAngle>(self);
+    const float speedDivider = Game::registry.get<Chasing>(self).isChasing() ? 1.0f : 3.0f;
+    auto &speed = Game::registry.get<Speed>(self);
     speed.value = speed.max / speedDivider;
     const Vector2 direction = Vector2Subtract(nextTarget, position);
 
-    const auto body = registry.get<b2BodyId>(self);
+    const auto body = Game::registry.get<b2BodyId>(self);
     constexpr int framerateCorrection = 60;
     const Vector2 velocity = Vector2Scale(Vector2Normalize(direction), speed * framerateCorrection);
     b2Body_SetLinearVelocity(body, {velocity.x, velocity.y});
@@ -220,31 +220,31 @@ Status MoveTowardsTarget::update(entt::registry &registry, entt::entity self, en
     return SUCCESS;
 }
 
-Status AttackMelee::update(entt::registry &registry, entt::entity self, entt::entity player) {
+Status AttackMelee::update(entt::entity self, entt::entity player) {
     static Triangle triangle;
-    const auto position = registry.get<Position>(self);
-    const auto &playerPosition = registry.get<Position>(player);
-    auto &lookAngle = registry.get<LookAngle>(self);
+    const auto position = Game::registry.get<Position>(self);
+    const auto &playerPosition = Game::registry.get<Position>(player);
+    auto &lookAngle = Game::registry.get<LookAngle>(self);
     adjustLookAngle(Vector2Subtract(playerPosition, position), lookAngle);
 
-    auto &attackTimer = registry.get<AttackTimer>(self).timer;
-    if (attackTimer.ElapsedSeconds() < registry.get<AttackSpeed>(self)) return RUNNING;
+    auto &attackTimer = Game::registry.get<AttackTimer>(self).timer;
+    if (attackTimer.ElapsedSeconds() < Game::registry.get<AttackSpeed>(self)) return RUNNING;
     attackTimer.Reset();
 
 
-    auto &health = registry.get<Health>(player);
-    const auto radius = registry.get<Radius>(player);
-    const auto attackRange = registry.get<AttackRange>(self);
-    const auto attackSpread = registry.get<Spread>(self);
-    const auto damage = registry.get<Damage>(self);
-    //    float pushback = registry.get<Pushback>(enemy);
+    auto &health = Game::registry.get<Health>(player);
+    const auto radius = Game::registry.get<Radius>(player);
+    const auto attackRange = Game::registry.get<AttackRange>(self);
+    const auto attackSpread = Game::registry.get<Spread>(self);
+    const auto damage = Game::registry.get<Damage>(self);
+    //    float pushback = Game::registry.get<Pushback>(enemy);
 
 
     const float clickAngle = atan2(playerPosition.y - position.y, playerPosition.x - position.x) *
                              Math::Const::radToDeg;
-    registry.emplace<AttackEffect>(registry.create(), 100, position, attackRange, clickAngle - attackSpread,
-                                   clickAngle + attackSpread, BROWN);
-    registry.emplace<Audio::Command>(registry.create(), "enemy_shot");
+    Game::registry.emplace<AttackEffect>(Game::registry.create(), 100, position, attackRange, clickAngle - attackSpread,
+                                         clickAngle + attackSpread, BROWN);
+    Game::registry.emplace<Audio::Command>(Game::registry.create(), "enemy_shot");
 
 
     triangle = TriangleAngles(position, attackRange, clickAngle - attackSpread, clickAngle + attackSpread);

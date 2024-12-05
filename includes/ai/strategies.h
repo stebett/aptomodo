@@ -29,8 +29,9 @@ namespace Strategy {
         AttackMelee attackMelee = {};
 
     public:
-        Melee(entt::registry& registry, entt::entity self);
+        Melee(entt::entity self);
     };
+
     struct Strategy {
         std::unique_ptr<BehaviorTree> behavior;
     };

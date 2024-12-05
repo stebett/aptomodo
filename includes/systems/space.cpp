@@ -25,16 +25,16 @@ bool inSimSpace(const Vector2 &point) {
     return pointInRec(point, simulationSpace);
 }
 
-void emplaceStuff(entt::registry &registry, const entt::entity entity, const Vector2 &position,
+void emplaceStuff(const entt::entity entity, const Vector2 &position,
                   const Camera2D &camera) {
     const Vector2 screenPos = GetWorldToScreen2D(position, camera);
     if (!inSimSpace(screenPos)) {
-        registry.remove<ToRender>(entity);
-        registry.remove<ToSimulate>(entity);
+        Game::registry.remove<ToRender>(entity);
+        Game::registry.remove<ToSimulate>(entity);
     } else {
-        registry.emplace_or_replace<ToSimulate>(entity);
+        Game::registry.emplace_or_replace<ToSimulate>(entity);
         if (inRenderSpace(screenPos)) {
-            registry.emplace_or_replace<ToRender>(entity);
+            Game::registry.emplace_or_replace<ToRender>(entity);
         }
     }
 }
@@ -52,10 +52,10 @@ namespace Space {
                 const auto point = Vector2{static_cast<float>(x), static_cast<float>(y)};
                 if (CheckCollisionCircleRec(center, radius,
                                             {
-                                                point.x * Const::tileSize,
-                                                point.y * Const::tileSize,
-                                                Const::tileSize,
-                                                Const::tileSize
+                                                    point.x * Const::tileSize,
+                                                    point.y * Const::tileSize,
+                                                    Const::tileSize,
+                                                    Const::tileSize
                                             })) {
                     occupiedTiles.emplace_back(point);
                 }
@@ -65,16 +65,16 @@ namespace Space {
     }
 
 
-    void Update(entt::registry &registry, const Camera2D &camera) {
+    void Update(const Camera2D &camera) {
         static std::vector<Vector2> occupied{}; // TODO make this a set
         for (auto tile: occupied) Game::grid.setFree(tile);
         occupied.clear();
 
-        registry.view<Item, Position>().each([&camera, &registry](auto entity, auto position) {
-            emplaceStuff(registry, entity, position, camera);
+        Game::registry.view<Item, Position>().each([&camera](auto entity, auto position) {
+            emplaceStuff(entity, position, camera);
         });
-        registry.view<Enemy, Position, Radius>().each([&camera, &registry](auto entity, auto position, auto radius) {
-            emplaceStuff(registry, entity, position, camera);
+        Game::registry.view<Enemy, Position, Radius>().each([&camera](auto entity, auto position, auto radius) {
+            emplaceStuff(entity, position, camera);
             for (auto tile: tilesOccupied(position, radius))
                 occupied.emplace_back(tile);
         });

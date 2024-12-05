@@ -7,9 +7,8 @@
 
 
 namespace StatusEffect {
-    void Update(entt::registry &registry);
+    void Update();
 }
-
 
 
 #endif //STATUS_UPDATER_H

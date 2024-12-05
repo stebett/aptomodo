@@ -36,7 +36,7 @@ struct std::hash<Node> {
 using EvaluatedNode = std::pair<Node, float>;
 
 struct CompareNodes {
-    bool operator()(const std::pair<Node, float>& a, const std::pair<Node, float>& b) const;
+    bool operator()(const std::pair<Node, float> &a, const std::pair<Node, float> &b) const;
 };
 
 // TODO use this directly instead of Path

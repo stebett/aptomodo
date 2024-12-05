@@ -6,7 +6,6 @@
 #define ENEMYTYPE_H
 
 
-
 struct EnemyType {
     std::string name;
     int grade;
@@ -29,7 +28,8 @@ struct EnemyDataFile {
     std::vector<EnemyType> enemyStats;
 
     bool loadCSV(const std::string &filename);
-    EnemyType &getType(const std::string&);
+
+    EnemyType &getType(const std::string &);
 };
 
 #endif //ENEMYTYPE_H

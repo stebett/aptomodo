@@ -7,7 +7,7 @@
 #include <constants.h>
 
 bool EnemyDataFile::loadCSV(const std::string &filename) {
-    auto path = std::filesystem::path(ROOT_PATH) / std::filesystem::path(CONFIG_PATH) /  std::filesystem::path(filename);
+    auto path = std::filesystem::path(ROOT_PATH) / std::filesystem::path(CONFIG_PATH) / std::filesystem::path(filename);
     SPDLOG_INFO("Config trying to parse: ");
     SPDLOG_INFO(path);
 
@@ -71,8 +71,8 @@ bool EnemyDataFile::loadCSV(const std::string &filename) {
     return true;
 }
 
-EnemyType& EnemyDataFile::getType(const std::string & name) {
-    for (auto & enemyType: enemyStats) {
+EnemyType &EnemyDataFile::getType(const std::string &name) {
+    for (auto &enemyType: enemyStats) {
         if (enemyType.name == name) {
             return enemyType;
         }

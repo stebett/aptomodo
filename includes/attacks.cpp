@@ -16,7 +16,7 @@ auto createShapeHelper = [](b2BodyId bodyId, b2Polygon box) {
 };
 
 namespace Attacks {
-    void Update(entt::registry &registry) {
+    void Update() {
         const auto now = GetTime();
         Game::registry.view<Attacks::Attack>().each([now](auto entity, const auto attack) {
             auto timer{Game::registry.get<PassiveTimer>(entity)};
@@ -40,6 +40,6 @@ namespace Attacks {
         });
     }
 
-    Attack::Attack(const float damage): damage(damage) {
+    Attack::Attack(const float damage) : damage(damage) {
     }
 }

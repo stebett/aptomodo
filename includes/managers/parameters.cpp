@@ -6,7 +6,8 @@
 
 namespace Params {
     void LoadAttributeParameters() {
-        auto path = std::filesystem::path(ROOT_PATH) / std::filesystem::path(CONFIG_PATH) / std::filesystem::path(attributeParametersPath);
+        auto path = std::filesystem::path(ROOT_PATH) / std::filesystem::path(CONFIG_PATH) /
+                    std::filesystem::path(attributeParametersPath);
         SPDLOG_INFO("Config trying to parse: ");
         SPDLOG_INFO(path);
         try {
@@ -104,13 +105,13 @@ toml::array serializeArray(std::array<float, 18> array) {
 
 toml::table AttributeParameters::writeTable() {
     auto table = toml::table{
-        {"expByLevel", expByLevel},
-        {"pointsByLevel", pointsByLevel},
-        {"pointsByAttr", pointsByAttr},
-        {"pointsAtStart", pointsAtStart},
+            {"expByLevel",         expByLevel},
+            {"pointsByLevel",      pointsByLevel},
+            {"pointsByAttr",       pointsByAttr},
+            {"pointsAtStart",      pointsAtStart},
 
-        {"subAttrMultipliers", serializeArray(subAttrMultipliers)},
-        {"subAttrAtStart", serializeArray(subAttrAtStart)},
+            {"subAttrMultipliers", serializeArray(subAttrMultipliers)},
+            {"subAttrAtStart",     serializeArray(subAttrAtStart)},
     };
     return table;
 }

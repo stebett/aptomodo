@@ -9,7 +9,6 @@
 #include "managers/levelManager.h"
 
 
-
 bool CheckCollisionLineCircle(Vector2 start, Vector2 end, Vector2 center, float radius) {
     if (CheckCollisionPointCircle(end, center, radius)) return true;
     float distX = start.x - end.x;
@@ -51,10 +50,13 @@ bool CheckCollisionCircleTriangle(Vector2 center, float radius, Vector2 v1, Vect
 
 
 void solveCircleRecCollision(Vector2 &futurePos, float radius) {
-    Vector2 upperBoundary = {std::max(0.0f, floor(futurePos.x / Const::tileSize) * Const::tileSize - 2 * Const::tileSize),
-                             std::max(0.0f, floor(futurePos.y / Const::tileSize) * Const::tileSize - 2 * Const::tileSize)};
-    Vector2 lowerBoundary = {std::min(float(Const::mapWidth), ceil(futurePos.x / Const::tileSize) * Const::tileSize + 2 * Const::tileSize),
-                             std::min(float(Const::mapHeight), ceil(futurePos.y / Const::tileSize) * Const::tileSize + 2 * Const::tileSize)};
+    Vector2 upperBoundary = {
+            std::max(0.0f, floor(futurePos.x / Const::tileSize) * Const::tileSize - 2 * Const::tileSize),
+            std::max(0.0f, floor(futurePos.y / Const::tileSize) * Const::tileSize - 2 * Const::tileSize)};
+    Vector2 lowerBoundary = {std::min(float(Const::mapWidth),
+                                      ceil(futurePos.x / Const::tileSize) * Const::tileSize + 2 * Const::tileSize),
+                             std::min(float(Const::mapHeight),
+                                      ceil(futurePos.y / Const::tileSize) * Const::tileSize + 2 * Const::tileSize)};
 //    DrawRectangleV(upperBoundary, Vector2Subtract(lowerBoundary, upperBoundary), ColorAlpha(RED, 0.2));
 
 
@@ -64,8 +66,8 @@ void solveCircleRecCollision(Vector2 &futurePos, float radius) {
     static float distanceY;
     static float overlap;
 
-    for (float x = upperBoundary.x; x <= lowerBoundary.x; x+=Const::tileSize) {
-        for (float y = upperBoundary.y; y <= lowerBoundary.y; y+=Const::tileSize) {
+    for (float x = upperBoundary.x; x <= lowerBoundary.x; x += Const::tileSize) {
+        for (float y = upperBoundary.y; y <= lowerBoundary.y; y += Const::tileSize) {
             if (Game::grid.fromWorld(x, y)[IntValue::OBSTACLE]) { // should also return whether it's out of map
                 clampedX = std::max(x, std::min(futurePos.x, x + float(Const::tileSize)));
                 clampedY = std::max(y, std::min(futurePos.y, y + float(Const::tileSize)));
@@ -76,7 +78,8 @@ void solveCircleRecCollision(Vector2 &futurePos, float radius) {
 //                std::cout << "Distance:" << Vector2Length({distanceX, distanceY}) << "\n\n";
 
                 if (overlap > 0) {
-                    futurePos = Vector2Subtract(futurePos, Vector2Scale(Vector2Normalize({distanceX, distanceY}), overlap));
+                    futurePos = Vector2Subtract(futurePos,
+                                                Vector2Scale(Vector2Normalize({distanceX, distanceY}), overlap));
                 }
             }
         }

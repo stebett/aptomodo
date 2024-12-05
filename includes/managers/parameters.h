@@ -12,7 +12,7 @@
 #include <string>
 #include "toml++/toml.hpp"
 
-constexpr char const * attributeParametersPath{"attributes.toml"};
+constexpr char const *attributeParametersPath{"attributes.toml"};
 
 struct AttributeParameters {
     int expByLevel;
@@ -23,7 +23,9 @@ struct AttributeParameters {
     std::array<float, 18> subAttrAtStart{};
 
     AttributeParameters() = default;
+
     explicit AttributeParameters(toml::table);
+
     toml::table writeTable();
 };
 
@@ -40,19 +42,33 @@ namespace Params {
     static toml::table config;
 
     void SaveAttributeParameters();
+
     void LoadAttributeParameters();
+
     void Instantiate();
-    float& Multiplier(AttributeConstants::SubAttributeName name);
+
+    float &Multiplier(AttributeConstants::SubAttributeName name);
+
     float MultiplierOriginal(AttributeConstants::SubAttributeName name);
-    float& StartValue(AttributeConstants::SubAttributeName name);
+
+    float &StartValue(AttributeConstants::SubAttributeName name);
+
     float StartValueOriginal(AttributeConstants::SubAttributeName name);
+
     int GetExpByLevel();
+
     int GetPointsByLevel();
+
     int GetPointsByAttr();
+
     int GetPointsAtStart();
+
     int GetExpByLevelOriginal();
+
     int GetPointsByLevelOriginal();
+
     int GetPointsByAttrOriginal();
+
     int GetPointsAtStartOriginal();
 
 

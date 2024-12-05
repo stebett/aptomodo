@@ -35,6 +35,7 @@ const GridBitmap &IntGrid::operator()(const size_t row, const size_t col) const 
 }
 
 [[nodiscard]] size_t IntGrid::rows() { return Rows; }
+
 [[nodiscard]] size_t IntGrid::cols() { return Cols; }
 
 [[nodiscard]] const GridBitmap &IntGrid::safe(const size_t row, const size_t col) const {
@@ -59,7 +60,8 @@ const GridBitmap &IntGrid::operator()(const size_t row, const size_t col) const 
 }
 
 void IntGrid::setVisible(const size_t row, const size_t col) {
-    DrawRectangle(row*Const::tileSize, col*Const::tileSize, Const::tileSize, Const::tileSize, ColorAlpha(YELLOW, 0.1));
+    DrawRectangle(row * Const::tileSize, col * Const::tileSize, Const::tileSize, Const::tileSize,
+                  ColorAlpha(YELLOW, 0.1));
     // grid[row][col][IntValue::VISIBLE);
 }
 
@@ -82,8 +84,8 @@ void IntGrid::setFree(const Vector2 &pos) {
 
 void IntGrid::initialize(const ldtk::Layer &layer) {
     // const auto gridSize = layer.getGridSize();
-    for (int x = 0; x <= IntGrid::rows() -1; x++) {
-        for (int y = 0; y <= IntGrid::cols()-1; y++) {
+    for (int x = 0; x <= IntGrid::rows() - 1; x++) {
+        for (int y = 0; y <= IntGrid::cols() - 1; y++) {
             switch (layer.getIntGridVal(x, y).value) {
                 case 1: {
                     grid[x][y].set(IntValue::GRASS);
@@ -94,7 +96,9 @@ void IntGrid::initialize(const ldtk::Layer &layer) {
                     grid[x][y].set(IntValue::OBSTACLE);
                     grid[x][y].set(IntValue::WATER);
                     grid[x][y].set(IntValue::OPAQUE);
-                    Physics::EmplaceStaticBody({static_cast<float>(x*Const::tileSize), static_cast<float>(y*Const::tileSize)}, Const::tileSize);
+                    Physics::EmplaceStaticBody(
+                            {static_cast<float>(x * Const::tileSize), static_cast<float>(y * Const::tileSize)},
+                            Const::tileSize);
                     break;
                 }
                 case 3: {

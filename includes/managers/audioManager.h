@@ -11,7 +11,7 @@ namespace Audio {
         std::string soundName;
     };
 
-    void Update(entt::registry &registry);
+    void Update();
 };
 
 

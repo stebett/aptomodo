@@ -7,7 +7,7 @@
 
 
 namespace Space {
-    void Update(entt::registry &registry, const Camera2D &camera);
+    void Update(const Camera2D &camera);
 
     std::vector<Vector2> tilesOccupied(Vector2 center, float radius);
 

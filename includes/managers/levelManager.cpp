@@ -10,7 +10,7 @@ namespace Level {
         std::vector<Level::Entity> result = {};
         for (const auto &entity: level.getLayer("Entities").allEntities()) {
             const Vector2 position = {
-                static_cast<float>(entity.getPosition().x), static_cast<float>(entity.getPosition().y)
+                    static_cast<float>(entity.getPosition().x), static_cast<float>(entity.getPosition().y)
             };
             const auto &type = entity.getName();
             const auto name = entity.getField<ldtk::FieldType::String>("Name").value();
@@ -31,15 +31,15 @@ namespace Level {
                     const auto source_pos = tile.getTextureRect();
                     const auto tile_size = static_cast<float>(layer.getTileset().tile_size);
                     const Rectangle source_rect = {
-                        .x = static_cast<float>(source_pos.x),
-                        .y = static_cast<float>(source_pos.y),
-                        .width = tile.flipX ? -tile_size : tile_size,
-                        .height = tile.flipY ? -tile_size : tile_size,
+                            .x = static_cast<float>(source_pos.x),
+                            .y = static_cast<float>(source_pos.y),
+                            .width = tile.flipX ? -tile_size : tile_size,
+                            .height = tile.flipY ? -tile_size : tile_size,
                     };
 
                     const Vector2 target_pos = {
-                        static_cast<float>(tile.getPosition().x),
-                        static_cast<float>(tile.getPosition().y),
+                            static_cast<float>(tile.getPosition().x),
+                            static_cast<float>(tile.getPosition().y),
                     };
 
                     DrawTextureRec(tilesetTexture, source_rect, target_pos, WHITE);

@@ -239,7 +239,6 @@ LevelOutcome PlayAnimationEditorLevel() {
     SPDLOG_INFO("Entering Editor Level");
     Game::EnterLevel();
     Camera2D camera{};
-    entt::registry registry;
 
 //    Gui::Instantiate();
 
@@ -270,7 +269,7 @@ LevelOutcome PlayAnimationEditorLevel() {
         camera.target.y += static_cast<float>(bitfield[1]);
         camera.target.x -= static_cast<float>(bitfield[2]);
         camera.target.x += static_cast<float>(bitfield[3]);
-//        Gui::Update(registry, camera);
+//        Gui::Update( camera);
 
         BeginDrawing();
         BeginMode2D(camera);
@@ -312,7 +311,6 @@ LevelOutcome PlayAnimationEditorLevelOnce() {
     SPDLOG_INFO("Entering Editor Level");
     Game::EnterLevel();
     static Camera2D camera{};
-    static entt::registry registry;
 
 //    Gui::Instantiate();
 
@@ -334,7 +332,7 @@ LevelOutcome PlayAnimationEditorLevelOnce() {
     camera.target.y += static_cast<float>(bitfield[1]);
     camera.target.x -= static_cast<float>(bitfield[2]);
     camera.target.x += static_cast<float>(bitfield[3]);
-//        Gui::Update(registry, camera);
+//        Gui::Update( camera);
 
     BeginDrawing();
     BeginMode2D(camera);

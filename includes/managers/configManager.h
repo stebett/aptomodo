@@ -4,7 +4,6 @@
 #pragma once
 
 
-
 constexpr char const *configPath{"config.toml"};
 constexpr size_t preStoredValues{20};
 

@@ -19,13 +19,11 @@ using DelayedCommandVariant = std::variant<
 >;
 
 
-
 namespace Inputs {
-    std::vector<DelayedCommandVariant> Listen(entt::registry &registry, GameCamera &camera, float delta);
+    std::vector<DelayedCommandVariant> Listen(GameCamera &camera, float delta);
 
     void Update(std::vector<DelayedCommandVariant>);
 }
-
 
 
 #endif //INPUTS_H

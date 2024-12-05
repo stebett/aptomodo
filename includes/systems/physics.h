@@ -7,9 +7,11 @@
 
 struct Body {
     b2BodyId id;
+
     ~Body() {
         b2DestroyBody(id);
     }
+
     operator b2BodyId() const noexcept { return id; }
 
 };
@@ -45,7 +47,7 @@ public:
 
     static void DestroyBody(b2BodyId body);
 
-    static void Update(entt::registry &registry);
+    static void Update();
 
     static void Step();
 

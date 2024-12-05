@@ -6,6 +6,7 @@
 #include <components.h>
 
 #include "attacks.h"
+#include "managers/game.h"
 
 b2WorldId Physics::worldId;
 std::unordered_map<int32_t, entt::entity> Physics::bodyMap{};
@@ -23,7 +24,7 @@ b2BodyId Physics::CreateDynamicCircularBody(const entt::entity entity, const Vec
                                             const float radius, const ContactCategories category) {
     b2BodyDef bodyDef = b2DefaultBodyDef();
     bodyDef.type = b2_dynamicBody;
-    bodyDef.position = (b2Vec2){position.x, position.y};
+    bodyDef.position = (b2Vec2) {position.x, position.y};
     bodyDef.enableSleep = false;
 
     b2ShapeDef shapeDef = b2DefaultShapeDef();
@@ -71,7 +72,7 @@ b2BodyId Physics::EmplaceSword(float half_width, float half_height) {
 
 void Physics::EmplaceStaticBody(const Vector2 position, float side) {
     b2BodyDef bodyDef = b2DefaultBodyDef();
-    bodyDef.position = (b2Vec2){position.x + side / 2, position.y + side / 2};
+    bodyDef.position = (b2Vec2) {position.x + side / 2, position.y + side / 2};
     b2BodyId bodyId = b2CreateBody(worldId, &bodyDef);
     b2Polygon Box = b2MakeBox(side / 2, side / 2);
     b2ShapeDef shapeDef = b2DefaultShapeDef();
@@ -79,28 +80,28 @@ void Physics::EmplaceStaticBody(const Vector2 position, float side) {
 }
 
 
-void Physics::Update(entt::registry &registry) {
+void Physics::Update() {
     const auto [moveEvents, moveCount] = b2World_GetBodyEvents(worldId);
     for (int i = 0; i < moveCount; ++i) {
         const b2BodyMoveEvent *event = moveEvents + i;
         b2BodyId bodyId = event->bodyId;
         const auto entity = bodyMap[bodyId.index1];
-        if (registry.all_of<Position>(entity)) {
-            Position &position = registry.get<Position>(entity);
+        if (Game::registry.all_of<Position>(entity)) {
+            Position &position = Game::registry.get<Position>(entity);
             const auto [x, y] = event->transform.p;
             position = {x, y};
             b2Body_SetLinearVelocity(bodyId, {0.0f, 0.0f});
         }
     }
-    registry.clear<Attacks::Hit>();
+    Game::registry.clear<Attacks::Hit>();
     const b2SensorEvents sensorEvents = b2World_GetSensorEvents(worldId);
     for (int i = 0; i < sensorEvents.beginCount; ++i) {
         const b2SensorBeginTouchEvent *beginTouch = sensorEvents.beginEvents + i;
         const auto weapon = bodyMap[b2Shape_GetBody(beginTouch->sensorShapeId).index1];
         const auto target = bodyMap[b2Shape_GetBody(beginTouch->visitorShapeId).index1];
-        const auto sword = registry.get<Attacks::Attack>(weapon);
-        registry.emplace_or_replace<Attacks::Hit>(target);
-        auto &health = registry.get<Health>(target);
+        const auto sword = Game::registry.get<Attacks::Attack>(weapon);
+        Game::registry.emplace_or_replace<Attacks::Hit>(target);
+        auto &health = Game::registry.get<Health>(target);
         health -= sword.damage;
     }
 }

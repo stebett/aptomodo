@@ -11,7 +11,8 @@ namespace PlayerUI {
         DrawFPS(10, 10);
         DrawText(std::format("Health: {}", health).c_str(), 10, Const::screenHeight - 40, 30, WHITE);
         if (Game::IsPaused()) {
-            DrawText("PAUSE", Const::screenHeight / 2 - 50, Const::screenWidth / 2 - MeasureText("PAUSE", 50), 50, WHITE);
+            DrawText("PAUSE", Const::screenHeight / 2 - 50, Const::screenWidth / 2 - MeasureText("PAUSE", 50), 50,
+                     WHITE);
         }
     }
 }

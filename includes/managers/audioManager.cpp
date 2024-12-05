@@ -4,7 +4,7 @@
 
 #include "audioManager.h"
 #include "assets.h"
-
+#include "managers/game.h"
 
 // TODO make a copy for each sound?
 namespace Audio {
@@ -18,15 +18,15 @@ namespace Audio {
 //        auto sound = Assets::GetSound(key);
     }
 
-    void Update(entt::registry &registry) {
-        registry.group<Audio::Command>().each([&registry](auto entity, auto &command) {
+    void Update() {
+        Game::registry.group<Audio::Command>().each([](auto entity, auto &command) {
             Audio::Play(command.soundName);
-            registry.destroy(entity);
+            Game::registry.destroy(entity);
         });
     }
 }
 
 // TODO this needs to be attached to an event system: everytime the player attacks this has to trigger updateAudio and updateAnimation and so on
-//void updateAudio(entt::registry &registry) {
-//    playerView = registry.view<Player,
+//void updateAudio() {
+//    playerView =Game::registry.view<Player,
 //}

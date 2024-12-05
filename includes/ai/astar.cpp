@@ -26,13 +26,13 @@ Node::Node() = default;
 Node::Node(int x, int y) : x(x), y(y) {
 }
 
-Node::Node(const Vector2 vec): x(static_cast<int>(vec.x)), y(static_cast<int>(vec.y)) {
+Node::Node(const Vector2 vec) : x(static_cast<int>(vec.x)), y(static_cast<int>(vec.y)) {
 }
 
 
 Node getTile(const Vector2 &position) {
     return {
-        static_cast<int>(floor(position.x / Const::tileSize)), static_cast<int>(floor(position.y / Const::tileSize))
+            static_cast<int>(floor(position.x / Const::tileSize)), static_cast<int>(floor(position.y / Const::tileSize))
     };
 }
 
@@ -130,7 +130,7 @@ void Search::step() {
         if (!came_from.contains(neighbor)) {
             if (neighbor == start | neighbor == came_from[current]) continue;
             float terrainPenalty = 3.0f * static_cast<float>(
-                                       Game::grid.safe(neighbor.x, neighbor.y)[IntValue::NEAR_OBSTACLE]);
+                    Game::grid.safe(neighbor.x, neighbor.y)[IntValue::NEAR_OBSTACLE]);
             if (!forcedFree.contains(neighbor) && Game::grid.safe(neighbor.x, neighbor.y)[IntValue::NPC])
                 terrainPenalty += 20.0f;
             open.emplace(neighbor, manhattan(neighbor, end) + terrainPenalty);
@@ -186,8 +186,8 @@ void Search::exportPath(Path &pathToUpdate) {
 
     for (int i = 0; i < size; i++) {
         pathToUpdate.path[i] = {
-            static_cast<float>(path[i + 1].x) * Const::tileSize + static_cast<float>(Const::tileSize) / 2,
-            static_cast<float>(path[i + 1].y) * Const::tileSize + static_cast<float>(Const::tileSize) / 2
+                static_cast<float>(path[i + 1].x) * Const::tileSize + static_cast<float>(Const::tileSize) / 2,
+                static_cast<float>(path[i + 1].y) * Const::tileSize + static_cast<float>(Const::tileSize) / 2
         };
     }
     pathToUpdate.index = 0;

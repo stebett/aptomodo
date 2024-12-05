@@ -21,7 +21,8 @@ void Config::SaveAttributeParameters() {
 
 void Config::LoadAttributeParameters() {
     try {
-        auto path = std::filesystem::path(ROOT_PATH) / std::filesystem::path(CONFIG_PATH) / std::filesystem::path(configPath);
+        auto path = std::filesystem::path(ROOT_PATH) / std::filesystem::path(CONFIG_PATH) /
+                    std::filesystem::path(configPath);
         SPDLOG_INFO("Config trying to parse: ");
         SPDLOG_INFO(path);
         config = toml::parse_file(path.string());

@@ -12,75 +12,76 @@
 #include "ai/strategies.h"
 #include "managers/assets.h"
 #include "systems/physics.h"
+#include "managers/game.h"
 
 // TODO Make a common factory, and define components used here in factories.h
 
-entt::entity spawnLiving(entt::registry &registry) {
-    const entt::entity e = registry.create();
-    registry.emplace<Living>(e);
-    registry.emplace<Radius>(e, 10.0f);
-    registry.emplace<Speed>(e, 3.0f);
-    registry.emplace<AttackTimer>(e);
-    registry.emplace<AttackSpeed>(e, 0.3f);
-    registry.emplace<Damage>(e, 5.0f);
-    registry.emplace<AttackRange>(e, 3 * Const::tileSize);
-    registry.emplace<Pushback>(e, 1.0f);
-    registry.emplace<Spread>(e, 10.0f);
-    registry.emplace<LookAngle>(e, 0.0f);
+entt::entity spawnLiving() {
+    const entt::entity e = Game::registry.create();
+    Game::registry.emplace<Living>(e);
+    Game::registry.emplace<Radius>(e, 10.0f);
+    Game::registry.emplace<Speed>(e, 3.0f);
+    Game::registry.emplace<AttackTimer>(e);
+    Game::registry.emplace<AttackSpeed>(e, 0.3f);
+    Game::registry.emplace<Damage>(e, 5.0f);
+    Game::registry.emplace<AttackRange>(e, 3 * Const::tileSize);
+    Game::registry.emplace<Pushback>(e, 1.0f);
+    Game::registry.emplace<Spread>(e, 10.0f);
+    Game::registry.emplace<LookAngle>(e, 0.0f);
 
     return e;
 }
 
 
-entt::entity spawnEnemyFromFile(entt::registry &registry, Position position, const std::string &enemyName) {
+entt::entity spawnEnemyFromFile(Position position, const std::string &enemyName) {
     const EnemyType &stats = Assets::GetEnemiesData().getType(enemyName);
     static int id = 0;
     // TODO this should be hashed or something, so we don't have overlap if we add new spawns elsewhere, or stored in Game::ID
-    const entt::entity e = registry.create();
-    registry.emplace<Name>(e, stats.name);
-    registry.emplace<Grade>(e, stats.grade);
-    registry.emplace<Radius>(e, stats.radius);
-    registry.emplace<Speed>(e, stats.speed);
-    registry.emplace<AttackSpeed>(e, stats.attackSpeed);
-    registry.emplace<Damage>(e, stats.damage);
-    registry.emplace<AttackRange>(e, stats.attackRange);
-    registry.emplace<Spread>(e, stats.attackSpread);
-    registry.emplace<ColorBB>(e, stats.color);
-    registry.emplace<Health>(e, stats.health);
-    registry.emplace<Experience>(e, stats.experience);
+    const entt::entity e = Game::registry.create();
+    Game::registry.emplace<Name>(e, stats.name);
+    Game::registry.emplace<Grade>(e, stats.grade);
+    Game::registry.emplace<Radius>(e, stats.radius);
+    Game::registry.emplace<Speed>(e, stats.speed);
+    Game::registry.emplace<AttackSpeed>(e, stats.attackSpeed);
+    Game::registry.emplace<Damage>(e, stats.damage);
+    Game::registry.emplace<AttackRange>(e, stats.attackRange);
+    Game::registry.emplace<Spread>(e, stats.attackSpread);
+    Game::registry.emplace<ColorBB>(e, stats.color);
+    Game::registry.emplace<Health>(e, stats.health);
+    Game::registry.emplace<Experience>(e, stats.experience);
 
 
-    registry.emplace<Path>(e);
-    registry.emplace<Position>(e, position);
-    registry.emplace<Enemy>(e);
-    registry.emplace<Chasing>(e);
-    auto &chasing = registry.get<Chasing>(e);
+    Game::registry.emplace<Path>(e);
+    Game::registry.emplace<Position>(e, position);
+    Game::registry.emplace<Enemy>(e);
+    Game::registry.emplace<Chasing>(e);
+    auto &chasing = Game::registry.get<Chasing>(e);
     chasing.timer.StartBehind(100);;
-    registry.emplace<ID>(e, id++);
-    registry.emplace<Strategy::Strategy>(e, std::make_unique<Strategy::Melee>(registry, e));
+    Game::registry.emplace<ID>(e, id++);
+    Game::registry.emplace<Strategy::Strategy>(e, std::make_unique<Strategy::Melee>(e));
     //TODO This leaks (how?)
-    registry.emplace<Living>(e);
-    registry.emplace<AttackTimer>(e);
-    registry.emplace<LookAngle>(e, 0.0f);
+    Game::registry.emplace<Living>(e);
+    Game::registry.emplace<AttackTimer>(e);
+    Game::registry.emplace<LookAngle>(e, 0.0f);
     auto bodyId = Physics::CreateDynamicCircularBody(e, position, stats.radius, Physics::Enemy);
-    registry.emplace<b2BodyId>(e, bodyId);
+    Game::registry.emplace<b2BodyId>(e, bodyId);
     return e;
 };
 
 
-entt::entity spawnPlayer(entt::registry &registry, Vector2 position) {
-    const entt::entity e = spawnLiving(registry);
-    registry.emplace<Player>(e);
-    registry.emplace<ToRender>(e);
-    registry.emplace<ToSimulate>(e);
-    registry.emplace<Position>(e, position);
-    registry.emplace<ColorBB>(e, BLUE);
+entt::entity spawnPlayer(Vector2 position) {
+    const entt::entity e = spawnLiving();
+    Game::registry.emplace<Player>(e);
+    Game::registry.emplace<ToRender>(e);
+    Game::registry.emplace<ToSimulate>(e);
+    Game::registry.emplace<Position>(e, position);
+    Game::registry.emplace<ColorBB>(e, BLUE);
     auto attr = Attributes();
-    registry.emplace<Attributes>(e, attr);
-    registry.emplace<Health>(e, attr.getMultiplied(AttributeConstants::health));
-    registry.emplace<Experience>(e, 0);
+    Game::registry.emplace<Attributes>(e, attr);
+    Game::registry.emplace<Health>(e, attr.getMultiplied(AttributeConstants::health));
+    Game::registry.emplace<Experience>(e, 0);
     auto bodyId = Physics::CreateDynamicCircularBody(e, position, 10.0f, Physics::Player);
-    registry.emplace<b2BodyId>(e, bodyId);
+    Game::registry.emplace<b2BodyId>(e, bodyId);
     return e;
 }
 
@@ -94,22 +95,22 @@ Camera2D spawnCamera() {
     return camera;
 }
 
-entt::entity spawnItemFromFile(entt::registry &registry, Vector2 position, const std::string &name) {
+entt::entity spawnItemFromFile(Vector2 position, const std::string &name) {
     // TODO make this load amulets from file
     return entt::entity();
 }
 
 
-void spawnEntities(entt::registry &registry, const std::vector<Level::Entity> &entities) {
+void spawnEntities(const std::vector<Level::Entity> &entities) {
     for (auto &[position, type, name]: entities) {
-        if (type == "Enemy") spawnEnemyFromFile(registry, position, name);
-        if (type == "Item") spawnItemFromFile(registry, position, name);
-        if (type == "Player") spawnPlayer(registry, position);
+        if (type == "Enemy") spawnEnemyFromFile(position, name);
+        if (type == "Item") spawnItemFromFile(position, name);
+        if (type == "Player") spawnPlayer(position);
     }
 }
 
 
-// void spawnAmulet(entt::registry &registry) {
+// void spawnAmulet() {
 //     Vector2 position{};
 //     for (const auto &[label, pos]: LevelManager::GetEntitiesPositions()) {
 //         if (label == "Amulet") position = pos;
@@ -126,7 +127,7 @@ void spawnEntities(entt::registry &registry, const std::vector<Level::Entity> &e
 // }
 //
 //
-// void spawnAmulet2(entt::registry &registry) {
+// void spawnAmulet2() {
 //     Vector2 position{};
 //     for (const auto &[label, pos]: LevelManager::GetEntitiesPositions()) {
 //         if (label == "Amulet2") position = pos;

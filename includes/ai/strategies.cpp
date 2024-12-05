@@ -4,7 +4,7 @@
 
 #include "strategies.h"
 
-Strategy::Melee::Melee(entt::registry &registry, entt::entity self): BehaviorTree(&root, registry, self) {
+Strategy::Melee::Melee(entt::entity self) : BehaviorTree(&root, self) {
     fallback1.addChild(&playerInView);
     fallback1.addChild(&patrol);
     patrol.addChild(&getRandomTarget);

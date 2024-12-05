@@ -4,6 +4,7 @@
 
 #ifndef SPLINE_H
 #define SPLINE_H
+
 #include "bezier.h"
 #include "math/mathConstants.h"
 
@@ -15,22 +16,27 @@ struct LocalSpline {
     b2Rot rotation{};
 
     LocalSpline(std::array<Vector2, 4> points, b2Rot rotation);
+
     LocalSpline(const std::array<b2Vec2, 4> &points, std::array<b2Transform, 4> transforms);
 
     [[nodiscard]] std::array<Vector2, 4> getGlobal(b2Transform);
+
     [[nodiscard]] Bezier::Bezier<3> getLocalBezier() const;
+
     [[nodiscard]] std::array<Math::Vec2, 4> getLocal() const;
 };
 
 struct EasingSpline {
     Bezier::Bezier<3> bezier;
+
     EasingSpline(float x1, float y1, float x2, float y2);
+
     explicit EasingSpline(std::array<float, 4> points);
+
     [[nodiscard]] float valueAt(float t) const;
 };
 
-const EasingSpline LinearEasing {0, 0, 1, 1};
-
+const EasingSpline LinearEasing{0, 0, 1, 1};
 
 
 #endif //SPLINE_H

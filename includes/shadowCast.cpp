@@ -5,7 +5,7 @@
 
 #include "shadowCast.h"
 
-using uint=uint32_t;
+using uint = uint32_t;
 
 float calculateAngle(const int dx, const int dy) {
     return std::atan2(dy, dx) * 180 / M_PI;
@@ -31,7 +31,7 @@ bool isAngleTouched(float startAngle, float endAngle, float testAngle) {
     if (startAngle >= endAngle) {
         return testAngle <= startAngle && testAngle >= endAngle;
     }
-    // Case 2: Arc crosses 0 degrees
+        // Case 2: Arc crosses 0 degrees
     else {
         return testAngle <= startAngle || testAngle >= endAngle;
     }
@@ -39,8 +39,8 @@ bool isAngleTouched(float startAngle, float endAngle, float testAngle) {
 
 
 void computeFOV2Visualize(IntGrid &map, uint startX, uint startY, const uint radius, const int row,
-                float startSlope, const float endSlope, uint xx, uint xy, uint yx, uint yy,
-                float sectorStartAngle, float sectorEndAngle) {
+                          float startSlope, const float endSlope, uint xx, uint xy, uint yx, uint yy,
+                          float sectorStartAngle, float sectorEndAngle) {
     if (startSlope < endSlope) return;
     float nextStartSlope = startSlope;
     for (int i = row; i <= radius; i++) {
@@ -81,7 +81,7 @@ void computeFOV2Visualize(IntGrid &map, uint startX, uint startY, const uint rad
                 blocked = true;
                 nextStartSlope = rightSlope;
                 computeFOV2Visualize(map, startX, startY, radius, i + 1, startSlope, leftSlope, xx, xy, yx, yy,
-                           sectorStartAngle, sectorEndAngle);
+                                     sectorStartAngle, sectorEndAngle);
             }
         }
         if (blocked) {
@@ -90,7 +90,8 @@ void computeFOV2Visualize(IntGrid &map, uint startX, uint startY, const uint rad
     }
 }
 
-bool computeFOV(IntGrid &map, uint startX, uint startY, const uint targetX, const uint targetY, const uint radius, const int row,
+bool computeFOV(IntGrid &map, uint startX, uint startY, const uint targetX, const uint targetY, const uint radius,
+                const int row,
                 float startSlope, const float endSlope, const uint xx, const uint xy, const uint yx, const uint yy,
                 const float sectorStartAngle, const float sectorEndAngle) {
     if (startSlope < endSlope) return false;
@@ -130,9 +131,10 @@ bool computeFOV(IntGrid &map, uint startX, uint startY, const uint targetX, cons
             } else if (map.isOpaque(ax, ay)) {
                 blocked = true;
                 nextStartSlope = rightSlope;
-                const bool res = computeFOV(map, startX, startY, targetX, targetY, radius, i + 1, startSlope, leftSlope, xx, xy, yx, yy,
+                const bool res = computeFOV(map, startX, startY, targetX, targetY, radius, i + 1, startSlope, leftSlope,
+                                            xx, xy, yx, yy,
                                             sectorStartAngle, sectorEndAngle);
-                if (res) {return true;}
+                if (res) { return true; }
             }
         }
         if (blocked) {
@@ -143,39 +145,38 @@ bool computeFOV(IntGrid &map, uint startX, uint startY, const uint targetX, cons
 }
 
 
-
 static constexpr int multipliers[4][8] = {
-    {1, 0, 0, -1, -1, 0, 0, 1},
-    {0, 1, -1, 0, 0, -1, 1, 0},
-    {0, 1, 1, 0, 0, -1, -1, 0},
-    {1, 0, 0, 1, -1, 0, 0, -1}
+        {1, 0, 0,  -1, -1, 0,  0,  1},
+        {0, 1, -1, 0,  0,  -1, 1,  0},
+        {0, 1, 1,  0,  0,  -1, -1, 0},
+        {1, 0, 0,  1,  -1, 0,  0,  -1}
 };
 
 void visualizeFOV(IntGrid &map, const float startX, const float startY, const float radius,
-            const float sectorStartAngle, const float sectorEndAngle) {
+                  const float sectorStartAngle, const float sectorEndAngle) {
 
     const uint correctedX = IntGrid::worldToGrid(startX, IntGrid::rows());
     const uint correctedY = IntGrid::worldToGrid(startY, IntGrid::cols());
     const uint correctedRadius = IntGrid::worldToGrid(radius, IntGrid::rows());
     for (uint i = 0; i < 8; i++) {
         computeFOV2Visualize(map, correctedX, correctedY, correctedRadius, 1, 1.0, 0.0,
-                   multipliers[0][i], multipliers[1][i], multipliers[2][i], multipliers[3][i],
-                   sectorStartAngle, sectorEndAngle);
+                             multipliers[0][i], multipliers[1][i], multipliers[2][i], multipliers[3][i],
+                             sectorStartAngle, sectorEndAngle);
     }
 }
 
 
 bool isTargetInFOV(IntGrid &map, float startX, float startY, float targetX, float targetY,
-    float radius,float sectorStartAngle, float sectorEndAngle) {
+                   float radius, float sectorStartAngle, float sectorEndAngle) {
     const uint correctedX = IntGrid::worldToGrid(startX, IntGrid::rows());
     const uint correctedY = IntGrid::worldToGrid(startY, IntGrid::cols());
     const uint correctedTargetX = IntGrid::worldToGrid(targetX, IntGrid::rows());
     const uint correctedTargetY = IntGrid::worldToGrid(targetY, IntGrid::cols());
     const uint correctedRadius = IntGrid::worldToGrid(radius, IntGrid::rows());
     for (uint i = 0; i < 8; i++) {
-        if (computeFOV(map, correctedX, correctedY, correctedTargetX,correctedTargetY, correctedRadius, 1, 1.0, 0.0,
-                   multipliers[0][i], multipliers[1][i], multipliers[2][i], multipliers[3][i],
-                   sectorStartAngle, sectorEndAngle))
+        if (computeFOV(map, correctedX, correctedY, correctedTargetX, correctedTargetY, correctedRadius, 1, 1.0, 0.0,
+                       multipliers[0][i], multipliers[1][i], multipliers[2][i], multipliers[3][i],
+                       sectorStartAngle, sectorEndAngle))
             return true;
     }
     return false;

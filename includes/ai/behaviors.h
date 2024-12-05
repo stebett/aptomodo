@@ -8,7 +8,7 @@
 #include "behaviorTree.h"
 
 class PlayerInView : public Behavior {
-    Status update(entt::registry &registry, entt::entity self, entt::entity player) override;
+    Status update(entt::entity self, entt::entity player) override;
 
     [[nodiscard]] const char *getName() const override { return name; }
 
@@ -17,9 +17,8 @@ public:
 };
 
 
-
 class PlayerInMeleeRange : public Behavior {
-    Status update(entt::registry &registry, entt::entity self, entt::entity player) override;
+    Status update(entt::entity self, entt::entity player) override;
 
     [[nodiscard]] const char *getName() const override { return name; }
 
@@ -28,7 +27,7 @@ public:
 };
 
 class AttackMelee : public Behavior {
-    Status update(entt::registry &registry, entt::entity self, entt::entity player) override;
+    Status update(entt::entity self, entt::entity player) override;
 
     [[nodiscard]] const char *getName() const override { return name; }
 
@@ -37,7 +36,7 @@ public:
 };
 
 class GetRandomTarget : public Behavior {
-    Status update(entt::registry &registry, entt::entity self, entt::entity player) override;
+    Status update(entt::entity self, entt::entity player) override;
 
     [[nodiscard]] const char *getName() const override { return name; }
 
@@ -46,7 +45,7 @@ public:
 };
 
 class MoveTowardsTarget : public Behavior {
-    Status update(entt::registry &registry, entt::entity self, entt::entity player) override;
+    Status update(entt::entity self, entt::entity player) override;
 
     [[nodiscard]] const char *getName() const override { return name; }
 
@@ -55,7 +54,7 @@ public:
 };
 
 class GetPlayerTarget : public Behavior {
-    Status update(entt::registry &registry, entt::entity self, entt::entity player) override;
+    Status update(entt::entity self, entt::entity player) override;
 
     [[nodiscard]] const char *getName() const override { return name; }
 

@@ -21,11 +21,11 @@ void AnimationManager::LoadFromDirectory(const std::string &directory) {
     TextureAnimation anim;
     std::set<fs::path> sorted_by_name;
 
-    for (auto &entry : fs::directory_iterator(getAssetPath(directory))) {
+    for (auto &entry: fs::directory_iterator(getAssetPath(directory))) {
         sorted_by_name.insert(entry.path());
     }
 
-    for (auto &filename : sorted_by_name) {
+    for (auto &filename: sorted_by_name) {
         anim.textures.push_back(LoadTexture(reinterpret_cast<const char *>(filename.c_str())));
         anim.frameCount++;
     }

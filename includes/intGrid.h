@@ -4,6 +4,7 @@
 
 #ifndef INTGRID_H
 #define INTGRID_H
+
 #include <constants.h>
 
 // Todo this file can probably be in a different directory

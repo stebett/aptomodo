@@ -23,10 +23,14 @@
     We will need aoadItemFromFile
  */
 
-struct OnPlayer {};
-struct Item {};
+struct OnPlayer {
+};
+struct Item {
+};
+
 struct Name {
     std::string value;
+
     operator std::string() const noexcept { return value; }
 };
 // TODO save items in files

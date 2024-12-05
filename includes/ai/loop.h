@@ -6,10 +6,9 @@
 #define APTOMODO_LOOP_H
 
 namespace AI {
-    void Update(entt::registry &registry, entt::entity player) ;
+    void Update(entt::entity player);
 
 }
-
 
 
 #endif //APTOMODO_LOOP_H

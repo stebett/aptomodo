@@ -4,15 +4,15 @@
 
 #ifndef APTOMODO_FACTORIES_H
 #define APTOMODO_FACTORIES_H
-#include <managers/levelManager.h>
 
+#include <managers/levelManager.h>
 
 
 Camera2D spawnCamera();
 
-void spawnEntities(entt::registry &registry, const std::vector<Level::Entity>&);
+void spawnEntities(const std::vector<Level::Entity> &);
 
-entt::entity spawnPlayer(entt::registry &registry);
+entt::entity spawnPlayer();
 
 
 #endif //APTOMODO_FACTORIES_H

@@ -4,6 +4,7 @@
 
 #ifndef GAME_H
 #define GAME_H
+
 #include <camera.h>
 #include "framerateManager.h"
 #include "intGrid.h"

@@ -5,8 +5,8 @@
 #include "pch.h"
 #include "controls.h"
 
-#include <external/miniaudio.h>
-#include <math/mathConstants.h>
+#include "external/miniaudio.h"
+#include "math/mathConstants.h"
 
 #include "collisions.h"
 #include "constants.h"
@@ -17,16 +17,16 @@
 #include "items.h"
 
 
-void playerAttack(entt::registry &registry, entt::entity &player, Attributes &attributes, Vector2 clickPosition) {
-    auto &attackTimer = registry.get<AttackTimer>(player).timer;
+void playerAttack(entt::entity &player, Attributes &attributes, Vector2 clickPosition) {
+    auto &attackTimer =Game::registry.get<AttackTimer>(player).timer;
     if (attackTimer.ElapsedSeconds() < attributes.getMultiplied(AttributeConstants::attackSpeed)) return;
     attackTimer.Reset();
-    Position &playerPosition = registry.get<Position>(player);
+    Position &playerPosition =Game::registry.get<Position>(player);
 
     float attackRange = attributes.getMultiplied(AttributeConstants::range);
     float attackSpread = attributes.getMultiplied(AttributeConstants::spread);
     float damage = attributes.getMultiplied(AttributeConstants::damagePhysical);
-    //    float pushback = registry.get<Pushback>(player);
+    //    float pushback =Game::registry.get<Pushback>(player);
 
     float clickAngle = atan2(clickPosition.y - playerPosition.y, clickPosition.x - playerPosition.x) * Math::Const::radToDeg;
 
@@ -34,9 +34,9 @@ void playerAttack(entt::registry &registry, entt::entity &player, Attributes &at
         100, playerPosition, attackRange, clickAngle - attackSpread, clickAngle + attackSpread,
         PURPLE
     };
-    registry.emplace<AttackEffect>(registry.create(), effect);
+   Game::registry.emplace<AttackEffect>Game::registry.create(), effect);
 
-    registry.emplace<Audio::Command>(registry.create(), "player_shot");
+   Game::registry.emplace<Audio::Command>Game::registry.create(), "player_shot");
 
     Vector2 endSegment1 = {
         playerPosition.x + attackRange *  cos((clickAngle - attackSpread) * Math::Const::degToRad),
@@ -47,7 +47,7 @@ void playerAttack(entt::registry &registry, entt::entity &player, Attributes &at
         playerPosition.y + attackRange *  sin((clickAngle + attackSpread) * Math::Const::degToRad)
     };
 
-    auto enemyView = registry.view<Enemy, Living, Health, Radius, Position>();
+    auto enemyView =Game::registry.view<Enemy, Living, Health, Radius, Position>();
     for (auto [enemy, health, radius, position]: enemyView.each()) {
         if (CheckCollisionCircleTriangle(position, radius, playerPosition,
                                          endSegment1, endSegment2, attackRange)) {
@@ -59,14 +59,14 @@ void playerAttack(entt::registry &registry, entt::entity &player, Attributes &at
     }
 }
 
-void playerSecondaryAttack(entt::registry &registry, entt::entity player) {
-    //    Position playerPosition = registry.get<Position>(player);
-    //    float attackRange  = registry.get<AttackRange>(player);
-    //    float damage  = registry.get<Damage>(player);
-    //    float pushback = registry.get<Pushback>(player);
+void playerSecondaryAttack(entt::entity player) {
+    //    Position playerPosition =Game::registry.get<Position>(player);
+    //    float attackRange  =Game::registry.get<AttackRange>(player);
+    //    float damage  =Game::registry.get<Damage>(player);
+    //    float pushback =Game::registry.get<Pushback>(player);
     //    DrawCircle(playerPosition.x, playerPosition.y, attackRange, RED);
     //
-    //    auto enemyView = registry.view<Enemy, Living, Health, Radius, Position>();
+    //    auto enemyView =Game::registry.view<Enemy, Living, Health, Radius, Position>();
     //    for (auto [enemy, health, radius, position]: enemyView.each()) {
     //        if (CheckCollisionCircles(position, radius, playerPosition,
     //                                  attackRange)) {
@@ -78,26 +78,26 @@ void playerSecondaryAttack(entt::registry &registry, entt::entity player) {
     //    }
 }
 
-void castFire(entt::registry &registry, entt::entity player, Vector2 clickPosition) {
+void castFire(entt::entity player, Vector2 clickPosition) {
 }
 
-void PickUpItem(entt::registry &registry, const entt::entity player) {
-    Position playerPosition = registry.get<Position>(player); // This could be static, or a static ref
-    for (auto [entity, position]: registry.view<Item, Position>().each()) {
+void PickUpItem(const entt::entity player) {
+    Position playerPosition =Game::registry.get<Position>(player); // This could be static, or a static ref
+    for (auto [entity, position]:Game::registry.view<Item, Position>().each()) {
         if (Vector2Distance(playerPosition, position) < 20) {
-            registry.emplace<OnPlayer>(entity);
-            registry.remove<Position>(entity);
+           Game::registry.emplace<OnPlayer>(entity);
+           Game::registry.remove<Position>(entity);
             return; // Only draw it for one item
         }
     }
 }
 
-void selectEnemy(entt::registry &registry, Vector2 worldPosition) {
-    auto enemyView = registry.view<Enemy, Living, Radius, Position>();
-    registry.clear<Selected>();
+void selectEnemy(Vector2 worldPosition) {
+    auto enemyView =Game::registry.view<Enemy, Living, Radius, Position>();
+   Game::registry.clear<Selected>();
     for (auto [enemy, radius, position]: enemyView.each()) {
         if (CheckCollisionPointCircle(worldPosition, position, radius)) {
-            registry.emplace<Selected>(enemy);
+           Game::registry.emplace<Selected>(enemy);
             *Config::GetBoolPtr("show_enemy_window") = true;
         }
     }
@@ -141,18 +141,18 @@ void movePlayer(Position &position, Vector2 &futurePos, const float radius, cons
 }
 
 
-void parseInput(entt::registry &registry, entt::entity &player, Position &position, Camera2D &camera) {
-    auto &attributes = registry.get<Attributes>(player);
-    const auto radius = registry.get<Radius>(player);
-    const auto lookAngle = registry.get<LookAngle>(player);
+void parseInput(entt::entity &player, Position &position, Camera2D &camera) {
+    auto &attributes =Game::registry.get<Attributes>(player);
+    const auto radius =Game::registry.get<Radius>(player);
+    const auto lookAngle =Game::registry.get<LookAngle>(player);
 
     if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) || IsMouseButtonDown(MOUSE_LEFT_BUTTON)) {
-        playerAttack(registry, player, attributes, GetScreenToWorld2D(GetMousePosition(), camera));
+        playerAttack( player, attributes, GetScreenToWorld2D(GetMousePosition(), camera));
     }
 
     if (IsMouseButtonPressed(MOUSE_RIGHT_BUTTON)) {
-        //        playerSecondaryAttack(registry, player);
-        selectEnemy(registry, GetScreenToWorld2D(GetMousePosition(), camera));
+        //        playerSecondaryAttack( player);
+        selectEnemy( GetScreenToWorld2D(GetMousePosition(), camera));
     }
 
     if (IsKeyPressed(KEY_O)) *Config::GetBoolPtr("show_attr_window") = !Config::GetBool("show_attr_window");
@@ -161,7 +161,7 @@ void parseInput(entt::registry &registry, entt::entity &player, Position &positi
 
 
     if (IsKeyPressed(KEY_F)) {
-        PickUpItem(registry, player);
+        PickUpItem( player);
     }
     camera.zoom += GetMouseWheelMove() / 10;
 
@@ -179,9 +179,9 @@ void parseInput(entt::registry &registry, entt::entity &player, Position &positi
 }
 
 
-void updateAttributes(const entt::registry &registry, Attributes &attributes) {
+void updateAttributes(const Attributes &attributes) {
     std::vector<AttributeConstants::Modifier> modifiers{};
-    auto modifiersView = registry.view<OnPlayer, AttributeConstants::Modifier>();
+    auto modifiersView =Game::registry.view<OnPlayer, AttributeConstants::Modifier>();
     for (auto [entity, modifier]: modifiersView.each()) {
         modifiers.emplace_back(modifier);
     }
@@ -193,15 +193,15 @@ void faceMouse(const Vector2 &position, LookAngle &lookAngle, const Camera2D &ca
     lookAngle = atan2(mouseY - position.y, mouseX - position.x) * RAD2DEG;
 }
 
-void updatePlayer(entt::registry &registry, entt::entity &player, Position &position, Camera2D &camera) {
-    parseInput(registry, player, position, camera);
-    auto &lookAngle = registry.get<LookAngle>(player);
-    auto &attributes = registry.get<Attributes>(player);
-    auto health = registry.get<Health>(player);
-    const auto exp = registry.get<Experience>(player);
+void updatePlayer(entt::entity &player, Position &position, Camera2D &camera) {
+    parseInput( player, position, camera);
+    auto &lookAngle =Game::registry.get<LookAngle>(player);
+    auto &attributes =Game::registry.get<Attributes>(player);
+    auto health =Game::registry.get<Health>(player);
+    const auto exp =Game::registry.get<Experience>(player);
 
     faceMouse(position, lookAngle, camera);
     if (health.max < health.value) health.value = health.max; // TODO fix this
     if (exp >= attributes.expToNextLevel()) attributes.levelUp();
-    updateAttributes(registry, attributes);
+    updateAttributes( attributes);
 }

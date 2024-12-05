@@ -16,11 +16,12 @@ class Gui {
 public:
     static void Instantiate();
 
-    static void Update(entt::registry& registry, const Camera2D &camera);
+    static void Update(const Camera2D &camera);
 
     static void Draw();
 
     static bool WantMouse();
+
     static bool WantKeyboard();
 
     static void Clean();

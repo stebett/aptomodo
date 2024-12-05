@@ -4,7 +4,7 @@
 
 #include <components.h>
 
-Chasing::Chasing(const float p_duration): timer(Timer()), duration(p_duration) {
+Chasing::Chasing(const float p_duration) : timer(Timer()), duration(p_duration) {
 }
 
 bool Chasing::isChasing() const { return timer.ElapsedSeconds() < duration; }
@@ -13,15 +13,15 @@ ColorBB::operator Color() const noexcept { return color; }
 
 Position::operator Vector2() const noexcept { return Vector2{x, y}; }
 
-Position::Position(Vector2 v): x(v.x), y(v.y) {
+Position::Position(Vector2 v) : x(v.x), y(v.y) {
 }
 
-Position::Position(float x, float y): x(x), y(y) {
+Position::Position(float x, float y) : x(x), y(y) {
 }
 
 Speed::operator float() const noexcept { return value; }
 
-Speed::Speed(float x): value(x), max(x) {
+Speed::Speed(float x) : value(x), max(x) {
 }
 
 Speed::Speed() {
@@ -33,7 +33,7 @@ float Health::operator-(const float x) const noexcept { return value - x; }
 
 void Health::operator-=(const float x) noexcept { value -= x; }
 
-Health::Health(const float max): value(max), max(max) {
+Health::Health(const float max) : value(max), max(max) {
 }
 
 Health::Health() {
@@ -90,7 +90,7 @@ void Path::validate() {
     valid = true;
 }
 
-Path::Path(): index(7), indexMax(7), path({0}) {
+Path::Path() : index(7), indexMax(7), path({0}) {
 }
 
 Radius::operator float() const noexcept { return value; }
@@ -99,18 +99,18 @@ Grade::operator int() const noexcept { return value; }
 
 LookAngle::operator float() const noexcept { return value; }
 
-LookAngle::LookAngle(float d): value(d) {
+LookAngle::LookAngle(float d) : value(d) {
 }
 
 Spread::operator float() const noexcept { return value; }
 
 AttackEffect::AttackEffect(float mDuration, Vector2 mCenter, const float &mRadius,
                            float mStartAngle, float mEndangle, const Color &mColor) : m_duration(mDuration),
-    m_center(mCenter),
-    m_radius(mRadius),
-    m_color(mColor),
-    m_startAngle(mStartAngle),
-    m_endAngle(mEndangle) {
+                                                                                      m_center(mCenter),
+                                                                                      m_radius(mRadius),
+                                                                                      m_color(mColor),
+                                                                                      m_startAngle(mStartAngle),
+                                                                                      m_endAngle(mEndangle) {
     m_timer.Reset();
 }
 

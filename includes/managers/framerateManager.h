@@ -42,4 +42,5 @@ struct FramerateManager {
         return GetTime() - previousTime;
     }
 };
+
 #endif //APTOMODO_FRAMERATEMANAGER_H

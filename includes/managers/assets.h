@@ -4,6 +4,7 @@
 
 #ifndef ASSETS_H
 #define ASSETS_H
+
 #include "enemyType.h"
 #include "intGrid.h"
 
