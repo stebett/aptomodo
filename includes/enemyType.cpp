@@ -10,6 +10,7 @@ const std::filesystem::path EnemyDataFile::path {std::filesystem::path(ROOT_PATH
 
 
 bool EnemyDataFile::loadCSV() {
+    enemyStats.clear();
     try {
         SPDLOG_INFO("Enemies file trying to parse: {}", path);
         rapidcsv::Document doc(path, rapidcsv::LabelParams(0, -1));
