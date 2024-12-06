@@ -56,6 +56,7 @@ void Assets::Clean() {
 void Assets::InstantiateAudio() {
     InitAudioDevice();
     SetMasterVolume(0);
+    auto names = Audio::loadCSV();
     for (const auto& name: Audio::loadCSV())
         LoadAudio(name);
 }

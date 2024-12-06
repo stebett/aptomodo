@@ -25,18 +25,49 @@
 
 ImGuiIO *Gui::m_io;
 
+void modalDroppedMp3(const std::filesystem::path &filepath, bool *droppedFile) {
+    ImGui::OpenPopup("MP3 file dropped");
+    auto path = std::filesystem::path(ROOT_PATH) / std::filesystem::path(AUDIO_PATH) / filepath.filename();
+    // Always center this window when appearing
+    ImVec2 center = ImGui::GetMainViewport()->GetCenter();
+    ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+
+    if (ImGui::BeginPopupModal("MP3 file dropped", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
+        ImGui::Text("Vuoi salvare il file?");
+        ImGui::Text("Verra' salvato in %s", path.c_str());
+        ImGui::Separator();
+
+        if (ImGui::Button("OK", ImVec2(120, 0))) {
+            ImGui::CloseCurrentPopup();
+            std::filesystem::copy(filepath, path);
+            auto names = Audio::loadCSV();
+            auto name = filepath.stem();
+            names.emplace_back(name.string());
+            Audio::saveCSV(names);
+            Assets::LoadAudio(name);
+            *droppedFile = false;
+        }
+        ImGui::SetItemDefaultFocus();
+        ImGui::SameLine();
+        if (ImGui::Button("Cancel", ImVec2(120, 0))) {
+            ImGui::CloseCurrentPopup();
+            *droppedFile = false;
+        }
+        ImGui::EndPopup();
+    }
+}
+
 void imguiShowAssets() {
     ImGui::Begin("Assets");
-    ImGui::SeparatorText("Audio");
-    for (const auto &[id, soundEffect]: Assets::audioResources) {
-        ImGui::PushID(id);
-        ImGui::Text("%s", soundEffect.name.c_str());
-        ImGui::SameLine();
-        if (ImGui::Button("Play")) Game::registry.emplace<Audio::Command>(Game::registry.create(), soundEffect.name);
-        ImGui::PopID();
+    if (ImGui::CollapsingHeader("Audio", ImGuiTreeNodeFlags_None)) {
+        for (const auto &[id, soundEffect]: Assets::audioResources) {
+            ImGui::PushID(id);
+            if (ImGui::Button(soundEffect.name.c_str()))
+                Game::registry.emplace<Audio::Command>(Game::registry.create(), soundEffect.name);
+            ImGui::PopID();
+        }
     }
-    ImGui::SeparatorText("Enemies");
-
+    if (ImGui::CollapsingHeader("Enemies", ImGuiTreeNodeFlags_None)) {}
 
     ImGui::End();
 };
@@ -611,6 +642,26 @@ void imguiWindowMain(ImGuiIO io, const Camera2D &camera) {
     showChecked("Instructions", imguiInstructions);
     showChecked("Multipliers Window", imguiAttributesMultipliers);
     showChecked("Start Values Window", imguiSubAttributesStartValues);
+
+
+    static bool droppedFile{false};
+    static FilePathList files{};
+    if (IsFileDropped()) droppedFile = true;
+    if (droppedFile) {
+        files = LoadDroppedFiles();
+        SPDLOG_INFO("Dropped a file: ");
+        SPDLOG_INFO(files.paths[files.count - 1]);
+        auto filename = files.paths[files.count - 1];
+        auto filepath = std::filesystem::path(filename);
+        if (filepath.extension() == ".mp3")
+            modalDroppedMp3(filepath, &droppedFile);
+        else droppedFile = false;
+    }
+    if (!droppedFile && files.count > 0) {
+        UnloadDroppedFiles(files);
+        files.count = 0;
+    }
+
 
     ImGui::End();
 }

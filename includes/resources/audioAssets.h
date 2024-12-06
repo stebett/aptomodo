@@ -14,6 +14,8 @@ struct SoundEffect {
 
 namespace Audio {
     std::vector<std::string> loadCSV();
+
+    bool saveCSV(const std::vector<std::string> &filenames);
 }
 
 
