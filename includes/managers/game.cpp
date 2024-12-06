@@ -19,6 +19,7 @@
 #include "gui.h"
 #include "renderingManager.h"
 #include "systems/statusUpdate.h"
+#include "gui/animationEditor.h"
 
 Texture2D Game::levelTexture;
 IntGrid Game::grid;
@@ -71,7 +72,7 @@ LevelOutcome PlayLevel(const int levelNumber) {
     while (!Game::IsLevelFinished()) {
         if (!Game::IsPaused()) {
             StatusEffect::Update();
-//            Attacks::Update();
+            Attacks::Update();
             framerateManager.accumulator += framerateManager.deltaTime;
             while (framerateManager.accumulator >= Physics::timeStep) {
                 Physics::Step();

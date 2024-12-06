@@ -5,12 +5,12 @@
 #ifndef ASSETS_H
 #define ASSETS_H
 
-#include "enemyType.h"
+#include "resources/enemyType.h"
 #include "intGrid.h"
+#include "resources/audioAssets.h"
 
 
 class Assets {
-    static std::unordered_map<size_t, Sound> audioResources;
 
     static std::unique_ptr<ldtk::Project> LDTKProject;
 
@@ -21,6 +21,8 @@ class Assets {
     static void InstantiateLevel();
 
 public:
+    static std::unordered_map<std::size_t, SoundEffect> audioResources;
+
     static void LoadAudio(const std::string &filename);
 
     static const Sound &GetSound(const std::string &name);
@@ -42,7 +44,7 @@ public:
     static void CleanLDTK();
 
     static void InstantiateEnemiesFile();
-};
 
+};
 
 #endif //ASSETS_H

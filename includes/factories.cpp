@@ -7,7 +7,7 @@
 #include <components.h>
 #include "constants.h"
 #include "attributes.h"
-#include "enemyType.h"
+#include "resources/enemyType.h"
 #include "items.h"
 #include "ai/strategies.h"
 #include "managers/assets.h"

@@ -15,18 +15,26 @@
 #include "components.h"
 #include "constants.h"
 #include "configManager.h"
-#include "enemyType.h"
+#include "resources/enemyType.h"
 #include "game.h"
 #include "items.h"
 #include "gui/bezierEditor.h"
 #include "assets.h"
 #include "factories.h"
+#include "audioManager.h"
 
 ImGuiIO *Gui::m_io;
 
 void imguiShowAssets() {
     ImGui::Begin("Assets");
     ImGui::SeparatorText("Audio");
+    for (const auto &[id, soundEffect]: Assets::audioResources) {
+        ImGui::PushID(id);
+        ImGui::Text("%s", soundEffect.name.c_str());
+        ImGui::SameLine();
+        if (ImGui::Button("Play")) Game::registry.emplace<Audio::Command>(Game::registry.create(), soundEffect.name);
+        ImGui::PopID();
+    }
     ImGui::SeparatorText("Enemies");
 
 
@@ -590,6 +598,7 @@ void imguiWindowMain(ImGuiIO io, const Camera2D &camera) {
     } else
         *inEditor = false;
 
+    showChecked("Assets Window", imguiShowAssets);
     showChecked("Player Window", imguiPlayerAttr);
     showChecked("Level Window", imguiLevel);
     showChecked("Cursor Window", imguiCursor, camera);

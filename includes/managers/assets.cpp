@@ -7,7 +7,7 @@
 
 #include "levelManager.h"
 
-std::unordered_map<size_t, Sound> Assets::audioResources;
+std::unordered_map<std::size_t, SoundEffect> Assets::audioResources;
 
 EnemyDataFile Assets::enemiesData;
 
@@ -15,10 +15,16 @@ std::unique_ptr<ldtk::Project> Assets::LDTKProject;
 
 
 void Assets::LoadAudio(const std::string &filename) {
-    audioResources.insert({entt::hashed_string(filename.data()), LoadSound(getAssetPath("tracce/" + filename + ".mp3").c_str())});
+    auto id{entt::hashed_string(filename.data())};
+    auto path{std::filesystem::path(ROOT_PATH) / std::filesystem::path(AUDIO_PATH) / filename };
+    const auto& name{filename};
+    auto sound{LoadSound(path.replace_extension(".mp3").c_str())};
+    audioResources.insert({id, SoundEffect(id, path, name, sound)});
 }
 
-const Sound &Assets::GetSound(const std::string &name) { return audioResources.at(entt::hashed_string(name.data())); }
+const Sound &Assets::GetSound(const std::string &name) {
+    return audioResources.at(entt::hashed_string(name.data())).sound;
+}
 
 
 const ldtk::Level &Assets::GetLevel(const int levelNumber) {
@@ -33,7 +39,7 @@ EnemyDataFile &Assets::GetEnemiesData() {
 void Assets::CleanAudio() {
     for (auto &audioResource: audioResources) {
         SPDLOG_INFO("[ASSETS] Unloading sound"); // maybe for debugging find a way to get the name
-        UnloadSound(audioResource.second);
+        UnloadSound(audioResource.second.sound);
     }
     CloseAudioDevice();
 }
@@ -50,9 +56,8 @@ void Assets::Clean() {
 void Assets::InstantiateAudio() {
     InitAudioDevice();
     SetMasterVolume(0);
-    LoadAudio("player_shot"); // TODO get all names from a file, or load all files in a directory
-    LoadAudio("enemy_shot");
-    LoadAudio("enemy_explosion");
+    for (const auto& name: Audio::loadCSV())
+        LoadAudio(name);
 }
 
 void Assets::InstantiateEnemiesFile() {
