@@ -20,8 +20,6 @@ class Assets {
 
     static void InstantiateAudio();
 
-    static void InstantiateEnemiesFile();
-
     static void InstantiateLevel();
 
 public:
@@ -44,6 +42,8 @@ public:
     static void CleanAudio();
 
     static void CleanLDTK();
+
+    static void InstantiateEnemiesFile();
 };
 
 

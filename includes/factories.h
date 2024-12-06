@@ -11,6 +11,7 @@
 Camera2D spawnCamera();
 
 void spawnEntities(const std::vector<Level::Entity> &);
+entt::entity spawnEnemyByName(Vector2 position, const std::string &enemyName);
 
 entt::entity spawnPlayer();
 

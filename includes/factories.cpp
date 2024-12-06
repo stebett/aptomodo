@@ -33,7 +33,7 @@ entt::entity spawnLiving() {
 }
 
 
-entt::entity spawnEnemyFromFile(Position position, const std::string &enemyName) {
+entt::entity spawnEnemyByName(Vector2 position, const std::string &enemyName) {
     const EnemyType &stats = Assets::GetEnemiesData().getType(enemyName);
     static int id = 0;
     // TODO this should be hashed or something, so we don't have overlap if we add new spawns elsewhere, or stored in Game::ID
@@ -103,7 +103,7 @@ entt::entity spawnItemFromFile(Vector2 position, const std::string &name) {
 
 void spawnEntities(const std::vector<Level::Entity> &entities) {
     for (auto &[position, type, name]: entities) {
-        if (type == "Enemy") spawnEnemyFromFile(position, name);
+        if (type == "Enemy") spawnEnemyByName(position, name);
         if (type == "Item") spawnItemFromFile(position, name);
         if (type == "Player") spawnPlayer(position);
     }

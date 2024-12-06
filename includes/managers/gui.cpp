@@ -20,6 +20,7 @@
 #include "items.h"
 #include "gui/bezierEditor.h"
 #include "assets.h"
+#include "factories.h"
 
 ImGuiIO *Gui::m_io;
 
@@ -186,13 +187,19 @@ void imguiSplineEditor(const Camera2D &camera) {
 
 void imguiEnemyTypesEditor() {
     ImGui::Begin("Enemy Types Editor");
+    const auto player = Game::registry.view<Player>().front();
+    const auto playerPosition = Game::registry.get<Position>(player);
 
     static auto enemyList = Assets::GetEnemiesData().enemyStats;
-    if (ImGui::Button("Save")) { EnemyDataFile::saveCSV(enemyList); }
+    if (ImGui::Button("Save")) {
+        EnemyDataFile::saveCSV(enemyList);
+        Assets::InstantiateEnemiesFile();
+    }
 
-    if (ImGui::BeginTable("EnemyTable", EnemyDataFile::headers.size(),
+    if (ImGui::BeginTable("EnemyTable", EnemyDataFile::headers.size() + 1,
                           ImGuiTableFlags_Borders | ImGuiTableFlags_Resizable)) {
         // Render table headers
+        ImGui::TableSetupColumn("Spawn");
         for (const char *header: EnemyDataFile::headers) {
             ImGui::TableSetupColumn(header);
         }
@@ -203,6 +210,11 @@ void imguiEnemyTypesEditor() {
             EnemyType &enemy = enemyList[i];
             ImGui::TableNextRow();
 
+
+            ImGui::TableNextColumn();
+            if (ImGui::Button(("Spawn##" + std::to_string(i)).c_str())) {
+                spawnEnemyByName(playerPosition + Vector2{0.0f, 40.0f}, enemy.name);
+            }
             char buffer[80];
             std::strncpy(buffer, enemy.name.c_str(), sizeof(buffer));
             buffer[sizeof(buffer) - 1] = '\0';
@@ -239,7 +251,7 @@ void imguiEnemyTypesEditor() {
         // TODO save
         enemyList.push_back(EnemyType{
                 "NewEnemy", 1, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-                 100.0f, 10, "", ""
+                100.0f, 10, "", ""
         });
     }
     ImGui::End();
