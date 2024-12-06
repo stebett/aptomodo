@@ -46,7 +46,7 @@ entt::entity spawnEnemyFromFile(Position position, const std::string &enemyName)
     Game::registry.emplace<Damage>(e, stats.damage);
     Game::registry.emplace<AttackRange>(e, stats.attackRange);
     Game::registry.emplace<Spread>(e, stats.attackSpread);
-    Game::registry.emplace<ColorBB>(e, stats.color);
+    Game::registry.emplace<ColorBB>(e, RED);
     Game::registry.emplace<Health>(e, stats.health);
     Game::registry.emplace<Experience>(e, stats.experience);
 

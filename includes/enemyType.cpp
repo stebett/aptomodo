@@ -3,73 +3,92 @@
 //
 
 #include "enemyType.h"
-
+#include "rapidcsv.h"
 #include <constants.h>
 
-bool EnemyDataFile::loadCSV(const std::string &filename) {
-    auto path = std::filesystem::path(ROOT_PATH) / std::filesystem::path(CONFIG_PATH) / std::filesystem::path(filename);
-    SPDLOG_INFO("Config trying to parse: ");
-    SPDLOG_INFO(path);
+const std::filesystem::path EnemyDataFile::path {std::filesystem::path(ROOT_PATH) / std::filesystem::path(CONFIG_PATH) / "enemies.csv"};
 
-    std::ifstream file(path);
-    if (!file.is_open()) {
-        SPDLOG_ERROR("[ENEMIES]:  Could not open enemy type file");
+
+bool EnemyDataFile::loadCSV() {
+    try {
+        SPDLOG_INFO("Enemies file trying to parse: {}", path);
+        rapidcsv::Document doc(path, rapidcsv::LabelParams(0, -1));
+        SPDLOG_INFO("[ENEMIES]: Reading type file");
+        size_t rowCount = doc.GetRowCount();
+        for (size_t i = 0; i < rowCount; ++i) {
+            EnemyType stats;
+
+            stats.name = doc.GetCell<std::string>("Name", i);
+            stats.grade = doc.GetCell<int>("Grade", i);
+            stats.radius = doc.GetCell<float>("Radius", i);
+            stats.speed = doc.GetCell<float>("Speed", i);
+            stats.attackSpeed = doc.GetCell<float>("AttackSpeed", i);
+            stats.damage = doc.GetCell<float>("Damage", i);
+            stats.attackRange = doc.GetCell<float>("AttackRange", i);
+            stats.attackSpread = doc.GetCell<float>("AttackSpread", i);
+            stats.health = doc.GetCell<float>("Health", i);
+            stats.experience = doc.GetCell<int>("ExperienceGiven", i);
+            stats.attributesPath = doc.GetCell<std::string>("AttributesPath", i);
+            stats.texturePath = doc.GetCell<std::string>("TexturePath", i);
+
+            enemyStats.push_back(stats);
+        }
+
+        return true;
+    } catch (const std::exception& e) {
+        SPDLOG_ERROR("[ENEMIES]: Error loading enemy types: {}", e.what());
         return false;
     }
-    SPDLOG_INFO("[ENEMIES]:   Reading type file");
-
-    std::string line;
-    if (std::getline(file, line)) {
-        std::stringstream ss(line);
-        std::string header;
-        while (std::getline(ss, header, ',')) {
-            headers.push_back(header);
-        }
-    }
-
-    // Read the data rows
-    while (std::getline(file, line)) {
-        std::stringstream ss(line);
-        std::string cell;
-        EnemyType stats{};
-
-        for (size_t i = 0; i < headers.size(); ++i) {
-            std::getline(ss, cell, ',');
-            if (headers[i] == "Name") {
-                stats.name = cell;
-            } else if (headers[i] == "Grade") {
-                stats.grade = std::stoi(cell);
-            } else if (headers[i] == "Radius") {
-                stats.radius = std::stof(cell);
-            } else if (headers[i] == "Speed") {
-                stats.speed = std::stof(cell);
-            } else if (headers[i] == "AttackSpeed") {
-                stats.attackSpeed = std::stof(cell);
-            } else if (headers[i] == "Damage") {
-                stats.damage = std::stof(cell);
-            } else if (headers[i] == "AttackRange") {
-                stats.attackRange = std::stof(cell);
-            } else if (headers[i] == "AttackSpread") {
-                stats.attackSpread = std::stof(cell);
-            } else if (headers[i] == "ColorBB") {
-                stats.color = colorMap.at(cell);
-            } else if (headers[i] == "Health") {
-                stats.health = std::stof(cell);
-            } else if (headers[i] == "ExperienceGiven") {
-                stats.experience = std::stoi(cell);
-                // } else if (headers[i] == "Strategy") {
-            } else if (headers[i] == "AttributesPath") {
-                stats.attributesPath = cell;
-            } else if (headers[i] == "TexturePath") {
-                stats.texturePath = cell;
-            }
-        }
-        enemyStats.push_back(stats);
-    }
-
-    file.close();
-    return true;
 }
+
+
+bool EnemyDataFile::saveCSV(const std::vector<EnemyType>& enemies) {
+    try {
+        std::vector<std::string> names, attributesPaths, texturePaths, colors;
+        std::vector<int> grades, experiences;
+        std::vector<float> radii, speeds, attackSpeeds, damages, attackRanges, attackSpreads, healths;
+
+        for (const auto& enemy : enemies) {
+            names.push_back(enemy.name);
+            grades.push_back(enemy.grade);
+            radii.push_back(enemy.radius);
+            speeds.push_back(enemy.speed);
+            attackSpeeds.push_back(enemy.attackSpeed);
+            damages.push_back(enemy.damage);
+            attackRanges.push_back(enemy.attackRange);
+            attackSpreads.push_back(enemy.attackSpread);
+            healths.push_back(enemy.health);
+            experiences.push_back(enemy.experience);
+            attributesPaths.push_back(enemy.attributesPath);
+            texturePaths.push_back(enemy.texturePath);
+        }
+
+        rapidcsv::Document doc(path, rapidcsv::LabelParams(0, -1));
+
+        doc.SetColumn<std::string>("Name", names);
+        doc.SetColumn<int>("Grade", grades);
+        doc.SetColumn<float>("Radius", radii);
+        doc.SetColumn<float>("Speed", speeds);
+        doc.SetColumn<float>("AttackSpeed", attackSpeeds);
+        doc.SetColumn<float>("Damage", damages);
+        doc.SetColumn<float>("AttackRange", attackRanges);
+        doc.SetColumn<float>("AttackSpread", attackSpreads);
+        doc.SetColumn<float>("Health", healths);
+        doc.SetColumn<int>("ExperienceGiven", experiences);
+        doc.SetColumn<std::string>("AttributesPath", attributesPaths);
+        doc.SetColumn<std::string>("TexturePath", texturePaths);
+
+        doc.Save(path);
+
+        SPDLOG_INFO("[ENEMIES]: File saved successfully to {}", path.string());
+        return true;
+    } catch (const std::exception& e) {
+        SPDLOG_ERROR("[ENEMIES]: Failed to save file: {}", e.what());
+        return false;
+    }
+}
+
+
 
 EnemyType &EnemyDataFile::getType(const std::string &name) {
     for (auto &enemyType: enemyStats) {

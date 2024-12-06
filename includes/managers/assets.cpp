@@ -58,7 +58,7 @@ void Assets::InstantiateAudio() {
 }
 
 void Assets::InstantiateEnemiesFile() {
-    enemiesData.loadCSV(enemiesData.path);
+    enemiesData.loadCSV();
 }
 
 

@@ -15,21 +15,32 @@ struct EnemyType {
     float damage;
     float attackRange;
     float attackSpread;
-    Color color;
     float health;
     int experience;
     std::string attributesPath;
     std::string texturePath;
 };
 
-struct EnemyDataFile {
-    std::string path{"enemies.csv"};
-    std::vector<std::string> headers;
-    std::vector<EnemyType> enemyStats;
+inline constexpr std::string_view root_path = ROOT_PATH;
+inline constexpr std::string_view config_path = CONFIG_PATH;
 
-    bool loadCSV(const std::string &filename);
+
+struct EnemyDataFile {
+    const static std::filesystem::path path;
+    std::vector<EnemyType> enemyStats;
+    static constexpr std::array headers{
+            "Name", "Grade", "Radius", "Speed", "Attack Speed", "Damage",
+            "Attack Range", "Attack Spread", "Health", "Experience",
+            "Attributes Path", "Texture Path"
+    };
+
+
+    bool loadCSV();
 
     EnemyType &getType(const std::string &);
+
+    static bool saveCSV(const std::vector<EnemyType>& enemies);
+
 };
 
 #endif //ENEMYTYPE_H

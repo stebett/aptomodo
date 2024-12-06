@@ -19,6 +19,7 @@
 #include "game.h"
 #include "items.h"
 #include "gui/bezierEditor.h"
+#include "assets.h"
 
 ImGuiIO *Gui::m_io;
 
@@ -186,22 +187,13 @@ void imguiSplineEditor(const Camera2D &camera) {
 void imguiEnemyTypesEditor() {
     ImGui::Begin("Enemy Types Editor");
 
-    // Define table columns
-    static const char *columnHeaders[] = {
-            "Name", "Grade", "Radius", "Speed", "Attack Speed", "Damage",
-            "Attack Range", "Attack Spread", "Color", "Health", "Experience",
-            "Attributes Path", "Texture Path"
-    };
+    static auto enemyList = Assets::GetEnemiesData().enemyStats;
+    if (ImGui::Button("Save")) { EnemyDataFile::saveCSV(enemyList); }
 
-    static EnemyDataFile dataFile{};
-    if (dataFile.headers.empty())
-        dataFile.loadCSV(dataFile.path);
-    static auto enemyList = dataFile.enemyStats;
-
-    if (ImGui::BeginTable("EnemyTable", IM_ARRAYSIZE(columnHeaders),
+    if (ImGui::BeginTable("EnemyTable", EnemyDataFile::headers.size(),
                           ImGuiTableFlags_Borders | ImGuiTableFlags_Resizable)) {
         // Render table headers
-        for (const char *header: columnHeaders) {
+        for (const char *header: EnemyDataFile::headers) {
             ImGui::TableSetupColumn(header);
         }
         ImGui::TableHeadersRow();
@@ -211,10 +203,12 @@ void imguiEnemyTypesEditor() {
             EnemyType &enemy = enemyList[i];
             ImGui::TableNextRow();
 
-            char *name = enemy.name.data();
-            // Editable fields for each column
+            char buffer[80];
+            std::strncpy(buffer, enemy.name.c_str(), sizeof(buffer));
+            buffer[sizeof(buffer) - 1] = '\0';
             ImGui::TableNextColumn();
-            ImGui::InputText(("##Name" + std::to_string(i)).c_str(), name, 80);
+            ImGui::InputText(("##Name" + std::to_string(i)).c_str(), buffer, 80);
+            enemy.name = std::string(buffer);
             ImGui::TableNextColumn();
             ImGui::InputInt(("##Grade" + std::to_string(i)).c_str(), &enemy.grade);
             ImGui::TableNextColumn();
@@ -229,10 +223,6 @@ void imguiEnemyTypesEditor() {
             ImGui::InputFloat(("##AttackRange" + std::to_string(i)).c_str(), &enemy.attackRange);
             ImGui::TableNextColumn();
             ImGui::InputFloat(("##AttackSpread" + std::to_string(i)).c_str(), &enemy.attackSpread);
-            ImGui::TableNextColumn();
-            if (ImGui::ColorEdit4(("##Color" + std::to_string(i)).c_str(), (float *) &enemy.color)) {
-                // Color edit handler
-            }
             ImGui::TableNextColumn();
             ImGui::InputFloat(("##Health" + std::to_string(i)).c_str(), &enemy.health);
             ImGui::TableNextColumn();
@@ -249,7 +239,7 @@ void imguiEnemyTypesEditor() {
         // TODO save
         enemyList.push_back(EnemyType{
                 "NewEnemy", 1, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-                Color(1.0f, 1.0f, 1.0f, 1.0f), 100.0f, 10, "", ""
+                 100.0f, 10, "", ""
         });
     }
     ImGui::End();
