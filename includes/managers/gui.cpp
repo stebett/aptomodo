@@ -24,6 +24,15 @@
 
 ImGuiIO *Gui::m_io;
 
+void imguiShowAssets() {
+    ImGui::Begin("Assets");
+    ImGui::SeparatorText("Audio");
+    ImGui::SeparatorText("Enemies");
+
+
+    ImGui::End();
+};
+
 auto createBody = [](const entt::entity entity) {
     b2BodyDef bodyDef = b2DefaultBodyDef();
     bodyDef.type = b2_kinematicBody;

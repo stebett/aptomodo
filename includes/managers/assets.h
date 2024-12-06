@@ -11,8 +11,6 @@
 
 class Assets {
     static std::unordered_map<size_t, Sound> audioResources;
-    static std::hash<std::string> hasher;
-
 
     static std::unique_ptr<ldtk::Project> LDTKProject;
 

@@ -4,7 +4,6 @@
 
 #include "enemyType.h"
 #include "rapidcsv.h"
-#include <constants.h>
 
 const std::filesystem::path EnemyDataFile::path {std::filesystem::path(ROOT_PATH) / std::filesystem::path(CONFIG_PATH) / "enemies.csv"};
 

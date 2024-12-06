@@ -8,7 +8,6 @@
 #include "levelManager.h"
 
 std::unordered_map<size_t, Sound> Assets::audioResources;
-std::hash<std::string> Assets::hasher;
 
 EnemyDataFile Assets::enemiesData;
 
@@ -16,10 +15,10 @@ std::unique_ptr<ldtk::Project> Assets::LDTKProject;
 
 
 void Assets::LoadAudio(const std::string &filename) {
-    audioResources.insert({hasher(filename), LoadSound(getAssetPath("tracce/" + filename + ".mp3").c_str())});
+    audioResources.insert({entt::hashed_string(filename.data()), LoadSound(getAssetPath("tracce/" + filename + ".mp3").c_str())});
 }
 
-const Sound &Assets::GetSound(const std::string &name) { return audioResources.at(hasher(name)); }
+const Sound &Assets::GetSound(const std::string &name) { return audioResources.at(entt::hashed_string(name.data())); }
 
 
 const ldtk::Level &Assets::GetLevel(const int levelNumber) {
@@ -41,7 +40,6 @@ void Assets::CleanAudio() {
 
 void Assets::CleanLDTK() {
     LDTKProject.reset();
-
 }
 
 void Assets::Clean() {
