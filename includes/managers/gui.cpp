@@ -67,8 +67,18 @@ void imguiShowAssets() {
             ImGui::PopID();
         }
     }
-    if (ImGui::CollapsingHeader("Enemies", ImGuiTreeNodeFlags_None)) {}
-
+    if (ImGui::CollapsingHeader("Enemies", ImGuiTreeNodeFlags_None)) {
+        const auto player = Game::registry.view<Player>().front();
+        const auto playerPosition = Game::registry.get<Position>(player);
+        const auto enemyList = Assets::GetEnemiesData().enemyStats;
+        for (size_t i = 0; i < enemyList.size(); ++i) {
+            const EnemyType &enemy = enemyList[i];
+            ImGui::PushID(i);
+            if (ImGui::Button(enemy.name.c_str()))
+                spawnEnemyByName(playerPosition + Vector2{0.0f, 40.0f}, enemy.name);
+            ImGui::PopID();
+        }
+    }
     ImGui::End();
 };
 
