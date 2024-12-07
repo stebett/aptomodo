@@ -6,14 +6,11 @@
 #include "rlImGui.h"
 #include "managers/game.h"
 #include "managers/gui.h"
+#include "math/helpers.h"
 
 constexpr int gridEdge = 4;
 constexpr int gridSize = 500;
 
-int roundUpToNextMultiple(float value, int n) {
-    if (n == 0) return value; // Avoid division by zero
-    return round(value / n) * n;
-}
 
 Rectangle RectangleFromTwoPoints(std::array<Vector2, 2> points) {
     const float xMin = std::min(points[0].x, points[1].x);
@@ -349,4 +346,3 @@ LevelOutcome PlayAnimationEditorLevelOnce() {
 
     return Game::GetOutcome();
 }
-
