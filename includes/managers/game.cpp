@@ -20,6 +20,7 @@
 #include "renderingManager.h"
 #include "systems/statusUpdate.h"
 #include "gui/animationEditor.h"
+#include "gui/aiEditor.h"
 
 Texture2D Game::levelTexture;
 IntGrid Game::grid;
@@ -116,7 +117,9 @@ void Game::Loop() {
     SPDLOG_INFO("Entering Loop");
 
     while (Game::levelOutcome != LevelOutcome::QUIT)
-        PlayLevel(Level);
+        PlayAIEditor();
+
+//        PlayLevel(Level);
 //        PlayAnimationEditorLevel();
 }
 
