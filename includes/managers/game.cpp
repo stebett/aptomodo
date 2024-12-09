@@ -47,6 +47,7 @@ void PlayerFaceMouse(const entt::entity player, const Camera2D &camera) {
     lookAngle = radians * RAD2DEG;
     if (!Config::GetBool("inEditor"))
         b2Body_SetTransform(body, transform.p, b2Rot(cos(radians), sin(radians)));
+    else b2Body_SetTransform(body, transform.p, b2Rot(cos(0.0), sin(0.0)));;
 }
 
 LevelOutcome PlayLevel() {

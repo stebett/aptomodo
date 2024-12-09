@@ -55,7 +55,7 @@ namespace Inputs {
         pairKeyPress(KEY_E, Delayed(Command::PickUp, player));
         pairKeyPress(KEY_LEFT_SHIFT, Delayed(Command::Dash, player));
 
-        if (!Gui::WantMouse() && !Config::GetBool("in_editor")) {
+        if (!Gui::WantMouse() && !Config::GetBool("inEditor")) {
             pairMouseKeyPress(MOUSE_BUTTON_RIGHT,
                               Delayed(Command::SelectEnemy, GetScreenToWorld2D(GetMousePosition(), camera)));
 //            pairMouseKeyPress(MOUSE_BUTTON_LEFT,
