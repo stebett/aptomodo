@@ -97,13 +97,71 @@ auto createShape = [](b2BodyId bodyId, b2Polygon box) {
     return b2CreatePolygonShape(bodyId, &shapeDef, &box);
 };
 
-void imguiBodyEditor(LocalSpline spline) {
-    ImGui::SeparatorText("Body Editor`");
-    static bool go{true};
-    static bool force_go{false};
+void imguiSplineEditor(const Camera2D &camera) {
+    static std::array<b2Vec2, 4> points{};
+    static std::array<b2Transform, 4> transforms{};
+    static std::array<bool, 4> pointsCreated = {false};
+    static std::array<bool, 4> pointsMoving = {false};
+
+    const Math::Vec2 mouse = GetScreenToWorld2D(GetMousePosition(), camera);
+    const auto player = Game::registry.view<Player>().front();
+    const auto playerBody = Game::registry.get<b2BodyId>(player);
+    const auto playerTransform = b2Body_GetTransform(playerBody);
+
+    if (!pointsCreated[0] && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+        pointsCreated[0] = true;
+        pointsCreated[1] = true;
+        points[0] = mouse;
+        points[1] = b2Add(points[0], {20, 20});
+        transforms[0] = b2Body_GetTransform(playerBody);
+        transforms[1] = b2Body_GetTransform(playerBody);
+    } else if (!pointsCreated[3] && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+        pointsCreated[2] = true;
+        pointsCreated[3] = true;
+        points[3] = mouse;
+        points[2] = b2Add(points[3], {20, 20});
+        transforms[2] = b2Body_GetTransform(playerBody);
+        transforms[3] = b2Body_GetTransform(playerBody);
+    }
+
+    auto spline = LocalSpline{points, transforms};
+
+    for (int i{0}; i < 4; i++) {
+        if (CheckCollisionPointCircle(spline.getGlobal(b2Body_GetTransform(playerBody))[i], mouse, 5.0f) &&
+            IsMouseButtonDown(
+                    MOUSE_BUTTON_LEFT)) {
+            pointsMoving[i] = true;
+            break;
+        }
+    }
+    for (int i{0}; i < 4; i++) {
+        if (pointsMoving[i]) {
+            points[i] = mouse;
+            transforms[i] = b2Body_GetTransform(playerBody);
+
+            if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
+                pointsMoving[i] = false;
+            }
+        }
+    }
+    ImGui::Begin("Spline editor");
+//
+//
+//    for (int n{0}; n < 4; n++) {
+//        ImGui::PushID(n);
+//        ImGui::Text("Point %i: %f x, %f y", n, points[n].x, points[n].y);
+//        ImGui::PopID();
+//    }
+
+    static entt::entity entity{Game::registry.create()};
+    Game::registry.emplace_or_replace<LocalSpline>(entity, spline);
+    ImGui::SeparatorText("Body Editor");
 
     static float duration = 2.0f;
     static float interval = 0.5f;
+
+    // TODO Put reset buttons on the left
+    // TODO Add a general reset
 
     static auto s = Attacks::LocalTransformSpline{spline};
     s.spline = spline;
@@ -157,88 +215,24 @@ void imguiBodyEditor(LocalSpline spline) {
     s.easingDim2 = EasingSpline(easingDim2);
 
     static float lastTime = GetTime() - duration;
-    ImGui::Checkbox("Create Body", &go);
-    auto entity{Game::registry.create()};
-    auto body{createBody(entity)};
+    auto bodyEntity{Game::registry.create()};
+    auto body{createBody(bodyEntity)};
     auto box{b2MakeBox(s.startDim1, s.startDim2)};
     createShape(body, box);
 
-    if (force_go || (go && ((lastTime + duration + interval) < GetTime()))) {
-        force_go = false;
+    if ((lastTime + duration + interval) < GetTime()) {
         lastTime = GetTime();
 
         const auto player = Game::registry.view<Player>().front();
         const auto playerBody = Game::registry.get<b2BodyId>(player);
-        Game::registry.emplace<Attacks::Attack>(entity, Attacks::Attack{100.0f});
-        Game::registry.emplace<Attacks::LocalTransformSpline>(entity, s);
-        Game::registry.emplace<Attacks::BodyCouple>(entity, Attacks::BodyCouple{playerBody, body});
-        Game::registry.emplace<PassiveTimer>(entity, duration);
+        Game::registry.emplace<Attacks::Attack>(bodyEntity, Attacks::Attack{100.0f});
+        Game::registry.emplace<Attacks::LocalTransformSpline>(bodyEntity, s);
+        Game::registry.emplace<Attacks::BodyCouple>(bodyEntity, Attacks::BodyCouple{playerBody, body});
+        Game::registry.emplace<PassiveTimer>(bodyEntity, duration);
     }
 
     ImGui::SliderFloat("duration", &duration, 0.1, 10);
     ImGui::SliderFloat("interval", &interval, 0, 10);
-}
-
-void imguiSplineEditor(const Camera2D &camera) {
-    static std::array<b2Vec2, 4> points{};
-    static std::array<b2Transform, 4> transforms{};
-    static std::array<bool, 4> pointsCreated = {false};
-    static std::array<bool, 4> pointsMoving = {false};
-
-    const Math::Vec2 mouse = GetScreenToWorld2D(GetMousePosition(), camera);
-    const auto player = Game::registry.view<Player>().front();
-    const auto playerBody = Game::registry.get<b2BodyId>(player);
-    const auto playerTransform = b2Body_GetTransform(playerBody);
-
-    if (!pointsCreated[0] && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-        pointsCreated[0] = true;
-        pointsCreated[1] = true;
-        points[0] = mouse;
-        points[1] = b2Add(points[0], {20, 20});
-        transforms[0] = b2Body_GetTransform(playerBody);
-        transforms[1] = b2Body_GetTransform(playerBody);
-    } else if (!pointsCreated[3] && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-        pointsCreated[2] = true;
-        pointsCreated[3] = true;
-        points[3] = mouse;
-        points[2] = b2Add(points[3], {20, 20});
-        transforms[2] = b2Body_GetTransform(playerBody);
-        transforms[3] = b2Body_GetTransform(playerBody);
-    }
-
-    auto spline = LocalSpline{points, transforms};
-
-    for (int i{0}; i < 4; i++) {
-        if (CheckCollisionPointCircle(spline.getGlobal(b2Body_GetTransform(playerBody))[i], mouse, 5.0f) &&
-            IsMouseButtonDown(
-                    MOUSE_BUTTON_LEFT)) {
-            pointsMoving[i] = true;
-            break;
-        }
-    }
-    for (int i{0}; i < 4; i++) {
-        if (pointsMoving[i]) {
-            points[i] = mouse;
-            transforms[i] = b2Body_GetTransform(playerBody);
-
-            if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
-                pointsMoving[i] = false;
-            }
-        }
-    }
-    ImGui::Begin("Spline editor");
-
-
-    for (int n{0}; n < 4; n++) {
-        ImGui::PushID(n);
-        ImGui::Text("Point %i: %f x, %f y", n, points[n].x, points[n].y);
-        ImGui::PopID();
-    }
-
-    static entt::entity entity{Game::registry.create()};
-    Game::registry.emplace_or_replace<LocalSpline>(entity, spline);
-    imguiBodyEditor(spline);
-
     ImGui::End();
 
 }
