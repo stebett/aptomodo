@@ -30,6 +30,15 @@ namespace Level {
     Texture2D LoadLevelTexture(const ldtk::Level &level);
 
     IntGrid LoadIntGrid(const ldtk::Level &level);
+
+
+    enum LevelName {
+        First = 0,
+        Second,
+        Third,
+        AIEditor,
+        AnimationEditor,
+    };
 }
 
 

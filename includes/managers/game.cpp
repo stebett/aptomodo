@@ -19,14 +19,15 @@
 #include "gui.h"
 #include "renderingManager.h"
 #include "systems/statusUpdate.h"
-#include "gui/animationEditor.h"
 #include "gui/aiEditor.h"
+#include "gui/animationEditor.h"
 
 Texture2D Game::levelTexture;
 IntGrid Game::grid;
 bool Game::paused = false;
 bool Game::levelFinished = false;
-int Game::Level = 0;
+int Game::Level = (Level::First);
+std::function<void()> Game::LevelFunction {&PlayLevel};
 LevelOutcome Game::levelOutcome = LevelOutcome::NONE;
 
 entt::registry Game::registry;
@@ -34,7 +35,9 @@ GameCamera Game::camera;
 FramerateManager Game::framerateManager{};
 
 // TODO find a better place for this
+
 void PlayerFaceMouse(const entt::entity player, const Camera2D &camera) {
+
     auto &lookAngle = Game::registry.get<LookAngle>(player);
     const auto body = Game::registry.get<b2BodyId>(player);
     const auto transform{b2Body_GetTransform(body)};
@@ -46,38 +49,31 @@ void PlayerFaceMouse(const entt::entity player, const Camera2D &camera) {
         b2Body_SetTransform(body, transform.p, b2Rot(cos(radians), sin(radians)));
 }
 
-
-/*
- * Different levels should
- *  - load different ldtk::levels
- *  - have different gui windows preopened
- */
-LevelOutcome PlayLevel(const int levelNumber) {
+LevelOutcome PlayLevel() {
     Game::EnterLevel();
     Gui::Instantiate();
     Physics::Instantiate();
 
     GameCamera camera{};
 
-    spawnEntities(Level::LoadEntities(Assets::GetLevel(levelNumber)));
-    Game::levelTexture = Level::LoadLevelTexture(Assets::GetLevel(levelNumber));
-    Game::grid = Level::LoadIntGrid(Assets::GetLevel(levelNumber));
-    // Assets::Clean();
+    spawnEntities(Level::LoadEntities(Assets::GetLevel(Game::Level)));
+    Game::levelTexture = Level::LoadLevelTexture(Assets::GetLevel(Game::Level));
+    Game::grid = Level::LoadIntGrid(Assets::GetLevel(Game::Level));
 
     const auto player = Game::registry.view<Player>().front();
     const auto &playerPosition = Game::registry.get<Position>(player);
     const auto &health = Game::registry.get<Health>(player);
 
-    FramerateManager framerateManager;
+    Game::framerateManager = FramerateManager();
 
     while (!Game::IsLevelFinished()) {
         if (!Game::IsPaused()) {
             StatusEffect::Update();
             Attacks::Update();
-            framerateManager.accumulator += framerateManager.deltaTime;
-            while (framerateManager.accumulator >= Physics::timeStep) {
+            Game::framerateManager.accumulator += Game::framerateManager.deltaTime;
+            while (Game::framerateManager.accumulator >= Physics::timeStep) {
                 Physics::Step();
-                framerateManager.accumulator -= Physics::timeStep;
+                Game::framerateManager.accumulator -= Physics::timeStep;
             }
             Physics::Update();
 
@@ -86,7 +82,7 @@ LevelOutcome PlayLevel(const int levelNumber) {
             PlayerFaceMouse(player, camera);
         }
         Gui::Update(camera);
-        camera.Update(playerPosition, framerateManager.deltaTime);
+        camera.Update(playerPosition, Game::framerateManager.deltaTime);
         Audio::Update();
 
         BeginDrawing();
@@ -95,9 +91,9 @@ LevelOutcome PlayLevel(const int levelNumber) {
         ClearBackground(WHITE);
         Rendering::DrawLevel(camera.GetPlayerCamera());
 
-        const auto commands = Inputs::Listen(camera, framerateManager.deltaTime);
+        const auto commands = Inputs::Listen(camera, Game::framerateManager.deltaTime);
         Inputs::Update(commands);
-        Rendering::Draw(camera.GetPlayerCamera(), framerateManager.framesCounter);
+        Rendering::Draw(camera.GetPlayerCamera(), Game::framerateManager.framesCounter);
         // This has to stay after updatePlayer
         EndMode2D();
 
@@ -106,7 +102,7 @@ LevelOutcome PlayLevel(const int levelNumber) {
 
         EndDrawing();
 
-        framerateManager.Update();
+        Game::framerateManager.Update();
     }
     Physics::Clean();
     Gui::Clean();
@@ -117,111 +113,36 @@ void Game::Loop() {
     SPDLOG_INFO("Entering Loop");
 
     while (Game::levelOutcome != LevelOutcome::QUIT)
-        PlayAIEditor();
-
+        LevelFunction();
+//        PlayAIEditor();
 //        PlayLevel(Level);
 //        PlayAnimationEditorLevel();
 }
 
-/*
- * Different levels should
- *  - load different ldtk::levels
- *  - have different gui windows preopened
- */
-LevelOutcome Game::PlayLevelOnce() {
-    SPDLOG_INFO("Initializing player");
 
-    const auto player = Game::registry.view<Player>().front();
-    const auto &playerPosition = Game::registry.get<Position>(player);
-    const auto &health = Game::registry.get<Health>(player);
-
-    if (!Game::IsPaused()) {
-        SPDLOG_INFO("Updates");
-        StatusEffect::Update();
-        Attacks::Update();
-        framerateManager.accumulator += framerateManager.deltaTime;
-        while (framerateManager.accumulator >= Physics::timeStep) {
-            Physics::Step();
-            framerateManager.accumulator -= Physics::timeStep;
+void Game::ChangeLevel(Level::LevelName newLevel) {
+    Game::Level = newLevel;
+    switch (newLevel) {
+        case Level::First : {
+            LevelFunction = &PlayLevel;
+            break;
         }
-        Physics::Update();
-
-        Space::Update(camera.GetPlayerCamera());
-        AI::Update(player);
-        PlayerFaceMouse(player, camera);
+        case Level::Second:{
+            LevelFunction = &PlayLevel;
+            break;
+        }
+        case Level::Third:{
+            LevelFunction = &PlayLevel;
+            break;
+        }
+        case Level::AIEditor:{
+            LevelFunction = &PlayAIEditor;
+            break;
+        }
+        case Level::AnimationEditor:
+            LevelFunction = &PlayAnimationEditorLevel;
+            break;
     }
-    Gui::Update(camera);
-    camera.Update(playerPosition, framerateManager.deltaTime);
-    Audio::Update();
-
-    SPDLOG_INFO("End Updates");
-    BeginDrawing();
-    BeginMode2D(camera);
-    SPDLOG_INFO("Begin Drawing");
-
-
-    ClearBackground(WHITE);
-    Rendering::DrawLevel(camera.GetPlayerCamera());
-
-    auto commands = Inputs::Listen(camera, framerateManager.deltaTime);
-    Inputs::Update(commands);
-    Rendering::Draw(camera.GetPlayerCamera(), framerateManager.framesCounter);
-    // This has to stay after updatePlayer
-    EndMode2D();
-
-    PlayerUI::Draw(health.value);
-
-    Gui::Draw();
-    SPDLOG_INFO("End Drawing");
-
-    EndDrawing();
-
-    framerateManager.Update();
-    SPDLOG_INFO("Post-updates done");
-
-    return Game::levelOutcome;
-}
-
-
-void Game::PrepareLevel(const int levelNumber) {
-    Game::EnterLevel();
-
-    // Initialize registry
-    registry = entt::registry{};
-
-    // Instantiate systems
-    Gui::Instantiate();
-    Physics::Instantiate();
-
-    // Initialize camera
-    camera = GameCamera{};
-
-    // Spawn entities
-    spawnEntities(Level::LoadEntities(Assets::GetLevel(levelNumber)));
-
-    // Load level data
-    Game::levelTexture = Level::LoadLevelTexture(Assets::GetLevel(levelNumber));
-    Game::grid = Level::LoadIntGrid(Assets::GetLevel(levelNumber));
-
-    // Initialize framerate manager
-    framerateManager = FramerateManager{};
-}
-
-void Game::CleanLevel() {
-    Physics::Clean();
-    Gui::Clean();
-
-    // Reset static members
-    registry = entt::registry{};
-    camera = GameCamera{};
-    framerateManager = FramerateManager{};
-}
-
-void Game::LoopOnce() {
-    SPDLOG_INFO("Entering Emscripten Loop");
-    PlayLevelOnce();
-//
-//    PlayAnimationEditorLevelOnce();
 }
 
 bool Game::IsPaused() {

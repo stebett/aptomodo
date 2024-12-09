@@ -23,4 +23,5 @@ show_enemy_texture = false
 show_enemy_window = false
 show_inv_window = false
 show_spline_ui = false
+show_menu = false
 strategy = 0

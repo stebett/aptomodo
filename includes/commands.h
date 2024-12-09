@@ -53,6 +53,7 @@ namespace Command {
 
     void Mute();
 
+    void ToggleMenu();
 }
 
 #endif //COMMANDS_H

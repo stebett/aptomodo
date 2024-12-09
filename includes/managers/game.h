@@ -17,6 +17,7 @@ enum class LevelOutcome {
     NONE,
 };
 
+LevelOutcome PlayLevel();
 
 class Game {
 private:
@@ -25,10 +26,12 @@ private:
     static LevelOutcome levelOutcome;
 
     static GameCamera camera;
-    static FramerateManager framerateManager;
 
 public:
+    static FramerateManager framerateManager;
+
     static int Level;
+    static std::function<void()> LevelFunction;
     static Texture2D levelTexture;
     static IntGrid grid;
     static entt::registry registry;
@@ -54,9 +57,11 @@ public:
 
     static void CleanLevel();
 
-    static void PrepareLevel(const int levelNumber);
+    static void PrepareLevel();
 
     static LevelOutcome PlayLevelOnce();
+
+    static void ChangeLevel(Level::LevelName newLevel);
 };
 
 

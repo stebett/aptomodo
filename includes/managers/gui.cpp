@@ -317,7 +317,9 @@ void imguiEnemyTypesEditor() {
 
 void imguiLevel() {
     ImGui::Begin("Level");
-    if (ImGui::InputInt("Select Level", &Game::Level)) {
+    static int level {Level::First};
+    if (ImGui::InputInt("Select Level", &level)) {
+        Game::ChangeLevel(static_cast<Level::LevelName>(level));
         Game::SetOutcome(LevelOutcome::RESTART);
         Game::ExitLevel();
     }
@@ -627,6 +629,14 @@ void showChecked(const char *label, Func &&func, Args &&... args) {
     }
 }
 
+template<typename Func, typename... Args>
+void showCheckedGlobal(const char *label, Func &&func, bool *show_window, Args &&... args) {
+    ImGui::Checkbox(label, show_window);
+    if (*show_window) {
+        std::invoke(std::forward<Func>(func), std::forward<Args>(args)...);
+    }
+}
+
 void imguiWindowMain(ImGuiIO io, const Camera2D &camera) {
     static auto inEditor = Config::GetBoolPtr("in_editor");
 
@@ -639,9 +649,10 @@ void imguiWindowMain(ImGuiIO io, const Camera2D &camera) {
     } else
         *inEditor = false;
 
+    showCheckedGlobal("Level Window",  imguiLevel, Config::GetBoolPtr("show_menu"));
+
     showChecked("Assets Window", imguiShowAssets);
     showChecked("Player Window", imguiPlayerAttr);
-    showChecked("Level Window", imguiLevel);
     showChecked("Cursor Window", imguiCursor, camera);
     showChecked("Local Space Window", imguiLocalSpace, camera);
     showChecked("Enemy Window", imguiEnemyAttr);

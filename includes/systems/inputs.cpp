@@ -47,7 +47,7 @@ namespace Inputs {
             }
         }
 
-        pairKeyPress(KEY_Q, Delayed(Command::Quit));
+        pairKeyPress(KEY_ESCAPE, Delayed(Command::ToggleMenu));
         pairKeyPress(KEY_Q, Delayed(Command::Quit));
         pairKeyPress(KEY_R, Delayed(Command::Restart));
         pairKeyPress(KEY_P, Delayed(Command::Pause));

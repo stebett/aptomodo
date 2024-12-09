@@ -20,6 +20,10 @@
 
 namespace Command {
 
+    void ToggleMenu() {
+        *Config::GetBoolPtr("show_menu") = !Config::GetBoolPtr("show_menu");
+    }
+
     void Move(entt::entity self, const std::bitset<4> bitfield) {
         const auto &attributes = Game::registry.get<Attributes>(self);
         const auto body = Game::registry.get<b2BodyId>(self);
