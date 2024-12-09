@@ -98,143 +98,139 @@ auto createShape = [](b2BodyId bodyId, b2Polygon box) {
 };
 
 void imguiSplineEditor(const Camera2D &camera) {
+    // Static variables for spline editor state
     static std::array<b2Vec2, 4> points{};
     static std::array<b2Transform, 4> transforms{};
     static std::array<bool, 4> pointsCreated = {false};
     static std::array<bool, 4> pointsMoving = {false};
 
+    // Get mouse position in world coordinates
     const Math::Vec2 mouse = GetScreenToWorld2D(GetMousePosition(), camera);
+
+    // Get player body and its transform
     const auto player = Game::registry.view<Player>().front();
     const auto playerBody = Game::registry.get<b2BodyId>(player);
     const auto playerTransform = b2Body_GetTransform(playerBody);
 
+    // Handle mouse input for creating the first two points
     if (!pointsCreated[0] && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-        pointsCreated[0] = true;
-        pointsCreated[1] = true;
+        pointsCreated[0] = pointsCreated[1] = true;
         points[0] = mouse;
         points[1] = b2Add(points[0], {20, 20});
-        transforms[0] = b2Body_GetTransform(playerBody);
-        transforms[1] = b2Body_GetTransform(playerBody);
-    } else if (!pointsCreated[3] && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-        pointsCreated[2] = true;
-        pointsCreated[3] = true;
+        transforms[0] = transforms[1] = playerTransform;
+    }
+        // Handle mouse input for creating the last two points
+    else if (!pointsCreated[3] && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+        pointsCreated[2] = pointsCreated[3] = true;
         points[3] = mouse;
         points[2] = b2Add(points[3], {20, 20});
-        transforms[2] = b2Body_GetTransform(playerBody);
-        transforms[3] = b2Body_GetTransform(playerBody);
+        transforms[2] = transforms[3] = playerTransform;
     }
 
+    // Create and update the local spline
     auto spline = LocalSpline{points, transforms};
 
-    for (int i{0}; i < 4; i++) {
-        if (CheckCollisionPointCircle(spline.getGlobal(b2Body_GetTransform(playerBody))[i], mouse, 5.0f) &&
-            IsMouseButtonDown(
-                    MOUSE_BUTTON_LEFT)) {
+    // Check for point movement
+    for (int i = 0; i < 4; i++) {
+        if (CheckCollisionPointCircle(spline.getGlobal(playerTransform)[i], mouse, 5.0f) &&
+            IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
             pointsMoving[i] = true;
             break;
         }
     }
-    for (int i{0}; i < 4; i++) {
+    for (int i = 0; i < 4; i++) {
         if (pointsMoving[i]) {
             points[i] = mouse;
-            transforms[i] = b2Body_GetTransform(playerBody);
-
+            transforms[i] = playerTransform;
             if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
                 pointsMoving[i] = false;
             }
         }
     }
-    ImGui::Begin("Spline editor");
-//
-//
-//    for (int n{0}; n < 4; n++) {
-//        ImGui::PushID(n);
-//        ImGui::Text("Point %i: %f x, %f y", n, points[n].x, points[n].y);
-//        ImGui::PopID();
-//    }
 
-    static entt::entity entity{Game::registry.create()};
+    // Start ImGui spline editor window
+    ImGui::Begin("Spline editor");
+
+    // Store the spline in the registry
+    static entt::entity entity = Game::registry.create();
     Game::registry.emplace_or_replace<LocalSpline>(entity, spline);
+
     ImGui::SeparatorText("Body Editor");
 
+    // Spline parameters
     static float duration = 2.0f;
     static float interval = 0.5f;
 
-    // TODO Put reset buttons on the left
-    // TODO Add a general reset
-
+    // Editor for LocalTransformSpline parameters
     static auto s = Attacks::LocalTransformSpline{spline};
     s.spline = spline;
-    ImGui::SliderFloat("Start Radians", &s.startRadians, -3.14f, 3.14f);
-    ImGui::SameLine();
-    if (ImGui::Button("Reset Start Radians")) s.startRadians = 0;
 
-    ImGui::SliderFloat("End Radians", &s.endRadians, -3.14f, 3.14f);
-    ImGui::SameLine();
-    if (ImGui::Button("Reset End Radians")) s.endRadians = 0;
+    // Parameter sliders with reset buttons
+    auto sliderWithReset = [](const char* label, float& value, float min, float max, float resetValue) {
+        ImGui::SliderFloat(label, &value, min, max);
+        ImGui::SameLine();
+        if (ImGui::Button(("Reset " + std::string(label)).c_str())) value = resetValue;
+    };
 
-    ImGui::SliderFloat("Start Dim1", &s.startDim1, 0.1, 30);
-    ImGui::SameLine();
-    if (ImGui::Button("Reset Start Dim1")) s.startDim1 = 5;
+    sliderWithReset("Start Radians", s.startRadians, -3.14f, 3.14f, 0.0f);
+    sliderWithReset("End Radians", s.endRadians, -3.14f, 3.14f, 0.0f);
+    sliderWithReset("Start Dim1", s.startDim1, 0.1f, 30.0f, 5.0f);
+    sliderWithReset("Start Dim2", s.startDim2, 0.1f, 30.0f, 5.0f);
+    sliderWithReset("End Dim1", s.endDim1, 0.1f, 30.0f, 5.0f);
+    sliderWithReset("End Dim2", s.endDim2, 0.1f, 30.0f, 5.0f);
 
-    ImGui::SliderFloat("Start Dim2", &s.startDim2, 0.1, 30);
-    ImGui::SameLine();
-    if (ImGui::Button("Reset Start Dim2")) s.startDim2 = 5;
-
-    ImGui::SliderFloat("End Dim1", &s.endDim1, 0.1, 30);
-    ImGui::SameLine();
-    if (ImGui::Button("Reset End Dim1")) s.endDim1 = 5;
-
-    ImGui::SliderFloat("End Dim2", &s.endDim2, 0.1, 30);
-    ImGui::SameLine();
-    if (ImGui::Button("Reset End Dim2")) s.endDim2 = 5;
-
+    // Bezier editors for easing parameters
+    auto bezierEditor = [](const char* label, std::array<float, 4>& easing, bool& editorOpen) {
+        if (ImGui::Button((std::string(label) + " Editor").c_str())) editorOpen = !editorOpen;
+        if (editorOpen) ImGui::ShowBezierEditor(easing.data(), label, &editorOpen);
+    };
 
     static std::array<float, 4> easingSpeed{0, 0, 1, 1};
     static bool openSpeedEditor = false;
-    if (ImGui::Button("Speed Bezier Editor")) openSpeedEditor = !openSpeedEditor;
-    if (openSpeedEditor) ImGui::ShowBezierEditor(easingSpeed.data(), "speed", &openSpeedEditor);
+    bezierEditor("Speed", easingSpeed, openSpeedEditor);
     s.easingSpeed = EasingSpline(easingSpeed);
 
     static std::array<float, 4> easingAngle{0, 0, 1, 1};
     static bool openAngleEditor = false;
-    if (ImGui::Button("Angle Bezier Editor")) openAngleEditor = !openAngleEditor;
-    if (openAngleEditor) ImGui::ShowBezierEditor(easingAngle.data(), "angle", &openAngleEditor);
+    bezierEditor("Angle", easingAngle, openAngleEditor);
     s.easingAngle = EasingSpline(easingAngle);
 
     static std::array<float, 4> easingDim1{0, 0, 1, 1};
     static bool openEasingDim1Editor = false;
-    if (ImGui::Button("Dim1 Bezier Editor")) openEasingDim1Editor = !openEasingDim1Editor;
-    if (openEasingDim1Editor) ImGui::ShowBezierEditor(easingDim1.data(), "dim1", &openEasingDim1Editor);
+    bezierEditor("Dim1", easingDim1, openEasingDim1Editor);
     s.easingDim1 = EasingSpline(easingDim1);
 
     static std::array<float, 4> easingDim2{0, 0, 1, 1};
     static bool openEasingDim2Editor = false;
-    if (ImGui::Button("Dim2 Bezier Editor")) openEasingDim2Editor = !openEasingDim2Editor;
-    if (openEasingDim2Editor) ImGui::ShowBezierEditor(easingDim2.data(), "dim2", &openEasingDim2Editor);
+    bezierEditor("Dim2", easingDim2, openEasingDim2Editor);
     s.easingDim2 = EasingSpline(easingDim2);
 
-    static float lastTime = GetTime() - duration;
-    auto bodyEntity{Game::registry.create()};
-    auto body{createBody(bodyEntity)};
-    auto box{b2MakeBox(s.startDim1, s.startDim2)};
-    createShape(body, box);
+    // Timing and attack creation
+    static auto bodyEntity = Game::registry.create();
 
+    static float lastTime = GetTime() - duration;
     if ((lastTime + duration + interval) < GetTime()) {
         lastTime = GetTime();
 
-        const auto player = Game::registry.view<Player>().front();
-        const auto playerBody = Game::registry.get<b2BodyId>(player);
+        // Create new body entity
+        bodyEntity = Game::registry.create();
+        auto body = createBody(bodyEntity);
+        auto box = b2MakeBox(s.startDim1, s.startDim2);
+        createShape(body, box);
+
+        // Link to player and setup attack components
         Game::registry.emplace<Attacks::Attack>(bodyEntity, Attacks::Attack{100.0f});
-        Game::registry.emplace<Attacks::LocalTransformSpline>(bodyEntity, s);
         Game::registry.emplace<Attacks::BodyCouple>(bodyEntity, Attacks::BodyCouple{playerBody, body});
         Game::registry.emplace<PassiveTimer>(bodyEntity, duration);
     }
+    if (Game::registry.valid(bodyEntity))
+        Game::registry.emplace_or_replace<Attacks::LocalTransformSpline>(bodyEntity, s);
 
-    ImGui::SliderFloat("duration", &duration, 0.1, 10);
-    ImGui::SliderFloat("interval", &interval, 0, 10);
+
+    // Timing sliders
+    ImGui::SliderFloat("Duration", &duration, 0.1f, 10.0f);
+    ImGui::SliderFloat("Interval", &interval, 0.0f, 10.0f);
     ImGui::End();
-
 }
 
 void imguiEnemyTypesEditor() {
