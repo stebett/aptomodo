@@ -4,6 +4,7 @@
 
 #include "aiEditor.h"
 #include "math/helpers.h"
+#include "managers/gui.h"
 
 Default View::defaultState;
 MovingView View::movingView;
@@ -55,7 +56,7 @@ void View::handleInput() {
 
 void DrawWidgets() {
     for (size_t i{0}; i < stateWidgets.size(); i++) {
-        if (i == stateWidgets.size()-1) stateWidgets[i].drawSelected();
+        if (i == stateWidgets.size() - 1) stateWidgets[i].drawSelected();
         else stateWidgets[i].draw();
     }
 }
@@ -63,6 +64,8 @@ void DrawWidgets() {
 LevelOutcome PlayAIEditor() {
     SPDLOG_INFO("Entering Editor Level");
     Game::EnterLevel();
+    Gui::Instantiate();
+
     auto grid{Grid()};
     View view;
 
@@ -86,6 +89,7 @@ LevelOutcome PlayAIEditor() {
             Game::SetOutcome(LevelOutcome::RESTART);
             Game::ExitLevel();
         }
+        Gui::Update(camera, &imguiWindowMainAI);
 
         BeginDrawing();
         BeginMode2D(camera);
@@ -94,10 +98,13 @@ LevelOutcome PlayAIEditor() {
         DrawWidgets();
 
         EndMode2D();
+        Gui::Draw();
 
         EndDrawing();
 
     }
+    Gui::Clean();
+
     return Game::GetOutcome();
 }
 

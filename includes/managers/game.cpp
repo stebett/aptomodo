@@ -26,7 +26,7 @@ Texture2D Game::levelTexture;
 IntGrid Game::grid;
 bool Game::paused = false;
 bool Game::levelFinished = false;
-int Game::Level = (Level::First);
+int Game::Level {0};
 std::function<void()> Game::LevelFunction {&PlayLevel};
 LevelOutcome Game::levelOutcome = LevelOutcome::NONE;
 
@@ -81,7 +81,7 @@ LevelOutcome PlayLevel() {
             AI::Update(player);
             PlayerFaceMouse(player, camera);
         }
-        Gui::Update(camera);
+        Gui::Update(camera, &imguiWindowMain);
         camera.Update(playerPosition, Game::framerateManager.deltaTime);
         Audio::Update();
 
@@ -125,22 +125,31 @@ void Game::ChangeLevel(Level::LevelName newLevel) {
     switch (newLevel) {
         case Level::First : {
             LevelFunction = &PlayLevel;
+            *Config::GetBoolPtr("in_editor_level") = false;
             break;
         }
         case Level::Second:{
             LevelFunction = &PlayLevel;
+            *Config::GetBoolPtr("in_editor_level") = false;
+
             break;
         }
         case Level::Third:{
             LevelFunction = &PlayLevel;
+            *Config::GetBoolPtr("in_editor_level") = false;
+
             break;
         }
         case Level::AIEditor:{
             LevelFunction = &PlayAIEditor;
+            *Config::GetBoolPtr("in_editor_level") = true;
+
             break;
         }
         case Level::AnimationEditor:
             LevelFunction = &PlayAnimationEditorLevel;
+            *Config::GetBoolPtr("in_editor_level") = true;
+
             break;
     }
 }

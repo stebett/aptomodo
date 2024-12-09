@@ -20,7 +20,7 @@ int main() {
     Params::Instantiate();
     SPDLOG_INFO("Finished instantiation");
 
-    Game::Level = 2;
+    Game::ChangeLevel(static_cast<Level::LevelName>(Config::GetInt("starting_level")));
     Game::Loop();
     CloseWindow();
     Assets::Clean();

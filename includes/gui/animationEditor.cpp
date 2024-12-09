@@ -237,7 +237,7 @@ LevelOutcome PlayAnimationEditorLevel() {
     Game::EnterLevel();
     Camera2D camera{};
 
-//    Gui::Instantiate();
+    Gui::Instantiate();
 
     camera.target = {0, 0};
     camera.zoom = 3.4;
@@ -266,7 +266,7 @@ LevelOutcome PlayAnimationEditorLevel() {
         camera.target.y += static_cast<float>(bitfield[1]);
         camera.target.x -= static_cast<float>(bitfield[2]);
         camera.target.x += static_cast<float>(bitfield[3]);
-//        Gui::Update( camera);
+        Gui::Update(camera, &imguiWindowMainAI);
 
         BeginDrawing();
         BeginMode2D(camera);
@@ -274,12 +274,12 @@ LevelOutcome PlayAnimationEditorLevel() {
         DrawTexture(grid.texture, -round(gridSize * gridEdge / 2), -round(gridSize * gridEdge / 2), RAYWHITE);
         AnimationEditorLevel(camera);
         EndMode2D();
-//        Gui::Draw();
+        Gui::Draw();
 
         EndDrawing();
 
     }
-//    Gui::Clean();
+    Gui::Clean();
 
 
     return Game::GetOutcome();

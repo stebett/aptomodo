@@ -245,8 +245,12 @@ void imguiSplineEditor(const Camera2D &camera) {
 
 void imguiEnemyTypesEditor() {
     ImGui::Begin("Enemy Types Editor");
-    const auto player = Game::registry.view<Player>().front();
-    const auto playerPosition = Game::registry.get<Position>(player);
+    Vector2 playerPosition = {0, 0};
+    if (!Game::registry.view<Player>().empty()) {
+        const auto player = Game::registry.view<Player>().front();
+        playerPosition = Game::registry.get<Position>(player);
+    }
+
 
     static auto enemyList = Assets::GetEnemiesData().enemyStats;
     if (ImGui::Button("Save")) {
@@ -270,9 +274,11 @@ void imguiEnemyTypesEditor() {
 
 
             ImGui::TableNextColumn();
+            if (Config::GetBool("in_editor_level")) ImGui::BeginDisabled();
             if (ImGui::Button(("Spawn##" + std::to_string(i)).c_str())) {
                 spawnEnemyByName(playerPosition + Vector2{0.0f, 40.0f}, enemy.name);
             }
+            if (Config::GetBool("in_editor_level")) ImGui::EndDisabled();
             char buffer[80];
             std::strncpy(buffer, enemy.name.c_str(), sizeof(buffer));
             buffer[sizeof(buffer) - 1] = '\0';
@@ -637,8 +643,8 @@ void showCheckedGlobal(const char *label, Func &&func, bool *show_window, Args &
     }
 }
 
-void imguiWindowMain(ImGuiIO io, const Camera2D &camera) {
-    static auto inEditor = Config::GetBoolPtr("in_editor");
+void imguiWindowMain(const Camera2D &camera) {
+    static auto inEditor = Config::GetBoolPtr("inEditor");
 
     ImGui::Begin("Main");
 
@@ -687,6 +693,23 @@ void imguiWindowMain(ImGuiIO io, const Camera2D &camera) {
     ImGui::End();
 }
 
+
+void imguiWindowMainAI(const Camera2D &camera) {
+    ImGui::Begin("Main");
+
+    showCheckedGlobal("Level Window",  imguiLevel, Config::GetBoolPtr("show_menu"));
+
+    showChecked("Assets Window", imguiShowAssets);
+    showChecked("Cursor Window", imguiCursor, camera);
+    showChecked("Local Space Window", imguiLocalSpace, camera);
+    showChecked("Enemy Types Window", imguiEnemyTypesEditor);
+    showChecked("Config Window", imguiConfig);
+    showChecked("Instructions", imguiInstructions);
+
+    ImGui::End();
+}
+
+
 void Gui::Instantiate() {
     ImGui::CreateContext();
     m_io = &ImGui::GetIO();
@@ -700,12 +723,12 @@ void Gui::Instantiate() {
     ImGui_ImplRaylib_BuildFontAtlas();
 }
 
-void Gui::Update(const Camera2D &camera) {
+void Gui::Update(const Camera2D &camera, const std::function<void(const Camera2D &)>& mainFunc= &imguiWindowMain) {
     ImGui_ImplRaylib_ProcessEvents();
     ImGui_ImplRaylib_NewFrame();
     ImGui::NewFrame();
 
-    imguiWindowMain(*m_io, camera);
+    mainFunc(camera);
     ImGui::Render();
 }
 
