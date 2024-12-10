@@ -111,6 +111,7 @@ namespace Attacks {
         tbl.emplace("startDim2", startDim2);
         tbl.emplace("endDim1", endDim1);
         tbl.emplace("endDim2", endDim2);
+        tbl.emplace("name", name);
 
         // Write to file
         std::ofstream outFile(path);
@@ -121,8 +122,8 @@ namespace Attacks {
     }
 
     // Load the Transform from a TOML file
-    void Transform::loadFromTOML(const std::string &name) {
-        auto path = std::filesystem::path(ROOT_PATH) / std::filesystem::path(ATTACK_PATH) / name;
+    void Transform::loadFromTOML(const std::string &filename) {
+        auto path = std::filesystem::path(ROOT_PATH) / std::filesystem::path(ATTACK_PATH) / filename;
         path.replace_extension(".toml");
         std::ifstream inFile(path);
         if (!inFile) {
@@ -170,5 +171,6 @@ namespace Attacks {
         startDim2 = tbl["startDim2"].value_or(5.0f);
         endDim1 = tbl["endDim1"].value_or(5.0f);
         endDim2 = tbl["endDim2"].value_or(5.0f);
+        name = tbl["name"].value_or("undefined");
     }
 }

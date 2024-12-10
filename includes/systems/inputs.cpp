@@ -47,13 +47,16 @@ namespace Inputs {
             }
         }
 
-        pairKeyPress(KEY_ESCAPE, Delayed(Command::ToggleMenu));
-        pairKeyPress(KEY_Q, Delayed(Command::Quit));
-        pairKeyPress(KEY_R, Delayed(Command::Restart));
-        pairKeyPress(KEY_P, Delayed(Command::Pause));
-        pairKeyPress(KEY_M, Delayed(Command::Mute));
-        pairKeyPress(KEY_E, Delayed(Command::PickUp, player));
-        pairKeyPress(KEY_LEFT_SHIFT, Delayed(Command::Dash, player));
+        if (!Gui::WantKeyboard()) {
+
+            pairKeyPress(KEY_ESCAPE, Delayed(Command::ToggleMenu));
+            pairKeyPress(KEY_Q, Delayed(Command::Quit));
+            pairKeyPress(KEY_R, Delayed(Command::Restart));
+            pairKeyPress(KEY_P, Delayed(Command::Pause));
+            pairKeyPress(KEY_M, Delayed(Command::Mute));
+            pairKeyPress(KEY_E, Delayed(Command::PickUp, player));
+            pairKeyPress(KEY_LEFT_SHIFT, Delayed(Command::Dash, player));
+        }
 
         if (!Gui::WantMouse() && !Config::GetBool("inEditor")) {
             pairMouseKeyPress(MOUSE_BUTTON_RIGHT,

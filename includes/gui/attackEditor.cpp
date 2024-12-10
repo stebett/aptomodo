@@ -154,24 +154,36 @@ void imguiSplineEditor(const Camera2D &camera) {
     if (Game::registry.valid(bodyEntity))
         Game::registry.emplace_or_replace<Attacks::Transform>(bodyEntity, transform);
 
+    if (ImGui::BeginPopupContextItem("my popup"))
+    {
+        constexpr const char * nullName = "none";
+        const char * name = nullName;
+        for (const auto& file: std::filesystem::directory_iterator(std::filesystem::path(ROOT_PATH) / std::filesystem::path(ATTACK_PATH))){
+            auto filename = file.path().filename().replace_extension("").c_str();
+            if (ImGui::Selectable(filename)) {
+                for (size_t i{0}; i < 4; i++) {
+                    transform.loadFromTOML(filename);
+                    points[i] = transform.trajectory.get()[i];
+                    pointsCreated[i] = true;
+                }
+            }
+        }
+        ImGui::EndPopup();
+    }
 
     // Timing sliders
     ImGui::SliderFloat("Duration", &duration, 0.1f, 10.0f);
     ImGui::SliderFloat("Interval", &interval, 0.0f, 10.0f);
+
+    char buffer[80];
+    std::strncpy(buffer, transform.name.c_str(), sizeof(buffer));
+    buffer[sizeof(buffer) - 1] = '\0';
+    if (ImGui::InputText("AttackName", buffer, 80))
+        transform.name = buffer;
     if (ImGui::Button("Save attack")) transform.saveToTOML();
     if (ImGui::Button("Load attack")) {
-        transform.loadFromTOML("default");
-        for (size_t i{0}; i < 4; i++) {
-            points[i] = transform.trajectory.get()[i];
-            pointsCreated[i] = true;
-        }
+        ImGui::OpenPopup("my popup");
     }
-    if (ImGui::BeginPopupContextItem()) // <-- use last item id as popup id
-    {
-        ImGui::Text("This a popup for loading");
-        if (ImGui::Button("Close"))
-            ImGui::CloseCurrentPopup();
-        ImGui::EndPopup();
-    }
+
     ImGui::End();
 }
