@@ -47,14 +47,13 @@ namespace Attacks {
 
     b2Rot Transform::endAngle() const { return b2Rot(cos(endRadians), sin(endRadians)); }
 
-    Transform::Transform(LocalSpline localSpline) : spline(localSpline) {
+    Transform::Transform(Spline trajectory) : trajectory(trajectory) {
     }
 
     b2Transform Transform::get(const float t) const {
-        const auto bezier = spline.getLocalBezier();
         const auto eased_t = easingSpeed.valueAt(t);
-        const Math::Vec2 p = bezier.valueAt(eased_t);
-        const Math::Vec2 norm = bezier.normalAt(eased_t);
+        const Math::Vec2 p = trajectory.bezier.valueAt(eased_t);
+        const Math::Vec2 norm = trajectory.bezier.normalAt(eased_t);
         if (isnan(norm.x) || isnan(norm.y)) {
             return {p, startAngle()};
         }
@@ -77,11 +76,13 @@ namespace Attacks {
     // Save the Transform to a TOML file
     void Transform::saveToTOML() const {
         auto path = std::filesystem::path(ROOT_PATH) / std::filesystem::path(ATTACK_PATH) / name;
+        path.replace_extension(".toml");
+
         toml::table tbl;
 
         // Save spline points as a toml::array
         toml::array splinePoints;
-        for (const auto &point : spline.localPoints) {
+        for (const auto &point: trajectory.get()) {
             toml::array pointArray;
             pointArray.push_back(point.x);
             pointArray.push_back(point.y);
@@ -92,7 +93,7 @@ namespace Attacks {
         // Save easing splines as toml::arrays
         auto saveEasingSpline = [&tbl](const std::string &key, const EasingSpline &easing) {
             toml::array easingArray;
-            for (const auto &value : easing.get()) {
+            for (const auto &value: easing.get()) {
                 easingArray.push_back(value);
             }
             tbl.emplace(key, std::move(easingArray));
@@ -120,31 +121,34 @@ namespace Attacks {
     }
 
     // Load the Transform from a TOML file
-    void Transform::loadFromTOML(const std::string &filename) {
-        std::ifstream inFile(filename);
+    void Transform::loadFromTOML(const std::string &name) {
+        auto path = std::filesystem::path(ROOT_PATH) / std::filesystem::path(ATTACK_PATH) / name;
+        path.replace_extension(".toml");
+        std::ifstream inFile(path);
         if (!inFile) {
-            throw std::runtime_error("Could not open file: " + filename);
+            throw std::runtime_error("Could not open file: " + path.string());
         }
 
         toml::table tbl = toml::parse(inFile);
 
         // Load spline points
-        if (auto splinePoints = tbl["spline"].as_array(); splinePoints) {
-            size_t i = 0;
-            for (const auto &point : *splinePoints) {
-                if (i >= spline.localPoints.size()) break;
-                if (auto pointArray = point.as_array(); pointArray && pointArray->size() == 2) {
-                    spline.localPoints[i].x = (*pointArray)[0].value_or(0.0f);
-                    spline.localPoints[i].y = (*pointArray)[1].value_or(0.0f);
-                }
-                ++i;
+        auto splinePoints = tbl["spline"].as_array();
+//        auto localSpline = LocalSpline(splinePoints);
+        size_t i = 0;
+        for (const auto &point: *splinePoints) {
+            if (i >= 4) break;
+            if (auto pointArray = point.as_array(); pointArray && pointArray->size() == 2) {
+                trajectory.bezier[i].x = (*pointArray)[0].value_or(0.0f);
+                trajectory.bezier[i].y = (*pointArray)[1].value_or(0.0f);
             }
+            ++i;
         }
+
 
         // Load easing splines
         auto loadEasingSpline = [&tbl](const std::string &key, EasingSpline &easing) {
             if (auto easingArray = tbl[key].as_array(); easingArray && easingArray->size() == 4) {
-                auto points {easing.get()};
+                auto points{easing.get()};
                 for (size_t i = 0; i < 4; ++i) {
                     points[i] = (*easingArray)[i].value_or(0.0f);
                 }

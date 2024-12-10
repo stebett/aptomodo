@@ -27,7 +27,7 @@ namespace Attacks {
     class Transform {
     public:
         std::string name {"default"};
-        LocalSpline spline;
+        Spline trajectory;
         EasingSpline easingSpeed{LinearEasing};
         EasingSpline easingAngle{LinearEasing};
         EasingSpline easingDim1{LinearEasing};
@@ -44,7 +44,7 @@ namespace Attacks {
 
         [[nodiscard]] b2Rot endAngle() const;
 
-        explicit Transform(LocalSpline localSpline);;
+        explicit Transform(Spline trajectory);;
 
         [[nodiscard]] b2Transform get(float t) const;
 

@@ -8,20 +8,14 @@
 #include "bezier.h"
 #include "math/mathConstants.h"
 
+struct Spline {
+    Bezier::Bezier<3> bezier;
+    // p1, c1, c2, p2
+    explicit Spline(std::array<Math::Vec2, 4> points);
 
-// p1, c1, c2, p2
-struct LocalSpline {
-    std::array<b2Vec2, 4> localPoints{};
-    std::array<b2Transform, 4> transforms{};
-    b2Rot rotation{};
+    [[nodiscard]] float valueAt(float t) const;
+    [[nodiscard]] std::array<Math::Vec2, 4> get() const;
 
-    LocalSpline(const std::array<b2Vec2, 4> &points, std::array<b2Transform, 4> transforms);
-
-    [[nodiscard]] std::array<Vector2, 4> getGlobal(b2Transform);
-
-    [[nodiscard]] Bezier::Bezier<3> getLocalBezier() const;
-
-    [[nodiscard]] std::array<Math::Vec2, 4> getLocal() const;
 };
 
 struct EasingSpline {
@@ -34,7 +28,7 @@ struct EasingSpline {
 
     [[nodiscard]] float valueAt(float t) const;
     void update(std::array<float, 4>);
-    std::array<float, 4> get() const;
+    [[nodiscard]] std::array<float, 4> get() const;
 };
 
 const EasingSpline LinearEasing{0, 0, 1, 1};

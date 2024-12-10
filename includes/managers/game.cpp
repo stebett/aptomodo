@@ -41,13 +41,15 @@ void PlayerFaceMouse(const entt::entity player, const Camera2D &camera) {
     auto &lookAngle = Game::registry.get<LookAngle>(player);
     const auto body = Game::registry.get<b2BodyId>(player);
     const auto transform{b2Body_GetTransform(body)};
+    const auto position{b2Body_GetPosition(body)};
 
     const auto [mouseX, mouseY] = GetScreenToWorld2D(GetMousePosition(), camera);
     const auto radians = atan2(mouseY - transform.p.y, mouseX - transform.p.x);
     lookAngle = radians * RAD2DEG;
     if (!Config::GetBool("inEditor"))
         b2Body_SetTransform(body, transform.p, b2Rot(cos(radians), sin(radians)));
-    else b2Body_SetTransform(body, transform.p, b2Rot(cos(0.0), sin(0.0)));;
+    else b2Body_SetTransform(body, position, b2Rot(cos(-1.5708), sin(-1.5708)));;
+//    b2Body_SetTransform(body, transform.p, b2Rot(cos(radians), sin(radians)));
 }
 
 LevelOutcome PlayLevel() {

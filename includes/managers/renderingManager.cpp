@@ -20,8 +20,15 @@ namespace Rendering {
         const auto player = Game::registry.view<Player>().front();
         const auto playerBody = Game::registry.get<b2BodyId>(player);
         const auto playerTransform = b2Body_GetTransform(playerBody);
-        Game::registry.view<LocalSpline>().each([playerTransform](auto entity, LocalSpline spline) {
-            const std::array<Vector2, 4> globalPoints = spline.getGlobal(playerTransform);
+
+
+        Game::registry.view<Attacks::Transform>().each([playerBody](auto entity, const Attacks::Transform& transform) {
+            const std::array<Math::Vec2, 4> localPoints = transform.trajectory.get();
+            std::array<Vector2, 4> globalPoints{};
+            for (size_t i{0}; i < 4; i++)
+                globalPoints[i] = Math::Vec2(b2Body_GetWorldPoint(playerBody, localPoints[i]));
+
+
             DrawLineV(globalPoints[0], globalPoints[1], GRAY);
             DrawLineV(globalPoints[2], globalPoints[3], GRAY);
             constexpr float radius = 3.0f;
@@ -31,9 +38,6 @@ namespace Rendering {
             DrawCircleV(globalPoints[3], radius, DARKBLUE);
             DrawSplineBezierCubic(globalPoints.data(), 4, 1, BLACK);
 
-            // for (auto point: spline.points) {
-            //     DrawCircleV(point, 5, RED);
-            // }
         });
     }
 
