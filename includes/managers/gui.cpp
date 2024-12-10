@@ -97,6 +97,25 @@ auto createShape = [](b2BodyId bodyId, b2Polygon box) {
     return b2CreatePolygonShape(bodyId, &shapeDef, &box);
 };
 
+// Bezier editors for easing parameters
+auto bezierEditor = [](const char *label, EasingSpline &easing) {
+    static std::unordered_map<std::string, bool> checkboxStates;
+    bool &show_window = checkboxStates[label];
+    ImGui::Checkbox(label, &show_window);
+    auto easing_points = easing.get();
+    if (show_window) ImGui::ShowBezierEditor(easing_points.data(), label, &show_window);
+    easing.update(easing_points);
+};
+
+
+// Parameter sliders with reset buttons
+auto sliderWithReset = [](const char *label, float &value, float min, float max, float resetValue) {
+    if (ImGui::Button("R")) value = resetValue;
+    ImGui::SameLine();
+    ImGui::SliderFloat(label, &value, min, max);
+};
+
+
 void imguiSplineEditor(const Camera2D &camera) {
     // Static variables for spline editor state
     static std::array<b2Vec2, 4> points{};
@@ -151,59 +170,34 @@ void imguiSplineEditor(const Camera2D &camera) {
     // Start ImGui spline editor window
     ImGui::Begin("Spline editor");
 
-    // Store the spline in the registry
+    // Store the spline in the registry so it can be rendered
     static entt::entity entity = Game::registry.create();
     Game::registry.emplace_or_replace<LocalSpline>(entity, spline);
 
-    ImGui::SeparatorText("Body Editor");
 
     // Spline parameters
     static float duration = 2.0f;
     static float interval = 0.5f;
 
-    // Editor for LocalTransformSpline parameters
-    static auto s = Attacks::LocalTransformSpline{spline};
+    // Editor for Transform parameters
+    static auto s = Attacks::Transform{spline};
     s.spline = spline;
 
-    // Parameter sliders with reset buttons
-    auto sliderWithReset = [](const char* label, float& value, float min, float max, float resetValue) {
-        ImGui::SliderFloat(label, &value, min, max);
-        ImGui::SameLine();
-        if (ImGui::Button(("Reset " + std::string(label)).c_str())) value = resetValue;
-    };
-
+    ImGui::SeparatorText("Parameters Editor");
     sliderWithReset("Start Radians", s.startRadians, -3.14f, 3.14f, 0.0f);
     sliderWithReset("End Radians", s.endRadians, -3.14f, 3.14f, 0.0f);
     sliderWithReset("Start Dim1", s.startDim1, 0.1f, 30.0f, 5.0f);
     sliderWithReset("Start Dim2", s.startDim2, 0.1f, 30.0f, 5.0f);
     sliderWithReset("End Dim1", s.endDim1, 0.1f, 30.0f, 5.0f);
     sliderWithReset("End Dim2", s.endDim2, 0.1f, 30.0f, 5.0f);
-
-    // Bezier editors for easing parameters
-    auto bezierEditor = [](const char* label, std::array<float, 4>& easing, bool& editorOpen) {
-        if (ImGui::Button((std::string(label) + " Editor").c_str())) editorOpen = !editorOpen;
-        if (editorOpen) ImGui::ShowBezierEditor(easing.data(), label, &editorOpen);
-    };
-
-    static std::array<float, 4> easingSpeed{0, 0, 1, 1};
-    static bool openSpeedEditor = false;
-    bezierEditor("Speed", easingSpeed, openSpeedEditor);
-    s.easingSpeed = EasingSpline(easingSpeed);
-
-    static std::array<float, 4> easingAngle{0, 0, 1, 1};
-    static bool openAngleEditor = false;
-    bezierEditor("Angle", easingAngle, openAngleEditor);
-    s.easingAngle = EasingSpline(easingAngle);
-
-    static std::array<float, 4> easingDim1{0, 0, 1, 1};
-    static bool openEasingDim1Editor = false;
-    bezierEditor("Dim1", easingDim1, openEasingDim1Editor);
-    s.easingDim1 = EasingSpline(easingDim1);
-
-    static std::array<float, 4> easingDim2{0, 0, 1, 1};
-    static bool openEasingDim2Editor = false;
-    bezierEditor("Dim2", easingDim2, openEasingDim2Editor);
-    s.easingDim2 = EasingSpline(easingDim2);
+    ImGui::SeparatorText("Easing Splines Editors");
+    bezierEditor("Speed", s.easingSpeed);
+    ImGui::SameLine();
+    bezierEditor("Angle", s.easingAngle);
+    ImGui::SameLine();
+    bezierEditor("Dim1", s.easingDim1);
+    ImGui::SameLine();
+    bezierEditor("Dim2", s.easingDim2);
 
     // Timing and attack creation
     static auto bodyEntity = Game::registry.create();
@@ -224,7 +218,7 @@ void imguiSplineEditor(const Camera2D &camera) {
         Game::registry.emplace<PassiveTimer>(bodyEntity, duration);
     }
     if (Game::registry.valid(bodyEntity))
-        Game::registry.emplace_or_replace<Attacks::LocalTransformSpline>(bodyEntity, s);
+        Game::registry.emplace_or_replace<Attacks::Transform>(bodyEntity, s);
 
 
     // Timing sliders
@@ -313,7 +307,7 @@ void imguiEnemyTypesEditor() {
 
 void imguiLevel() {
     ImGui::Begin("Level");
-    static int level {Level::First};
+    static int level{Level::First};
     if (ImGui::InputInt("Select Level", &level)) {
         Game::ChangeLevel(static_cast<Level::LevelName>(level));
         Game::SetOutcome(LevelOutcome::RESTART);
@@ -645,7 +639,7 @@ void imguiWindowMain(const Camera2D &camera) {
     } else
         *inEditor = false;
 
-    showCheckedGlobal("Level Window",  imguiLevel, Config::GetBoolPtr("show_menu"));
+    showCheckedGlobal("Level Window", imguiLevel, Config::GetBoolPtr("show_menu"));
 
     showChecked("Assets Window", imguiShowAssets);
     showChecked("Player Window", imguiPlayerAttr);
@@ -687,7 +681,7 @@ void imguiWindowMain(const Camera2D &camera) {
 void imguiWindowMainAI(const Camera2D &camera) {
     ImGui::Begin("Main");
 
-    showCheckedGlobal("Level Window",  imguiLevel, Config::GetBoolPtr("show_menu"));
+    showCheckedGlobal("Level Window", imguiLevel, Config::GetBoolPtr("show_menu"));
 
     showChecked("Assets Window", imguiShowAssets);
     showChecked("Cursor Window", imguiCursor, camera);
@@ -713,7 +707,7 @@ void Gui::Instantiate() {
     ImGui_ImplRaylib_BuildFontAtlas();
 }
 
-void Gui::Update(const Camera2D &camera, const std::function<void(const Camera2D &)>& mainFunc= &imguiWindowMain) {
+void Gui::Update(const Camera2D &camera, const std::function<void(const Camera2D &)> &mainFunc = &imguiWindowMain) {
     ImGui_ImplRaylib_ProcessEvents();
     ImGui_ImplRaylib_NewFrame();
     ImGui::NewFrame();

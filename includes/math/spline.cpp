@@ -64,3 +64,28 @@ EasingSpline::EasingSpline(std::array<float, 4> points) : bezier({
 float EasingSpline::valueAt(float t) const {
     return bezier.valueAt(t).y;
 }
+
+EasingSpline::EasingSpline() : bezier({
+                                              {0.0f, 0.0f},
+                                              {0.0f, 0.0f},
+                                              {1.0f, 1.0f},
+                                              {1.0f, 1.0f}
+                                      }) {
+
+}
+
+void EasingSpline::update(std::array<float, 4> points) {
+    bezier = Bezier::Bezier<3>({{0.0f,      0.0f},
+                                {points[0], points[1]},
+                                {points[2], points[3]},
+                                {1.0f,      1.0f}});
+}
+
+std::array<float, 4> EasingSpline::get() {
+    return {
+            static_cast<float>(bezier[1].x),
+            static_cast<float>(bezier[1].y),
+            static_cast<float>(bezier[2].x),
+            static_cast<float>(bezier[2].y)
+    };
+}
