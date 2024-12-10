@@ -89,7 +89,8 @@ void imguiSplineEditor(const Camera2D &camera) {
 
     // Check for point movement
     for (int i = 0; i < 4; i++) {
-        if (CheckCollisionPointCircle(Math::Vec2(b2TransformPoint(fixedPlayerTransform, Math::Vec2(trajectory.bezier[i]))), mouse, 5.0f) &&
+        if (CheckCollisionPointCircle(
+                Math::Vec2(b2TransformPoint(fixedPlayerTransform, Math::Vec2(trajectory.bezier[i]))), mouse, 5.0f) &&
             IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
             pointsMoving[i] = true;
             break;
@@ -113,24 +114,24 @@ void imguiSplineEditor(const Camera2D &camera) {
     static float interval = 0.0f;
 
     // Editor for Transform parameters
-    static auto s = Attacks::Transform{trajectory};
-    s.trajectory = trajectory;
+    static auto transform = Attacks::Transform{trajectory};
+    transform.trajectory = trajectory;
 
     ImGui::SeparatorText("Parameters Editor");
-    sliderWithReset("Start Radians", s.startRadians, -3.14f, 3.14f, 0.0f);
-    sliderWithReset("End Radians", s.endRadians, -3.14f, 3.14f, 0.0f);
-    sliderWithReset("Start Dim1", s.startDim1, 0.1f, 30.0f, 5.0f);
-    sliderWithReset("Start Dim2", s.startDim2, 0.1f, 30.0f, 5.0f);
-    sliderWithReset("End Dim1", s.endDim1, 0.1f, 30.0f, 5.0f);
-    sliderWithReset("End Dim2", s.endDim2, 0.1f, 30.0f, 5.0f);
+    sliderWithReset("Start Radians", transform.startRadians, -3.14f, 3.14f, 0.0f);
+    sliderWithReset("End Radians", transform.endRadians, -3.14f, 3.14f, 0.0f);
+    sliderWithReset("Start Dim1", transform.startDim1, 0.1f, 30.0f, 5.0f);
+    sliderWithReset("Start Dim2", transform.startDim2, 0.1f, 30.0f, 5.0f);
+    sliderWithReset("End Dim1", transform.endDim1, 0.1f, 30.0f, 5.0f);
+    sliderWithReset("End Dim2", transform.endDim2, 0.1f, 30.0f, 5.0f);
     ImGui::SeparatorText("Easing Splines Editors");
-    bezierEditor("Speed", s.easingSpeed);
+    bezierEditor("Speed", transform.easingSpeed);
     ImGui::SameLine();
-    bezierEditor("Angle", s.easingAngle);
+    bezierEditor("Angle", transform.easingAngle);
     ImGui::SameLine();
-    bezierEditor("Dim1", s.easingDim1);
+    bezierEditor("Dim1", transform.easingDim1);
     ImGui::SameLine();
-    bezierEditor("Dim2", s.easingDim2);
+    bezierEditor("Dim2", transform.easingDim2);
 
     // Timing and attack creation
     static auto bodyEntity = Game::registry.create();
@@ -142,7 +143,7 @@ void imguiSplineEditor(const Camera2D &camera) {
         // Create new body entity
         bodyEntity = Game::registry.create();
         auto body = createBody(bodyEntity);
-        auto box = b2MakeBox(s.startDim1, s.startDim2);
+        auto box = b2MakeBox(transform.startDim1, transform.startDim2);
         createShape(body, box);
 
         // Link to player and setup attack components
@@ -151,14 +152,20 @@ void imguiSplineEditor(const Camera2D &camera) {
         Game::registry.emplace<PassiveTimer>(bodyEntity, duration);
     }
     if (Game::registry.valid(bodyEntity))
-        Game::registry.emplace_or_replace<Attacks::Transform>(bodyEntity, s);
+        Game::registry.emplace_or_replace<Attacks::Transform>(bodyEntity, transform);
 
 
     // Timing sliders
     ImGui::SliderFloat("Duration", &duration, 0.1f, 10.0f);
     ImGui::SliderFloat("Interval", &interval, 0.0f, 10.0f);
-    if (ImGui::Button("Save attack")) s.saveToTOML();
-    if (ImGui::Button("Load attack")) s.loadFromTOML("default");
+    if (ImGui::Button("Save attack")) transform.saveToTOML();
+    if (ImGui::Button("Load attack")) {
+        transform.loadFromTOML("default");
+        for (size_t i{0}; i < 4; i++) {
+            points[i] = transform.trajectory.get()[i];
+            pointsCreated[i] = true;
+        }
+    }
     if (ImGui::BeginPopupContextItem()) // <-- use last item id as popup id
     {
         ImGui::Text("This a popup for loading");

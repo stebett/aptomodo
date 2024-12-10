@@ -135,14 +135,16 @@ namespace Attacks {
         auto splinePoints = tbl["spline"].as_array();
 //        auto localSpline = LocalSpline(splinePoints);
         size_t i = 0;
+        auto trajPoints = trajectory.get();
         for (const auto &point: *splinePoints) {
             if (i >= 4) break;
             if (auto pointArray = point.as_array(); pointArray && pointArray->size() == 2) {
-                trajectory.bezier[i].x = (*pointArray)[0].value_or(0.0f);
-                trajectory.bezier[i].y = (*pointArray)[1].value_or(0.0f);
+                trajPoints[i].x = (*pointArray)[0].value_or(0.0f);
+                trajPoints[i].y = (*pointArray)[1].value_or(0.0f);
             }
             ++i;
         }
+        trajectory = Spline(trajPoints);
 
 
         // Load easing splines
