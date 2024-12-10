@@ -3,7 +3,6 @@
 //
 
 #include "configManager.h"
-//#include "parameters.h"
 
 int Config::storedIntsIndex{0};
 int Config::storedFloatsIndex{0};

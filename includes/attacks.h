@@ -26,6 +26,7 @@ namespace Attacks {
 
     class Transform {
     public:
+        std::string name {"default"};
         LocalSpline spline;
         EasingSpline easingSpeed{LinearEasing};
         EasingSpline easingAngle{LinearEasing};
@@ -45,11 +46,16 @@ namespace Attacks {
 
         explicit Transform(LocalSpline localSpline);;
 
-        [[nodiscard]] b2Transform get(const float t) const;
+        [[nodiscard]] b2Transform get(float t) const;
 
-        [[nodiscard]] float getDim1(const float t) const;
+        [[nodiscard]] float getDim1(float t) const;
 
-        [[nodiscard]] float getDim2(const float t) const;
+        [[nodiscard]] float getDim2(float t) const;
+
+        void saveToTOML() const;
+
+        void loadFromTOML(const std::string &name);
+
     };
 
     struct BodyCouple {

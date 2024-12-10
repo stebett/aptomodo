@@ -59,6 +59,7 @@ target_link_libraries(${EXEC} PRIVATE tomlplusplus::tomlplusplus)
 target_compile_definitions(${EXEC} PUBLIC ASSETS_PATH="assets/current/")
 target_compile_definitions(${EXEC} PUBLIC CONFIG_PATH="config/")
 target_compile_definitions(${EXEC} PUBLIC AUDIO_PATH="assets/tracks/")
+target_compile_definitions(${EXEC} PUBLIC ATTACK_PATH="assets/attacks/")
 
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")
     add_compile_definitions(SPDLOG_ACTIVE_LEVEL=SPDLOG_LEVEL_TRACE)

@@ -81,7 +81,7 @@ void EasingSpline::update(std::array<float, 4> points) {
                                 {1.0f,      1.0f}});
 }
 
-std::array<float, 4> EasingSpline::get() {
+std::array<float, 4> EasingSpline::get() const{
     return {
             static_cast<float>(bezier[1].x),
             static_cast<float>(bezier[1].y),

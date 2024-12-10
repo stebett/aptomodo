@@ -73,4 +73,96 @@ namespace Attacks {
     float Transform::getDim2(const float t) const {
         return Lerp(startDim2, endDim2, easingDim2.valueAt(t));
     }
+
+    // Save the Transform to a TOML file
+    void Transform::saveToTOML() const {
+        auto path = std::filesystem::path(ROOT_PATH) / std::filesystem::path(ATTACK_PATH) / name;
+        toml::table tbl;
+
+        // Save spline points as a toml::array
+        toml::array splinePoints;
+        for (const auto &point : spline.localPoints) {
+            toml::array pointArray;
+            pointArray.push_back(point.x);
+            pointArray.push_back(point.y);
+            splinePoints.push_back(std::move(pointArray));
+        }
+        tbl.emplace("spline", std::move(splinePoints));
+
+        // Save easing splines as toml::arrays
+        auto saveEasingSpline = [&tbl](const std::string &key, const EasingSpline &easing) {
+            toml::array easingArray;
+            for (const auto &value : easing.get()) {
+                easingArray.push_back(value);
+            }
+            tbl.emplace(key, std::move(easingArray));
+        };
+
+        saveEasingSpline("easingSpeed", easingSpeed);
+        saveEasingSpline("easingAngle", easingAngle);
+        saveEasingSpline("easingDim1", easingDim1);
+        saveEasingSpline("easingDim2", easingDim2);
+
+        // Save other parameters
+        tbl.emplace("startRadians", startRadians);
+        tbl.emplace("endRadians", endRadians);
+        tbl.emplace("startDim1", startDim1);
+        tbl.emplace("startDim2", startDim2);
+        tbl.emplace("endDim1", endDim1);
+        tbl.emplace("endDim2", endDim2);
+
+        // Write to file
+        std::ofstream outFile(path);
+        if (!outFile) {
+            throw std::runtime_error("Could not open file for writing: " + path.string());
+        }
+        outFile << tbl;
+    }
+
+    // Load the Transform from a TOML file
+    void Transform::loadFromTOML(const std::string &filename) {
+        std::ifstream inFile(filename);
+        if (!inFile) {
+            throw std::runtime_error("Could not open file: " + filename);
+        }
+
+        toml::table tbl = toml::parse(inFile);
+
+        // Load spline points
+        if (auto splinePoints = tbl["spline"].as_array(); splinePoints) {
+            size_t i = 0;
+            for (const auto &point : *splinePoints) {
+                if (i >= spline.localPoints.size()) break;
+                if (auto pointArray = point.as_array(); pointArray && pointArray->size() == 2) {
+                    spline.localPoints[i].x = (*pointArray)[0].value_or(0.0f);
+                    spline.localPoints[i].y = (*pointArray)[1].value_or(0.0f);
+                }
+                ++i;
+            }
+        }
+
+        // Load easing splines
+        auto loadEasingSpline = [&tbl](const std::string &key, EasingSpline &easing) {
+            if (auto easingArray = tbl[key].as_array(); easingArray && easingArray->size() == 4) {
+                auto points {easing.get()};
+                for (size_t i = 0; i < 4; ++i) {
+                    points[i] = (*easingArray)[i].value_or(0.0f);
+                }
+                easing.update(points);
+            }
+        };
+
+        loadEasingSpline("easingSpeed", easingSpeed);
+        loadEasingSpline("easingAngle", easingAngle);
+        loadEasingSpline("easingDim1", easingDim1);
+        loadEasingSpline("easingDim2", easingDim2);
+
+        // Load other parameters
+        startRadians = tbl["startRadians"].value_or(0.0f);
+        endRadians = tbl["endRadians"].value_or(0.0f);
+        startDim1 = tbl["startDim1"].value_or(5.0f);
+        startDim2 = tbl["startDim2"].value_or(5.0f);
+        endDim1 = tbl["endDim1"].value_or(5.0f);
+        endDim2 = tbl["endDim2"].value_or(5.0f);
+    }
 }

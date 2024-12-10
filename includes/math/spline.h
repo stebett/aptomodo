@@ -34,7 +34,7 @@ struct EasingSpline {
 
     [[nodiscard]] float valueAt(float t) const;
     void update(std::array<float, 4>);
-    std::array<float, 4> get();
+    std::array<float, 4> get() const;
 };
 
 const EasingSpline LinearEasing{0, 0, 1, 1};

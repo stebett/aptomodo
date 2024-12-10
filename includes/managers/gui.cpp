@@ -110,9 +110,11 @@ auto bezierEditor = [](const char *label, EasingSpline &easing) {
 
 // Parameter sliders with reset buttons
 auto sliderWithReset = [](const char *label, float &value, float min, float max, float resetValue) {
+    ImGui::PushID(entt::hashed_string(label).value());
     if (ImGui::Button("R")) value = resetValue;
     ImGui::SameLine();
     ImGui::SliderFloat(label, &value, min, max);
+    ImGui::PopID();
 };
 
 
@@ -224,6 +226,7 @@ void imguiSplineEditor(const Camera2D &camera) {
     // Timing sliders
     ImGui::SliderFloat("Duration", &duration, 0.1f, 10.0f);
     ImGui::SliderFloat("Interval", &interval, 0.0f, 10.0f);
+    if (ImGui::Button("Save attack")) s.saveToTOML();
     ImGui::End();
 }
 
