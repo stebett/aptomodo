@@ -1,13 +1,11 @@
-/cmake-build-debug/
-.idea
 /assets/player/GandalfHardcore Character Asset Pack/
 /cmake-build-windows/vendors/
 /cmake-build-windows/bin/
 /cmake-build-windows/
-/bin-windows/
 /cmake-build-release/
 /logs/log.txt
 vendors/imgui/CMakeLists.txt
 vendors/rlImGui/CMakeLists.txt
 /cmake-build-debugemscripten/
 /cmake-build-windows/
+/cmake-build-debug/
