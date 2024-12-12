@@ -193,12 +193,46 @@ void PlayAnimation(Animation anim, Vector2 pos, double t) {
 
 LevelOutcome AnimationEditorLevel(Camera2D &camera) {
     static Texture2D texture = {};
+
     static bool draw{false};
+    static std::vector<Rectangle> recs;
+
     if (!draw && IsFileDropped()) {
         auto file{LoadDroppedFiles()};
-        auto path = std::filesystem::path(file.paths[0]);
-        SPDLOG_INFO("Loading spritesheet");
-        texture = LoadTexture(path.c_str());
+        std::vector<Texture> textures;
+        textures.reserve(file.count);
+        int height_dest{0};
+        int width_dest{0};
+        int height_source{0};
+        int width_source{0};
+        int base_height{512};
+        int base_width{512};
+        std::vector<Rectangle> sources{};
+        std::vector<Rectangle> destinations{};
+        for (size_t i{0}; i < file.count; i++) {
+            auto path = std::filesystem::path(file.paths[i]);
+            auto t = LoadTexture(path.c_str());
+            auto ratio = t.width / t.height;
+            height_dest = std::max(base_height / ratio, height_dest);
+            height_source = std::max(t.height, height_source);
+            textures.emplace_back(t);
+            sources.emplace_back(Rectangle(width_source, 0, t.width, height_source));
+            destinations.emplace_back(Rectangle(width_dest, 0, base_width / ratio, height_dest));
+            width_dest += base_width / ratio;
+            width_source += width_source;
+
+        }
+
+
+        RenderTexture2D target = LoadRenderTexture(width_dest, height_dest);
+        BeginTextureMode(target);
+        for (size_t i{0};i<file.count;i++) {
+            DrawTexturePro(textures[i], sources[i], destinations[i], {0, 0}, 0,  WHITE);
+            recs.emplace_back(destinations[i]);
+        }
+        EndTextureMode();
+        texture = target.texture;
+        UnloadDroppedFiles(file);
         draw = true;
         Vector2 screenDimensions = Vector2(GetScreenWidth(), GetScreenHeight());
         float zoomFactor = screenDimensions.x / texture.width * 0.75f;
@@ -215,7 +249,6 @@ LevelOutcome AnimationEditorLevel(Camera2D &camera) {
     if (draw) DrawTexture(texture, 0, 0, RAYWHITE);
 
     static bool done{false};
-    static std::vector<Rectangle> recs;
     if (!done) SelectRectangles(camera, recs);
     if (IsKeyPressed(KEY_ENTER)) done = true;
     if (IsKeyPressed(KEY_BACKSPACE)) done = false;
