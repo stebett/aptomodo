@@ -5,12 +5,13 @@
 #ifndef ATTACKS_H
 #define ATTACKS_H
 
-#include <math/spline.h>
+#include "math/spline.h"
 
 #include "math/bezier.h"
 
 
 namespace Attacks {
+
     struct Hit {
     };
 

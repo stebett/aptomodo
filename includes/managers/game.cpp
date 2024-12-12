@@ -14,7 +14,7 @@
 #include <systems/space.h>
 
 #include "assets.h"
-#include "attacks.h"
+#include "systems/attacks.h"
 #include "audioManager.h"
 #include "gui.h"
 #include "renderingManager.h"

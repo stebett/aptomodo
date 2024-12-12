@@ -17,6 +17,7 @@ struct Animation {
     Texture2D texture;
     int frameCount;
     std::vector<Rectangle> sources;
+    std::string name {"default"};
 };
 
 LevelOutcome AnimationEditorLevel(const Camera2D &camera);

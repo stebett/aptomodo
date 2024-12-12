@@ -9,7 +9,7 @@
 #include <math/mathConstants.h>
 #include <systems/physics.h>
 
-#include "attacks.h"
+#include "systems/attacks.h"
 #include "attributes.h"
 #include "parameters.h"
 #include "components.h"

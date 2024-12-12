@@ -5,8 +5,8 @@
 #include "attacks.h"
 #include "managers/game.h"
 
-#include <timer.h>
-#include <systems/physics.h>
+#include "timer.h"
+#include "physics.h"
 
 auto createShapeHelper = [](b2BodyId bodyId, b2Polygon box) {
     b2ShapeDef shapeDef = b2DefaultShapeDef();

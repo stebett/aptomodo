@@ -7,7 +7,7 @@
 
 #include "../components.h"
 #include "animationManager.h"
-#include "attacks.h"
+#include "systems/attacks.h"
 #include "game.h"
 #include "levelManager.h"
 #include "shadowCast.h"

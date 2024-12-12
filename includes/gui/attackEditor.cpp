@@ -7,7 +7,7 @@
 #include "bezierEditor.h"
 #include "math/spline.h"
 #include "managers/game.h"
-#include "attacks.h"
+#include "systems/attacks.h"
 #include "timer.h"
 #include "components.h"
 

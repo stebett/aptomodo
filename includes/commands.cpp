@@ -12,7 +12,7 @@
 #include <managers/gui.h>
 #include <systems/physics.h>
 
-#include "attacks.h"
+#include "systems/attacks.h"
 #include "math/mathConstants.h"
 #include "status.h"
 #include <bitset>
