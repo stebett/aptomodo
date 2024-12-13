@@ -134,14 +134,8 @@ namespace Command {
             Game::testShader = LoadShader(nullptr, (std::filesystem::path(ROOT_PATH) / "assets/shaders/base.fs").c_str());
 
         }
-        // Get uniform locations
-        int iTimeLoc = GetShaderLocation(Game::testShader, "iTime");
-        int iResolutionLoc = GetShaderLocation(Game::testShader, "iResolution");
-        Vector2 resolution = { (float)GetScreenWidth(), (float)GetScreenHeight() };
 
-        float time = GetTime(); // Get time in seconds
-        SetShaderValue(Game::testShader, iTimeLoc, &time, SHADER_UNIFORM_FLOAT);
-        SetShaderValue(Game::testShader, iResolutionLoc, &resolution, SHADER_UNIFORM_VEC2);
     }
+
 
 }

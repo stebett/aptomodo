@@ -57,7 +57,6 @@ LevelOutcome PlayLevel() {
     Gui::Instantiate();
     Physics::Instantiate();
 
-    GameCamera camera{};
 
     spawnEntities(Level::LoadEntities(Assets::GetLevel(Game::Level)));
     Game::levelTexture = Level::LoadLevelTexture(Assets::GetLevel(Game::Level));
@@ -81,24 +80,25 @@ LevelOutcome PlayLevel() {
             }
             Physics::Update();
 
-            Space::Update(camera.GetPlayerCamera());
+            Space::Update(Game::camera.GetPlayerCamera());
             AI::Update(player);
-            PlayerFaceMouse(player, camera);
+            PlayerFaceMouse(player, Game::camera);
         }
-        Gui::Update(camera, &imguiWindowMain);
-        camera.Update(playerPosition, Game::framerateManager.deltaTime);
+        Gui::Update(Game::camera, &imguiWindowMain);
+        Game::camera.Update(playerPosition, Game::framerateManager.deltaTime);
         Audio::Update();
 
         BeginDrawing();
-        BeginMode2D(camera);
+        BeginMode2D(Game::camera);
 
         ClearBackground(WHITE);
         BeginShaderMode(Game::testShader);
-        Rendering::DrawLevel(camera.GetPlayerCamera());
+        Game::UpdateShaders();
+        Rendering::DrawLevel(Game::camera.GetPlayerCamera());
         EndShaderMode();
-        const auto commands = Inputs::Listen(camera, Game::framerateManager.deltaTime);
+        const auto commands = Inputs::Listen(Game::camera, Game::framerateManager.deltaTime);
         Inputs::Update(commands);
-        Rendering::Draw(camera.GetPlayerCamera(), Game::framerateManager.framesCounter);
+        Rendering::Draw(Game::camera.GetPlayerCamera(), Game::framerateManager.framesCounter);
         // This has to stay after updatePlayer
         EndMode2D();
 
@@ -189,4 +189,25 @@ LevelOutcome Game::GetOutcome() {
 
 void Game::SetOutcome(const LevelOutcome outcome) {
     levelOutcome = outcome;
+}
+
+void Game::UpdateShaders() {
+    // Get uniform locations
+    int iTimeLoc = GetShaderLocation(Game::testShader, "iTime");
+    int iResolutionLoc = GetShaderLocation(Game::testShader, "iResolution");
+    int iCenterLoc = GetShaderLocation(Game::testShader, "iCenter");
+    Vector2 resolution = { (float)GetScreenWidth(), (float)GetScreenHeight() };
+
+    float time = GetTime(); // Get time in seconds
+    const auto player = Game::registry.view<Player>().front();
+    const auto playerPosition = Game::registry.get<Position>(player);
+    Vector2 screenPos = GetWorldToScreen2D(playerPosition, Game::camera);
+    Vector2 normalizedPos = {
+            (screenPos.x / resolution.x) * 2.0f - 1.0f,
+            (screenPos.y / resolution.y) * 2.0f - 1.0f
+    };
+//    Vector2 center = GetMousePosition();
+    SetShaderValue(Game::testShader, iTimeLoc, &time, SHADER_UNIFORM_FLOAT);
+    SetShaderValue(Game::testShader, iResolutionLoc, &resolution, SHADER_UNIFORM_VEC2);
+    SetShaderValue(Game::testShader, iCenterLoc, &normalizedPos, SHADER_UNIFORM_VEC2);
 }

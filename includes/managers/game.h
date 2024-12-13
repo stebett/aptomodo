@@ -25,10 +25,10 @@ private:
     static bool levelFinished;
     static LevelOutcome levelOutcome;
 
-    static GameCamera camera;
 
 public:
     static FramerateManager framerateManager;
+    static GameCamera camera;
 
     static int Level;
     static std::function<void()> LevelFunction;
@@ -64,6 +64,8 @@ public:
     static void ChangeLevel(Level::LevelName newLevel);
 
     static Shader testShader;
+
+    static void UpdateShaders();
 };
 
 
