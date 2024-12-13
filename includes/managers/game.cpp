@@ -69,6 +69,8 @@ LevelOutcome PlayLevel() {
 
     Game::framerateManager = FramerateManager();
 
+    Shader shader = LoadShader(nullptr, (std::filesystem::path(ROOT_PATH) / "assets/shaders/grayscale.fs").c_str());
+
     while (!Game::IsLevelFinished()) {
         if (!Game::IsPaused()) {
             StatusEffect::Update();
@@ -92,8 +94,9 @@ LevelOutcome PlayLevel() {
         BeginMode2D(camera);
 
         ClearBackground(WHITE);
+        BeginShaderMode(shader);
         Rendering::DrawLevel(camera.GetPlayerCamera());
-
+        EndShaderMode();
         const auto commands = Inputs::Listen(camera, Game::framerateManager.deltaTime);
         Inputs::Update(commands);
         Rendering::Draw(camera.GetPlayerCamera(), Game::framerateManager.framesCounter);
