@@ -54,6 +54,8 @@ namespace Command {
     void Mute();
 
     void ToggleMenu();
+
+    void LoadTestShader();
 }
 
 #endif //COMMANDS_H

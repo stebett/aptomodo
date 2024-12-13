@@ -62,6 +62,8 @@ public:
     static LevelOutcome PlayLevelOnce();
 
     static void ChangeLevel(Level::LevelName newLevel);
+
+    static Shader testShader;
 };
 
 

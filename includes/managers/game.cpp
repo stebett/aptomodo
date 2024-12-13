@@ -29,7 +29,7 @@ bool Game::levelFinished = false;
 int Game::Level {0};
 std::function<void()> Game::LevelFunction {&PlayLevel};
 LevelOutcome Game::levelOutcome = LevelOutcome::NONE;
-
+Shader Game::testShader;
 entt::registry Game::registry;
 GameCamera Game::camera;
 FramerateManager Game::framerateManager{};
@@ -69,7 +69,6 @@ LevelOutcome PlayLevel() {
 
     Game::framerateManager = FramerateManager();
 
-    Shader shader = LoadShader(nullptr, (std::filesystem::path(ROOT_PATH) / "assets/shaders/grayscale.fs").c_str());
 
     while (!Game::IsLevelFinished()) {
         if (!Game::IsPaused()) {
@@ -94,7 +93,7 @@ LevelOutcome PlayLevel() {
         BeginMode2D(camera);
 
         ClearBackground(WHITE);
-        BeginShaderMode(shader);
+        BeginShaderMode(Game::testShader);
         Rendering::DrawLevel(camera.GetPlayerCamera());
         EndShaderMode();
         const auto commands = Inputs::Listen(camera, Game::framerateManager.deltaTime);
@@ -180,6 +179,8 @@ void Game::EnterLevel() {
     registry = entt::registry();
     levelFinished = false;
     levelOutcome = LevelOutcome::NONE;
+    testShader = LoadShader(nullptr, (std::filesystem::path(ROOT_PATH) / "assets/shaders/base.fs").c_str());
+
 }
 
 LevelOutcome Game::GetOutcome() {

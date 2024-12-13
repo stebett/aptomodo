@@ -127,4 +127,21 @@ namespace Command {
         GetMasterVolume() == 0 ? SetMasterVolume(100) : SetMasterVolume(0);
     }
 
+    void LoadTestShader() {
+        UnloadShader(Game::testShader);
+        Game::testShader = LoadShader(nullptr, (std::filesystem::path(ROOT_PATH) / "assets/shaders/test.fs").c_str());
+        if (Game::testShader.id == 0) {
+            Game::testShader = LoadShader(nullptr, (std::filesystem::path(ROOT_PATH) / "assets/shaders/base.fs").c_str());
+
+        }
+        // Get uniform locations
+        int iTimeLoc = GetShaderLocation(Game::testShader, "iTime");
+        int iResolutionLoc = GetShaderLocation(Game::testShader, "iResolution");
+        Vector2 resolution = { (float)GetScreenWidth(), (float)GetScreenHeight() };
+
+        float time = GetTime(); // Get time in seconds
+        SetShaderValue(Game::testShader, iTimeLoc, &time, SHADER_UNIFORM_FLOAT);
+        SetShaderValue(Game::testShader, iResolutionLoc, &resolution, SHADER_UNIFORM_VEC2);
+    }
+
 }
