@@ -45,6 +45,11 @@ const Camera2D &GameCamera::GetPlayerCamera() const {
     return playerCamera;
 }
 
+Camera2D &GameCamera::GetPlayerCamera() {
+    return playerCamera;
+}
+
+
 void GameCamera::Update(const Vector2 &playerPosition, const float delta) {
     if (Config::GetBool("free_camera")) {
         activeCamera = &freeCamera;
@@ -64,3 +69,4 @@ void GameCamera::Zoom() const {
 void GameCamera::MoveFreeCamera(const Vector2 &movement) {
     freeCamera.target = Vector2Add(freeCamera.target, movement);
 }
+

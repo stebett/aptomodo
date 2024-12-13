@@ -10,6 +10,7 @@
 
 constexpr int gridEdge = 4;
 constexpr int gridSize = 500;
+std::string animationName = "default";
 
 
 Rectangle RectangleFromTwoPoints(std::array<Vector2, 2> points) {
@@ -29,6 +30,20 @@ enum class Direction {
     Vertical,
     None,
 };
+
+
+RenderTexture2D loadGrid() {
+    RenderTexture2D grid{LoadRenderTexture(gridSize * gridEdge, gridSize * gridEdge)};
+    BeginTextureMode(grid);
+    for (int i{-gridSize}; i <= gridSize; i++) {
+        int start = -gridSize * gridEdge;
+        int j = i * gridEdge;
+        DrawLineEx(Vector2(start, j), Vector2(-start, j), 1, ColorAlpha(WHITE, 0.3));
+        DrawLineEx(Vector2(j, start), Vector2(j, -start), 1, ColorAlpha(WHITE, 0.3));
+    }
+    EndTextureMode();
+    return grid;
+}
 
 
 void SelectRectangles(const Camera2D &camera, std::vector<Rectangle> &recs) {
@@ -180,6 +195,61 @@ void SelectRectangles(const Camera2D &camera, std::vector<Rectangle> &recs) {
     }
 }
 
+
+Animation loadAnimation(std::vector<Rectangle> &recs) {
+    Texture2D texture = {};
+
+    auto file{LoadDroppedFiles()};
+    auto directorySource = std::filesystem::path(file.paths[0]).root_directory();
+    std::vector<Texture2D> textures;
+    textures.reserve(file.count);
+    int height_dest{0};
+    int width_dest{0};
+    int height_source{0};
+    int width_source{0};
+    int base_height{512};
+    int base_width{512};
+    std::vector<Rectangle> sources{};
+    std::vector<Rectangle> destinations{};
+
+    for (size_t i{0}; i < file.count; i++) {
+        auto path = std::filesystem::path(file.paths[i]);
+        auto t = LoadTexture(path.c_str());
+        auto ratio = t.width / t.height;
+        height_dest = std::max(base_height / ratio, height_dest);
+        height_source = std::max(t.height, height_source);
+        textures.emplace_back(t);
+        sources.emplace_back(Rectangle(width_source, 0, t.width, height_source));
+        destinations.emplace_back(Rectangle(width_dest, 0, base_width / ratio, height_dest));
+        width_dest += base_width / ratio;
+        width_source += t.width;
+
+    }
+
+
+    RenderTexture2D target = LoadRenderTexture(width_dest, height_dest);
+    BeginTextureMode(target);
+    for (size_t i{0}; i < file.count; i++) {
+        DrawTexturePro(textures[i], sources[i], destinations[i], {0, 0}, 0, WHITE);
+        recs.emplace_back(destinations[i]);
+    }
+    EndTextureMode();
+    texture = target.texture;
+    UnloadDroppedFiles(file);
+    Vector2 screenDimensions = Vector2(GetScreenWidth(), GetScreenHeight());
+    float zoomFactor = screenDimensions.x / texture.width * 0.75f;
+
+
+    Game::camera.GetPlayerCamera().zoom = zoomFactor;
+
+    Game::camera.GetPlayerCamera().target = Vector2(texture.width / 2, texture.height / 2 + 24);
+    Game::camera.GetPlayerCamera().offset = screenDimensions / 2;
+    auto path = std::filesystem::path(ROOT_PATH) / std::filesystem::path(ATTACK_PATH) / animationName;
+
+    return Animation(texture, destinations[0], destinations, destinations.size(), animationName, path, directorySource);
+
+}
+
 void PlayAnimation(Animation anim, Vector2 pos, double t) {
     if (anim.frameCount < 1) return;
     static int i = 0;
@@ -188,83 +258,30 @@ void PlayAnimation(Animation anim, Vector2 pos, double t) {
         start = t;
         i = (i + 1) % anim.frameCount;
     }
-    DrawTextureRec(anim.texture, anim.sources[i], pos, WHITE);
+//    DrawTextureRec(anim.texture, anim.sources[i], pos, WHITE);
+    DrawTexturePro(anim.texture, anim.sources[i], anim.dest, pos, 0, WHITE);
 }
 
 LevelOutcome AnimationEditorLevel(Camera2D &camera) {
-    static Texture2D texture = {};
 
     static bool draw{false};
     static std::vector<Rectangle> recs;
+    static Animation animation = {};
+
 
     if (!draw && IsFileDropped()) {
-        auto file{LoadDroppedFiles()};
-        std::vector<Texture> textures;
-        textures.reserve(file.count);
-        int height_dest{0};
-        int width_dest{0};
-        int height_source{0};
-        int width_source{0};
-        int base_height{512};
-        int base_width{512};
-        std::vector<Rectangle> sources{};
-        std::vector<Rectangle> destinations{};
-        for (size_t i{0}; i < file.count; i++) {
-            auto path = std::filesystem::path(file.paths[i]);
-            auto t = LoadTexture(path.c_str());
-            auto ratio = t.width / t.height;
-            height_dest = std::max(base_height / ratio, height_dest);
-            height_source = std::max(t.height, height_source);
-            textures.emplace_back(t);
-            sources.emplace_back(Rectangle(width_source, 0, t.width, height_source));
-            destinations.emplace_back(Rectangle(width_dest, 0, base_width / ratio, height_dest));
-            width_dest += base_width / ratio;
-            width_source += width_source;
-
-        }
-
-
-        RenderTexture2D target = LoadRenderTexture(width_dest, height_dest);
-        BeginTextureMode(target);
-        for (size_t i{0};i<file.count;i++) {
-            DrawTexturePro(textures[i], sources[i], destinations[i], {0, 0}, 0,  WHITE);
-            recs.emplace_back(destinations[i]);
-        }
-        EndTextureMode();
-        texture = target.texture;
-        UnloadDroppedFiles(file);
+        animation = loadAnimation(recs);
         draw = true;
-        Vector2 screenDimensions = Vector2(GetScreenWidth(), GetScreenHeight());
-        float zoomFactor = screenDimensions.x / texture.width * 0.75f;
+    } else DrawTexture(animation.texture, 0, 0, RAYWHITE);
 
+//    SelectRectangles(camera, recs);
 
-        camera.zoom = zoomFactor;
-        Vector2 screenDimensionsCorrected = GetScreenToWorld2D(Vector2(GetScreenWidth(), GetScreenHeight()), camera);
-
-        camera.target = Vector2(texture.width / 2, texture.height / 2 + 24);
-        camera.offset = screenDimensions / 2;
-
-
-    }
-    if (draw) DrawTexture(texture, 0, 0, RAYWHITE);
-
-    static bool done{false};
-    if (!done) SelectRectangles(camera, recs);
-    if (IsKeyPressed(KEY_ENTER)) done = true;
-    if (IsKeyPressed(KEY_BACKSPACE)) done = false;
-
-    auto anim = Animation(texture, recs.size(), recs);
-    if (!recs.empty())
-        PlayAnimation(anim, Vector2(texture.width / 2 - recs[0].width / 2, texture.height + 10), GetTime());
+    if (!animation.sources.empty())
+     PlayAnimation(animation, GetScreenToWorld2D({500, 500}, camera), GetTime());
     return LevelOutcome::WIN;
 }
 
 
-/*
- * Different levels should
- *  - load different ldtk::levels
- *  - have different gui windows preopened
- */
 LevelOutcome PlayAnimationEditorLevel() {
     SPDLOG_INFO("Entering Editor Level");
     Game::EnterLevel();
@@ -275,15 +292,7 @@ LevelOutcome PlayAnimationEditorLevel() {
     camera.target = {0, 0};
     camera.zoom = 3.4;
     Game::SetOutcome(LevelOutcome::QUIT);
-    RenderTexture2D grid{LoadRenderTexture(gridSize * gridEdge, gridSize * gridEdge)};
-    BeginTextureMode(grid);
-    for (int i{-gridSize}; i <= gridSize; i++) {
-        int start = -gridSize * gridEdge;
-        int j = i * gridEdge;
-        DrawLineEx(Vector2(start, j), Vector2(-start, j), 1, ColorAlpha(WHITE, 0.3));
-        DrawLineEx(Vector2(j, start), Vector2(j, -start), 1, ColorAlpha(WHITE, 0.3));
-    }
-    EndTextureMode();
+    RenderTexture2D grid{loadGrid()};
     SetTargetFPS(60);
     while (!Game::IsLevelFinished()) {
         camera.zoom += GetMouseWheelMove() / 10;
@@ -318,64 +327,3 @@ LevelOutcome PlayAnimationEditorLevel() {
     return Game::GetOutcome();
 }
 
-
-RenderTexture2D loadGrid() {
-    RenderTexture2D grid{LoadRenderTexture(gridSize * gridEdge, gridSize * gridEdge)};
-    BeginTextureMode(grid);
-    for (int i{-gridSize}; i <= gridSize; i++) {
-        int start = -gridSize * gridEdge;
-        int j = i * gridEdge;
-        DrawLineEx(Vector2(start, j), Vector2(-start, j), 1, ColorAlpha(WHITE, 0.3));
-        DrawLineEx(Vector2(j, start), Vector2(j, -start), 1, ColorAlpha(WHITE, 0.3));
-    }
-    EndTextureMode();
-    return grid;
-}
-
-/*
- * Different levels should
- *  - load different ldtk::levels
- *  - have different gui windows preopened
- */
-LevelOutcome PlayAnimationEditorLevelOnce() {
-    SPDLOG_INFO("Entering Editor Level");
-    Game::EnterLevel();
-    static Camera2D camera{};
-
-//    Gui::Instantiate();
-
-//    camera.target = {0, 0};
-//    camera.zoom = 3.4;
-//    Game::SetOutcome(LevelOutcome::QUIT);
-    static RenderTexture2D grid{loadGrid()};
-
-    camera.zoom += GetMouseWheelMove() / 10;
-    std::bitset<4> bitfield;
-    if (!Game::IsPaused()) {
-        if (IsKeyPressed(KEY_W) || IsKeyDown(KEY_W)) bitfield.set(0);
-        if (IsKeyPressed(KEY_S) || IsKeyDown(KEY_S)) bitfield.set(1);
-        if (IsKeyPressed(KEY_A) || IsKeyDown(KEY_A)) bitfield.set(2);
-        if (IsKeyPressed(KEY_D) || IsKeyDown(KEY_D)) bitfield.set(3);
-    }
-    if (IsKeyPressed(KEY_Q)) Game::ExitLevel();
-    camera.target.y -= static_cast<float>(bitfield[0]);
-    camera.target.y += static_cast<float>(bitfield[1]);
-    camera.target.x -= static_cast<float>(bitfield[2]);
-    camera.target.x += static_cast<float>(bitfield[3]);
-//        Gui::Update( camera);
-
-    BeginDrawing();
-    BeginMode2D(camera);
-    ClearBackground(DARKGRAY);
-    DrawTexture(grid.texture, -round(gridSize * gridEdge / 2), -round(gridSize * gridEdge / 2), RAYWHITE);
-    AnimationEditorLevel(camera);
-    EndMode2D();
-//        Gui::Draw();
-
-    EndDrawing();
-
-//    Gui::Clean();
-
-
-    return Game::GetOutcome();
-}

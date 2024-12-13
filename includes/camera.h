@@ -21,7 +21,8 @@ public:
 
     void FollowPlayer(const Vector2 &playerPosition, float delta);
 
-    const Camera2D &GetPlayerCamera() const;
+    [[nodiscard]] const Camera2D &GetPlayerCamera() const;
+    [[nodiscard]] Camera2D &GetPlayerCamera();
 
     void Update(const Vector2 &playerPosition, float delta);
 
