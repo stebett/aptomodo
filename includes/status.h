@@ -7,6 +7,7 @@
 
 #include <timer.h>
 
+// TODO this file can be renamed to statusEffect and it can go in a different dir (probably with commands and components and factories?)
 
 namespace StatusEffect {
     struct Dash {

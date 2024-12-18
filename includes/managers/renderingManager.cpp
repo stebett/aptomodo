@@ -15,6 +15,8 @@
 #include "../items.h"
 #include "math/spline.h"
 
+// TODO this is a system, not a manager
+
 namespace Rendering {
     void drawSplines() {
         const auto player = Game::registry.view<Player>().front();

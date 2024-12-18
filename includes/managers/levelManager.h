@@ -18,6 +18,9 @@
  *
  * So LevelManager can be a normal object, unless there is some issue with loading order. In that case, maybe we can just make ldtk* variables static?
  */
+
+// TODO this should be in resources dir
+
 namespace Level {
     struct Entity {
         Vector2 position;

@@ -2,7 +2,7 @@
 // Created by ginko on 16/04/24.
 //
 #pragma once
-
+// TODO This should be in resources dir
 
 constexpr char const *configPath{"config.toml"};
 constexpr size_t preStoredValues{20};

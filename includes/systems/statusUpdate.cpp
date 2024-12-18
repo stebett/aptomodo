@@ -8,6 +8,7 @@
 #include <components.h>
 #include <status.h>
 
+// TODO rename this file just status?
 
 namespace StatusEffect {
     void updateDash(double now) {

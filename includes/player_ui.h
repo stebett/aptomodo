@@ -5,6 +5,8 @@
 #ifndef PLAYER_UI_H
 #define PLAYER_UI_H
 
+// TODO this can go in gui dir
+
 namespace PlayerUI {
     void Draw(float);
 }

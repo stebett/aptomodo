@@ -7,6 +7,8 @@
 
 #include "intGrid.h"
 
+// TODO this can go in ai
+
 void visualizeFOV(IntGrid &map, float startX, float startY, float radius,
                   float sectorStartAngle, float sectorEndAngle);
 

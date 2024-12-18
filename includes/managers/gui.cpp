@@ -24,6 +24,7 @@
 #include "audioManager.h"
 #include "gui/attackEditor.h"
 
+// TODO this should be in gui dir
 ImGuiIO *Gui::m_io;
 
 void modalDroppedMp3(const std::filesystem::path &filepath, bool *droppedFile) {

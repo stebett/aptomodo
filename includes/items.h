@@ -5,6 +5,8 @@
 #ifndef APTOMODO_ITEMS_H
 #define APTOMODO_ITEMS_H
 
+// TODO items can probably be in assets dir
+
 /*
     Detect items when close (maybe in the collision loop)
      show a toooltip

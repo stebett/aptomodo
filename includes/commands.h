@@ -8,6 +8,8 @@
 #include <camera.h>
 #include <type_traits>
 
+// TODO we should add 'consumption' of commands, so that they can be easily propagated between indipendent layers
+
 
 template<typename Callable, typename... Args>
 concept InvocableWith = requires(Callable c, Args... args) {

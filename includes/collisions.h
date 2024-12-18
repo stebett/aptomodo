@@ -7,6 +7,8 @@
 
 #include "constants.h"
 
+// TODO remove this file
+
 bool
 CheckCollisionCircleTriangle(Vector2 center, float radius, Vector2 v1, Vector2 v2, Vector2 v3, float height);
 

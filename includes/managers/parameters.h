@@ -12,6 +12,8 @@
 #include <string>
 #include "toml++/toml.hpp"
 
+// TODO This should be called attribute parameters, and it should be refactored
+
 constexpr char const *attributeParametersPath{"attributes.toml"};
 
 struct AttributeParameters {
