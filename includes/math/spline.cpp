@@ -69,3 +69,4 @@ std::array<Math::Vec2, 4> Spline::get() const {
             bezier[3],
     };
 }
+Spline::Spline() = default;

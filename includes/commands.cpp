@@ -60,31 +60,8 @@ namespace Command {
         auto &attackTimer = Game::registry.get<AttackTimer>(self).timer;
         const auto &attributes = Game::registry.get<Attributes>(self);
         const auto lookAngle = Game::registry.get<LookAngle>(self);
-        const auto body = Game::registry.get<b2BodyId>(self);
-        const auto radius = Game::registry.get<Radius>(self);
-        if (attackTimer.ElapsedSeconds() < attributes.getMultiplied(AttributeConstants::attackSpeed)) return;
-        attackTimer.Reset();
-        Position &playerPosition = Game::registry.get<Position>(self);
-
-        auto swordEntity = Game::registry.create();
-        constexpr float halfWidth = 3;
-        constexpr float halfHeight = 25;
-        b2BodyId swordBodyId = Physics::EmplaceSword(halfWidth, halfHeight);
-        Physics::ConnectBodyToEntity(swordBodyId, swordEntity);
-        Game::registry.emplace<Attacks::Attack>(swordEntity, Attacks::Attack{100.0f});
-        b2Transform front = b2Transform({halfHeight + radius, 0}, b2Rot(0, 1));
-        b2Transform beg = b2Transform({halfHeight + 6, 6}, b2Rot(cos(-0.8), sin(-0.8)));
-        b2Transform end = b2Transform({halfHeight + radius, 0}, b2Rot(cos(0), sin(0)));
-        Game::registry.emplace<Attacks::BodyCouple>(swordEntity, Attacks::BodyCouple{body, swordBodyId});
-        Game::registry.emplace<PassiveTimer>(swordEntity, 0.5f);
-
-        const float attackRange = attributes.getMultiplied(AttributeConstants::range);
-        const float attackSpread = attributes.getMultiplied(AttributeConstants::spread);
-        const float damage = attributes.getMultiplied(AttributeConstants::damagePhysical);
-
-        float clickAngle = atan2(mousePosition.y - playerPosition.y, mousePosition.x - playerPosition.x) *
-                           Math::Const::radToDeg;
-
+        const auto playerBody = Game::registry.get<b2BodyId>(self);
+        Attacks::Assign(playerBody, "default");
     }
 
     void PickUp(entt::entity self) {

@@ -9,7 +9,8 @@
 #include "math/mathConstants.h"
 
 struct Spline {
-    Bezier::Bezier<3> bezier;
+  Spline();
+  Bezier::Bezier<3> bezier;
     // p1, c1, c2, p2
     explicit Spline(std::array<Math::Vec2, 4> points);
 

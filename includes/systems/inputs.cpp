@@ -61,8 +61,8 @@ namespace Inputs {
         if (!Gui::WantMouse() && !Config::GetBool("inEditor")) {
             pairMouseKeyPress(MOUSE_BUTTON_RIGHT,
                               Delayed(Command::SelectEnemy, GetScreenToWorld2D(GetMousePosition(), camera)));
-//            pairMouseKeyPress(MOUSE_BUTTON_LEFT,
-//                              Delayed(Command::Attack, player, GetScreenToWorld2D(GetMousePosition(), camera)));
+            pairMouseKeyPress(MOUSE_BUTTON_LEFT,
+                              Delayed(Command::Attack, player, GetScreenToWorld2D(GetMousePosition(), camera)));
         }
         return commands;
     }

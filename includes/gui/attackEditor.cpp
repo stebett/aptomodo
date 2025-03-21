@@ -11,21 +11,21 @@
 #include "timer.h"
 #include "components.h"
 
+//
+//auto createBody = [](const entt::entity entity) {
+//    b2BodyDef bodyDef = b2DefaultBodyDef();
+//    bodyDef.type = b2_kinematicBody;
+//    const b2BodyId body = b2CreateBody(Physics::GetWorldID(), &bodyDef);
+//    Physics::ConnectBodyToEntity(body, entity);
+//    return body;
+//};
 
-auto createBody = [](const entt::entity entity) {
-    b2BodyDef bodyDef = b2DefaultBodyDef();
-    bodyDef.type = b2_kinematicBody;
-    const b2BodyId body = b2CreateBody(Physics::GetWorldID(), &bodyDef);
-    Physics::ConnectBodyToEntity(body, entity);
-    return body;
-};
-
-auto createShape = [](b2BodyId bodyId, b2Polygon box) {
-    b2ShapeDef shapeDef = b2DefaultShapeDef();
-    shapeDef.isSensor = true;
-    shapeDef.filter.maskBits = Physics::Enemy;
-    return b2CreatePolygonShape(bodyId, &shapeDef, &box);
-};
+//auto createShape = [](b2BodyId bodyId, b2Polygon box) {
+//    b2ShapeDef shapeDef = b2DefaultShapeDef();
+//    shapeDef.isSensor = true;
+//    shapeDef.filter.maskBits = Physics::Enemy;
+//    return b2CreatePolygonShape(bodyId, &shapeDef, &box);
+//};
 
 // Bezier editors for easing parameters
 auto bezierEditor = [](const char *label, EasingSpline &easing) {
@@ -142,9 +142,9 @@ void imguiSplineEditor(const Camera2D &camera) {
 
         // Create new body entity
         bodyEntity = Game::registry.create();
-        auto body = createBody(bodyEntity);
+        auto body = Attacks::createBody(bodyEntity);
         auto box = b2MakeBox(transform.startDim1, transform.startDim2);
-        createShape(body, box);
+        Attacks::createShape(body, box);
 
         // Link to player and setup attack components
         Game::registry.emplace<Attacks::Attack>(bodyEntity, Attacks::Attack{100.0f});
