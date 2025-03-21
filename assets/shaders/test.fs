@@ -44,7 +44,7 @@ void main() {
     }
     }
 
-    uv *= 2.;
+    uv *= 3.;
     vec2 gv = fract(uv.rg) - 0.5;
     vec2 id = floor(uv);
     for (float y = -1.; y <= 1.; y ++) {
@@ -58,9 +58,10 @@ void main() {
     }
 
 
-    col = vec3(smoothstep(1.1, -0.5, minDist));
+    col = vec3(smoothstep(1.1, 0, minDist));
 
     vec4 texColor = texture(texture0, fragTexCoord);
-    col = mix(texColor.rgb, col, sin(t)*0.5-0.5);
+//     col = mix(texColor.rgb, col, sin(t)*0.5-0.5);
+    col = mix(texColor.rgb, col, 1.0);
 	finalColor=vec4(col, 1.0);
 }
