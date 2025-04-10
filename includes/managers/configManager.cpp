@@ -7,12 +7,15 @@
 int Config::storedIntsIndex{0};
 int Config::storedFloatsIndex{0};
 int Config::storedBoolsIndex{0};
+int Config::storedStringsIndex{0};
 std::array<int, preStoredValues> Config::storedInts{};
 std::array<float, preStoredValues> Config::storedFloats{};
 std::array<bool, preStoredValues> Config::storedBools{};
+std::array<std::string, preStoredValues> Config::storedStrings{};
 std::unordered_map<std::string, int> Config::indexDictInts{};
 std::unordered_map<std::string, int> Config::indexDictFloats{};
 std::unordered_map<std::string, int> Config::indexDictBools{};
+std::unordered_map<std::string, int> Config::indexDictStrings{};
 toml::table Config::config{};
 
 toml::table Config::writeTable() {
@@ -20,6 +23,7 @@ toml::table Config::writeTable() {
     for (auto [key, value]: indexDictBools) table.emplace(key, storedBools[value]);
     for (auto [key, value]: indexDictInts) table.emplace(key, storedInts[value]);
     for (auto [key, value]: indexDictFloats) table.emplace(key, storedFloats[value]);
+    for (auto [key, value]: indexDictStrings) table.emplace(key, storedStrings[value]);
     return table;
 }
 
@@ -61,6 +65,8 @@ void Config::LoadAttributeParameters() {
                 addFloat(key.data());
             } else if (value.is_boolean()) {
                 addBool(key.data());
+            } else if (value.is_string()) {
+                addString(key.data());
             }
         }
     } catch (const toml::parse_error &err) {
@@ -120,4 +126,16 @@ void Config::Instantiate() {
     SPDLOG_INFO("Working dir: ", GetWorkingDirectory());
     SPDLOG_INFO("Instantiating Config");
     LoadAttributeParameters();
+}
+void Config::addString(const std::string &name) {
+    storedStrings[storedStringsIndex] = config[name].value<std::string>().value();
+    indexDictStrings[name] = storedStringsIndex;
+    storedStringsIndex++;
+    assert(storedStringsIndex < preStoredValues && "[CONFIG] Not enough pre-stored values");
+}
+std::string Config::GetString(const std::string &name) {
+    return storedStrings[indexDictStrings[name]];
+}
+std::string *Config::GetStringPtr(const std::string &name) {
+    return &storedStrings[indexDictStrings[name]];
 }

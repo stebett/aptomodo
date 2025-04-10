@@ -29,3 +29,4 @@ show_inv_window = false
 show_spline_ui = false
 show_menu = false
 strategy = 0
+player_attack_name = "spadata"

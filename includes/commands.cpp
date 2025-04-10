@@ -61,7 +61,8 @@ namespace Command {
         const auto &attributes = Game::registry.get<Attributes>(self);
         const auto lookAngle = Game::registry.get<LookAngle>(self);
         const auto playerBody = Game::registry.get<b2BodyId>(self);
-        Attacks::Assign(playerBody, "default");
+        std::string attackName = Config::GetString("player_attack_name");
+        Attacks::Assign(playerBody, attackName);
     }
 
     void PickUp(entt::entity self) {

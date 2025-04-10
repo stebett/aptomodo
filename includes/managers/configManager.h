@@ -12,13 +12,16 @@ class Config {
     static std::array<int, preStoredValues> storedInts;
     static std::array<float, preStoredValues> storedFloats;
     static std::array<bool, preStoredValues> storedBools;
+    static std::array<std::string, preStoredValues> storedStrings;
     static int storedIntsIndex;
     static int storedFloatsIndex;
     static int storedBoolsIndex;
+    static int storedStringsIndex;
 public:
     static std::unordered_map<std::string, int> indexDictInts; // TODO make them private and use getters to const ref
     static std::unordered_map<std::string, int> indexDictFloats;
     static std::unordered_map<std::string, int> indexDictBools;
+    static std::unordered_map<std::string, int> indexDictStrings;
 
     static toml::table writeTable();
 
@@ -36,6 +39,12 @@ public:
 
     static float *GetFloatPtr(const std::string &name);
 
+    static void addString(const std::string &name);
+
+    static std::string GetString(const std::string &name);
+
+    static std::string *GetStringPtr(const std::string &name);
+
     static void addBool(const std::string &name);
 
     static bool GetBool(const std::string &name);
@@ -43,7 +52,6 @@ public:
     static bool *GetBoolPtr(const std::string &name);
 
     static void addInt(const std::string &name);
-
 
     static void Instantiate();
 
