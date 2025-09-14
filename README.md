@@ -6,7 +6,7 @@ Aptomodo is a custom **game engine written in C++**. It bundles everything you n
   <img alt="Aptomodo" src="demos/demo.gif" width="1080"/>
   </p>
 
-  ---
+    ---
 
 ## ✨ Highlights
 
