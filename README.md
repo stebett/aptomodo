@@ -21,8 +21,8 @@ Aptomodo is a custom **game engine written in C++**. It bundles everything you n
 * **Built‑in Editors**:
 
   * 🎞️ **Animation Editor** — import from **Blender** and author playback.
-    * 👾 **Enemy Editor** — define enemies and behaviors quickly.
-      * 🗡️ **Attack Editor** — author attack bounding boxes visually.
+  * 👾 **Enemy Editor** — define enemies and behaviors quickly.
+  * 🗡️ **Attack Editor** — author attack bounding boxes visually.
 
       ---
 
