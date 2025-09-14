@@ -1,24 +1,9 @@
-Aptomodo is a custom game engine built in C++.
-
-It has all the elements necessary for a developement of a classic rogue-like game:
-- AI system with Behavioral Trees
-- Rendering and animation control (OpenGL, Raylib)
-- Audio management
-- Combat system
-- Path tracing system with alpha star and shadow casting for wall occlusion
-- ImGui with real-time diagnostic and access to configuration with Dear ImGui
-- Animation editor for importing animations from Blender
-- Enemy editor for easily authoring enemies
-- Attack editor for easily authoring bounding boxes of the attacks of new enemies
-
-The architecture is built around the Entity Component System (EnTT)
-
 # Aptomodo — C++ Roguelike Game Engine
 
 Aptomodo is a custom **game engine written in C++**. It bundles everything you need to build a **classic roguelike** with modern tooling: an **ECS** core (powered by **EnTT**), behavior‑tree AI, OpenGL/Raylib rendering and animation, audio, combat, robust pathfinding with shadow‑casting visibility, in‑engine editors, and real‑time diagnostics via Dear ImGui.
 
 <p align="center">
-  <img alt="Aptomodo" src="docs/media/hero.gif" width="720"/>
+  <img alt="Aptomodo" src="demos/demo.gif" width="720"/>
   </p>
 
   ---
