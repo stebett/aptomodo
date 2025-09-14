@@ -3,7 +3,7 @@
 Aptomodo is a custom **game engine written in C++**. It bundles everything you need to build a **classic roguelike** with modern tooling: an **ECS** core (powered by **EnTT**), behavior‑tree AI, OpenGL/Raylib rendering and animation, audio, combat, robust pathfinding with shadow‑casting visibility, in‑engine editors, and real‑time diagnostics via Dear ImGui.
 
 <p align="center">
-  <img alt="Aptomodo" src="demos/demo.gif" width="720"/>
+  <img alt="Aptomodo" src="demos/demo.gif" width="1080"/>
   </p>
 
   ---
@@ -66,7 +66,7 @@ void physics(entt::registry& r, float dt) {
 
 Behavior Trees keep AI logic modular and testable. Typical nodes include **Selector**, **Sequence**, **Decorator**, and **Leaf** actions.
 
-* Author trees in data (YAML) or code; reuse leaf actions across enemies.
+* Author trees in data (TOML) or code; reuse leaf actions across enemies.
 * Integrates with the **Enemy Editor** to preview decisions and tweak parameters live.
 
 ---
@@ -134,8 +134,7 @@ Behavior Trees keep AI logic modular and testable. Typical nodes include **Selec
 
 ### Credits
 
-* **C++20** toolchain (GCC)
-* **CMake ≥ 3.24**
+* **C++20** toolchain (GCC, CMake)
 * **Raylib** (OpenGL)
 * **EnTT** (ECS)
 * **Dear ImGui**
